@@ -201,7 +201,7 @@
 
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 14px;">
         <div class="summary" id="summary-bajie" style="display:none;">
-          <div style="font-size:14px; color:var(--muted); margin-bottom:8px; font-weight:800;">八戒别跑 (72050)</div>
+          <div style="font-size:14px; color:var(--muted); margin-bottom:8px; font-weight:800;">八戒别跑 (72050折中版)</div>
           <div class="seat" id="finalSeat-bajie">—</div>
           <div class="sub" id="finalSub-bajie">—</div>
         </div>
@@ -228,23 +228,28 @@
       </div>
 
       <div class="tiny">
-【八戒别跑 v72050 专属规则】⭐⭐⭐
+【八戒别跑 v72050 折中版】⭐⭐⭐
 ═══════════════════════════════════════════════════
 先算：
 Q = floor((5098636 - 72050 - 房号) / 98636)
 R = (5098636 - 72050 - 房号) mod 98636
 尾数 = R 的最后一位
 
-规则：
-· 1号：Q=50 且尾1/4
-· 2号：Q=50 且尾9
-· 3号：Q=50 且尾9
-· 4号：Q=50 且尾7
-· 5号：Q=50 且尾3
+只在 Q=50 前提下看尾数：
+· 1号：尾 1 / 4 / 5
+· 2号：尾 9
+· 3号：尾 9 / 4 / 2
+· 4号：尾 7 / 3
+· 5号：尾 3
 · 6号：跳
 
 最终推荐优先级：
 1 > 4 > 5 > 3 > 2
+
+回测（72050）：
+· 全量：14中12，胜率 85.7%，总分 +12560
+· 大波动(|分数|>500)：10中10，胜率 100%，总分 +12480
+═══════════════════════════════════════════════════
 
 【流浪小男孩】
 X值配置：2号[2,4] | 3号[2] | 4号[0,5] | 5号[5,6] | 6号[5]
@@ -255,7 +260,7 @@ X值配置：1号[2,4,9] | 2号[5] | 3号[4,6] | 4号[1,0,7] | 5号[1] | 6号[5,
 综合评分：5号 > 4号 > 6号 > 2号 > 3号
 
 说明：输入房号，三个账号同时输出推荐位子。
-当前八戒只使用 72050 比赛场专属规则。
+当前八戒只使用 72050 比赛场折中版规则。
       </div>
     </div>
   </div>
@@ -267,7 +272,7 @@ X值配置：1号[2,4,9] | 2号[5] | 3号[4,6] | 4号[1,0,7] | 5号[1] | 6号[5,
     const historyListEl = document.getElementById("historyList");
     const clearHistoryEl = document.getElementById("clearHistory");
 
-    const HISTORY_KEY = "shuanghuang_history_v5_72050";
+    const HISTORY_KEY = "shuanghuang_history_v6_72050_mid";
     const HISTORY_LIMIT = 30;
 
     const ACCOUNTS = {
@@ -333,10 +338,11 @@ X值配置：1号[2,4,9] | 2号[5] | 3号[4,6] | 4号[1,0,7] | 5号[1] | 6号[5,
         let hits = [];
 
         if (q === 50) {
-          if (tail === 1 || tail === 4) hits.push(1);
-          if (tail === 7) hits.push(4);
+          if (tail === 1 || tail === 4 || tail === 5) hits.push(1);
+          if (tail === 7 || tail === 3) hits.push(4);
           if (tail === 3) hits.push(5);
-          if (tail === 9) hits.push(3, 2);
+          if (tail === 9 || tail === 4 || tail === 2) hits.push(3);
+          if (tail === 9) hits.push(2);
         }
 
         let finalSeat = "跳";
