@@ -255,12 +255,18 @@ R = (5098636 - 72050 - 房号) mod 98636
 X值配置：2号[2,4] | 3号[2] | 4号[0,5] | 5号[5,6] | 6号[5]
 综合评分：6号 > 4号 > 2号 > 3号 > 5号
 
-【梦见】ID:5096507
-X值配置：1号[2,4,9] | 2号[5] | 3号[4,6] | 4号[1,0,7] | 5号[1] | 6号[5,8]
-综合评分：5号 > 4号 > 6号 > 2号 > 3号
+【梦见】ID:5096507｜比赛场：13704｜K=96507（纯版A）
+V = 5096507 - 13704 - 房号 = 5082803 - 房号
+Q = floor(V / 96507)
+R = V mod 96507
+尾数 = R 的最后一位
 
-说明：输入房号，三个账号同时输出推荐位子。
-当前八戒只使用 72050 比赛场折中版规则。
+只留 Q=52：
+· 4号：尾 2 / 5 / 9
+· 6号：尾 4
+· 3号：尾 1 / 6
+优先级：4 > 6 > 3
+其他情况：跳
       </div>
     </div>
   </div>
@@ -297,22 +303,7 @@ X值配置：1号[2,4,9] | 2号[5] | 3号[4,6] | 4号[1,0,7] | 5号[1] | 6号[5,
         }
       },
       mengjian: {
-        name: "梦见",
-        xValues: {
-          1: [2, 4, 9],
-          2: [5],
-          3: [4, 6],
-          4: [1, 0, 7],
-          5: [1],
-          6: [5, 8]
-        },
-        seatPriority: {
-          5: 1,
-          4: 2,
-          6: 3,
-          2: 4,
-          3: 5
-        }
+        name: "梦见"
       }
     };
 
@@ -327,6 +318,17 @@ X值配置：1号[2,4,9] | 2号[5] | 3号[4,6] | 4号[1,0,7] | 5号[1] | 6号[5,
       const r = mod(raw, 98636);
       const tail = r % 10;
       return { roomNum, raw, q, r, tail };
+    }
+
+    // 梦见·13704 纯版A
+    function calcMengjian13704(room5) {
+      const roomNum = parseInt(room5, 10);
+      const V = 5082803 - roomNum;   // 5096507 - 13704 - room
+      const K = 96507;
+      const q = Math.floor(V / K);
+      const r = mod(V, K);
+      const tail = r % 10;
+      return { roomNum, V, q, r, tail, K };
     }
 
     function analyze(room5, accountKey) {
@@ -356,7 +358,32 @@ X值配置：1号[2,4,9] | 2号[5] | 3号[4,6] | 4号[1,0,7] | 5号[1] | 6号[5,
         return { finalSeat, finalDesc, seats: hits };
       }
 
-      // 其他账号：保持原有逻辑
+      if (accountKey === "mengjian") {
+        const { q, r, tail, K } = calcMengjian13704(room5);
+
+        let hits = [];
+        let finalSeat = "跳";
+        let finalDesc = `Q=${q}｜R=${r}｜尾=${tail}\n未命中 → 跳`;
+
+        if (q === 52) {
+          // 优先级：4 > 6 > 3
+          if (tail === 2 || tail === 5 || tail === 9) hits.push(4);
+          else if (tail === 4) hits.push(6);
+          else if (tail === 1 || tail === 6) hits.push(3);
+        }
+
+        if (hits.length > 0) {
+          finalSeat = `${hits[0]}号`;
+          finalDesc = `Q=${q}｜R=${r}｜尾=${tail}\n命中位：${hits.join("、")}号`;
+        } else {
+          // q!=52 时给更明确提示
+          if (q !== 52) finalDesc = `Q=${q}｜R=${r}｜尾=${tail}\nQ≠52 → 跳`;
+        }
+
+        return { finalSeat, finalDesc, seats: hits };
+      }
+
+      // 其他账号：保持原有逻辑（流浪小男孩）
       const X_VALUES = config.xValues;
       const SEAT_PRIORITY = config.seatPriority;
 
