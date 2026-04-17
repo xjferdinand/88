@@ -201,7 +201,7 @@
 
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 14px;">
         <div class="summary" id="summary-bajie" style="display:none;">
-          <div style="font-size:14px; color:var(--muted); margin-bottom:8px; font-weight:800;">八戒别跑 (P值终版)</div>
+          <div style="font-size:14px; color:var(--muted); margin-bottom:8px; font-weight:800;">八戒别跑 (X值黄金版)</div>
           <div class="seat" id="finalSeat-bajie">—</div>
           <div class="sub" id="finalSub-bajie">—</div>
         </div>
@@ -228,27 +228,27 @@
       </div>
 
       <div class="tiny">
-【八戒别跑 vP值终版】⭐⭐⭐
+【八戒别跑 vX值黄金版】⭐⭐⭐
 ═══════════════════════════════════════════════════
-P值定义（圆环）：
-· 1号：P = E + B - A
-· 2号：P = A + C - B
-· 3号：P = B + D - C
-· 4号：P = C + E - D
-· 5号：P = D + A - E
-· 6号：P = D + A - E
-
-规则：
-· 1号：P=-4/1/5 可打；P=-3/0 跳
-· 2号：P=7 最优，P=2/3 可打；P=5/-1/-4 跳
-· 3号：P=2 最优，P=5/0/-1 可打；P=3/6/1 跳
-· 4号：P=8 最优，P=6 可打；P=-3/-1/5 跳
-· 5号：P=4 最优，P=8/5 可打；P=-1/2/6 跳
-· 6号：P=11 最优，P=-2/-3 可打；P=9/-1/2/6 跳
+X值规则：
+· 1号：A=8
+· 2号：B=2
+· 3号：C=7
+· 4号：D=5
+· 5号：E=3
+· 6号：E=8
 
 输出规则：
 · 最多同时推荐3个位子
-· 主力位优先级固定：5 > 2 > 4 > 3 > 6 > 1
+· 主力位优先级固定：5 > 1 > 2 > 3 > 4 > 6
+
+说明：
+· 1号看房号首位 A
+· 2号看房号第二位 B
+· 3号看房号第三位 C
+· 4号看房号第四位 D
+· 5号看房号末位 E
+· 6号也看房号末位 E
 ═══════════════════════════════════════════════════
 
 【流浪小男孩】
@@ -278,7 +278,7 @@ R = V mod 96507
     const historyListEl = document.getElementById("historyList");
     const clearHistoryEl = document.getElementById("clearHistory");
 
-    const HISTORY_KEY = "shuanghuang_history_v7_pvalue_bajie";
+    const HISTORY_KEY = "shuanghuang_history_v8_xgold_bajie";
     const HISTORY_LIMIT = 30;
 
     const ACCOUNTS = {
@@ -321,75 +321,38 @@ R = V mod 96507
       return { roomNum, V, q, r, tail, K };
     }
 
-    function calcBajiePValues(room5) {
-      const digits = room5.split('').map(Number);
-      const [A, B, C, D, E] = digits;
-
-      return {
-        1: E + B - A,
-        2: A + C - B,
-        3: B + D - C,
-        4: C + E - D,
-        5: D + A - E,
-        6: D + A - E
-      };
-    }
-
     function analyze(room5, accountKey) {
       const config = ACCOUNTS[accountKey];
 
       if (accountKey === "bajie") {
-        const p = calcBajiePValues(room5);
+        const digits = room5.split('').map(Number);
+        const [A, B, C, D, E] = digits;
 
-        const seatRules = {
-          1: { best: new Set(), good: new Set([-4, 1, 5]), bad: new Set([-3, 0]) },
-          2: { best: new Set([7]), good: new Set([2, 3]), bad: new Set([5, -1, -4]) },
-          3: { best: new Set([2]), good: new Set([5, 0, -1]), bad: new Set([3, 6, 1]) },
-          4: { best: new Set([8]), good: new Set([6]), bad: new Set([-3, -1, 5]) },
-          5: { best: new Set([4]), good: new Set([8, 5]), bad: new Set([-1, 2, 6]) },
-          6: { best: new Set([11]), good: new Set([-2, -3]), bad: new Set([9, -1, 2, 6]) }
-        };
+        const hits = [];
 
-        const seatPriority = {
-          5: 1,
-          2: 2,
-          4: 3,
-          3: 4,
-          6: 5,
-          1: 6
-        };
+        if (E === 3) hits.push(5);
+        if (A === 8) hits.push(1);
+        if (B === 2) hits.push(2);
+        if (C === 7) hits.push(3);
+        if (D === 5) hits.push(4);
+        if (E === 8) hits.push(6);
 
-        const candidates = [];
-
-        for (let seat = 1; seat <= 6; seat++) {
-          const val = p[seat];
-          const rule = seatRules[seat];
-
-          if (rule.bad.has(val)) continue;
-
-          if (rule.best.has(val)) {
-            candidates.push({ seat, p: val, level: 1, priority: seatPriority[seat] });
-          } else if (rule.good.has(val)) {
-            candidates.push({ seat, p: val, level: 2, priority: seatPriority[seat] });
-          }
-        }
-
-        candidates.sort((a, b) => {
-          if (a.priority !== b.priority) return a.priority - b.priority;
-          return a.level - b.level;
-        });
-
-        const top3 = candidates.slice(0, 3).map(x => x.seat);
+        const top3 = hits.slice(0, 3);
 
         let finalSeat = "跳";
-        let finalDesc =
-          `P1=${p[1]} P2=${p[2]} P3=${p[3]} P4=${p[4]} P5=${p[5]} P6=${p[6]}\n无可打位 → 跳`;
+        let finalDesc = `A=${A} B=${B} C=${C} D=${D} E=${E}\n无命中 → 跳`;
 
         if (top3.length > 0) {
-          finalSeat = `${top3.join("/") }号`;
-          const detail = top3.map(seat => `${seat}号(P=${p[seat]})`).join("、");
-          finalDesc =
-            `P1=${p[1]} P2=${p[2]} P3=${p[3]} P4=${p[4]} P5=${p[5]} P6=${p[6]}\n推荐：${detail}`;
+          finalSeat = `${top3.join("/")}号`;
+          const detail = top3.map(seat => {
+            if (seat === 1) return `1号(A=8)`;
+            if (seat === 2) return `2号(B=2)`;
+            if (seat === 3) return `3号(C=7)`;
+            if (seat === 4) return `4号(D=5)`;
+            if (seat === 5) return `5号(E=3)`;
+            return `6号(E=8)`;
+          }).join("、");
+          finalDesc = `A=${A} B=${B} C=${C} D=${D} E=${E}\n推荐：${detail}`;
         }
 
         return { finalSeat, finalDesc, seats: top3 };
