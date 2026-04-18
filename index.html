@@ -7,9 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="双账号智能模型">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>八戒 流浪小男孩 梦见 - 三账号智能模型 v3.0</title>
+  <title>八戒 流浪小男孩 梦见 - 三账号智能模型 v3.1</title>
 
   <style>
     :root{
@@ -191,7 +189,7 @@
 </head>
 <body>
   <div class="app">
-    <div class="title">八戒 流浪小男孩 梦见 - 三账号智能模型 v3.0</div>
+    <div class="title">八戒 流浪小男孩 梦见 - 三账号智能模型 v3.1</div>
 
     <div class="panel">
       <input id="room" inputmode="numeric" placeholder="输入5位房号（例如：74759）" maxlength="5" />
@@ -213,7 +211,7 @@
         </div>
 
         <div class="summary" id="summary-mengjian" style="display:none;">
-          <div style="font-size:14px; color:var(--muted); margin-bottom:8px; font-weight:800;">梦见</div>
+          <div style="font-size:14px; color:var(--muted); margin-bottom:8px; font-weight:800;">梦见 (新规则✨)</div>
           <div class="seat" id="finalSeat-mengjian">—</div>
           <div class="sub" id="finalSub-mengjian">—</div>
         </div>
@@ -298,18 +296,25 @@ S=16/18/21 跳
 X值配置：2号[2,4] | 3号[2] | 4号[0,5] | 5号[5,6] | 6号[5]
 综合评分：6号 > 4号 > 2号 > 3号 > 5号
 
-【梦见】ID:5096507｜比赛场：13704｜K=96507（纯版A）
-V = 5096507 - 13704 - 房号 = 5082803 - 房号
-Q = floor(V / 96507)
-R = V mod 96507
-尾数 = R 的最后一位
+【梦见 - 黄金X值+S值规则(v3.1)✨新规则】
+黄金X值定义（必须满足）：
+· 2号: X=5
+· 3号: X=9或4
+· 4号: X=0/7/8/1/4
+· 5号: X=1
+· 6号: X=5/7/3/6/8
 
-只留 Q=52：
-· 4号：尾 2 / 5 / 9
-· 6号：尾 4
-· 3号：尾 1 / 6
-优先级：4 > 6 > 3
-其他情况：跳
+S值质量（S=各位数字之和）：
+· 好S值(赢率≥75%): 10,11,12,14,15,19,21,22,26,27,29,31,34,35 ✅
+· 中S值(50-75%): 16,17,23,24,28 ⚠️
+· 垃圾S值(<50%): 18,25,30 ❌ 直接跳
+
+位子优先级：5号>2号>3号>4号>6号
+
+进房规则：
+✅ 有黄金X值 + (好S值 OR 中S值)
+❌ 垃圾S值无论如何都跳
+❌ 无黄金X值直接跳
       </div>
     </div>
   </div>
@@ -349,20 +354,6 @@ R = V mod 96507
         name: "梦见"
       }
     };
-
-    function mod(n, m) {
-      return ((n % m) + m) % m;
-    }
-
-    function calcMengjian13704(room5) {
-      const roomNum = parseInt(room5, 10);
-      const V = 5082803 - roomNum;
-      const K = 96507;
-      const q = Math.floor(V / K);
-      const r = mod(V, K);
-      const tail = r % 10;
-      return { roomNum, V, q, r, tail, K };
-    }
 
     function analyze(room5, accountKey) {
       const config = ACCOUNTS[accountKey];
@@ -421,26 +412,73 @@ R = V mod 96507
       }
 
       if (accountKey === "mengjian") {
-        const { q, r, tail } = calcMengjian13704(room5);
+        const digits = room5.split("").map(Number);
+        const [A, B, C, D, E] = digits;
+        const S = A + B + C + D + E;
 
-        let hits = [];
-        let finalSeat = "跳";
-        let finalDesc = `Q=${q}｜R=${r}｜尾=${tail}\n未命中 → 跳`;
-
-        if (q === 52) {
-          if (tail === 2 || tail === 5 || tail === 9) hits.push(4);
-          else if (tail === 4) hits.push(6);
-          else if (tail === 1 || tail === 6) hits.push(3);
+        // 垃圾S值直接跳
+        if ([18, 25, 30].includes(S)) {
+          return {
+            finalSeat: "跳",
+            finalDesc: `黄金X+S值规则\nS=${S} 垃圾区 → 直接跳`,
+            seats: []
+          };
         }
 
-        if (hits.length > 0) {
-          finalSeat = `${hits[0]}号`;
-          finalDesc = `Q=${q}｜R=${r}｜尾=${tail}\n命中位：${hits.join("、")}号`;
-        } else {
-          if (q !== 52) finalDesc = `Q=${q}｜R=${r}｜尾=${tail}\nQ≠52 → 跳`;
+        // 黄金X值定义
+        const goldenXValues = {
+          2: [5],
+          3: [9, 4],
+          4: [0, 7, 8, 1, 4],
+          5: [1],
+          6: [5, 7, 3, 6, 8]
+        };
+
+        const seatMapping = { 2: B, 3: C, 4: D, 5: E, 6: E };
+        const seatPriority = { 5: 1, 2: 2, 3: 3, 4: 4, 6: 5 };
+
+        // 检查黄金X值
+        const candidates = [];
+        for (let seat = 2; seat <= 6; seat++) {
+          const xVal = seatMapping[seat];
+          if (goldenXValues[seat].includes(xVal)) {
+            candidates.push({
+              seat,
+              x: xVal,
+              priority: seatPriority[seat]
+            });
+          }
         }
 
-        return { finalSeat, finalDesc, seats: hits };
+        if (candidates.length === 0) {
+          return {
+            finalSeat: "跳",
+            finalDesc: `黄金X+S值规则\nS=${S}\n无黄金X值 → 跳`,
+            seats: []
+          };
+        }
+
+        // 检查S值质量
+        let sQuality = "unknown";
+        if ([10, 11, 12, 14, 15, 19, 21, 22, 26, 27, 29, 31, 34, 35].includes(S)) {
+          sQuality = "good";
+        } else if ([16, 17, 23, 24, 28].includes(S)) {
+          sQuality = "medium";
+        }
+
+        // 排序并取前3个
+        candidates.sort((a, b) => a.priority - b.priority);
+        const top3 = candidates.slice(0, 3);
+
+        const seatText = top3.map(x => x.seat).join("/");
+        const seatDetail = top3.map(x => `${x.seat}号(X=${x.x})`).join("、");
+        const sQualityText = sQuality === "good" ? "好S值✅" : (sQuality === "medium" ? "中S值⚠️" : "弱S值");
+
+        return {
+          finalSeat: `${seatText}号`,
+          finalDesc: `黄金X+S值规则\nS=${S}(${sQualityText})\n推荐：${seatDetail}`,
+          seats: top3.map(x => x.seat)
+        };
       }
 
       const X_VALUES = config.xValues;
