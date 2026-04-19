@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="双账号智能模型">
-  <title>八戒 流浪小男孩 梦见 - 三账号智能模型 v3.1</title>
+  <title>八戒 流浪小男孩 梦见 - 三账号智能模型 v3.2</title>
 
   <style>
     :root{
@@ -189,7 +189,7 @@
 </head>
 <body>
   <div class="app">
-    <div class="title">八戒 流浪小男孩 梦见 - 三账号智能模型 v3.1</div>
+    <div class="title">八戒 流浪小男孩 梦见 - 三账号智能模型 v3.2</div>
 
     <div class="panel">
       <input id="room" inputmode="numeric" placeholder="输入5位房号（例如：74759）" maxlength="5" />
@@ -199,7 +199,7 @@
 
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 14px;">
         <div class="summary" id="summary-bajie" style="display:none;">
-          <div style="font-size:14px; color:var(--muted); margin-bottom:8px; font-weight:800;">八戒别跑 (当前主模型)</div>
+          <div style="font-size:14px; color:var(--muted); margin-bottom:8px; font-weight:800;">八戒别跑 ⭐方案B+A级</div>
           <div class="seat" id="finalSeat-bajie">—</div>
           <div class="sub" id="finalSub-bajie">—</div>
         </div>
@@ -226,71 +226,30 @@
       </div>
 
       <div class="tiny">
-【八戒当前主模型（26号位）】
+【八戒别跑 方案B+A级模型 v3.2】
+进房率≈29% | 历史胜率98.8% | 平均+819¥/场
 
-一、位子与房号对应关系
-2号 = B
-3号 = C
-4号 = D
-5号 = E
-6号 = E
+⭐ = 方案B命中（双层爆款黄金规则）
+✨ = A级纯净命中（历史100%胜率组合）
 
-说明：
-1号位目前不纳入这套主模型统计。
-所以这套模型只管 26 号位。
+─────────────────────────────────────
+方案B规则（双层爆款+黑名单）：
+· 末位须在 {2,3,5,7,8}
+· 座位1看第1位=8
+· 座位2看第2位=2
+· 座位3看第3位=7
+· 座位4看第4位=5
+· 座位5看末位=3
+· 座位6看末位=8
+· S值黑名单：{18,21,22,29,30} 直接跳
+· 永久黑名单：座2X=0 / 座3X=0 / 座4X=9
+· 座5X=0时S须在{12,15,16,19,22}才进
 
-二、第一层：奇偶方向
-3号、5号：优先奇数X
-2号、4号、6号：优先偶数X
+A级纯净组合（61个，均历史100%胜率）：
+已内置，自动匹配
 
-也就是：
-2号优先偶数B
-3号优先奇数C
-4号优先偶数D
-5号优先奇数E
-6号优先偶数E
-
-三、第二层：过滤后的最终可用X值
-2号：只用 2 / 4 / 8
-3号：只用 1 / 7
-4号：只用 0 / 2 / 4
-5号：只用 1 / 3 / 5 / 9
-6号：只用 0 / 6 / 8
-
-四、各位子避坑值
-2号：避 0 / 6
-3号：避 9 / 3 / 5
-4号：避 8 / 6
-5号：避 7
-6号：避 2 / 4
-
-五、和值过滤
-S = A + B + C + D + E
-
-如果 S = 16 / 18 / 21
-则直接跳，不打。
-
-六、最终执行表
-2号：B 只用 2 / 4 / 8
-3号：C 只用 1 / 7
-4号：D 只用 0 / 2 / 4
-5号：E 只用 1 / 3 / 5 / 9
-6号：E 只用 0 / 6 / 8
-
-若 S = 16 / 18 / 21
-直接跳
-
-七、位子权重排序
-5号 > 2号 > 3号 > 4号 > 6号
-
-八、最简口令版
-2=B 只用248
-3=C 只用17
-4=D 只用024
-5=E 只用1359
-6=E 只用068
-S=16/18/21 跳
-位子排序：5>2>3>4>6
+座位优先级：5>3>6>1>2>4
+─────────────────────────────────────
 
 【流浪小男孩】
 X值配置：2号[2,4] | 3号[2] | 4号[0,5] | 5号[5,6] | 6号[5]
@@ -326,89 +285,99 @@ S值质量（S=各位数字之和）：
     const historyListEl = document.getElementById("historyList");
     const clearHistoryEl = document.getElementById("clearHistory");
 
-    const HISTORY_KEY = "shuanghuang_history_v10_bajie_main_model";
+    const HISTORY_KEY = "shuanghuang_history_v32_bajie_planb_agrade";
     const HISTORY_LIMIT = 30;
 
+    // ── 八戒 方案B + A级纯净组合 ──────────────────────────────
+    const BAJIE_GOLDEN_X   = {1:8, 2:2, 3:7, 4:5, 5:3, 6:8};
+    const BAJIE_GOLDEN_LAST = new Set([2,3,5,7,8]);
+    const BAJIE_BLACKLIST_S = new Set([18,21,22,29,30]);
+    // 61个A级纯净组合 [seat, x, s]
+    const BAJIE_A_GRADE = [
+      [2,8,23],[4,3,15],[4,4,23],[3,6,28],[1,8,17],[5,0,19],[3,8,34],[4,8,38],
+      [5,1,20],[6,1,25],[1,8,18],[4,0,12],[3,8,25],[4,0,20],[5,4,25],[4,2,24],
+      [6,4,14],[5,5,27],[5,0,15],[5,5,19],[2,3,13],[1,9,35],[4,6,26],[3,8,28],
+      [4,0,23],[3,2,5], [5,6,28],[3,5,19],[2,7,24],[4,8,29],[5,8,30],[2,2,18],
+      [5,3,18],[6,9,25],[2,4,22],[5,2,29],[4,2,17],[2,4,31],[6,1,10],[5,9,22],
+      [1,9,37],[5,9,33],[6,0,13],[6,6,36],[4,4,16],[4,6,20],[5,0,22],[6,9,35],
+      [4,1,16],[2,8,32],[5,2,15],[5,9,31],[5,9,26],[2,2,19],[3,2,25],[3,6,17],
+      [2,6,18],[4,6,30],[2,8,28],[4,5,22],[1,3,21]
+    ];
+    // 座位优先级 5>3>6>1>2>4
+    const BAJIE_PRIORITY = {5:1, 3:2, 6:3, 1:4, 2:5, 4:6};
+
+    function analyzeBajie(room5) {
+      const digits = room5.split("").map(Number);
+      const [A, B, C, D, E] = digits;
+      const S = A + B + C + D + E;
+      const lastDigit = E;
+      const xMap = {1:A, 2:B, 3:C, 4:D, 5:E, 6:E};
+
+      const planBSeats = [];
+      const aGradeSeats = [];
+
+      // ── 方案B检测 ───────────────────────────────────────────
+      if (BAJIE_GOLDEN_LAST.has(lastDigit)) {
+        for (let seat = 1; seat <= 6; seat++) {
+          const x = xMap[seat];
+          if (x !== BAJIE_GOLDEN_X[seat]) continue;
+          if (BAJIE_BLACKLIST_S.has(S)) continue;
+          if (seat === 2 && x === 0) continue;
+          if (seat === 3 && x === 0) continue;
+          if (seat === 4 && x === 9) continue;
+          if (seat === 5 && x === 0 && ![12,15,16,19,22].includes(S)) continue;
+          planBSeats.push(seat);
+        }
+      }
+
+      // ── A级纯净组合检测 ──────────────────────────────────────
+      for (const [cs, cx, cS] of BAJIE_A_GRADE) {
+        if (xMap[cs] === cx && S === cS && !planBSeats.includes(cs)) {
+          aGradeSeats.push(cs);
+        }
+      }
+
+      // ── 合并 & 排序 ──────────────────────────────────────────
+      const combined = [...new Set([...planBSeats, ...aGradeSeats])];
+      combined.sort((a, b) => (BAJIE_PRIORITY[a]||9) - (BAJIE_PRIORITY[b]||9));
+      const top3 = combined.slice(0, 3);
+
+      if (top3.length === 0) {
+        let reason = "无命中";
+        if (!BAJIE_GOLDEN_LAST.has(lastDigit)) reason = `末位${lastDigit}不符`;
+        else if (BAJIE_BLACKLIST_S.has(S))      reason = `S=${S}黑名单`;
+        return {
+          finalSeat: "跳",
+          finalDesc: `S=${S}  末位${lastDigit}\n${reason} → 跳`,
+          seats: []
+        };
+      }
+
+      const tags = top3.map(s => {
+        const mark = planBSeats.includes(s) ? "⭐" : "✨";
+        return `${s}号${mark}(X=${xMap[s]})`;
+      });
+
+      return {
+        finalSeat: top3.join("/") + "号",
+        finalDesc: `S=${S}  末位${lastDigit}\n${tags.join("  ")}`,
+        seats: top3
+      };
+    }
+
+    // ── 流浪小男孩 & 梦见（不改动）────────────────────────────
     const ACCOUNTS = {
-      bajie: {
-        name: "八戒别跑"
-      },
       liulang: {
         name: "流浪小男孩",
-        xValues: {
-          2: [2, 4],
-          3: [2],
-          4: [0, 5],
-          5: [5, 6],
-          6: [5]
-        },
-        seatPriority: {
-          6: 1,
-          4: 2,
-          2: 3,
-          3: 4,
-          5: 5
-        }
+        xValues: { 2:[2,4], 3:[2], 4:[0,5], 5:[5,6], 6:[5] },
+        seatPriority: { 6:1, 4:2, 2:3, 3:4, 5:5 }
       },
-      mengjian: {
-        name: "梦见"
-      }
+      mengjian: { name: "梦见" }
     };
 
     function analyze(room5, accountKey) {
-      const config = ACCOUNTS[accountKey];
-
       if (accountKey === "bajie") {
-        const digits = room5.split("").map(Number);
-        const [A, B, C, D, E] = digits;
-        const S = A + B + C + D + E;
-
-        if ([16, 18, 21].includes(S)) {
-          return {
-            finalSeat: "跳",
-            finalDesc: `B=${B} C=${C} D=${D} E=${E}｜S=${S}\n命中弱区 S=${S} → 直接跳`,
-            seats: []
-          };
-        }
-
-        const candidates = [];
-
-        if ([2, 4, 8].includes(B)) {
-          candidates.push({ seat: 2, x: B, priority: 2 });
-        }
-        if ([1, 7].includes(C)) {
-          candidates.push({ seat: 3, x: C, priority: 3 });
-        }
-        if ([0, 2, 4].includes(D)) {
-          candidates.push({ seat: 4, x: D, priority: 4 });
-        }
-        if ([1, 3, 5, 9].includes(E)) {
-          candidates.push({ seat: 5, x: E, priority: 1 });
-        }
-        if ([0, 6, 8].includes(E)) {
-          candidates.push({ seat: 6, x: E, priority: 5 });
-        }
-
-        candidates.sort((a, b) => a.priority - b.priority);
-
-        const top3 = candidates.slice(0, 3);
-
-        if (top3.length === 0) {
-          return {
-            finalSeat: "跳",
-            finalDesc: `B=${B} C=${C} D=${D} E=${E}｜S=${S}\n无命中 → 跳`,
-            seats: []
-          };
-        }
-
-        const seatText = top3.map(x => x.seat).join("/");
-        const detail = top3.map(item => `${item.seat}号(X=${item.x})`).join("、");
-
-        return {
-          finalSeat: `${seatText}号`,
-          finalDesc: `B=${B} C=${C} D=${D} E=${E}｜S=${S}\n推荐：${detail}`,
-          seats: top3.map(x => x.seat)
-        };
+        return analyzeBajie(room5);
       }
 
       if (accountKey === "mengjian") {
@@ -416,7 +385,6 @@ S值质量（S=各位数字之和）：
         const [A, B, C, D, E] = digits;
         const S = A + B + C + D + E;
 
-        // 垃圾S值直接跳
         if ([18, 25, 30].includes(S)) {
           return {
             finalSeat: "跳",
@@ -425,7 +393,6 @@ S值质量（S=各位数字之和）：
           };
         }
 
-        // 黄金X值定义
         const goldenXValues = {
           2: [5],
           3: [9, 4],
@@ -433,20 +400,14 @@ S值质量（S=各位数字之和）：
           5: [1],
           6: [5, 7, 3, 6, 8]
         };
+        const seatMapping = { 2:B, 3:C, 4:D, 5:E, 6:E };
+        const seatPriority = { 5:1, 2:2, 3:3, 4:4, 6:5 };
 
-        const seatMapping = { 2: B, 3: C, 4: D, 5: E, 6: E };
-        const seatPriority = { 5: 1, 2: 2, 3: 3, 4: 4, 6: 5 };
-
-        // 检查黄金X值
         const candidates = [];
         for (let seat = 2; seat <= 6; seat++) {
           const xVal = seatMapping[seat];
           if (goldenXValues[seat].includes(xVal)) {
-            candidates.push({
-              seat,
-              x: xVal,
-              priority: seatPriority[seat]
-            });
+            candidates.push({ seat, x: xVal, priority: seatPriority[seat] });
           }
         }
 
@@ -458,18 +419,12 @@ S值质量（S=各位数字之和）：
           };
         }
 
-        // 检查S值质量
         let sQuality = "unknown";
-        if ([10, 11, 12, 14, 15, 19, 21, 22, 26, 27, 29, 31, 34, 35].includes(S)) {
-          sQuality = "good";
-        } else if ([16, 17, 23, 24, 28].includes(S)) {
-          sQuality = "medium";
-        }
+        if ([10,11,12,14,15,19,21,22,26,27,29,31,34,35].includes(S)) sQuality = "good";
+        else if ([16,17,23,24,28].includes(S)) sQuality = "medium";
 
-        // 排序并取前3个
         candidates.sort((a, b) => a.priority - b.priority);
         const top3 = candidates.slice(0, 3);
-
         const seatText = top3.map(x => x.seat).join("/");
         const seatDetail = top3.map(x => `${x.seat}号(X=${x.x})`).join("、");
         const sQualityText = sQuality === "good" ? "好S值✅" : (sQuality === "medium" ? "中S值⚠️" : "弱S值");
@@ -481,174 +436,116 @@ S值质量（S=各位数字之和）：
         };
       }
 
+      // 流浪小男孩
+      const config = ACCOUNTS[accountKey];
       const X_VALUES = config.xValues;
       const SEAT_PRIORITY = config.seatPriority;
-
       const digits = room5.split("").map(Number);
       const [A, B, C, D, E] = digits;
-
-      const seatMapping = {
-        1: A,
-        2: B,
-        3: C,
-        4: D,
-        5: E,
-        6: E
-      };
+      const seatMapping = { 1:A, 2:B, 3:C, 4:D, 5:E, 6:E };
 
       const rows = [];
-
       for (let seat in X_VALUES) {
         const seatNum = parseInt(seat, 10);
         const xValue = seatMapping[seatNum];
-        const requiredXValues = X_VALUES[seat];
-        const isHit = requiredXValues.includes(xValue);
-
-        rows.push({
-          seat: seatNum,
-          xValue,
-          requiredXValues: requiredXValues.join(", "),
-          isHit,
-          priority: SEAT_PRIORITY[seatNum] || 999
-        });
+        const isHit = X_VALUES[seat].includes(xValue);
+        rows.push({ seat: seatNum, xValue, isHit, priority: SEAT_PRIORITY[seatNum] || 999 });
       }
 
-      const hits = rows
-        .filter(r => r.isHit)
-        .sort((a, b) => a.priority - b.priority)
-        .slice(0, 3);
+      const hits = rows.filter(r => r.isHit).sort((a, b) => a.priority - b.priority).slice(0, 3);
+      if (hits.length === 0) return { finalSeat: "跳", finalDesc: "无", seats: [] };
 
-      let finalSeat = "跳";
-      let finalDesc = "无";
-
-      if (hits.length > 0) {
-        finalSeat = `${hits[0].seat}号`;
-        finalDesc = `X=${hits[0].xValue}`;
-
-        if (hits.length > 1) {
-          const others = hits.slice(1).map(x => `${x.seat}号`).join("、");
-          finalDesc += `\n次选：${others}`;
-        }
+      let finalSeat = `${hits[0].seat}号`;
+      let finalDesc = `X=${hits[0].xValue}`;
+      if (hits.length > 1) {
+        finalDesc += `\n次选：${hits.slice(1).map(x => `${x.seat}号`).join("、")}`;
       }
-
       return { finalSeat, finalDesc, seats: hits.map(h => h.seat) };
     }
 
+    // ── 历史记录 ─────────────────────────────────────────────
     function loadHistory() {
-      try {
-        const raw = localStorage.getItem(HISTORY_KEY);
-        return raw ? JSON.parse(raw) : [];
-      } catch {
-        return [];
-      }
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+      catch { return []; }
     }
-
     function saveHistory(items) {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, HISTORY_LIMIT)));
     }
-
     function renderHistory() {
       const items = loadHistory();
       historyListEl.innerHTML = "";
-
       if (items.length === 0) {
         historyListEl.innerHTML = `<div class="historyItem"><div class="historyMain" style="color:rgba(255,255,255,.55)">暂无记录</div></div>`;
         return;
       }
-
       items.forEach(item => {
         const div = document.createElement("div");
         div.className = "historyItem";
-
         const resultText = item.accounts
           .map(acc => `${acc.name}:${acc.seats.length > 0 ? acc.seats.join("、") + "号" : "跳"}`)
           .join(" | ");
-
         div.innerHTML = `
           <div class="historyTop">
             <div>房号：<span class="pill">${item.room}</span></div>
             <div>${item.time}</div>
           </div>
-          <div class="historyMain">
-            <div><strong>结果：</strong>${resultText}</div>
-          </div>
+          <div class="historyMain"><strong>结果：</strong>${resultText}</div>
         `;
         historyListEl.appendChild(div);
       });
     }
-
     function pushHistory(room, results) {
       const items = loadHistory();
-
       items.unshift({
         room,
         accounts: [
-          { name: "八戒别跑", seats: results.bajie.seats },
+          { name: "八戒别跑",   seats: results.bajie.seats },
           { name: "流浪小男孩", seats: results.liulang.seats },
-          { name: "梦见", seats: results.mengjian.seats }
+          { name: "梦见",       seats: results.mengjian.seats }
         ],
         time: new Date().toLocaleString("zh-CN", { hour12: false })
       });
-
       saveHistory(items);
       renderHistory();
     }
 
+    // ── 主逻辑 ───────────────────────────────────────────────
     function run() {
       const s = roomEl.value.trim().replace(/\s+/g, "");
       if (!/^\d{5}$/.test(s)) {
         msgEl.textContent = "请输入正确的5位数字";
-        document.getElementById("summary-bajie").style.display = "none";
-        document.getElementById("summary-liulang").style.display = "none";
-        document.getElementById("summary-mengjian").style.display = "none";
+        ["bajie","liulang","mengjian"].forEach(k =>
+          document.getElementById(`summary-${k}`).style.display = "none");
         return;
       }
-
       msgEl.textContent = "";
 
       const results = {
-        bajie: analyze(s, "bajie"),
-        liulang: analyze(s, "liulang"),
+        bajie:    analyze(s, "bajie"),
+        liulang:  analyze(s, "liulang"),
         mengjian: analyze(s, "mengjian")
       };
 
-      const summaryBajie = document.getElementById("summary-bajie");
-      document.getElementById("finalSeat-bajie").textContent = results.bajie.finalSeat;
-      document.getElementById("finalSub-bajie").textContent = results.bajie.finalDesc;
-      summaryBajie.style.display = "block";
-
-      const summaryLiulang = document.getElementById("summary-liulang");
-      document.getElementById("finalSeat-liulang").textContent = results.liulang.finalSeat;
-      document.getElementById("finalSub-liulang").textContent = results.liulang.finalDesc;
-      summaryLiulang.style.display = "block";
-
-      const summaryMengjian = document.getElementById("summary-mengjian");
-      document.getElementById("finalSeat-mengjian").textContent = results.mengjian.finalSeat;
-      document.getElementById("finalSub-mengjian").textContent = results.mengjian.finalDesc;
-      summaryMengjian.style.display = "block";
+      ["bajie","liulang","mengjian"].forEach(k => {
+        const el = document.getElementById(`summary-${k}`);
+        document.getElementById(`finalSeat-${k}`).textContent = results[k].finalSeat;
+        document.getElementById(`finalSub-${k}`).textContent  = results[k].finalDesc;
+        el.style.display = "block";
+      });
 
       pushHistory(s, results);
-
-      setTimeout(() => {
-        roomEl.value = "";
-        roomEl.focus();
-      }, 250);
+      setTimeout(() => { roomEl.value = ""; roomEl.focus(); }, 250);
     }
 
     goEl.addEventListener("click", run);
-    roomEl.addEventListener("keydown", e => {
-      if (e.key === "Enter") run();
-    });
-
+    roomEl.addEventListener("keydown", e => { if (e.key === "Enter") run(); });
     clearHistoryEl.addEventListener("click", () => {
       localStorage.removeItem(HISTORY_KEY);
       renderHistory();
     });
 
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js");
-      });
+      window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
     }
 
     renderHistory();
