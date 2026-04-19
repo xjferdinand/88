@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="八戒智能模型">
-  <title>八戒别跑 - 精英模型 v4.0</title>
+  <title>八戒别跑 - 精英模型 v5.0</title>
   <style>
     :root{
       --bg:#0b0b0f;--card:#11111a;--line:rgba(255,255,255,.10);
@@ -27,7 +27,6 @@
     }
     .app{width:min(520px,100%);}
 
-    /* 标题 */
     .title{
       font-size:20px;font-weight:900;margin:0 0 14px;
       display:flex;align-items:center;gap:9px;letter-spacing:.3px;
@@ -37,14 +36,12 @@
       background:var(--red);box-shadow:0 0 14px rgba(255,45,45,.9);
     }
 
-    /* 面板 */
     .panel{
       background:linear-gradient(160deg,rgba(255,45,45,.07),transparent 55%),var(--card);
       border:1px solid var(--line);border-radius:20px;padding:18px;
       box-shadow:0 20px 70px rgba(0,0,0,.60);
     }
 
-    /* 输入框 */
     input{
       width:100%;padding:15px 16px;font-size:22px;letter-spacing:3px;
       border-radius:14px;border:1px solid var(--line);
@@ -53,7 +50,6 @@
     }
     input:focus{border-color:rgba(255,45,45,.65);box-shadow:0 0 0 3px rgba(255,45,45,.12);}
 
-    /* 圆形按钮 */
     .btn-wrap{display:flex;justify-content:center;margin:18px 0 10px;}
     .btn-circle{
       width:80px;height:80px;border-radius:50%;
@@ -67,10 +63,8 @@
     }
     .btn-circle:active{transform:scale(.93);box-shadow:0 0 10px rgba(255,45,45,.3);}
 
-    /* 消息 */
     .msg{text-align:center;font-size:13px;color:var(--muted);min-height:16px;margin-bottom:10px;}
 
-    /* 结果卡 */
     .result{
       display:none;margin-top:4px;padding:16px;border-radius:16px;
       border:1px solid rgba(255,45,45,.30);
@@ -81,7 +75,6 @@
       letter-spacing:.5px;margin-bottom:10px;text-align:center;
     }
 
-    /* 命中项 */
     .hit-list{display:flex;flex-direction:column;gap:8px;}
     .hit{
       display:flex;align-items:center;gap:10px;
@@ -92,6 +85,8 @@
     .hit.rank1{border-color:rgba(255,45,45,.45);background:rgba(255,45,45,.10);}
     .hit.rank2{border-color:rgba(255,180,0,.25);}
     .hit.rank3{border-color:rgba(255,255,255,.10);}
+    .hit.rank4{border-color:rgba(255,255,255,.08);}
+    .hit.rank5{border-color:rgba(255,255,255,.06);}
 
     .hit-rank{
       font-size:11px;font-weight:900;padding:3px 7px;border-radius:999px;
@@ -108,17 +103,16 @@
     .hit-detail{font-size:12px;color:var(--muted);line-height:1.7;}
     .hit-profit{
       margin-left:auto;font-size:13px;font-weight:800;
-      color:rgba(100,255,150,.85);flex-shrink:0;
+      color:rgba(100,255,150,.85);flex-shrink:0;text-align:right;
+      min-width:72px;
     }
 
-    /* 跳 */
     .skip{
       display:none;text-align:center;padding:18px;
       font-size:32px;font-weight:1000;color:rgba(255,255,255,.25);
       letter-spacing:2px;
     }
 
-    /* 历史 */
     .history{
       margin-top:14px;padding:12px 14px;border-radius:14px;
       border:1px solid var(--line);background:rgba(255,255,255,.025);
@@ -151,7 +145,6 @@
       font-weight:800;margin-right:4px;color:var(--red);
     }
 
-    /* 文档 */
     .tiny{
       margin-top:14px;font-size:11px;color:rgba(255,255,255,.35);
       line-height:1.8;white-space:pre-line;border-top:1px solid var(--line);
@@ -161,7 +154,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">八戒别跑 — 精英模型 v4.0</div>
+  <div class="title">八戒别跑 — 精英模型 v5.0</div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入房号" maxlength="5" />
@@ -172,16 +165,13 @@
 
     <div class="msg" id="msg"></div>
 
-    <!-- 命中展示 -->
     <div class="result" id="result">
-      <div class="result-header" id="result-header">— 命中组合 —</div>
+      <div class="result-header" id="result-header">— 命中位子 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
 
-    <!-- 跳 -->
     <div class="skip" id="skip">跳</div>
 
-    <!-- 历史 -->
     <div class="history">
       <div class="historyHeader">
         <div class="historyTitle">最近记录</div>
@@ -191,116 +181,183 @@
     </div>
 
     <div class="tiny">
-【八戒别跑 精英模型 v4.0】
-54个纯净组合 | 64场历史全赢 | 平均+951¥/场
+【八戒别跑 精英模型 v5.0】
 
-规则：座位 + X值 + S值 三重精准匹配
-X值：座位1-4看对应位，座位5-6看末位
-S值：房号五位数字之和
+核心规则：
+1）只看 2~6 号位
+2）先过位子专属 X 白名单
+3）再过 X 与其余四位关系条件
+4）命中则显示对应位子，不命中就跳
 
-命中时按平均利润强度排序，🔥强（≥1000）⭐强（≥600）
+位子白名单：
+2号位：B ∈ {2,4,8}
+3号位：C ∈ {1,7}
+4号位：D ∈ {0,2,4}
+5号位：E ∈ {1,3,5,9}
+6号位：E ∈ {0,6,8}
+
+关系条件：
+2号位：避雷位，X全场最大跳；同奇偶达到3个跳
+3号位：X有1个重复 或 X最大/并列最大；差1数量=2跳
+4号位：X全场最小/最小并列可选；X最大/并列最大跳
+5号位：X有1个重复 或 差2数量=1；X全场最大跳；差2数量=2跳
+6号位：X最大/并列最大可选；X有1个重复跳
+
+历史回测（仅供参考）：
+整体放行命中率约 78.8%
     </div>
 
   </div>
 </div>
 
 <script>
-  const roomEl       = document.getElementById("room");
-  const goEl         = document.getElementById("go");
-  const msgEl        = document.getElementById("msg");
-  const resultEl     = document.getElementById("result");
-  const resultHeader = document.getElementById("result-header");
-  const hitListEl    = document.getElementById("hitList");
-  const skipEl       = document.getElementById("skip");
-  const historyListEl= document.getElementById("historyList");
-  const clearHistEl  = document.getElementById("clearHistory");
+  const roomEl        = document.getElementById("room");
+  const goEl          = document.getElementById("go");
+  const msgEl         = document.getElementById("msg");
+  const resultEl      = document.getElementById("result");
+  const resultHeader  = document.getElementById("result-header");
+  const hitListEl     = document.getElementById("hitList");
+  const skipEl        = document.getElementById("skip");
+  const historyListEl = document.getElementById("historyList");
+  const clearHistEl   = document.getElementById("clearHistory");
 
-  const HISTORY_KEY   = "bajie_v40_elite";
+  const HISTORY_KEY   = "bajie_v50_struct";
   const HISTORY_LIMIT = 30;
 
-  // ═══════════════════════════════════════════════════════════
-  //  54个精英纯净组合 [seat, x, s, avgProfit]  按avgProfit降序
-  // ═══════════════════════════════════════════════════════════
-  const ELITE = [
-    [1,8,27,3060],
-    [5,3,14,2690],
-    [2,8,23,2310],
-    [4,3,15,2030],
-    [3,6,28,1510],
-    [5,0,19,1440],
-    [4,8,38,1380],
-    [6,1,25,1350],
-    [4,0,12,1220],
-    [3,8,25,1140],
-    [3,7,28,1010],
-    [4,0,20,1010],
-    [6,8,19,1007],
-    [4,2,24, 990],
-    [6,4,14, 990],
-    [5,4,25, 990],
-    [5,5,27, 980],
-    [4,4,23, 970],
-    [5,0,15, 960],
-    [2,3,13, 940],
-    [5,5,19, 940],
-    [1,9,35, 910],
-    [3,7,17, 900],
-    [4,6,26, 860],
-    [3,8,28, 830],
-    [4,0,23, 830],
-    [3,2, 5, 820],
-    [5,6,28, 810],
-    [3,5,19, 790],
-    [2,7,24, 760],
-    [4,8,29, 750],
-    [5,8,30, 740],
-    [5,1,22, 735],
-    [2,2,18, 730],
-    [5,3,18, 730],
-    [1,8,17, 725],
-    [2,4,22, 710],
-    [6,9,25, 710],
-    [3,8,34, 700],
-    [5,1,20, 675],
-    [5,2,29, 670],
-    [5,0,16, 655],
-    [4,2,17, 650],
-    [2,4,31, 640],
-    [5,9,22, 640],
-    [6,1,10, 640],
-    [1,8,16, 630],
-    [1,9,37, 620],
-    [5,9,33, 620],
-    [3,7,25, 620],
-    [1,8,18, 610],
-    [6,0,13, 600],
-    [6,6,36, 600],
-    [6,9,35, 560],  // 保留但标注较弱
-  ];
+  const SEAT_CONFIG = {
+    2: { allow: [2,4,8], rate: "90.0%", rank: 1 },
+    3: { allow: [1,7],   rate: "100%",  rank: 5 },
+    4: { allow: [0,2,4], rate: "69.2%", rank: 3 },
+    5: { allow: [1,3,5,9], rate: "80.0%", rank: 2 },
+    6: { allow: [0,6,8], rate: "66.7%", rank: 4 }
+  };
 
-  function getS(r){ return r.split("").reduce((a,c)=>a+parseInt(c),0); }
-  function getX(r, seat){
-    const d = r.split("").map(Number);
-    return (seat>=5) ? d[4] : d[seat-1];
+  function getDigits(room){
+    return room.split("").map(Number); // [A,B,C,D,E]
   }
 
-  function analyze(room5){
-    const S    = getS(room5);
-    const hits = [];
+  function getX(d, seat){
+    if(seat === 2) return d[1];
+    if(seat === 3) return d[2];
+    if(seat === 4) return d[3];
+    if(seat === 5) return d[4];
+    if(seat === 6) return d[4];
+    return null;
+  }
 
-    for(const [seat,x,s,avg] of ELITE){
-      if(getX(room5, seat)===x && S===s){
-        hits.push({seat, x, s, avg});
+  function relationInfo(digits, seat){
+    const X = getX(digits, seat);
+    const idx = seat === 2 ? 1 : seat === 3 ? 2 : seat === 4 ? 3 : 4;
+    const others = digits.filter((_, i) => i !== idx);
+
+    const strictMax = others.every(v => X > v);
+    const strictMin = others.every(v => X < v);
+    const maxOrTiedMax = others.every(v => X >= v);
+    const minOrTiedMin = others.every(v => X <= v);
+
+    const eqCount = others.filter(v => v === X).length;
+    const sameParityCount = others.filter(v => (v % 2) === (X % 2)).length;
+    const diff1Count = others.filter(v => Math.abs(v - X) === 1).length;
+    const diff2Count = others.filter(v => Math.abs(v - X) === 2).length;
+
+    return {
+      X,
+      strictMax,
+      strictMin,
+      maxOrTiedMax,
+      minOrTiedMin,
+      eqCount,
+      sameParityCount,
+      diff1Count,
+      diff2Count
+    };
+  }
+
+  function evaluateSeat(digits, seat){
+    const conf = SEAT_CONFIG[seat];
+    const info = relationInfo(digits, seat);
+    const X = info.X;
+
+    if(!conf.allow.includes(X)) return null;
+
+    let allowed = false;
+    let label = "可选";
+    let reason = "";
+
+    if(seat === 2){
+      if(info.strictMax) return null;
+      if(info.sameParityCount >= 3) return null;
+
+      allowed = true;
+      label = "强可选";
+      reason = "白名单通过，且未命中2号位避雷";
+    }
+
+    if(seat === 3){
+      if(info.diff1Count === 2) return null;
+      if(info.eqCount === 1 || info.maxOrTiedMax){
+        allowed = true;
+        label = info.eqCount === 1 ? "强可选" : "可选";
+        reason = info.eqCount === 1 ? "X有1个重复" : "X最大/并列最大";
       }
     }
 
-    // 已经按avgProfit降序（ELITE数组本身有序），但防止乱序再排一次
-    hits.sort((a,b)=>b.avg - a.avg);
-    return { S, hits };
+    if(seat === 4){
+      if(info.maxOrTiedMax) return null;
+      if(info.strictMin || info.minOrTiedMin){
+        allowed = true;
+        label = info.strictMin ? "强可选" : "可选";
+        reason = info.strictMin ? "X全场最小" : "X最小/并列最小";
+      }
+    }
+
+    if(seat === 5){
+      if(info.strictMax) return null;
+      if(info.diff2Count === 2) return null;
+
+      if(info.eqCount === 1 || info.diff2Count === 1){
+        allowed = true;
+        label = info.eqCount === 1 ? "强可选" : "可选";
+        reason = info.eqCount === 1 ? "X有1个重复" : "差2数量=1";
+      }
+    }
+
+    if(seat === 6){
+      if(info.eqCount === 1) return null;
+      if(info.maxOrTiedMax){
+        allowed = true;
+        label = "可选";
+        reason = "X最大/并列最大";
+      }
+    }
+
+    if(!allowed) return null;
+
+    return {
+      seat,
+      x: X,
+      label,
+      reason,
+      rate: conf.rate,
+      rank: conf.rank
+    };
+  }
+
+  function analyze(room5){
+    const digits = getDigits(room5);
+    const hits = [];
+
+    [2,3,4,5,6].forEach(seat => {
+      const res = evaluateSeat(digits, seat);
+      if(res) hits.push(res);
+    });
+
+    hits.sort((a,b) => a.rank - b.rank);
+    return { hits };
   }
 
   function render(room5){
-    const {S, hits} = analyze(room5);
+    const { hits } = analyze(room5);
 
     resultEl.style.display = "none";
     skipEl.style.display   = "none";
@@ -311,86 +368,107 @@ S值：房号五位数字之和
       return [];
     }
 
-    const top = hits.slice(0,3);
-    resultHeader.textContent = `S=${S}　命中 ${top.length} 个强组合`;
+    resultHeader.textContent = `命中 ${hits.length} 个可选位`;
     resultEl.style.display = "block";
 
-    top.forEach((h, idx)=>{
+    hits.forEach((h, idx) => {
       const div = document.createElement("div");
-      div.className = `hit rank${idx+1}`;
-
-      const rankLabel = idx===0 ? "最强" : (idx===1 ? "次强" : "第三");
-      const star      = h.avg>=1000 ? "🔥强" : "⭐强";
+      div.className = `hit rank${Math.min(idx+1, 5)}`;
 
       div.innerHTML = `
-        <div class="hit-rank">${star}${rankLabel}</div>
+        <div class="hit-rank">${h.label}</div>
         <div class="hit-seat">${h.seat}</div>
-        <div class="hit-detail">${h.seat}号位<br>X=${h.x}  S=${h.s}</div>
-        <div class="hit-profit">+${h.avg}¥</div>
+        <div class="hit-detail">
+          ${h.seat}号位　X=${h.x}<br>
+          ${h.reason}
+        </div>
+        <div class="hit-profit">命中率<br>${h.rate}</div>
       `;
       hitListEl.appendChild(div);
     });
 
-    return top.map(h=>h.seat);
+    return hits.map(h => h.seat);
   }
 
   function run(){
     const raw = roomEl.value.trim().replace(/\s+/g,"");
     if(!/^\d{5}$/.test(raw)){
-      msgEl.textContent="请输入正确的5位数字";
+      msgEl.textContent = "请输入正确的5位数字";
       return;
     }
-    msgEl.textContent="";
+    msgEl.textContent = "";
     const seats = render(raw);
     pushHistory(raw, seats);
-    setTimeout(()=>{ roomEl.value=""; roomEl.focus(); }, 200);
+    setTimeout(() => {
+      roomEl.value = "";
+      roomEl.focus();
+    }, 200);
   }
 
-  // ── 历史记录 ─────────────────────────────────────
   function loadHistory(){
-    try{ return JSON.parse(localStorage.getItem(HISTORY_KEY))||[]; }catch{ return []; }
+    try{
+      return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+    }catch{
+      return [];
+    }
   }
+
   function saveHistory(items){
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0,HISTORY_LIMIT)));
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, HISTORY_LIMIT)));
   }
+
   function renderHistory(){
     const items = loadHistory();
     historyListEl.innerHTML = "";
+
     if(!items.length){
-      historyListEl.innerHTML=`<div class="historyItem"><div class="historyMain" style="color:rgba(255,255,255,.25)">暂无记录</div></div>`;
+      historyListEl.innerHTML =
+        `<div class="historyItem"><div class="historyMain" style="color:rgba(255,255,255,.25)">暂无记录</div></div>`;
       return;
     }
-    items.forEach(item=>{
+
+    items.forEach(item => {
       const div = document.createElement("div");
       div.className = "historyItem";
       const res = item.seats.length
-        ? item.seats.map(s=>`强${s}号`).join(" → ")
+        ? item.seats.map(s => `${s}号`).join(" → ")
         : "跳";
-      div.innerHTML=`
-        <div class="historyTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-        <div class="historyMain">${res}</div>`;
+
+      div.innerHTML = `
+        <div class="historyTop">
+          <span>房号 <span class="pill">${item.room}</span></span>
+          <span>${item.time}</span>
+        </div>
+        <div class="historyMain">${res}</div>
+      `;
       historyListEl.appendChild(div);
     });
   }
+
   function pushHistory(room, seats){
     const items = loadHistory();
     items.unshift({
-      room, seats,
-      time: new Date().toLocaleString("zh-CN",{hour12:false})
+      room,
+      seats,
+      time: new Date().toLocaleString("zh-CN", { hour12:false })
     });
     saveHistory(items);
     renderHistory();
   }
 
-  // ── 事件绑定 ─────────────────────────────────────
   goEl.addEventListener("click", run);
-  roomEl.addEventListener("keydown", e=>{ if(e.key==="Enter") run(); });
-  clearHistEl.addEventListener("click",()=>{
+  roomEl.addEventListener("keydown", e => {
+    if(e.key === "Enter") run();
+  });
+
+  clearHistEl.addEventListener("click", () => {
     localStorage.removeItem(HISTORY_KEY);
     renderHistory();
   });
-  if("serviceWorker"in navigator)
-    window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
+
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
+  }
 
   renderHistory();
   roomEl.focus();
