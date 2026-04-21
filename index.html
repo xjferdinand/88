@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="八戒牛逼 结构黑名单模型">
-  <title>八戒牛逼 结构黑名单模型</title>
+  <meta name="apple-mobile-web-app-title" content="八戒牛逼 结构双模型">
+  <title>八戒牛逼 结构双模型</title>
   <style>
     :root{
       --bg:#0b0b0f;--card:#11111a;--line:rgba(255,255,255,.10);
@@ -73,7 +73,7 @@
     .hit-list{display:flex;flex-direction:column;gap:7px;}
 
     .hit{
-      display:grid;grid-template-columns:auto 52px 1fr auto;
+      display:grid;grid-template-columns:auto 78px 1fr auto;
       align-items:center;gap:10px;
       padding:10px 13px;border-radius:13px;
       border:1px solid rgba(255,255,255,.07);
@@ -91,9 +91,10 @@
     .hit.r1 .hit-lbl{background:rgba(255,45,45,.38);color:#ff9090;}
 
     .hit-seat{
-      font-size:38px;font-weight:1000;color:var(--red);
+      font-size:28px;font-weight:1000;color:var(--red);
       text-shadow:0 0 16px rgba(255,45,45,.45);
-      line-height:1;text-align:center;
+      line-height:1.1;text-align:center;
+      white-space:nowrap;
     }
     .hit-body{line-height:1.7;}
     .hit-body .row1{font-size:12px;color:var(--text);}
@@ -142,7 +143,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">八戒牛逼<span class="version">结构黑名单模型</span></div>
+  <div class="title">八戒牛逼<span class="version">26结构 / 强X双模型</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -154,7 +155,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 命中位子 —</div>
+      <div class="result-hdr" id="resultHdr">— 双模型结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
     <div class="skip" id="skip">跳</div>
@@ -168,21 +169,20 @@
     </div>
 
     <div class="tiny">
-【八戒牛逼 结构黑名单模型】
+【八戒牛逼 结构双模型】
 
-双层逻辑：
-1. 正结构结果（最多2个位子）
-2. 正结构 + X黑名单过滤结果（最多2个位子）
+当前模型 = 26种结构 / 34条位子规则
 
-显示规则：
-- 若过滤后仍有命中位子：只显示“过滤后命中”
-- 若过滤后全部被拦截：同时显示
-  「过滤结果：跳」
-  「原始正结构结果：原本命中位子」
+同时输出两个模型：
+1. 26结构模型
+2. 26结构 + 稳健版强X
 
-备注：
-- 所有输出都带备注
-- 最多给你 2 个位子，方便抢位
+说明：
+- 每个模型最多给 2 个位子
+- 页面最多同时显示 2 个结果块
+- 一个结果块代表一个模型
+- 若结构模型命中但强X模型未命中，会同时显示：
+  「26结构模型」和「26结构 + 强X → 跳」
     </div>
 
   </div>
@@ -190,122 +190,113 @@
 
 <script>
 // ══════════════════════════════════════════════════════
-// 正结构规则：一个结构最多给2个位子
-// 第一位 = 首选
-// 第二位 = 次选（仅在已确认也为正收益时加入）
+// 当前模型：26种结构 / 34条位子规则
+// 每种结构最多保留2个位子，保证输出不会超过2个位子
 // ══════════════════════════════════════════════════════
 const STRUCT_RULES = {
   '偶偶偶偶偶': [
-    { seat: 3, n: 1, net: 650,  wr: '100%', avg: '+650' }
+    { seat: 3, tag: '单样本补充', n: 1, net: 650,  wr: '100%', avg: '+650' }
   ],
   '偶偶偶奇偶': [
-    { seat: 5, n: 3, net: 1810, wr: '100%', avg: '+603' }
+    { seat: 5, tag: '稳结构', n: 4, net: 1930, wr: '100%', avg: '+482' }
   ],
   '偶偶偶奇奇': [
-    { seat: 5, n: 1, net: 320,  wr: '100%', avg: '+320' }
+    { seat: 5, tag: '稳结构', n: 2, net: 590,  wr: '100%', avg: '+295' }
   ],
   '偶偶奇偶偶': [
-    { seat: 5, n: 1, net: 990,  wr: '100%', avg: '+990' }
+    { seat: 5, tag: '单样本补充', n: 1, net: 990,  wr: '100%', avg: '+990' }
   ],
   '偶偶奇偶奇': [
-    { seat: 5, n: 3, net: 2680, wr: '100%', avg: '+893' },
-    { seat: 6, n: 2, net: 1370, wr: '100%', avg: '+685' }
-  ],
-  '偶偶奇奇偶': [
-    { seat: 1, n: 4, net: 1150, wr: '75%',  avg: '+287' }
+    { seat: 5, tag: '稳结构', n: 4, net: 2960, wr: '100%', avg: '+740' },
+    { seat: 6, tag: '扩容补位', n: 2, net: 1370, wr: '100%', avg: '+685' }
   ],
   '偶偶奇奇奇': [
-    { seat: 1, n: 2, net: 2550, wr: '100%', avg: '+1275' }
+    { seat: 1, tag: '稳结构', n: 2, net: 2550, wr: '100%', avg: '+1275' }
   ],
-
   '偶奇偶偶偶': [
-    { seat: 1, n: 3, net: 4200, wr: '100%', avg: '+1400' },
-    { seat: 3, n: 5, net: 2870, wr: '80%',  avg: '+574' }
+    { seat: 1, tag: '稳结构', n: 3, net: 4200, wr: '100%', avg: '+1400' },
+    { seat: 3, tag: '小输大赢扩容', n: 5, net: 2870, wr: '80%', avg: '+574' }
   ],
   '偶奇偶偶奇': [
-    { seat: 5, n: 2, net: 2010, wr: '50%',  avg: '+1005' }
+    { seat: 6, tag: '稳结构', n: 2, net: 980,  wr: '100%', avg: '+490' }
   ],
   '偶奇偶奇偶': [
-    { seat: 4, n: 1, net: 970,  wr: '100%', avg: '+970' }
+    { seat: 6, tag: '稳结构', n: 2, net: 160,  wr: '100%', avg: '+80' },
+    { seat: 4, tag: '单样本补充', n: 1, net: 970,  wr: '100%', avg: '+970' }
   ],
   '偶奇奇偶偶': [
-    { seat: 6, n: 1, net: 990,  wr: '100%', avg: '+990' }
+    { seat: 5, tag: '稳结构', n: 2, net: 810,  wr: '100%', avg: '+405' },
+    { seat: 6, tag: '单样本补充', n: 1, net: 990,  wr: '100%', avg: '+990' }
   ],
   '偶奇奇偶奇': [
-    { seat: 4, n: 2, net: 1400, wr: '100%', avg: '+700' }
+    { seat: 4, tag: '稳结构', n: 2, net: 1400, wr: '100%', avg: '+700' }
   ],
   '偶奇奇奇偶': [
-    { seat: 3, n: 2, net: 1690, wr: '100%', avg: '+845' }
+    { seat: 3, tag: '稳结构', n: 2, net: 1690, wr: '100%', avg: '+845' }
   ],
   '偶奇奇奇奇': [
-    { seat: 5, n: 2, net: 1200, wr: '100%', avg: '+600' }
+    { seat: 5, tag: '扩容结构', n: 3, net: 1060, wr: '66.7%', avg: '+353' }
   ],
-
   '奇偶偶偶偶': [
-    { seat: 3, n: 1, net: 820,  wr: '100%', avg: '+820' }
+    { seat: 3, tag: '单样本补充', n: 1, net: 820,  wr: '100%', avg: '+820' }
   ],
   '奇偶偶偶奇': [
-    { seat: 5, n: 3, net: 2240, wr: '100%', avg: '+746' }
+    { seat: 5, tag: '稳结构', n: 4, net: 2320, wr: '100%', avg: '+580' },
+    { seat: 3, tag: '稳结构', n: 3, net: 1950, wr: '100%', avg: '+650' }
   ],
   '奇偶偶奇偶': [
-    { seat: 5, n: 1, net: 1060, wr: '100%', avg: '+1060' }
+    { seat: 5, tag: '稳结构', n: 2, net: 1480, wr: '100%', avg: '+740' },
+    { seat: 6, tag: '稳结构', n: 2, net: 400,  wr: '100%', avg: '+200' }
   ],
   '奇偶偶奇奇': [
-    { seat: 2, n: 1, net: 2310, wr: '100%', avg: '+2310' }
+    { seat: 4, tag: '稳结构', n: 2, net: 630,  wr: '100%', avg: '+315' },
+    { seat: 6, tag: '小输大赢扩容', n: 3, net: 1880, wr: '66.7%', avg: '+626' }
   ],
   '奇偶奇偶偶': [
-    { seat: 5, n: 3, net: 2510, wr: '100%', avg: '+836' }
+    { seat: 5, tag: '小输大赢扩容', n: 5, net: 2110, wr: '60%', avg: '+422' }
   ],
   '奇偶奇偶奇': [
-    { seat: 5, n: 3, net: 3660, wr: '100%', avg: '+1220' },
-    { seat: 4, n: 4, net: 1710, wr: '75%',  avg: '+427' }
+    { seat: 5, tag: '稳结构', n: 4, net: 3950, wr: '100%', avg: '+987' },
+    { seat: 2, tag: '稳结构', n: 2, net: 1130, wr: '100%', avg: '+565' }
   ],
   '奇偶奇奇偶': [
-    { seat: 4, n: 2, net: 1430, wr: '50%',  avg: '+715' }
+    { seat: 6, tag: '稳结构', n: 2, net: 1050, wr: '100%', avg: '+525' },
+    { seat: 4, tag: '扩容结构', n: 2, net: 1430, wr: '50%', avg: '+715' }
   ],
   '奇偶奇奇奇': [
-    { seat: 5, n: 4, net: 3280, wr: '75%',  avg: '+820' }
+    { seat: 5, tag: '高波动扩容', n: 6, net: 3300, wr: '66.7%', avg: '+550' }
   ],
-
   '奇奇偶偶偶': [
-    { seat: 4, n: 2, net: 2080, wr: '100%', avg: '+1040' }
+    { seat: 4, tag: '稳结构', n: 2, net: 2080, wr: '100%', avg: '+1040' }
   ],
   '奇奇偶偶奇': [
-    { seat: 5, n: 1, net: 940,  wr: '100%', avg: '+940' }
+    { seat: 5, tag: '扩容结构', n: 2, net: 840,  wr: '50%', avg: '+420' }
   ],
   '奇奇偶奇偶': [
-    { seat: 6, n: 5, net: 1970, wr: '60%',  avg: '+394' }
-  ],
-  '奇奇偶奇奇': [
-    { seat: 1, n: 1, net: 370,  wr: '100%', avg: '+370' }
+    { seat: 6, tag: '扩容结构', n: 5, net: 1970, wr: '60%', avg: '+394' }
   ],
   '奇奇奇偶偶': [
-    { seat: 1, n: 2, net: 2000, wr: '100%', avg: '+1000' }
+    { seat: 1, tag: '稳结构', n: 2, net: 2000, wr: '100%', avg: '+1000' }
   ],
   '奇奇奇偶奇': [
-    { seat: 4, n: 4, net: 1830, wr: '75%',  avg: '+457' }
-  ],
-  '奇奇奇奇偶': [
-    { seat: 3, n: 2, net: 1430, wr: '50%',  avg: '+715' }
+    { seat: 4, tag: '高波动扩容', n: 7, net: 2390, wr: '57.1%', avg: '+341' }
   ],
   '奇奇奇奇奇': [
-    { seat: 1, n: 1, net: 910,  wr: '100%', avg: '+910' }
+    { seat: 1, tag: '单样本补充', n: 1, net: 910,  wr: '100%', avg: '+910' }
   ],
 };
 
-// ══════════════════════════════════════════════════════
-// X 黑名单
-// ══════════════════════════════════════════════════════
-const BLACK_X = {
-  1: new Set([7]),
-  2: new Set([0, 3, 7, 9]),
-  3: new Set([0, 1, 3, 4, 5, 6, 9]),
-  4: new Set([6, 8, 9]),
-  5: new Set([6, 7, 8]),
-  6: new Set([3, 4, 6, 7]),
+// 稳健版强X
+const STRONG_X = {
+  1: new Set([8]),
+  2: new Set([4]),
+  3: new Set([7, 8]),
+  4: new Set([0, 2, 4]),
+  5: new Set([1, 3, 5, 9]),
+  6: new Set([1, 5, 8, 9]),
 };
 
-const HISTORY_KEY   = 'bajie_niubi_struct_blacklist_v1';
+const HISTORY_KEY   = 'bajie_26struct_strongx_v1';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -330,98 +321,82 @@ function getSeatX(room, seat){
   return seat >= 5 ? digits[4] : digits[seat - 1];
 }
 
-// 原始正结构结果：最多2个位子
-function getPositiveStructureResult(room5){
+// 26结构模型
+function getStructureModel(room5){
   const pattern = getParityPattern(room5);
   const rules = STRUCT_RULES[pattern];
 
   if(!rules || !rules.length){
-    return {
-      ok: false,
-      pattern,
-      reason: '无正结构'
-    };
+    return { ok: false, pattern, reason: '无结构命中' };
   }
 
-  const hits = rules
-    .filter(rule => rule.net > 0)
-    .slice(0, 2)
-    .map(rule => ({
-      seat: rule.seat,
-      X: getSeatX(room5, rule.seat),
-      n: rule.n,
-      net: rule.net,
-      wr: rule.wr,
-      avg: rule.avg
-    }));
+  const hits = rules.slice(0, 2).map(rule => ({
+    seat: rule.seat,
+    X: getSeatX(room5, rule.seat),
+    tag: rule.tag,
+    n: rule.n,
+    net: rule.net,
+    wr: rule.wr,
+    avg: rule.avg,
+  }));
 
-  if(!hits.length){
-    return {
-      ok: false,
-      pattern,
-      reason: '无正结构'
-    };
-  }
-
-  return {
-    ok: true,
-    pattern,
-    hits
-  };
+  return { ok: true, pattern, hits };
 }
 
-// 过滤后结果：最多2个位子
-function getFilteredResult(room5){
-  const base = getPositiveStructureResult(room5);
+// 26结构 + 稳健版强X
+function getStructureStrongXModel(room5){
+  const base = getStructureModel(room5);
 
   if(!base.ok){
+    return { ok: false, pattern: base.pattern, reason: base.reason };
+  }
+
+  const passed = base.hits.filter(hit => STRONG_X[hit.seat] && STRONG_X[hit.seat].has(hit.X));
+
+  if(!passed.length){
     return {
       ok: false,
       pattern: base.pattern,
-      reason: base.reason,
-      original: null
-    };
-  }
-
-  const passed = [];
-  const blocked = [];
-
-  base.hits.forEach(hit => {
-    if(BLACK_X[hit.seat] && BLACK_X[hit.seat].has(hit.X)){
-      blocked.push(hit);
-    } else {
-      passed.push(hit);
-    }
-  });
-
-  if(passed.length){
-    return {
-      ok: true,
-      pattern: base.pattern,
-      hits: passed.slice(0, 2),
+      reason: '结构命中，但强X未命中',
       original: base
     };
   }
 
   return {
-    ok: false,
+    ok: true,
     pattern: base.pattern,
-    reason: '命中X黑名单',
-    blocked,
-    original: base
+    hits: passed.slice(0, 2)
   };
 }
 
-function buildHitCard({label, seat, pattern, X, n, net, wr, avg, note}, rank=1){
+function formatSeats(hits){
+  return hits.map(h => `${h.seat}`).join(' / ');
+}
+function formatXs(hits){
+  return hits.map(h => `${h.X}`).join(' / ');
+}
+function formatTags(hits){
+  return hits.map(h => h.tag).join('；');
+}
+function formatStats(hits){
+  return hits.map(h => `${h.seat}号(${h.n}局 ${h.net >= 0 ? '+' + h.net : h.net})`).join('；');
+}
+function formatWrAvg(hits){
+  if (!hits.length) return { wr: '—', avg: '—' };
+  if (hits.length === 1) return { wr: hits[0].wr, avg: hits[0].avg };
+  return { wr: `${hits[0].wr} / ${hits[1].wr}`, avg: `${hits[0].avg} / ${hits[1].avg}` };
+}
+
+function buildModelCard({label, seatsText, pattern, xText, note, wr, avg}, rank=1){
   const cls = rank <= 3 ? `r${rank}` : '';
   const div = document.createElement('div');
   div.className = `hit ${cls}`;
   div.innerHTML = `
     <div class="hit-lbl">${label}</div>
-    <div class="hit-seat">${seat}</div>
+    <div class="hit-seat">${seatsText}</div>
     <div class="hit-body">
-      <div class="row1">${seat}号位　结构=${pattern}</div>
-      <div class="row2">X=${X}　样本=${n}局　净分=${net >= 0 ? '+' + net : net}</div>
+      <div class="row1">结构=${pattern}</div>
+      <div class="row2">位子=${seatsText}　X=${xText}</div>
       <div class="row3">${note}</div>
     </div>
     <div class="hit-right">
@@ -432,16 +407,17 @@ function buildHitCard({label, seat, pattern, X, n, net, wr, avg, note}, rank=1){
   return div;
 }
 
-function buildSkipCard({label, pattern, note}){
+function buildSkipCard({label, pattern, note}, rank=2){
+  const cls = rank <= 3 ? `r${rank}` : '';
   const div = document.createElement('div');
-  div.className = 'hit';
+  div.className = `hit ${cls}`;
   div.innerHTML = `
     <div class="hit-lbl">${label}</div>
     <div class="hit-seat" style="color:rgba(255,255,255,.25);text-shadow:none;">跳</div>
     <div class="hit-body">
       <div class="row1">结构=${pattern}</div>
       <div class="row2">${note}</div>
-      <div class="row3">已被过滤拦截</div>
+      <div class="row3">该模型当前无可用位子</div>
     </div>
     <div class="hit-right">
       <div class="hit-wr">—</div>
@@ -452,76 +428,62 @@ function buildSkipCard({label, pattern, note}){
 }
 
 function render(room5){
-  const base = getPositiveStructureResult(room5);
-  const filtered = getFilteredResult(room5);
+  const structRes = getStructureModel(room5);
+  const strongRes = getStructureStrongXModel(room5);
 
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
 
-  if(!base.ok){
-    resultHdr.textContent = `${base.pattern}　${base.reason}`;
+  if(!structRes.ok){
+    resultHdr.textContent = `${structRes.pattern}　无结构命中`;
     skipEl.style.display = 'block';
     return [];
   }
 
-  // 过滤后还有命中：只显示过滤结果
-  if(filtered.ok){
-    resultHdr.textContent = `${filtered.pattern}　命中过滤结果`;
-    resultEl.style.display = 'block';
-
-    filtered.hits.forEach((hit, idx) => {
-      hitListEl.appendChild(
-        buildHitCard({
-          label: idx === 0 ? '过滤后首选' : '过滤后次选',
-          seat: hit.seat,
-          pattern: filtered.pattern,
-          X: hit.X,
-          n: hit.n,
-          net: hit.net,
-          wr: hit.wr,
-          avg: hit.avg,
-          note: '备注：正结构 + X黑名单过滤 后仍可进'
-        }, idx + 1)
-      );
-    });
-
-    return filtered.hits.map(h => h.seat);
-  }
-
-  // 原始结构有命中，但过滤后全被拦截：同时输出
-  resultHdr.textContent = `${base.pattern}　原始命中 / 过滤拦截`;
   resultEl.style.display = 'block';
+  resultHdr.textContent = `${structRes.pattern}　双模型结果`;
 
-  const blockedText = (filtered.blocked || [])
-    .map(h => `${h.seat}号位 X=${h.X}`)
-    .join('；');
-
+  // 模型1：26结构模型
+  const structStat = formatWrAvg(structRes.hits);
   hitListEl.appendChild(
-    buildSkipCard({
-      label: '过滤结果',
-      pattern: filtered.pattern,
-      note: `备注：正结构 + X黑名单过滤 → 跳（${blockedText || '命中黑名单'}）`
-    })
+    buildModelCard({
+      label: '26结构模型',
+      seatsText: formatSeats(structRes.hits),
+      pattern: structRes.pattern,
+      xText: formatXs(structRes.hits),
+      note: `备注：当前模型 = 26种结构 / 34条位子规则；类型=${formatTags(structRes.hits)}；${formatStats(structRes.hits)}`,
+      wr: structStat.wr,
+      avg: structStat.avg
+    }, 1)
   );
 
-  base.hits.forEach((hit, idx) => {
+  // 模型2：26结构 + 稳健版强X
+  if(strongRes.ok){
+    const strongStat = formatWrAvg(strongRes.hits);
     hitListEl.appendChild(
-      buildHitCard({
-        label: idx === 0 ? '原始首选' : '原始次选',
-        seat: hit.seat,
-        pattern: base.pattern,
-        X: hit.X,
-        n: hit.n,
-        net: hit.net,
-        wr: hit.wr,
-        avg: hit.avg,
-        note: '备注：这是正结构原始结果，仅供参考，已被黑名单拦截'
-      }, idx + 2)
+      buildModelCard({
+        label: '26结构 + 强X',
+        seatsText: formatSeats(strongRes.hits),
+        pattern: strongRes.pattern,
+        xText: formatXs(strongRes.hits),
+        note: `备注：在结构命中的基础上，再命中稳健版强X；${formatStats(strongRes.hits)}`,
+        wr: strongStat.wr,
+        avg: strongStat.avg
+      }, 2)
     );
-  });
+  } else {
+    hitListEl.appendChild(
+      buildSkipCard({
+        label: '26结构 + 强X',
+        pattern: structRes.pattern,
+        note: '备注：结构模型已命中，但位子对应X未命中稳健版强X'
+      }, 2)
+    );
+  }
 
-  return [];
+  // 历史记录只记更实战的第二模型，有则记第二模型，否则记第一模型
+  return strongRes.ok ? strongRes.hits.map(h => h.seat) : structRes.hits.map(h => h.seat);
 }
 
 function run(){
@@ -558,7 +520,7 @@ function renderHist(){
   items.forEach(item => {
     const div = document.createElement('div');
     div.className = 'histItem';
-    const res = item.seats.length ? item.seats.map(s=>`${s}号`).join(' → ') : '跳';
+    const res = item.seats.length ? item.seats.map(s=>`${s}号`).join(' / ') : '跳';
     div.innerHTML = `
       <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
       <div class="histMain">${item.pattern}　→　${res}</div>`;
