@@ -170,22 +170,17 @@
     <div class="tiny">
 【八戒别跑 精英模型 v7.0】
 
-三元组规则：座位 + X + K
-  X = 你坐的位子对应的数字
-    1号→A  2号→B  3号→C  4号→D  5/6号→E
-  K = S - X（S为房号五位数字之和）
+全32种奇偶结构则房
+  先把房号 ABCDE 转成 奇偶结构
+  例如：
+    50638 → 奇偶偶奇偶
+    62877 → 偶偶偶奇奇
 
-历史回测（375场）：
-  命中 112场  111赢1亏
-  胜率  99.1%
-  命中率 29.9%（约每3.3场进1场）
-  均利润 +844¥/场
+再按结构直接给推荐位
 
-各座位胜率：
-  1号 100% | 2号 100% | 3号 100%
-  4号 100% | 5号  97% | 6号 100%
-
-座位优先级：5 > 4 > 6 > 2 > 3 > 1
+说明：
+  这是“房间结构 → 选位”逻辑
+  不改页面设计，只改则房逻辑
     </div>
 
   </div>
@@ -193,78 +188,48 @@
 
 <script>
 // ══════════════════════════════════════════════════════
-//  三元组规则：RULES[seat][x] = Set of allowed K values
-//  K = S - X  (S = 房号五位数字之和)
+//  全32种奇偶结构 → 推荐座位
+//  来源：你历史战绩的全32结构回测规则
 // ══════════════════════════════════════════════════════
-const RULES = {
-  1: {
-    3: new Set([18]),
-    8: new Set([8, 9, 10, 15, 19]),
-    9: new Set([7, 14, 26, 28]),
-  },
-  2: {
-    2: new Set([16, 17]),
-    3: new Set([10]),
-    4: new Set([18, 27]),
-    6: new Set([12]),
-    7: new Set([17]),
-    8: new Set([15, 20, 24]),
-  },
-  3: {
-    2: new Set([3, 23]),
-    5: new Set([14]),
-    6: new Set([11, 22]),
-    7: new Set([10, 18, 19, 21]),
-    8: new Set([17, 20, 26]),
-  },
-  4: {
-    0: new Set([12, 17, 20, 23]),
-    2: new Set([15, 22]),
-    3: new Set([12]),
-    4: new Set([12, 19]),
-    5: new Set([17]),
-    6: new Set([14, 20, 24]),
-    7: new Set([15]),
-    8: new Set([21, 30]),
-  },
-  5: {
-    0: new Set([15, 16, 19, 22]),
-    1: new Set([19, 32, 34]),
-    2: new Set([13, 27]),
-    3: new Set([11, 15, 17, 18]),
-    4: new Set([21]),
-    5: new Set([14, 21, 22]),
-    6: new Set([22]),
-    7: new Set([18]),
-    8: new Set([22]),
-    9: new Set([13, 17, 22, 24]),
-  },
-  6: {
-    0: new Set([13]),
-    1: new Set([9, 17, 24]),
-    2: new Set([23]),
-    4: new Set([10]),
-    5: new Set([21]),
-    6: new Set([30]),
-    8: new Set([11, 22, 31]),
-    9: new Set([16, 26]),
-  },
+const STRUCT_RULES = {
+  '偶偶偶偶偶': { seat: 3, n: 1, net: 650,  wr: '100%', avg: '+650'  },
+  '偶偶偶偶奇': { seat: 5, n: 1, net: -420, wr: '0%',   avg: '-420'  },
+  '偶偶偶奇偶': { seat: 5, n: 3, net: 1810, wr: '100%', avg: '+603'  },
+  '偶偶偶奇奇': { seat: 5, n: 1, net: 320,  wr: '100%', avg: '+320'  },
+  '偶偶奇偶偶': { seat: 5, n: 1, net: 990,  wr: '100%', avg: '+990'  },
+  '偶偶奇偶奇': { seat: 5, n: 3, net: 2680, wr: '100%', avg: '+893'  },
+  '偶偶奇奇偶': { seat: 1, n: 4, net: 1150, wr: '75%',  avg: '+287'  },
+  '偶偶奇奇奇': { seat: 1, n: 2, net: 2550, wr: '100%', avg: '+1275' },
+
+  '偶奇偶偶偶': { seat: 1, n: 3, net: 4200, wr: '100%', avg: '+1400' },
+  '偶奇偶偶奇': { seat: 5, n: 2, net: 2010, wr: '50%',  avg: '+1005' },
+  '偶奇偶奇偶': { seat: 4, n: 1, net: 970,  wr: '100%', avg: '+970'  },
+  '偶奇偶奇奇': { seat: 4, n: 1, net: -370, wr: '0%',   avg: '-370'  },
+  '偶奇奇偶偶': { seat: 6, n: 1, net: 990,  wr: '100%', avg: '+990'  },
+  '偶奇奇偶奇': { seat: 4, n: 2, net: 1400, wr: '100%', avg: '+700'  },
+  '偶奇奇奇偶': { seat: 3, n: 2, net: 1690, wr: '100%', avg: '+845'  },
+  '偶奇奇奇奇': { seat: 5, n: 2, net: 1200, wr: '100%', avg: '+600'  },
+
+  '奇偶偶偶偶': { seat: 3, n: 1, net: 820,  wr: '100%', avg: '+820'  },
+  '奇偶偶偶奇': { seat: 5, n: 3, net: 2240, wr: '100%', avg: '+746'  },
+  '奇偶偶奇偶': { seat: 5, n: 1, net: 1060, wr: '100%', avg: '+1060' },
+  '奇偶偶奇奇': { seat: 2, n: 1, net: 2310, wr: '100%', avg: '+2310' },
+  '奇偶奇偶偶': { seat: 5, n: 3, net: 2510, wr: '100%', avg: '+836'  },
+  '奇偶奇偶奇': { seat: 5, n: 3, net: 3660, wr: '100%', avg: '+1220' },
+  '奇偶奇奇偶': { seat: 4, n: 2, net: 1430, wr: '50%',  avg: '+715'  },
+  '奇偶奇奇奇': { seat: 5, n: 4, net: 3280, wr: '75%',  avg: '+820'  },
+
+  '奇奇偶偶偶': { seat: 4, n: 2, net: 2080, wr: '100%', avg: '+1040' },
+  '奇奇偶偶奇': { seat: 5, n: 1, net: 940,  wr: '100%', avg: '+940'  },
+  '奇奇偶奇偶': { seat: 6, n: 5, net: 1970, wr: '60%',  avg: '+394'  },
+  '奇奇偶奇奇': { seat: 1, n: 1, net: 370,  wr: '100%', avg: '+370'  },
+  '奇奇奇偶偶': { seat: 1, n: 2, net: 2000, wr: '100%', avg: '+1000' },
+  '奇奇奇偶奇': { seat: 4, n: 4, net: 1830, wr: '75%',  avg: '+457'  },
+  '奇奇奇奇偶': { seat: 3, n: 2, net: 1430, wr: '50%',  avg: '+715'  },
+  '奇奇奇奇奇': { seat: 1, n: 1, net: 910,  wr: '100%', avg: '+910'  },
 };
 
-// 各座位历史胜率 & 均利润
-const SEAT_STAT = {
-  1: {wr:'100%', avg:'+881¥', n:'15场'},
-  2: {wr:'100%', avg:'+748¥', n:'11场'},
-  3: {wr:'100%', avg:'+862¥', n:'15场'},
-  4: {wr:'100%', avg:'+907¥', n:'21场'},
-  5: {wr:'97%',  avg:'+862¥', n:'33场'},
-  6: {wr:'100%', avg:'+744¥', n:'17场'},
-};
-
-// 座位优先级：5→4→6→2→3→1
-const PRIORITY = {5:1, 4:2, 6:3, 2:4, 3:5, 1:6};
-
-const HISTORY_KEY   = 'bajie_v70';
+const HISTORY_KEY   = 'bajie_v70_struct32';
 const HISTORY_LIMIT = 30;
 
 const roomEl    = document.getElementById('room');
@@ -277,39 +242,32 @@ const skipEl    = document.getElementById('skip');
 const histListEl= document.getElementById('histList');
 const clearBtnEl= document.getElementById('clearBtn');
 
-function getS(room){
-  return room.split('').reduce((a,c)=>a+parseInt(c, 10),0);
-}
-function getX(digits, seat){
-  return (seat >= 5) ? digits[4] : digits[seat-1];
+function getParityPattern(room){
+  return room
+    .split('')
+    .map(n => (parseInt(n, 10) % 2 === 0 ? '偶' : '奇'))
+    .join('');
 }
 
 function analyze(room5){
-  const digits = room5.split('').map(Number);
-  const S = getS(room5);
-  const hits = [];
+  const pattern = getParityPattern(room5);
+  const rule = STRUCT_RULES[pattern];
+  if(!rule) return { hits: [], pattern };
 
-  for(let seat = 1; seat <= 6; seat++){
-    const X = getX(digits, seat);
-    const K = S - X;
+  const hits = [{
+    seat: rule.seat,
+    pattern,
+    n: rule.n,
+    net: rule.net,
+    wr: rule.wr,
+    avg: rule.avg,
+  }];
 
-    const seatRules = RULES[seat];
-    if(!seatRules) continue;
-
-    const kSet = seatRules[X];
-    if(!kSet) continue;
-
-    if(!kSet.has(K)) continue;
-
-    hits.push({seat, X, K, S});
-  }
-
-  hits.sort((a,b)=>(PRIORITY[a.seat]||9)-(PRIORITY[b.seat]||9));
-  return {hits, S};
+  return { hits, pattern };
 }
 
 function render(room5){
-  const {hits, S} = analyze(room5);
+  const {hits, pattern} = analyze(room5);
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
@@ -319,15 +277,13 @@ function render(room5){
     return [];
   }
 
-  const top = hits.slice(0, 5);
-  resultHdr.textContent = `S=${S}　命中 ${top.length} 个位子`;
+  resultHdr.textContent = `${pattern}　命中 ${hits.length} 个位子`;
   resultEl.style.display = 'block';
 
-  top.forEach((h, idx) => {
+  hits.forEach((h, idx) => {
     const rank = idx + 1;
     const cls  = rank <= 3 ? `r${rank}` : '';
     const lbl  = rank === 1 ? '首选' : rank === 2 ? '次选' : rank === 3 ? '第三' : '备选';
-    const stat = SEAT_STAT[h.seat];
 
     const div = document.createElement('div');
     div.className = `hit ${cls}`;
@@ -335,19 +291,19 @@ function render(room5){
       <div class="hit-lbl">${lbl}</div>
       <div class="hit-seat">${h.seat}</div>
       <div class="hit-body">
-        <div class="row1">${h.seat}号位　X=${h.X}</div>
-        <div class="row2">K=${h.K}　S=${h.S}</div>
-        <div class="row3">${stat.n} 验证</div>
+        <div class="row1">${h.seat}号位　结构=${h.pattern}</div>
+        <div class="row2">样本=${h.n}局　净分=${h.net >= 0 ? '+' + h.net : h.net}</div>
+        <div class="row3">全32结构规则</div>
       </div>
       <div class="hit-right">
-        <div class="hit-wr">${stat.wr}</div>
-        <div class="hit-avg">${stat.avg}</div>
+        <div class="hit-wr">${h.wr}</div>
+        <div class="hit-avg">${h.avg}</div>
       </div>
     `;
     hitListEl.appendChild(div);
   });
 
-  return top.map(h => h.seat);
+  return hits.map(h => h.seat);
 }
 
 function run(){
@@ -387,14 +343,19 @@ function renderHist(){
     const res = item.seats.length ? item.seats.map(s=>`${s}号`).join(' → ') : '跳';
     div.innerHTML = `
       <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">${res}</div>`;
+      <div class="histMain">${item.pattern}　→　${res}</div>`;
     histListEl.appendChild(div);
   });
 }
 
 function pushHistory(room, seats){
   const items = loadHist();
-  items.unshift({room, seats, time: new Date().toLocaleString('zh-CN', {hour12:false})});
+  items.unshift({
+    room,
+    seats,
+    pattern: getParityPattern(room),
+    time: new Date().toLocaleString('zh-CN', {hour12:false})
+  });
   saveHist(items);
   renderHist();
 }
