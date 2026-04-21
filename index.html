@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="八戒智能模型">
-  <title>八戒别跑 — 精英模型 v7.0</title>
+  <meta name="apple-mobile-web-app-title" content="八戒牛逼 结构黑名单模型">
+  <title>八戒牛逼 结构黑名单模型</title>
   <style>
     :root{
       --bg:#0b0b0f;--card:#11111a;--line:rgba(255,255,255,.10);
@@ -142,7 +142,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">八戒别跑<span class="version">精英模型 v7.0</span></div>
+  <div class="title">八戒牛逼<span class="version">结构黑名单模型</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -168,20 +168,21 @@
     </div>
 
     <div class="tiny">
-【八戒别跑 精英模型 v7.0】
+【八戒牛逼 结构黑名单模型】
 
-双结果显示逻辑：
-1. 正结构结果
-2. 正结构 + X黑名单过滤结果
+双层逻辑：
+1. 正结构结果（最多2个位子）
+2. 正结构 + X黑名单过滤结果（最多2个位子）
 
 显示规则：
-- 若“正结构 + X黑名单过滤”命中：只显示这一条
-- 若被X黑名单拦截：同时显示
+- 若过滤后仍有命中位子：只显示“过滤后命中”
+- 若过滤后全部被拦截：同时显示
   「过滤结果：跳」
   「原始正结构结果：原本命中位子」
 
-说明：
-  这是“结构结果”和“结构+过滤结果”双输出版
+备注：
+- 所有输出都带备注
+- 最多给你 2 个位子，方便抢位
     </div>
 
   </div>
@@ -189,42 +190,107 @@
 
 <script>
 // ══════════════════════════════════════════════════════
-// 正结构：只保留总净分 > 0 的结构
+// 正结构规则：一个结构最多给2个位子
+// 第一位 = 首选
+// 第二位 = 次选（仅在已确认也为正收益时加入）
 // ══════════════════════════════════════════════════════
 const STRUCT_RULES = {
-  '偶偶偶偶偶': { seat: 3, n: 1, net: 650,  wr: '100%', avg: '+650'  },
-  '偶偶偶奇偶': { seat: 5, n: 3, net: 1810, wr: '100%', avg: '+603'  },
-  '偶偶偶奇奇': { seat: 5, n: 1, net: 320,  wr: '100%', avg: '+320'  },
-  '偶偶奇偶偶': { seat: 5, n: 1, net: 990,  wr: '100%', avg: '+990'  },
-  '偶偶奇偶奇': { seat: 5, n: 3, net: 2680, wr: '100%', avg: '+893'  },
-  '偶偶奇奇偶': { seat: 1, n: 4, net: 1150, wr: '75%',  avg: '+287'  },
-  '偶偶奇奇奇': { seat: 1, n: 2, net: 2550, wr: '100%', avg: '+1275' },
+  '偶偶偶偶偶': [
+    { seat: 3, n: 1, net: 650,  wr: '100%', avg: '+650' }
+  ],
+  '偶偶偶奇偶': [
+    { seat: 5, n: 3, net: 1810, wr: '100%', avg: '+603' }
+  ],
+  '偶偶偶奇奇': [
+    { seat: 5, n: 1, net: 320,  wr: '100%', avg: '+320' }
+  ],
+  '偶偶奇偶偶': [
+    { seat: 5, n: 1, net: 990,  wr: '100%', avg: '+990' }
+  ],
+  '偶偶奇偶奇': [
+    { seat: 5, n: 3, net: 2680, wr: '100%', avg: '+893' },
+    { seat: 6, n: 2, net: 1370, wr: '100%', avg: '+685' }
+  ],
+  '偶偶奇奇偶': [
+    { seat: 1, n: 4, net: 1150, wr: '75%',  avg: '+287' }
+  ],
+  '偶偶奇奇奇': [
+    { seat: 1, n: 2, net: 2550, wr: '100%', avg: '+1275' }
+  ],
 
-  '偶奇偶偶偶': { seat: 1, n: 3, net: 4200, wr: '100%', avg: '+1400' },
-  '偶奇偶偶奇': { seat: 5, n: 2, net: 2010, wr: '50%',  avg: '+1005' },
-  '偶奇偶奇偶': { seat: 4, n: 1, net: 970,  wr: '100%', avg: '+970'  },
-  '偶奇奇偶偶': { seat: 6, n: 1, net: 990,  wr: '100%', avg: '+990'  },
-  '偶奇奇偶奇': { seat: 4, n: 2, net: 1400, wr: '100%', avg: '+700'  },
-  '偶奇奇奇偶': { seat: 3, n: 2, net: 1690, wr: '100%', avg: '+845'  },
-  '偶奇奇奇奇': { seat: 5, n: 2, net: 1200, wr: '100%', avg: '+600'  },
+  '偶奇偶偶偶': [
+    { seat: 1, n: 3, net: 4200, wr: '100%', avg: '+1400' },
+    { seat: 3, n: 5, net: 2870, wr: '80%',  avg: '+574' }
+  ],
+  '偶奇偶偶奇': [
+    { seat: 5, n: 2, net: 2010, wr: '50%',  avg: '+1005' }
+  ],
+  '偶奇偶奇偶': [
+    { seat: 4, n: 1, net: 970,  wr: '100%', avg: '+970' }
+  ],
+  '偶奇奇偶偶': [
+    { seat: 6, n: 1, net: 990,  wr: '100%', avg: '+990' }
+  ],
+  '偶奇奇偶奇': [
+    { seat: 4, n: 2, net: 1400, wr: '100%', avg: '+700' }
+  ],
+  '偶奇奇奇偶': [
+    { seat: 3, n: 2, net: 1690, wr: '100%', avg: '+845' }
+  ],
+  '偶奇奇奇奇': [
+    { seat: 5, n: 2, net: 1200, wr: '100%', avg: '+600' }
+  ],
 
-  '奇偶偶偶偶': { seat: 3, n: 1, net: 820,  wr: '100%', avg: '+820'  },
-  '奇偶偶偶奇': { seat: 5, n: 3, net: 2240, wr: '100%', avg: '+746'  },
-  '奇偶偶奇偶': { seat: 5, n: 1, net: 1060, wr: '100%', avg: '+1060' },
-  '奇偶偶奇奇': { seat: 2, n: 1, net: 2310, wr: '100%', avg: '+2310' },
-  '奇偶奇偶偶': { seat: 5, n: 3, net: 2510, wr: '100%', avg: '+836'  },
-  '奇偶奇偶奇': { seat: 5, n: 3, net: 3660, wr: '100%', avg: '+1220' },
-  '奇偶奇奇偶': { seat: 4, n: 2, net: 1430, wr: '50%',  avg: '+715'  },
-  '奇偶奇奇奇': { seat: 5, n: 4, net: 3280, wr: '75%',  avg: '+820'  },
+  '奇偶偶偶偶': [
+    { seat: 3, n: 1, net: 820,  wr: '100%', avg: '+820' }
+  ],
+  '奇偶偶偶奇': [
+    { seat: 5, n: 3, net: 2240, wr: '100%', avg: '+746' }
+  ],
+  '奇偶偶奇偶': [
+    { seat: 5, n: 1, net: 1060, wr: '100%', avg: '+1060' }
+  ],
+  '奇偶偶奇奇': [
+    { seat: 2, n: 1, net: 2310, wr: '100%', avg: '+2310' }
+  ],
+  '奇偶奇偶偶': [
+    { seat: 5, n: 3, net: 2510, wr: '100%', avg: '+836' }
+  ],
+  '奇偶奇偶奇': [
+    { seat: 5, n: 3, net: 3660, wr: '100%', avg: '+1220' },
+    { seat: 4, n: 4, net: 1710, wr: '75%',  avg: '+427' }
+  ],
+  '奇偶奇奇偶': [
+    { seat: 4, n: 2, net: 1430, wr: '50%',  avg: '+715' }
+  ],
+  '奇偶奇奇奇': [
+    { seat: 5, n: 4, net: 3280, wr: '75%',  avg: '+820' }
+  ],
 
-  '奇奇偶偶偶': { seat: 4, n: 2, net: 2080, wr: '100%', avg: '+1040' },
-  '奇奇偶偶奇': { seat: 5, n: 1, net: 940,  wr: '100%', avg: '+940'  },
-  '奇奇偶奇偶': { seat: 6, n: 5, net: 1970, wr: '60%',  avg: '+394'  },
-  '奇奇偶奇奇': { seat: 1, n: 1, net: 370,  wr: '100%', avg: '+370'  },
-  '奇奇奇偶偶': { seat: 1, n: 2, net: 2000, wr: '100%', avg: '+1000' },
-  '奇奇奇偶奇': { seat: 4, n: 4, net: 1830, wr: '75%',  avg: '+457'  },
-  '奇奇奇奇偶': { seat: 3, n: 2, net: 1430, wr: '50%',  avg: '+715'  },
-  '奇奇奇奇奇': { seat: 1, n: 1, net: 910,  wr: '100%', avg: '+910'  },
+  '奇奇偶偶偶': [
+    { seat: 4, n: 2, net: 2080, wr: '100%', avg: '+1040' }
+  ],
+  '奇奇偶偶奇': [
+    { seat: 5, n: 1, net: 940,  wr: '100%', avg: '+940' }
+  ],
+  '奇奇偶奇偶': [
+    { seat: 6, n: 5, net: 1970, wr: '60%',  avg: '+394' }
+  ],
+  '奇奇偶奇奇': [
+    { seat: 1, n: 1, net: 370,  wr: '100%', avg: '+370' }
+  ],
+  '奇奇奇偶偶': [
+    { seat: 1, n: 2, net: 2000, wr: '100%', avg: '+1000' }
+  ],
+  '奇奇奇偶奇': [
+    { seat: 4, n: 4, net: 1830, wr: '75%',  avg: '+457' }
+  ],
+  '奇奇奇奇偶': [
+    { seat: 3, n: 2, net: 1430, wr: '50%',  avg: '+715' }
+  ],
+  '奇奇奇奇奇': [
+    { seat: 1, n: 1, net: 910,  wr: '100%', avg: '+910' }
+  ],
 };
 
 // ══════════════════════════════════════════════════════
@@ -239,7 +305,7 @@ const BLACK_X = {
   6: new Set([3, 4, 6, 7]),
 };
 
-const HISTORY_KEY   = 'bajie_v70_dual_output';
+const HISTORY_KEY   = 'bajie_niubi_struct_blacklist_v1';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -264,11 +330,12 @@ function getSeatX(room, seat){
   return seat >= 5 ? digits[4] : digits[seat - 1];
 }
 
+// 原始正结构结果：最多2个位子
 function getPositiveStructureResult(room5){
   const pattern = getParityPattern(room5);
-  const rule = STRUCT_RULES[pattern];
+  const rules = STRUCT_RULES[pattern];
 
-  if(!rule){
+  if(!rules || !rules.length){
     return {
       ok: false,
       pattern,
@@ -276,28 +343,34 @@ function getPositiveStructureResult(room5){
     };
   }
 
-  if(rule.net <= 0){
+  const hits = rules
+    .filter(rule => rule.net > 0)
+    .slice(0, 2)
+    .map(rule => ({
+      seat: rule.seat,
+      X: getSeatX(room5, rule.seat),
+      n: rule.n,
+      net: rule.net,
+      wr: rule.wr,
+      avg: rule.avg
+    }));
+
+  if(!hits.length){
     return {
       ok: false,
       pattern,
-      reason: '负结构'
+      reason: '无正结构'
     };
   }
-
-  const X = getSeatX(room5, rule.seat);
 
   return {
     ok: true,
     pattern,
-    seat: rule.seat,
-    X,
-    n: rule.n,
-    net: rule.net,
-    wr: rule.wr,
-    avg: rule.avg
+    hits
   };
 }
 
+// 过滤后结果：最多2个位子
 function getFilteredResult(room5){
   const base = getPositiveStructureResult(room5);
 
@@ -305,24 +378,37 @@ function getFilteredResult(room5){
     return {
       ok: false,
       pattern: base.pattern,
-      reason: base.reason
+      reason: base.reason,
+      original: null
     };
   }
 
-  if(BLACK_X[base.seat] && BLACK_X[base.seat].has(base.X)){
+  const passed = [];
+  const blocked = [];
+
+  base.hits.forEach(hit => {
+    if(BLACK_X[hit.seat] && BLACK_X[hit.seat].has(hit.X)){
+      blocked.push(hit);
+    } else {
+      passed.push(hit);
+    }
+  });
+
+  if(passed.length){
     return {
-      ok: false,
+      ok: true,
       pattern: base.pattern,
-      seat: base.seat,
-      X: base.X,
-      reason: '命中X黑名单',
+      hits: passed.slice(0, 2),
       original: base
     };
   }
 
   return {
-    ok: true,
-    ...base
+    ok: false,
+    pattern: base.pattern,
+    reason: '命中X黑名单',
+    blocked,
+    original: base
   };
 }
 
@@ -373,58 +459,67 @@ function render(room5){
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
 
-  // 连正结构都没有
   if(!base.ok){
     resultHdr.textContent = `${base.pattern}　${base.reason}`;
     skipEl.style.display = 'block';
     return [];
   }
 
-  // 过滤后还能进：只显示过滤后的结果
+  // 过滤后还有命中：只显示过滤结果
   if(filtered.ok){
     resultHdr.textContent = `${filtered.pattern}　命中过滤结果`;
     resultEl.style.display = 'block';
-    hitListEl.appendChild(
-      buildHitCard({
-        label: '过滤后命中',
-        seat: filtered.seat,
-        pattern: filtered.pattern,
-        X: filtered.X,
-        n: filtered.n,
-        net: filtered.net,
-        wr: filtered.wr,
-        avg: filtered.avg,
-        note: '备注：正结构 + X黑名单过滤 后仍可进'
-      }, 1)
-    );
-    return [filtered.seat];
+
+    filtered.hits.forEach((hit, idx) => {
+      hitListEl.appendChild(
+        buildHitCard({
+          label: idx === 0 ? '过滤后首选' : '过滤后次选',
+          seat: hit.seat,
+          pattern: filtered.pattern,
+          X: hit.X,
+          n: hit.n,
+          net: hit.net,
+          wr: hit.wr,
+          avg: hit.avg,
+          note: '备注：正结构 + X黑名单过滤 后仍可进'
+        }, idx + 1)
+      );
+    });
+
+    return filtered.hits.map(h => h.seat);
   }
 
-  // 有正结构，但被黑名单拦截：同时输出两个逻辑
+  // 原始结构有命中，但过滤后全被拦截：同时输出
   resultHdr.textContent = `${base.pattern}　原始命中 / 过滤拦截`;
   resultEl.style.display = 'block';
+
+  const blockedText = (filtered.blocked || [])
+    .map(h => `${h.seat}号位 X=${h.X}`)
+    .join('；');
 
   hitListEl.appendChild(
     buildSkipCard({
       label: '过滤结果',
       pattern: filtered.pattern,
-      note: `备注：正结构 + X黑名单过滤 → 跳（${filtered.reason}，${filtered.seat}号位 X=${filtered.X}）`
+      note: `备注：正结构 + X黑名单过滤 → 跳（${blockedText || '命中黑名单'}）`
     })
   );
 
-  hitListEl.appendChild(
-    buildHitCard({
-      label: '原始结构',
-      seat: base.seat,
-      pattern: base.pattern,
-      X: base.X,
-      n: base.n,
-      net: base.net,
-      wr: base.wr,
-      avg: base.avg,
-      note: '备注：这是正结构原始结果，仅供参考，已被黑名单拦截'
-    }, 2)
-  );
+  base.hits.forEach((hit, idx) => {
+    hitListEl.appendChild(
+      buildHitCard({
+        label: idx === 0 ? '原始首选' : '原始次选',
+        seat: hit.seat,
+        pattern: base.pattern,
+        X: hit.X,
+        n: hit.n,
+        net: hit.net,
+        wr: hit.wr,
+        avg: hit.avg,
+        note: '备注：这是正结构原始结果，仅供参考，已被黑名单拦截'
+      }, idx + 2)
+    );
+  });
 
   return [];
 }
@@ -489,9 +584,11 @@ clearBtnEl.addEventListener('click', () => {
   localStorage.removeItem(HISTORY_KEY);
   renderHist();
 });
+
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
 }
+
 renderHist();
 roomEl.focus();
 </script>
