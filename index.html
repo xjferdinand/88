@@ -170,15 +170,18 @@
     <div class="tiny">
 【八戒别跑 精英模型 v7.0】
 
-正结构 + X黑名单过滤
-  先把房号 ABCDE 转成奇偶结构
-  再按结构找推荐位
-  若该结构总净分≤0：直接跳
-  若推荐位对应X命中黑名单：直接跳
-  否则进
+双结果显示逻辑：
+1. 正结构结果
+2. 正结构 + X黑名单过滤结果
+
+显示规则：
+- 若“正结构 + X黑名单过滤”命中：只显示这一条
+- 若被X黑名单拦截：同时显示
+  「过滤结果：跳」
+  「原始正结构结果：原本命中位子」
 
 说明：
-  这是“房间结构 → 选位 → X过滤”逻辑
+  这是“结构结果”和“结构+过滤结果”双输出版
     </div>
 
   </div>
@@ -187,8 +190,6 @@
 <script>
 // ══════════════════════════════════════════════════════
 // 正结构：只保留总净分 > 0 的结构
-// 每条规则：结构 -> 推荐座位
-// n = 训练样本数, net = 训练总净分
 // ══════════════════════════════════════════════════════
 const STRUCT_RULES = {
   '偶偶偶偶偶': { seat: 3, n: 1, net: 650,  wr: '100%', avg: '+650'  },
@@ -227,8 +228,7 @@ const STRUCT_RULES = {
 };
 
 // ══════════════════════════════════════════════════════
-// 各座位 X 黑名单
-// 命中则跳
+// X 黑名单
 // ══════════════════════════════════════════════════════
 const BLACK_X = {
   1: new Set([7]),
@@ -239,7 +239,7 @@ const BLACK_X = {
   6: new Set([3, 4, 6, 7]),
 };
 
-const HISTORY_KEY   = 'bajie_v70_struct_x';
+const HISTORY_KEY   = 'bajie_v70_dual_output';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -264,99 +264,169 @@ function getSeatX(room, seat){
   return seat >= 5 ? digits[4] : digits[seat - 1];
 }
 
-function analyze(room5){
+function getPositiveStructureResult(room5){
   const pattern = getParityPattern(room5);
   const rule = STRUCT_RULES[pattern];
 
-  // 没有结构规则，直接跳
   if(!rule){
-    return { hits: [], pattern, blocked: true, reason: '无结构规则' };
-  }
-
-  // 负结构兜底，直接跳（虽然当前表里已经删掉）
-  if(rule.net <= 0){
-    return { hits: [], pattern, blocked: true, reason: '负结构' };
-  }
-
-  const seat = rule.seat;
-  const X = getSeatX(room5, seat);
-
-  // 正结构命中X黑名单，直接跳
-  if(BLACK_X[seat] && BLACK_X[seat].has(X)){
     return {
-      hits: [],
+      ok: false,
       pattern,
-      blocked: true,
-      reason: `X黑名单`,
-      blockedSeat: seat,
-      blockedX: X
+      reason: '无正结构'
+    };
+  }
+
+  if(rule.net <= 0){
+    return {
+      ok: false,
+      pattern,
+      reason: '负结构'
+    };
+  }
+
+  const X = getSeatX(room5, rule.seat);
+
+  return {
+    ok: true,
+    pattern,
+    seat: rule.seat,
+    X,
+    n: rule.n,
+    net: rule.net,
+    wr: rule.wr,
+    avg: rule.avg
+  };
+}
+
+function getFilteredResult(room5){
+  const base = getPositiveStructureResult(room5);
+
+  if(!base.ok){
+    return {
+      ok: false,
+      pattern: base.pattern,
+      reason: base.reason
+    };
+  }
+
+  if(BLACK_X[base.seat] && BLACK_X[base.seat].has(base.X)){
+    return {
+      ok: false,
+      pattern: base.pattern,
+      seat: base.seat,
+      X: base.X,
+      reason: '命中X黑名单',
+      original: base
     };
   }
 
   return {
-    hits: [{
-      seat,
-      pattern,
-      X,
-      n: rule.n,
-      net: rule.net,
-      wr: rule.wr,
-      avg: rule.avg,
-    }],
-    pattern,
-    blocked: false,
-    reason: ''
+    ok: true,
+    ...base
   };
 }
 
+function buildHitCard({label, seat, pattern, X, n, net, wr, avg, note}, rank=1){
+  const cls = rank <= 3 ? `r${rank}` : '';
+  const div = document.createElement('div');
+  div.className = `hit ${cls}`;
+  div.innerHTML = `
+    <div class="hit-lbl">${label}</div>
+    <div class="hit-seat">${seat}</div>
+    <div class="hit-body">
+      <div class="row1">${seat}号位　结构=${pattern}</div>
+      <div class="row2">X=${X}　样本=${n}局　净分=${net >= 0 ? '+' + net : net}</div>
+      <div class="row3">${note}</div>
+    </div>
+    <div class="hit-right">
+      <div class="hit-wr">${wr}</div>
+      <div class="hit-avg">${avg}</div>
+    </div>
+  `;
+  return div;
+}
+
+function buildSkipCard({label, pattern, note}){
+  const div = document.createElement('div');
+  div.className = 'hit';
+  div.innerHTML = `
+    <div class="hit-lbl">${label}</div>
+    <div class="hit-seat" style="color:rgba(255,255,255,.25);text-shadow:none;">跳</div>
+    <div class="hit-body">
+      <div class="row1">结构=${pattern}</div>
+      <div class="row2">${note}</div>
+      <div class="row3">已被过滤拦截</div>
+    </div>
+    <div class="hit-right">
+      <div class="hit-wr">—</div>
+      <div class="hit-avg">—</div>
+    </div>
+  `;
+  return div;
+}
+
 function render(room5){
-  const {hits, pattern, blocked, reason, blockedSeat, blockedX} = analyze(room5);
+  const base = getPositiveStructureResult(room5);
+  const filtered = getFilteredResult(room5);
+
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
 
-  if(blocked){
-    if(reason === 'X黑名单'){
-      resultHdr.textContent = `${pattern}　${blockedSeat}号位 X=${blockedX} 命中黑名单`;
-    } else {
-      resultHdr.textContent = `${pattern}　${reason}`;
-    }
+  // 连正结构都没有
+  if(!base.ok){
+    resultHdr.textContent = `${base.pattern}　${base.reason}`;
     skipEl.style.display = 'block';
     return [];
   }
 
-  if(hits.length === 0){
-    skipEl.style.display = 'block';
-    return [];
+  // 过滤后还能进：只显示过滤后的结果
+  if(filtered.ok){
+    resultHdr.textContent = `${filtered.pattern}　命中过滤结果`;
+    resultEl.style.display = 'block';
+    hitListEl.appendChild(
+      buildHitCard({
+        label: '过滤后命中',
+        seat: filtered.seat,
+        pattern: filtered.pattern,
+        X: filtered.X,
+        n: filtered.n,
+        net: filtered.net,
+        wr: filtered.wr,
+        avg: filtered.avg,
+        note: '备注：正结构 + X黑名单过滤 后仍可进'
+      }, 1)
+    );
+    return [filtered.seat];
   }
 
-  resultHdr.textContent = `${pattern}　命中 ${hits.length} 个位子`;
+  // 有正结构，但被黑名单拦截：同时输出两个逻辑
+  resultHdr.textContent = `${base.pattern}　原始命中 / 过滤拦截`;
   resultEl.style.display = 'block';
 
-  hits.forEach((h, idx) => {
-    const rank = idx + 1;
-    const cls  = rank <= 3 ? `r${rank}` : '';
-    const lbl  = rank === 1 ? '首选' : rank === 2 ? '次选' : rank === 3 ? '第三' : '备选';
+  hitListEl.appendChild(
+    buildSkipCard({
+      label: '过滤结果',
+      pattern: filtered.pattern,
+      note: `备注：正结构 + X黑名单过滤 → 跳（${filtered.reason}，${filtered.seat}号位 X=${filtered.X}）`
+    })
+  );
 
-    const div = document.createElement('div');
-    div.className = `hit ${cls}`;
-    div.innerHTML = `
-      <div class="hit-lbl">${lbl}</div>
-      <div class="hit-seat">${h.seat}</div>
-      <div class="hit-body">
-        <div class="row1">${h.seat}号位　结构=${h.pattern}</div>
-        <div class="row2">X=${h.X}　样本=${h.n}局　净分=${h.net >= 0 ? '+' + h.net : h.net}</div>
-        <div class="row3">正结构 + X黑名单过滤</div>
-      </div>
-      <div class="hit-right">
-        <div class="hit-wr">${h.wr}</div>
-        <div class="hit-avg">${h.avg}</div>
-      </div>
-    `;
-    hitListEl.appendChild(div);
-  });
+  hitListEl.appendChild(
+    buildHitCard({
+      label: '原始结构',
+      seat: base.seat,
+      pattern: base.pattern,
+      X: base.X,
+      n: base.n,
+      net: base.net,
+      wr: base.wr,
+      avg: base.avg,
+      note: '备注：这是正结构原始结果，仅供参考，已被黑名单拦截'
+    }, 2)
+  );
 
-  return hits.map(h => h.seat);
+  return [];
 }
 
 function run(){
