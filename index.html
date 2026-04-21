@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="八戒智能模型">
-  <title>八戒别跑 — 精英模型 v6.0</title>
+  <title>八戒别跑 — 精英模型 v6.1</title>
   <style>
     :root{
       --bg:#0b0b0f;--card:#11111a;--line:rgba(255,255,255,.10);
@@ -65,7 +65,6 @@
 
     .msg{text-align:center;font-size:12px;color:var(--muted);min-height:14px;margin-bottom:8px;}
 
-    /* 结果区 */
     .result{display:none;margin-top:4px;}
     .result-hdr{
       text-align:center;font-size:11px;color:var(--muted);
@@ -105,14 +104,12 @@
     .hit-wr{font-size:13px;font-weight:900;color:rgba(80,255,140,.85);}
     .hit-avg{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
 
-    /* 跳 */
     .skip{
       display:none;text-align:center;padding:22px;
       font-size:38px;font-weight:1000;color:rgba(255,255,255,.18);
       letter-spacing:4px;
     }
 
-    /* 历史 */
     .history{
       margin-top:13px;padding:11px 13px;border-radius:13px;
       border:1px solid var(--line);background:rgba(255,255,255,.02);
@@ -137,7 +134,6 @@
       font-weight:800;color:var(--red);margin-right:3px;
     }
 
-    /* 说明 */
     .tiny{
       margin-top:13px;padding-top:11px;border-top:1px solid var(--line);
       font-size:11px;color:rgba(255,255,255,.28);line-height:1.8;white-space:pre-line;
@@ -146,7 +142,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">八戒别跑<span class="version">精英模型 v6.0</span></div>
+  <div class="title">八戒别跑<span class="version">精英模型 v6.1</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -172,7 +168,7 @@
     </div>
 
     <div class="tiny">
-【八戒别跑 v6.0 三层精英规则】
+【八戒别跑 v6.1 三层精英规则】
 
 层1 X白名单（位子对应数字）：
   1号→A  2号→B  3号→C  4号→D  5/6号→E
@@ -191,17 +187,16 @@
   5号 A∈{3,4,5,6,7,8,9}
   6号 A∈{3,4,5,7,8,9}
 
-层3 S黑名单（房号五位数字之和）：
-  1号 S∉{21,22,38}
-  2号 S∉{22}
-  3号 无
-  4号 S∉{18}
-  5号 S∉{19}
-  6号 S∉{21,28}
+层3 Sun白名单（必须命中才允许通过）：
+  1号 Sun∈{16,17,18,23,27}
+  2号 Sun∈{19,23,28,32}
+  3号 Sun∈{17,25,26,28,34}
+  4号 Sun∈{15,17,20,22,23,24}
+  5号 Sun∈{14,15,16,33,35}
+  6号 Sun∈{19,25,30,39}
 
-历史胜率（过滤后）：
-  1号86.7% | 2号100% | 3号90.9%
-  4号100%  | 5号71.4% | 6号91.7%
+说明：
+  三层全部命中才放行
     </div>
 
   </div>
@@ -209,7 +204,7 @@
 
 <script>
 // ══════════════════════════════════════════════
-//  三层精英规则
+//  三层精英规则 v6.1
 // ══════════════════════════════════════════════
 
 // 层1：X白名单
@@ -232,20 +227,20 @@ const A_WHITE = {
   6: new Set([3,4,5,7,8,9]),
 };
 
-// 层3：S黑名单
-const S_BLACK = {
-  1: new Set([21,22,38]),
-  2: new Set([22]),
-  3: new Set(),
-  4: new Set([18]),
-  5: new Set([19]),
-  6: new Set([21,28]),
+// 层3：Sun白名单（必须命中）
+const S_WHITE = {
+  1: new Set([16,17,18,23,27]),
+  2: new Set([19,23,28,32]),
+  3: new Set([17,25,26,28,34]),
+  4: new Set([15,17,20,22,23,24]),
+  5: new Set([14,15,16,33,35]),
+  6: new Set([19,25,30,39]),
 };
 
 // 座位优先级：5→4→6→2→3（→1）
 const PRIORITY = {5:1, 4:2, 6:3, 2:4, 3:5, 1:6};
 
-// 历史胜率 & 均利润
+// 历史胜率 & 均利润（原样保留）
 const STAT = {
   1: {wr:'86.7%', avg:'+647¥', n:'15场'},
   2: {wr:'100%',  avg:'+538¥', n:'8场'},
@@ -255,7 +250,7 @@ const STAT = {
   6: {wr:'91.7%', avg:'+491¥', n:'12场'},
 };
 
-const HISTORY_KEY   = 'bajie_v60';
+const HISTORY_KEY   = 'bajie_v61_sun_white';
 const HISTORY_LIMIT = 30;
 
 const roomEl    = document.getElementById('room');
@@ -268,7 +263,7 @@ const skipEl    = document.getElementById('skip');
 const histListEl= document.getElementById('histList');
 const clearBtnEl= document.getElementById('clearBtn');
 
-function getS(r){ return r.split('').reduce((a,c)=>a+parseInt(c),0); }
+function getS(r){ return r.split('').reduce((a,c)=>a+parseInt(c,10),0); }
 function getX(digits, seat){
   return (seat>=5) ? digits[4] : digits[seat-1];
 }
@@ -286,13 +281,12 @@ function analyze(room5){
     if(!X_WHITE[seat].has(X)) continue;
     // 层2：A白名单
     if(!A_WHITE[seat].has(A)) continue;
-    // 层3：S黑名单
-    if(S_BLACK[seat].has(S)) continue;
+    // 层3：Sun白名单（必须命中）
+    if(!S_WHITE[seat].has(S)) continue;
 
     hits.push({seat, X, A, S});
   }
 
-  // 按优先级排序
   hits.sort((a,b)=>(PRIORITY[a.seat]||9)-(PRIORITY[b.seat]||9));
   return {hits, S, A};
 }
@@ -309,7 +303,7 @@ function render(room5){
   }
 
   const top = hits.slice(0,5);
-  resultHdr.textContent = `S=${S}　A=${A}　命中 ${top.length} 个位子`;
+  resultHdr.textContent = `Sun=${S}　A=${A}　命中 ${top.length} 个位子`;
   resultEl.style.display = 'block';
 
   top.forEach((h,idx)=>{
@@ -317,7 +311,6 @@ function render(room5){
     const cls   = rank<=3 ? `r${rank}` : '';
     const lbl   = rank===1 ? '首选' : rank===2 ? '次选' : rank===3 ? '第三' : '备选';
     const stat  = STAT[h.seat];
-    const sBadge= S_BLACK[h.seat].size ? `S=${h.S}✓` : `S=${h.S}`;
 
     const div = document.createElement('div');
     div.className = `hit ${cls}`;
@@ -326,7 +319,8 @@ function render(room5){
       <div class="hit-seat">${h.seat}</div>
       <div class="hit-body">
         <div class="row1">${h.seat}号位　X=${h.X}</div>
-        <div class="row2">A=${h.A}　${sBadge}</div>
+        <div class="row2">A=${h.A}　Sun=${h.S}✓</div>
+        <div class="row3">已命中 Sun 白名单</div>
       </div>
       <div class="hit-right">
         <div class="hit-wr">${stat.wr}</div>
