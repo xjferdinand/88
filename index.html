@@ -1,282 +1,65 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#b00000"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="八戒智能模型">
-  <title>八戒别跑 — 精英模型 v7.0</title>
-  <style>
-    :root{
-      --bg:#0b0b0f;--card:#11111a;--line:rgba(255,255,255,.10);
-      --text:#f5f5f7;--muted:rgba(255,255,255,.50);--red:#ff2d2d;
-    }
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{
-      min-height:100vh;display:flex;align-items:center;justify-content:center;
-      background:
-        radial-gradient(800px 400px at 50% 15%,rgba(255,45,45,.20),transparent 60%),
-        radial-gradient(900px 500px at 50% 110%,rgba(176,0,0,.25),transparent 60%),
-        var(--bg);
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-      padding:18px;
-    }
-    .app{width:min(500px,100%);}
-
-    .title{
-      font-size:18px;font-weight:900;margin:0 0 14px;
-      display:flex;align-items:center;gap:9px;
-    }
-    .title::before{
-      content:"";flex-shrink:0;width:9px;height:9px;border-radius:50%;
-      background:var(--red);box-shadow:0 0 14px rgba(255,45,45,.9);
-    }
-    .version{font-size:11px;color:rgba(255,45,45,.6);margin-left:4px;font-weight:400;}
-
-    .panel{
-      background:linear-gradient(160deg,rgba(255,45,45,.07),transparent 55%),var(--card);
-      border:1px solid var(--line);border-radius:20px;padding:18px;
-      box-shadow:0 20px 70px rgba(0,0,0,.60);
-    }
-
-    input{
-      width:100%;padding:14px 16px;font-size:26px;letter-spacing:6px;
-      border-radius:14px;border:1px solid var(--line);
-      background:rgba(0,0,0,.40);color:var(--text);outline:none;
-      text-align:center;font-weight:700;
-    }
-    input:focus{border-color:rgba(255,45,45,.65);box-shadow:0 0 0 3px rgba(255,45,45,.12);}
-    input::placeholder{font-size:15px;letter-spacing:1px;font-weight:400;}
-
-    .btn-wrap{display:flex;justify-content:center;margin:16px 0 8px;}
-    .btn-circle{
-      width:76px;height:76px;border-radius:50%;
-      border:2px solid rgba(255,45,45,.55);
-      background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
-      color:#fff;font-size:17px;font-weight:900;letter-spacing:1px;
-      cursor:pointer;display:flex;align-items:center;justify-content:center;
-      box-shadow:0 0 22px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18);
-      transition:transform .1s,box-shadow .1s;
-    }
-    .btn-circle:active{transform:scale(.92);}
-
-    .msg{text-align:center;font-size:12px;color:var(--muted);min-height:14px;margin-bottom:8px;}
-
-    .result{display:none;margin-top:4px;}
-    .result-hdr{
-      text-align:center;font-size:11px;color:var(--muted);
-      margin-bottom:10px;letter-spacing:.5px;
-    }
-    .hit-list{display:flex;flex-direction:column;gap:7px;}
-
-    .hit{
-      display:grid;grid-template-columns:auto 52px 1fr auto;
-      align-items:center;gap:10px;
-      padding:10px 13px;border-radius:13px;
-      border:1px solid rgba(255,255,255,.07);
-      background:rgba(0,0,0,.22);
-    }
-    .hit.r1{border-color:rgba(255,45,45,.50);background:rgba(255,45,45,.10);}
-    .hit.r2{border-color:rgba(255,140,0,.28);}
-    .hit.r3{border-color:rgba(255,255,255,.10);}
-
-    .hit-lbl{
-      font-size:10px;font-weight:900;padding:3px 7px;border-radius:999px;
-      background:rgba(255,45,45,.20);color:#ff8080;
-      white-space:nowrap;letter-spacing:.3px;
-    }
-    .hit.r1 .hit-lbl{background:rgba(255,45,45,.38);color:#ff9090;}
-
-    .hit-seat{
-      font-size:38px;font-weight:1000;color:var(--red);
-      text-shadow:0 0 16px rgba(255,45,45,.45);
-      line-height:1;text-align:center;
-    }
-    .hit-body{line-height:1.7;}
-    .hit-body .row1{font-size:12px;color:var(--text);}
-    .hit-body .row2{font-size:11px;color:var(--muted);}
-    .hit-body .row3{font-size:10px;color:rgba(255,255,255,.30);margin-top:1px;}
-
-    .hit-right{text-align:right;}
-    .hit-wr{font-size:13px;font-weight:900;color:rgba(80,255,140,.85);}
-    .hit-avg{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
-
-    .skip{
-      display:none;text-align:center;padding:22px;
-      font-size:38px;font-weight:1000;color:rgba(255,255,255,.18);
-      letter-spacing:4px;
-    }
-
-    .history{
-      margin-top:13px;padding:11px 13px;border-radius:13px;
-      border:1px solid var(--line);background:rgba(255,255,255,.02);
-    }
-    .histHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
-    .histTitle{font-size:12px;font-weight:800;color:var(--muted);}
-    .clearBtn{
-      font-size:11px;padding:4px 9px;border-radius:7px;cursor:pointer;
-      border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);
-      color:rgba(255,100,100,.85);
-    }
-    .histList{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow:auto;}
-    .histItem{
-      border:1px solid rgba(255,255,255,.05);border-radius:9px;
-      padding:7px 10px;background:rgba(0,0,0,.14);
-    }
-    .histTop{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:2px;}
-    .histMain{font-size:12px;color:rgba(255,255,255,.60);}
-    .pill{
-      display:inline-block;padding:1px 6px;border-radius:999px;
-      border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);
-      font-weight:800;color:var(--red);margin-right:3px;
-    }
-
-    .tiny{
-      margin-top:13px;padding-top:11px;border-top:1px solid var(--line);
-      font-size:11px;color:rgba(255,255,255,.28);line-height:1.8;white-space:pre-line;
-    }
-  </style>
-</head>
-<body>
-<div class="app">
-  <div class="title">八戒别跑<span class="version">精英模型 v7.0</span></div>
-  <div class="panel">
-
-    <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
-
-    <div class="btn-wrap">
-      <button class="btn-circle" id="go">开干</button>
-    </div>
-
-    <div class="msg" id="msg"></div>
-
-    <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 命中位子 —</div>
-      <div class="hit-list" id="hitList"></div>
-    </div>
-    <div class="skip" id="skip">跳</div>
-
-    <div class="history">
-      <div class="histHead">
-        <span class="histTitle">最近记录</span>
-        <button class="clearBtn" id="clearBtn">清空</button>
-      </div>
-      <div class="histList" id="histList"></div>
-    </div>
-
-    <div class="tiny">
-【八戒别跑 精英模型 v7.0】
-
-四元组规则：A + 座位 + X + K
-  A = 房号第一位数字
-  X = 你坐的位子对应的数字
-    1号→A  2号→B  3号→C  4号→D  5/6号→E
-  K = S - X（S为房号五位数字之和）
-
-历史回测（375场）：
-  命中 112场  111赢1亏
-  胜率  99.1%
-  命中率 29.9%（约每3.3场进1场）
-  均利润 +844¥/场
-
-各座位胜率：
-  1号 100% | 2号 100% | 3号 100%
-  4号 100% | 5号  97% | 6号 100%
-
-座位优先级：5 > 4 > 6 > 2 > 3 > 1
-    </div>
-
-  </div>
-</div>
-
 <script>
 // ══════════════════════════════════════════════════════
-//  四元组规则：RULES[seat][x][k] = Set of allowed A values
-//  K = S - X  (S = 房号五位数字之和)
+//  三元组规则：座位 + X + K（已去掉A）
+//  K = S - X
 // ══════════════════════════════════════════════════════
 const RULES = {
   1: {
-    3: { 18: new Set([3]) },
-    8: { 8: new Set([8]),  9: new Set([8]),  10: new Set([8]),  15: new Set([8]),  19: new Set([8]) },
-    9: { 7: new Set([9]),  14: new Set([9]),  26: new Set([9]),  28: new Set([9]) },
+    3: { 18: true },
+    8: { 8: true, 9: true, 10: true, 15: true, 19: true },
+    9: { 7: true, 14: true, 26: true, 28: true },
   },
   2: {
-    2: { 16: new Set([1]),  17: new Set([7]) },
-    3: { 10: new Set([4]) },
-    4: { 18: new Set([5]),  27: new Set([9]) },
-    6: { 12: new Set([6]) },
-    7: { 17: new Set([5]) },
-    8: { 15: new Set([4, 9]),  20: new Set([2]),  24: new Set([9]) },
+    2: { 16: true, 17: true },
+    3: { 10: true },
+    4: { 18: true, 27: true },
+    6: { 12: true },
+    7: { 17: true },
+    8: { 15: true, 20: true, 24: true },
   },
   3: {
-    2: { 3: new Set([1]),  23: new Set([8]) },
-    5: { 14: new Set([8]) },
-    6: { 11: new Set([7]),  22: new Set([7]) },
-    7: { 10: new Set([4]),  18: new Set([7]),  19: new Set([2, 8]),  21: new Set([4, 7]) },
-    8: { 17: new Set([3]),  20: new Set([3]),  26: new Set([6, 7]) },
+    2: { 3: true, 23: true },
+    5: { 14: true },
+    6: { 11: true, 22: true },
+    7: { 10: true, 18: true, 19: true, 21: true },
+    8: { 17: true, 20: true, 26: true },
   },
   4: {
-    0: { 12: new Set([3]),  17: new Set([1, 4]),  20: new Set([5]),  23: new Set([6]) },
-    2: { 15: new Set([5]),  22: new Set([2, 8]) },
-    3: { 12: new Set([5]) },
-    4: { 12: new Set([1]),  19: new Set([4, 5, 7]) },
-    5: { 17: new Set([4, 7]) },
-    6: { 14: new Set([7]),  20: new Set([9]),  24: new Set([6]) },
-    7: { 15: new Set([6]) },
-    8: { 21: new Set([7]),  30: new Set([5]) },
+    0: { 12: true, 17: true, 20: true, 23: true },
+    2: { 15: true, 22: true },
+    3: { 12: true },
+    4: { 12: true, 19: true },
+    5: { 17: true },
+    6: { 14: true, 20: true, 24: true },
+    7: { 15: true },
+    8: { 21: true, 30: true },
   },
   5: {
-    0: { 15: new Set([6]),  16: new Set([5, 7]),  19: new Set([8]),  22: new Set([5, 7, 9]) },
-    1: { 19: new Set([2, 3, 8, 9]),  32: new Set([9]),  34: new Set([9]) },
-    2: { 13: new Set([2]),  27: new Set([7]) },
-    3: { 11: new Set([7]),  15: new Set([2, 5]),  17: new Set([4, 6]),  18: new Set([5]) },
-    4: { 21: new Set([2]) },
-    5: { 14: new Set([7]),  21: new Set([8]),  22: new Set([9]) },
-    6: { 22: new Set([5]) },
-    7: { 18: new Set([1]) },
-    8: { 22: new Set([7]) },
-    9: { 13: new Set([1]),  17: new Set([1]),  22: new Set([3]),  24: new Set([6]) },
+    0: { 15: true, 16: true, 19: true, 22: true },
+    1: { 19: true, 32: true, 34: true },
+    2: { 13: true, 27: true },
+    3: { 11: true, 15: true, 17: true, 18: true },
+    4: { 21: true },
+    5: { 14: true, 21: true, 22: true },
+    6: { 22: true },
+    7: { 18: true },
+    8: { 22: true },
+    9: { 13: true, 17: true, 22: true, 24: true },
   },
   6: {
-    0: { 13: new Set([3]) },
-    1: { 9: new Set([6]),  17: new Set([6]),  24: new Set([7]) },
-    2: { 23: new Set([1]) },
-    4: { 10: new Set([2]) },
-    5: { 21: new Set([6, 9]) },
-    6: { 30: new Set([5]) },
-    8: { 11: new Set([3, 8]),  22: new Set([7, 9]),  31: new Set([7]) },
-    9: { 16: new Set([5]),  26: new Set([1]) },
+    0: { 13: true },
+    1: { 9: true, 17: true, 24: true },
+    2: { 23: true },
+    4: { 10: true },
+    5: { 21: true },
+    6: { 30: true },
+    8: { 11: true, 22: true, 31: true },
+    9: { 16: true, 26: true },
   },
 };
 
-// 各座位历史胜率 & 均利润
-const SEAT_STAT = {
-  1: {wr:'100%', avg:'+881¥', n:'15场'},
-  2: {wr:'100%', avg:'+748¥', n:'11场'},
-  3: {wr:'100%', avg:'+862¥', n:'15场'},
-  4: {wr:'100%', avg:'+907¥', n:'21场'},
-  5: {wr: '97%', avg:'+862¥', n:'33场'},
-  6: {wr:'100%', avg:'+744¥', n:'17场'},
-};
-
-// 座位优先级：5→4→6→2→3→1
+// 座位优先级
 const PRIORITY = {5:1, 4:2, 6:3, 2:4, 3:5, 1:6};
-
-const HISTORY_KEY   = 'bajie_v70';
-const HISTORY_LIMIT = 30;
-
-const roomEl    = document.getElementById('room');
-const goEl      = document.getElementById('go');
-const msgEl     = document.getElementById('msg');
-const resultEl  = document.getElementById('result');
-const resultHdr = document.getElementById('resultHdr');
-const hitListEl = document.getElementById('hitList');
-const skipEl    = document.getElementById('skip');
-const histListEl= document.getElementById('histList');
-const clearBtnEl= document.getElementById('clearBtn');
 
 function getS(room){
   return room.split('').reduce((a,c)=>a+parseInt(c),0);
@@ -284,12 +67,11 @@ function getS(room){
 function getX(digits, seat){
   return (seat >= 5) ? digits[4] : digits[seat-1];
 }
-function getA(digits){ return digits[0]; }
 
+// ✅ 核心逻辑（已删除A）
 function analyze(room5){
   const digits = room5.split('').map(Number);
   const S = getS(room5);
-  const A = getA(digits);
   const hits = [];
 
   for(let seat = 1; seat <= 6; seat++){
@@ -298,108 +80,16 @@ function analyze(room5){
 
     const seatRules = RULES[seat];
     if(!seatRules) continue;
+
     const xRules = seatRules[X];
     if(!xRules) continue;
-    const aSet = xRules[K];
-    if(!aSet) continue;
-    if(!aSet.has(A)) continue;
 
-    hits.push({seat, X, K, S, A});
+    if(!xRules[K]) continue;
+
+    hits.push({seat, X, K, S});
   }
 
   hits.sort((a,b)=>(PRIORITY[a.seat]||9)-(PRIORITY[b.seat]||9));
-  return {hits, S, A};
+  return {hits, S};
 }
-
-function render(room5){
-  const {hits, S, A} = analyze(room5);
-  resultEl.style.display = 'none';
-  skipEl.style.display   = 'none';
-  hitListEl.innerHTML    = '';
-
-  if(hits.length === 0){
-    skipEl.style.display = 'block';
-    return [];
-  }
-
-  const top = hits.slice(0, 5);
-  resultHdr.textContent = `A=${A}  S=${S}　命中 ${top.length} 个位子`;
-  resultEl.style.display = 'block';
-
-  top.forEach((h, idx) => {
-    const rank = idx + 1;
-    const cls  = rank <= 3 ? `r${rank}` : '';
-    const lbl  = rank === 1 ? '首选' : rank === 2 ? '次选' : rank === 3 ? '第三' : '备选';
-    const stat = SEAT_STAT[h.seat];
-
-    const div = document.createElement('div');
-    div.className = `hit ${cls}`;
-    div.innerHTML = `
-      <div class="hit-lbl">${lbl}</div>
-      <div class="hit-seat">${h.seat}</div>
-      <div class="hit-body">
-        <div class="row1">${h.seat}号位　X=${h.X}</div>
-        <div class="row2">K=${h.K}　S=${h.S}　A=${h.A}</div>
-        <div class="row3">${stat.n} 验证</div>
-      </div>
-      <div class="hit-right">
-        <div class="hit-wr">${stat.wr}</div>
-        <div class="hit-avg">${stat.avg}</div>
-      </div>
-    `;
-    hitListEl.appendChild(div);
-  });
-
-  return top.map(h => h.seat);
-}
-
-function run(){
-  const raw = roomEl.value.trim().replace(/\s+/g, '');
-  if(!/^\d{5}$/.test(raw)){
-    msgEl.textContent = '请输入正确的5位数字';
-    return;
-  }
-  msgEl.textContent = '';
-  const seats = render(raw);
-  pushHistory(raw, seats);
-  setTimeout(() => { roomEl.value = ''; roomEl.focus(); }, 180);
-}
-
-// ── 历史记录 ──────────────────────────────────
-function loadHist(){ try{ return JSON.parse(localStorage.getItem(HISTORY_KEY))||[]; }catch{ return[]; } }
-function saveHist(items){ localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, HISTORY_LIMIT))); }
-
-function renderHist(){
-  const items = loadHist();
-  histListEl.innerHTML = '';
-  if(!items.length){
-    histListEl.innerHTML = `<div class="histItem"><div class="histMain" style="color:rgba(255,255,255,.2)">暂无记录</div></div>`;
-    return;
-  }
-  items.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'histItem';
-    const res = item.seats.length ? item.seats.map(s=>`${s}号`).join(' → ') : '跳';
-    div.innerHTML = `
-      <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">${res}</div>`;
-    histListEl.appendChild(div);
-  });
-}
-
-function pushHistory(room, seats){
-  const items = loadHist();
-  items.unshift({room, seats, time: new Date().toLocaleString('zh-CN', {hour12:false})});
-  saveHist(items);
-  renderHist();
-}
-
-goEl.addEventListener('click', run);
-roomEl.addEventListener('keydown', e => { if(e.key === 'Enter') run(); });
-clearBtnEl.addEventListener('click', () => { localStorage.removeItem(HISTORY_KEY); renderHist(); });
-if('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
-renderHist();
-roomEl.focus();
 </script>
-</body>
-</html>
