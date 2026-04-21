@@ -170,17 +170,15 @@
     <div class="tiny">
 【八戒别跑 精英模型 v7.0】
 
-全32种奇偶结构则房
-  先把房号 ABCDE 转成 奇偶结构
-  例如：
-    50638 → 奇偶偶奇偶
-    62877 → 偶偶偶奇奇
-
-再按结构直接给推荐位
+正结构 + X黑名单过滤
+  先把房号 ABCDE 转成奇偶结构
+  再按结构找推荐位
+  若该结构总净分≤0：直接跳
+  若推荐位对应X命中黑名单：直接跳
+  否则进
 
 说明：
-  这是“房间结构 → 选位”逻辑
-  不改页面设计，只改则房逻辑
+  这是“房间结构 → 选位 → X过滤”逻辑
     </div>
 
   </div>
@@ -188,12 +186,12 @@
 
 <script>
 // ══════════════════════════════════════════════════════
-//  全32种奇偶结构 → 推荐座位
-//  来源：你历史战绩的全32结构回测规则
+// 正结构：只保留总净分 > 0 的结构
+// 每条规则：结构 -> 推荐座位
+// n = 训练样本数, net = 训练总净分
 // ══════════════════════════════════════════════════════
 const STRUCT_RULES = {
   '偶偶偶偶偶': { seat: 3, n: 1, net: 650,  wr: '100%', avg: '+650'  },
-  '偶偶偶偶奇': { seat: 5, n: 1, net: -420, wr: '0%',   avg: '-420'  },
   '偶偶偶奇偶': { seat: 5, n: 3, net: 1810, wr: '100%', avg: '+603'  },
   '偶偶偶奇奇': { seat: 5, n: 1, net: 320,  wr: '100%', avg: '+320'  },
   '偶偶奇偶偶': { seat: 5, n: 1, net: 990,  wr: '100%', avg: '+990'  },
@@ -204,7 +202,6 @@ const STRUCT_RULES = {
   '偶奇偶偶偶': { seat: 1, n: 3, net: 4200, wr: '100%', avg: '+1400' },
   '偶奇偶偶奇': { seat: 5, n: 2, net: 2010, wr: '50%',  avg: '+1005' },
   '偶奇偶奇偶': { seat: 4, n: 1, net: 970,  wr: '100%', avg: '+970'  },
-  '偶奇偶奇奇': { seat: 4, n: 1, net: -370, wr: '0%',   avg: '-370'  },
   '偶奇奇偶偶': { seat: 6, n: 1, net: 990,  wr: '100%', avg: '+990'  },
   '偶奇奇偶奇': { seat: 4, n: 2, net: 1400, wr: '100%', avg: '+700'  },
   '偶奇奇奇偶': { seat: 3, n: 2, net: 1690, wr: '100%', avg: '+845'  },
@@ -229,18 +226,31 @@ const STRUCT_RULES = {
   '奇奇奇奇奇': { seat: 1, n: 1, net: 910,  wr: '100%', avg: '+910'  },
 };
 
-const HISTORY_KEY   = 'bajie_v70_struct32';
+// ══════════════════════════════════════════════════════
+// 各座位 X 黑名单
+// 命中则跳
+// ══════════════════════════════════════════════════════
+const BLACK_X = {
+  1: new Set([7]),
+  2: new Set([0, 3, 7, 9]),
+  3: new Set([0, 1, 3, 4, 5, 6, 9]),
+  4: new Set([6, 8, 9]),
+  5: new Set([6, 7, 8]),
+  6: new Set([3, 4, 6, 7]),
+};
+
+const HISTORY_KEY   = 'bajie_v70_struct_x';
 const HISTORY_LIMIT = 30;
 
-const roomEl    = document.getElementById('room');
-const goEl      = document.getElementById('go');
-const msgEl     = document.getElementById('msg');
-const resultEl  = document.getElementById('result');
-const resultHdr = document.getElementById('resultHdr');
-const hitListEl = document.getElementById('hitList');
-const skipEl    = document.getElementById('skip');
-const histListEl= document.getElementById('histList');
-const clearBtnEl= document.getElementById('clearBtn');
+const roomEl     = document.getElementById('room');
+const goEl       = document.getElementById('go');
+const msgEl      = document.getElementById('msg');
+const resultEl   = document.getElementById('result');
+const resultHdr  = document.getElementById('resultHdr');
+const hitListEl  = document.getElementById('hitList');
+const skipEl     = document.getElementById('skip');
+const histListEl = document.getElementById('histList');
+const clearBtnEl = document.getElementById('clearBtn');
 
 function getParityPattern(room){
   return room
@@ -249,28 +259,71 @@ function getParityPattern(room){
     .join('');
 }
 
+function getSeatX(room, seat){
+  const digits = room.split('').map(Number);
+  return seat >= 5 ? digits[4] : digits[seat - 1];
+}
+
 function analyze(room5){
   const pattern = getParityPattern(room5);
   const rule = STRUCT_RULES[pattern];
-  if(!rule) return { hits: [], pattern };
 
-  const hits = [{
-    seat: rule.seat,
+  // 没有结构规则，直接跳
+  if(!rule){
+    return { hits: [], pattern, blocked: true, reason: '无结构规则' };
+  }
+
+  // 负结构兜底，直接跳（虽然当前表里已经删掉）
+  if(rule.net <= 0){
+    return { hits: [], pattern, blocked: true, reason: '负结构' };
+  }
+
+  const seat = rule.seat;
+  const X = getSeatX(room5, seat);
+
+  // 正结构命中X黑名单，直接跳
+  if(BLACK_X[seat] && BLACK_X[seat].has(X)){
+    return {
+      hits: [],
+      pattern,
+      blocked: true,
+      reason: `X黑名单`,
+      blockedSeat: seat,
+      blockedX: X
+    };
+  }
+
+  return {
+    hits: [{
+      seat,
+      pattern,
+      X,
+      n: rule.n,
+      net: rule.net,
+      wr: rule.wr,
+      avg: rule.avg,
+    }],
     pattern,
-    n: rule.n,
-    net: rule.net,
-    wr: rule.wr,
-    avg: rule.avg,
-  }];
-
-  return { hits, pattern };
+    blocked: false,
+    reason: ''
+  };
 }
 
 function render(room5){
-  const {hits, pattern} = analyze(room5);
+  const {hits, pattern, blocked, reason, blockedSeat, blockedX} = analyze(room5);
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
+
+  if(blocked){
+    if(reason === 'X黑名单'){
+      resultHdr.textContent = `${pattern}　${blockedSeat}号位 X=${blockedX} 命中黑名单`;
+    } else {
+      resultHdr.textContent = `${pattern}　${reason}`;
+    }
+    skipEl.style.display = 'block';
+    return [];
+  }
 
   if(hits.length === 0){
     skipEl.style.display = 'block';
@@ -292,8 +345,8 @@ function render(room5){
       <div class="hit-seat">${h.seat}</div>
       <div class="hit-body">
         <div class="row1">${h.seat}号位　结构=${h.pattern}</div>
-        <div class="row2">样本=${h.n}局　净分=${h.net >= 0 ? '+' + h.net : h.net}</div>
-        <div class="row3">全32结构规则</div>
+        <div class="row2">X=${h.X}　样本=${h.n}局　净分=${h.net >= 0 ? '+' + h.net : h.net}</div>
+        <div class="row3">正结构 + X黑名单过滤</div>
       </div>
       <div class="hit-right">
         <div class="hit-wr">${h.wr}</div>
