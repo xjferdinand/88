@@ -212,6 +212,26 @@ A组=0/1/2/3/4  B组=5/6/7/8/9
 前四模型为原网页八戒账号模型，保持不变。
 然仔模型独立输出，命中则显示。
 M模型与其余模型独立不叠加。
+
+【然仔模型规则】
+3号：EOEOE + X=4/2/6 命中优先；
+     扩容：OEEEO / OOOOE / OOEEO；
+     黑结构：OOEEE；X=1禁，X=8/3降级。
+
+4号：OEEEE + X=4/3/2 命中优先；
+     扩容：EEOOO / OOOEO；
+     黑结构：OEOOO；X=9禁，X=0降级。
+
+5号：OOEOO / OOOOE / OEOEO + X=1/6 命中优先；
+     补：OOEEE / EOEOE；
+     黑结构：OEOOO / OEOOE / EOOEE / OOEOE；
+     X=5/0/4禁，X=9/7/2弱放。
+
+6号：OEOEO / OEOOE / OEEOE + X=6/3/0/8 命中优先；
+     补：OEOEE / EOOOO；
+     黑结构：OEEEO；X=5降级。
+
+2号、1号：当前不纳入然仔正式模型。
     </div>
 
   </div>
