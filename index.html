@@ -27,7 +27,7 @@
     .btn-circle{width:66px;height:66px;border-radius:50%;border:2px solid rgba(255,45,45,.55);background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));color:#fff;font-size:15px;font-weight:900;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18);transition:transform .1s,box-shadow .1s}
     .btn-circle:active{transform:scale(.92)}
     .msg{text-align:center;font-size:12px;color:var(--muted);min-height:14px;margin-bottom:8px}
-    .result{display:none;margin-top:4px}
+    .result{display:none;margin-top:8px}
     .result-hdr{text-align:center;font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.3px}
     .hit-list{display:flex;flex-direction:column;gap:6px}
     .hit{display:grid;grid-template-columns:auto 52px 1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.22)}
@@ -63,12 +63,13 @@
     .histTop{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:2px}
     .histMain{font-size:11px;color:rgba(255,255,255,.60);line-height:1.35}
     .pill{display:inline-block;padding:1px 6px;border-radius:999px;border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);font-weight:800;color:var(--red);margin-right:3px}
-    .tiny{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:10px;color:rgba(255,255,255,.28);line-height:1.7;white-space:pre-line}
+    .tiny,.logic-list{font-size:10px;line-height:1.7;white-space:pre-line}
+    .tiny{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);color:rgba(255,255,255,.28)}
     .logic-box{margin-top:12px;padding:10px 11px;border-radius:12px;border:1px solid rgba(120,120,255,.22);background:rgba(110,110,255,.06)}
     .logic-title{font-size:11px;font-weight:900;color:#bfc6ff;margin-bottom:6px;display:flex;align-items:center;gap:6px}
     .logic-title::before{content:"";width:6px;height:6px;border-radius:50%;background:#9ea8ff;box-shadow:0 0 10px rgba(120,120,255,.85);flex-shrink:0}
-    .logic-list{font-size:10px;line-height:1.7;color:rgba(255,255,255,.72);white-space:pre-line}
-    @media (max-width:430px){body{padding:10px}.app{width:100%}.panel{padding:10px;border-radius:15px}.hit{grid-template-columns:auto 46px 1fr auto;gap:6px;padding:7px 8px}.hit-seat{font-size:19px}.result-hdr{font-size:10px}.histMain{font-size:10px}.tiny,.logic-list{font-size:9px}}
+    .logic-list{color:rgba(255,255,255,.72)}
+    @media (max-width:430px){body{padding:10px}.app{width:100%}.panel{padding:10px;border-radius:15px}.hit{grid-template-columns:auto 46px 1fr auto;gap:6px;padding:7px 8px}.hit-seat{font-size:19px}.result-hdr{font-size:10px}.histMain,.tiny,.logic-list{font-size:9px}}
   </style>
 </head>
 <body>
@@ -90,7 +91,7 @@
     </div>
 
     <div class="result" id="logicResult">
-      <div class="result-hdr" id="logicResultHdr">— 然仔硬核选位输出 —</div>
+      <div class="result-hdr" id="logicResultHdr">— 然仔局部结构 + X排名输出 —</div>
       <div class="hit-list" id="logicHitList"></div>
     </div>
 
@@ -103,44 +104,24 @@
 
     <div class="logic-box">
       <div class="logic-title">然仔·局部结构 + X排名模型 v1.0</div>
-      <div class="logic-list">局部结构口径：
-3号看 BCD
+      <div class="logic-list">3号看 BCD
 4号看 CDE
 5号看 ADE
 6号看 ADE
 
-当前执行规则：
 3号：BCD=OEO（排1/2/3）或 EEE（排3）或 OEE（排3）或 OOO（排2）或 EOE（排3）
 4号：CDE=EEE（排3）或 OEO（排3/5）或 OOO（排2）或 EOO（排2）
 5号：ADE=EEO（排3）或 EOE（排2）或 OEE（排1）或 OOE（排2）或 OOO（排3）或 EOO（排2）或 OEO（排1）
 6号：ADE=OOE（排1/5）或 OEE（排1）或 OEO（排2/5）或 EOO（排4）
 
-注意：
-5号的 OEO + 第4名 已验证会亏，这条已杀。
-      </div>
+5号的 OEO + 第4名 已验证会亏，这条已杀。</div>
     </div>
 
     <div class="tiny">
-【72050专属六模型】
-1）结构模型（奇偶）
-2）结构+强X
-3）M模型
-4）AB结构模型（新）
-5）然仔·局部结构 + X排名模型 v1.0
-6）然仔·局部结构选位输出 v1.0
-
-A组=0/1/2/3/4  B组=5/6/7/8/9
-前四模型为原网页八戒账号模型，保持不变。
-然仔模型独立输出，命中则显示。
-
-【然仔模型说明】
-这版不再看整串5位奇偶，不再直接用旧然仔整串结构模型。
-改为：
-- 3号看 BCD 局部奇偶
-- 4号看 CDE 局部奇偶
-- 5号看 ADE 局部奇偶
-- 6号看 ADE 局部奇偶
-并叠加 X 在5位房间号中的排名区间来判断是否进房。
+【然仔说明】
+这版不再看整串5位奇偶，
+改为看局部结构 + X排名。
+八戒四模型保持不变。
     </div>
   </div>
 </div>
@@ -194,13 +175,13 @@ const LOCAL_RULES = {
     { local:'EEE', ranks:new Set([3]), tag:'次打' },
     { local:'OEE', ranks:new Set([3]), tag:'观察' },
     { local:'OOO', ranks:new Set([2]), tag:'观察' },
-    { local:'EOE', ranks:new Set([3]), tag:'观察' },
+    { local:'EOE', ranks:new Set([3]), tag:'观察' }
   ],
   4: [
     { local:'EEE', ranks:new Set([3]), tag:'主打' },
     { local:'OEO', ranks:new Set([3,5]), tag:'主打' },
     { local:'OOO', ranks:new Set([2]), tag:'次打' },
-    { local:'EOO', ranks:new Set([2]), tag:'次打' },
+    { local:'EOO', ranks:new Set([2]), tag:'次打' }
   ],
   5: [
     { local:'EEO', ranks:new Set([3]), tag:'主打' },
@@ -215,7 +196,7 @@ const LOCAL_RULES = {
     { local:'OOE', ranks:new Set([1,5]), tag:'主打' },
     { local:'OEE', ranks:new Set([1]), tag:'次打' },
     { local:'OEO', ranks:new Set([2,5]), tag:'次打' },
-    { local:'EOO', ranks:new Set([4]), tag:'观察' },
+    { local:'EOO', ranks:new Set([4]), tag:'观察' }
   ]
 };
 
@@ -333,32 +314,72 @@ function buildModelCard({label,seatsText,pattern,row2Text,note,wr,avg},rank=1){
 }
 function render(room5){
   const structRes=getStructureModel(room5), strongRes=getStructureStrongXModel(room5), mRes=getMModel(room5), abRes=getABModel(room5), ranzaiRes=getRanzaiModel(room5), logicRes=getHardLogicModel(room5);
-  resultEl.style.display='none'; ranzaiResultEl.style.display='none'; logicResultEl.style.display='none'; skipEl.style.display='none';
-  hitListEl.innerHTML=''; ranzaiHitListEl.innerHTML=''; logicHitListEl.innerHTML='';
+
+  resultEl.style.display='none';
+  ranzaiResultEl.style.display='none';
+  logicResultEl.style.display='none';
+  skipEl.style.display='none';
+
+  hitListEl.innerHTML='';
+  ranzaiHitListEl.innerHTML='';
+  logicHitListEl.innerHTML='';
+
   let shown=0, ranzaiShown=0, logicShown=0;
 
   if(structRes.ok){ const stat=formatWrAvg(structRes.hits); hitListEl.appendChild(buildModelCard({label:'结构',seatsText:formatSeats(structRes.hits),pattern:`结构=${structRes.pattern}`,row2Text:`位=${formatSeats(structRes.hits)}  X=${formatXs(structRes.hits)}`,note:'72050结构命中',wr:stat.wr,avg:stat.avg},1)); shown++; }
   if(strongRes.ok){ const stat=formatWrAvg(strongRes.hits); hitListEl.appendChild(buildModelCard({label:'结构+X',seatsText:formatSeats(strongRes.hits),pattern:`结构=${strongRes.pattern}`,row2Text:`位=${formatSeats(strongRes.hits)}  X=${formatXs(strongRes.hits)}`,note:'结构后再命中强X',wr:stat.wr,avg:stat.avg},2)); shown++; }
   if(mRes.ok){ const stat=formatWrAvg(mRes.hits); hitListEl.appendChild(buildModelCard({label:'M模型',seatsText:formatSeats(mRes.hits),pattern:`结构=${mRes.pattern}`,row2Text:`位=${formatSeats(mRes.hits)}  M=${formatMs(mRes.hits)}`,note:'独立M结果',wr:stat.wr,avg:stat.avg},3)); shown++; }
   if(abRes.ok){ const stat=formatWrAvg(abRes.hits); hitListEl.appendChild(buildModelCard({label:'AB结构',seatsText:formatSeats(abRes.hits),pattern:`AB=${abRes.abPat}`,row2Text:`位=${formatSeats(abRes.hits)}  ${abRes.hits.map(h=>h.tag).join('/')}`,note:`${abRes.hits.map(h=>`${h.n}验证`).join('  ')}`,wr:stat.wr,avg:stat.avg},4)); shown++; }
+
   if(ranzaiRes.ok){
     const seatParts=ranzaiRes.hits.map(h=>`${h.seat}号(X=${h.X})`).join(' / ');
     const levelParts=ranzaiRes.hits.map(h=>`${h.pattern}｜${h.avg}`).join(' / ');
-    ranzaiHitListEl.appendChild(buildModelCard({label:'然仔',seatsText:formatSeats(ranzaiRes.hits),pattern:`局部=${ranzaiRes.hits.map(h=>h.pattern).join('/')}`,row2Text:`位=${formatSeats(ranzaiRes.hits)}  ${seatParts}`,note:levelParts,wr:'v1.0',avg:'局部+排名'},5));
+    ranzaiHitListEl.appendChild(buildModelCard({
+      label:'然仔',
+      seatsText:formatSeats(ranzaiRes.hits),
+      pattern:`局部=${ranzaiRes.hits.map(h=>h.pattern).join('/')}`,
+      row2Text:`位=${formatSeats(ranzaiRes.hits)}  ${seatParts}`,
+      note:levelParts,
+      wr:'v1.0',
+      avg:'独立框'
+    },5));
     ranzaiShown++;
   }
+
   if(logicRes.ok){
     const seatParts=logicRes.hits.map(h=>`${h.seat}号(X=${h.X},${h.xLevel})`).join(' / ');
     const noteParts=logicRes.hits.map(h=>`${h.pattern}｜${h.level}`).join(' / ');
-    logicHitListEl.appendChild(buildModelCard({label:'选位',seatsText:formatSeats(logicRes.hits),pattern:`局部=${logicRes.hits.map(h=>h.pattern).join('/')}`,row2Text:`推荐位=${formatSeats(logicRes.hits)}  ${seatParts}`,note:noteParts,wr:'v1.0',avg:'局部+排名'},6));
+    logicHitListEl.appendChild(buildModelCard({
+      label:'选位',
+      seatsText:formatSeats(logicRes.hits),
+      pattern:`局部=${logicRes.hits.map(h=>h.pattern).join('/')}`,
+      row2Text:`推荐位=${formatSeats(logicRes.hits)}  ${seatParts}`,
+      note:noteParts,
+      wr:'v1.0',
+      avg:'独立框'
+    },6));
     logicShown++;
   }
 
   const pp=getParityPattern(room5), ab=getABPattern(room5);
-  if(shown===0 && ranzaiShown===0 && logicShown===0){ resultHdr.textContent=`${pp} / AB:${ab}　全部模型未命中`; skipEl.style.display='block'; return []; }
-  if(shown>0){ resultHdr.textContent=`${pp} / AB:${ab}　八戒四模型，共命中 ${shown} 项`; resultEl.style.display='block'; }
-  if(ranzaiShown>0){ ranzaiResultHdr.textContent=`局部结构命中`; ranzaiResultEl.style.display='block'; }
-  if(logicShown>0){ logicResultHdr.textContent=`然仔局部结构 + X排名输出`; logicResultEl.style.display='block'; }
+  if(shown===0 && ranzaiShown===0 && logicShown===0){
+    resultHdr.textContent=`${pp} / AB:${ab}　全部模型未命中`;
+    skipEl.style.display='block';
+    return [];
+  }
+
+  if(shown>0){
+    resultHdr.textContent=`${pp} / AB:${ab}　八戒四模型，共命中 ${shown} 项`;
+    resultEl.style.display='block';
+  }
+  if(ranzaiShown>0){
+    ranzaiResultHdr.textContent='— 然仔账号独立命中 —';
+    ranzaiResultEl.style.display='block';
+  }
+  if(logicShown>0){
+    logicResultHdr.textContent='— 然仔局部结构 + X排名输出 —';
+    logicResultEl.style.display='block';
+  }
 
   const seats=[];
   if(structRes.ok) seats.push(...structRes.hits.map(h=>h.seat));
