@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="72050专属六模型">
-  <title>72050专属六模型</title>
+  <meta name="apple-mobile-web-app-title" content="72050专属七模型">
+  <title>72050专属七模型</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -63,26 +63,19 @@
     }
     input:focus{border-color:rgba(255,45,45,.65);box-shadow:0 0 0 3px rgba(255,45,45,.12)}
     input::placeholder{font-size:13px;letter-spacing:1px;font-weight:400}
-
     .btn-wrap{display:flex;justify-content:center;margin:14px 0 8px}
     .btn-circle{
       width:66px;height:66px;border-radius:50%;
       border:2px solid rgba(255,45,45,.55);
       background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
-      color:#fff;
-      font-size:15px;
-      font-weight:900;
-      letter-spacing:1px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      color:#fff;font-size:15px;font-weight:900;letter-spacing:1px;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
       box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18);
       transition:transform .1s,box-shadow .1s;
     }
     .btn-circle:active{transform:scale(.92)}
-
     .msg{text-align:center;font-size:12px;color:var(--muted);min-height:14px;margin-bottom:8px}
+
     .result{display:none;margin-top:8px}
     .result-hdr{text-align:center;font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.3px}
     .hit-list{display:flex;flex-direction:column;gap:6px}
@@ -102,34 +95,27 @@
     .hit.r4{border-color:rgba(0,200,160,.35);background:rgba(0,180,140,.07)}
     .hit.r5{border-color:rgba(120,120,255,.35);background:rgba(110,110,255,.08)}
     .hit.r6{border-color:rgba(168,120,255,.35);background:rgba(150,100,255,.08)}
+    .hit.r7{border-color:rgba(255,215,0,.35);background:rgba(255,215,0,.08)}
 
     .hit-lbl{
-      font-size:9px;
-      font-weight:900;
-      padding:2px 6px;
-      border-radius:999px;
-      background:rgba(255,45,45,.20);
-      color:#ff8080;
-      white-space:nowrap;
-      letter-spacing:.2px;
+      font-size:9px;font-weight:900;padding:2px 6px;border-radius:999px;
+      background:rgba(255,45,45,.20);color:#ff8080;white-space:nowrap;letter-spacing:.2px;
     }
     .hit.r1 .hit-lbl{background:rgba(255,45,45,.38);color:#ff9090}
     .hit.r4 .hit-lbl{background:rgba(0,200,160,.25);color:#00d4a8}
     .hit.r5 .hit-lbl{background:rgba(120,120,255,.25);color:#b8b8ff}
     .hit.r6 .hit-lbl{background:rgba(168,120,255,.25);color:#d7b8ff}
+    .hit.r7 .hit-lbl{background:rgba(255,215,0,.20);color:#ffe27a}
 
     .hit-seat{
-      font-size:21px;
-      font-weight:1000;
-      color:var(--red);
+      font-size:21px;font-weight:1000;color:var(--red);
       text-shadow:0 0 12px rgba(255,45,45,.35);
-      line-height:1.05;
-      text-align:center;
-      white-space:nowrap;
+      line-height:1.05;text-align:center;white-space:nowrap;
     }
     .hit.r4 .hit-seat{color:#00d4a8;text-shadow:0 0 12px rgba(0,200,160,.4)}
     .hit.r5 .hit-seat{color:#9ea8ff;text-shadow:0 0 12px rgba(120,120,255,.45)}
     .hit.r6 .hit-seat{color:#c9a8ff;text-shadow:0 0 12px rgba(168,120,255,.45)}
+    .hit.r7 .hit-seat{color:#ffe27a;text-shadow:0 0 12px rgba(255,215,0,.45)}
 
     .hit-body{line-height:1.4;min-width:0}
     .hit-body .row1{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -141,31 +127,19 @@
     .hit-avg{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px}
 
     .skip{
-      display:none;
-      text-align:center;
-      padding:18px;
-      font-size:30px;
-      font-weight:1000;
-      color:rgba(255,255,255,.18);
-      letter-spacing:4px;
+      display:none;text-align:center;padding:18px;
+      font-size:30px;font-weight:1000;color:rgba(255,255,255,.18);letter-spacing:4px;
     }
 
     .history{
-      margin-top:12px;
-      padding:10px 11px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
+      margin-top:12px;padding:10px 11px;border-radius:12px;
+      border:1px solid var(--line);background:rgba(255,255,255,.02);
     }
     .histHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
     .histTitle{font-size:11px;font-weight:800;color:var(--muted)}
     .clearBtn{
-      font-size:10px;
-      padding:4px 8px;
-      border-radius:7px;
-      cursor:pointer;
-      border:1px solid rgba(255,45,45,.35);
-      background:rgba(255,45,45,.10);
+      font-size:10px;padding:4px 8px;border-radius:7px;cursor:pointer;
+      border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);
       color:rgba(255,100,100,.85);
     }
     .histList{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow:auto}
@@ -173,38 +147,22 @@
     .histTop{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:2px}
     .histMain{font-size:11px;color:rgba(255,255,255,.60);line-height:1.35}
     .pill{
-      display:inline-block;
-      padding:1px 6px;
-      border-radius:999px;
-      border:1px solid rgba(255,45,45,.35);
-      background:rgba(255,45,45,.10);
-      font-weight:800;
-      color:var(--red);
-      margin-right:3px;
+      display:inline-block;padding:1px 6px;border-radius:999px;
+      border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);
+      font-weight:800;color:var(--red);margin-right:3px;
     }
 
     .logic-box{
-      margin-top:12px;
-      padding:10px 11px;
-      border-radius:12px;
-      border:1px solid rgba(120,120,255,.22);
-      background:rgba(110,110,255,.06);
+      margin-top:12px;padding:10px 11px;border-radius:12px;
+      border:1px solid rgba(120,120,255,.22);background:rgba(110,110,255,.06);
     }
     .logic-title{
-      font-size:11px;
-      font-weight:900;
-      color:#bfc6ff;
-      margin-bottom:6px;
-      display:flex;
-      align-items:center;
-      gap:6px;
+      font-size:11px;font-weight:900;color:#bfc6ff;margin-bottom:6px;
+      display:flex;align-items:center;gap:6px;
     }
     .logic-title::before{
-      content:"";
-      width:6px;height:6px;border-radius:50%;
-      background:#9ea8ff;
-      box-shadow:0 0 10px rgba(120,120,255,.85);
-      flex-shrink:0;
+      content:"";width:6px;height:6px;border-radius:50%;
+      background:#9ea8ff;box-shadow:0 0 10px rgba(120,120,255,.85);flex-shrink:0;
     }
     .logic-list{font-size:10px;line-height:1.7;color:rgba(255,255,255,.72);white-space:pre-line}
     .tiny{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:10px;color:rgba(255,255,255,.28);line-height:1.7;white-space:pre-line}
@@ -222,7 +180,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">72050专属<span class="version">结构 / 强X / M / AB / 然仔 / 选位六模型</span></div>
+  <div class="title">72050专属<span class="version">结构 / 强X / M / AB / 然仔 / 排名七模型</span></div>
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
     <div class="btn-wrap"><button class="btn-circle" id="go">开干</button></div>
@@ -243,6 +201,11 @@
       <div class="hit-list" id="logicHitList"></div>
     </div>
 
+    <div class="result" id="rankOnlyResult">
+      <div class="result-hdr" id="rankOnlyResultHdr">— 只看X排名独立输出 —</div>
+      <div class="hit-list" id="rankOnlyHitList"></div>
+    </div>
+
     <div class="skip" id="skip">跳</div>
 
     <div class="history">
@@ -251,29 +214,25 @@
     </div>
 
     <div class="logic-box">
-      <div class="logic-title">然仔·局部结构 + X排名模型 v1.1</div>
-      <div class="logic-list">3号看 BCD
-4号看 CDE
-5号看 ADE
-6号看 ADE
+      <div class="logic-title">只看 X 排名独立模型</div>
+      <div class="logic-list">3号：排 1 / 2 / 3
+4号：排 2 / 3 / 5
+5号：排 1 / 2 / 3
+6号：排 1 / 2 / 4 / 5
 
-3号：BCD=OEO（排1/2/3）或 EEE（排3）或 OEE（排3）或 OOO（排2）或 EOE（排3）
-4号：CDE=EEE（排3）或 OEO（排3/5）或 OOO（排2）或 EOO（排2）
-5号：ADE=EEO（排3）或 EOE（排2）或 OEE（排1）或 OOE（排2）或 OOO（排3）或 EOO（排2）或 OEO（排1）
-6号：ADE=OOE（排1/5）或 OEE（排1）或 OEO（排2/5）或 EOO（排4）
-
-主推荐优先级：
-3号 > 4号 > 5号 > 6号
-
-5号的 OEO + 第4名 已验证会亏，这条已杀。</div>
+规则：
+- 不看结构
+- 只看当前位子的 X 在 5 位房号中的排名
+- 有命中就输出位子
+- 没命中单独显示“跳”</div>
     </div>
 
     <div class="tiny">
 【说明】
 八戒四模型保持不变。
-然仔旧模型已移除。
-现在然仔只看：
-局部结构 + X排名，并直接输出推荐位子。
+然仔局部结构模型保持不变。
+新增：
+只看X排名独立输出框。
     </div>
   </div>
 </div>
@@ -378,6 +337,13 @@ const LOCAL_RULES = {
   ]
 };
 
+const RANK_ONLY_RULES = {
+  3: new Set([1,2,3]),
+  4: new Set([2,3,5]),
+  5: new Set([1,2,3]),
+  6: new Set([1,2,4,5])
+};
+
 const HISTORY_KEY='model_72050_compact_v1';
 const HISTORY_LIMIT=30;
 
@@ -393,6 +359,9 @@ const ranzaiHitListEl=document.getElementById('ranzaiHitList');
 const logicResultEl=document.getElementById('logicResult');
 const logicResultHdr=document.getElementById('logicResultHdr');
 const logicHitListEl=document.getElementById('logicHitList');
+const rankOnlyResultEl=document.getElementById('rankOnlyResult');
+const rankOnlyResultHdr=document.getElementById('rankOnlyResultHdr');
+const rankOnlyHitListEl=document.getElementById('rankOnlyHitList');
 const skipEl=document.getElementById('skip');
 const histListEl=document.getElementById('histList');
 const clearBtnEl=document.getElementById('clearBtn');
@@ -530,6 +499,24 @@ function getHardLogicModel(room5){
   hits.sort((a,b)=>(priority[a.seat]||9)-(priority[b.seat]||9));
   return {ok:true,hits,main:hits[0],others:hits.slice(1)};
 }
+function getRankOnlyModel(room5){
+  const hits=[];
+  for(const seat of [3,4,5,6]){
+    const rank=getXRank(room5, seat);
+    const X=getSeatX(room5, seat);
+    if(!(RANK_ONLY_RULES[seat] && RANK_ONLY_RULES[seat].has(rank))) continue;
+    hits.push({
+      seat,
+      X,
+      rank
+    });
+  }
+  if(!hits.length) return {ok:false,reason:'只看X排名未命中'};
+  const priority={3:1,4:2,5:3,6:4};
+  hits.sort((a,b)=>(priority[a.seat]||9)-(priority[b.seat]||9));
+  return {ok:true,hits,main:hits[0],others:hits.slice(1)};
+}
+
 function formatSeats(hits){ return hits.map(h=>`${h.seat}`).join('/'); }
 function formatXs(hits){ return hits.map(h=>`${h.X}`).join('/'); }
 function formatMs(hits){ return hits.map(h=>`${h.M}`).join('/'); }
@@ -539,7 +526,7 @@ function formatWrAvg(hits){
   return {wr:`${hits[0].wr}/${hits[1].wr}`,avg:`${hits[0].avg}/${hits[1].avg}`};
 }
 function buildModelCard({label,seatsText,pattern,row2Text,note,wr,avg},rank=1){
-  const cls=rank<=6?`r${rank}`:'';
+  const cls=rank<=7?`r${rank}`:'';
   const div=document.createElement('div');
   div.className=`hit ${cls}`;
   div.innerHTML=`
@@ -559,6 +546,7 @@ function buildModelCard({label,seatsText,pattern,row2Text,note,wr,avg},rank=1){
 function mainSeatFrom(res){
   return res && res.main ? res.main.seat : null;
 }
+
 function render(room5){
   const structRes=getStructureModel(room5);
   const strongRes=getStructureStrongXModel(room5);
@@ -566,15 +554,18 @@ function render(room5){
   const abRes=getABModel(room5);
   const ranzaiRes=getRanzaiModel(room5);
   const logicRes=getHardLogicModel(room5);
+  const rankOnlyRes=getRankOnlyModel(room5);
 
   resultEl.style.display='none';
   ranzaiResultEl.style.display='none';
   logicResultEl.style.display='none';
+  rankOnlyResultEl.style.display='none';
   skipEl.style.display='none';
 
   hitListEl.innerHTML='';
   ranzaiHitListEl.innerHTML='';
   logicHitListEl.innerHTML='';
+  rankOnlyHitListEl.innerHTML='';
 
   let shown=0, ranzaiShown=0, logicShown=0;
 
@@ -661,11 +652,36 @@ function render(room5){
     logicShown++;
   }
 
+  if(rankOnlyRes.ok){
+    const main=rankOnlyRes.main;
+    const others=rankOnlyRes.others.length ? `候选位=${rankOnlyRes.others.map(h=>`${h.seat}号`).join('/')}` : '无候选位';
+    rankOnlyHitListEl.appendChild(buildModelCard({
+      label:'排名',
+      seatsText:`${main.seat}`,
+      pattern:`只看X排名`,
+      row2Text:`推荐位=${main.seat}号  X=${main.X}  排名第${main.rank}名`,
+      note:`${others}`,
+      wr:'独立',
+      avg:'命中'
+    },7));
+  } else {
+    rankOnlyHitListEl.appendChild(buildModelCard({
+      label:'排名',
+      seatsText:`跳`,
+      pattern:`只看X排名`,
+      row2Text:`当前房号未命中排名区间`,
+      note:`3号看 1/2/3；4号看 2/3/5；5号看 1/2/3；6号看 1/2/4/5`,
+      wr:'独立',
+      avg:'跳'
+    },7));
+  }
+  rankOnlyResultHdr.textContent='— 只看X排名独立输出 —';
+  rankOnlyResultEl.style.display='block';
+
   const pp=getParityPattern(room5), ab=getABPattern(room5);
-  if(shown===0 && ranzaiShown===0 && logicShown===0){
-    resultHdr.textContent=`${pp} / AB:${ab}　全部模型未命中`;
+  if(shown===0 && ranzaiShown===0 && logicShown===0 && !rankOnlyRes.ok){
+    resultHdr.textContent=`${pp} / AB:${ab}　其余模型未命中`;
     skipEl.style.display='block';
-    return [];
   }
 
   if(shown>0){
@@ -688,8 +704,10 @@ function render(room5){
   if(abRes.ok) seats.push(...abRes.hits.map(h=>h.seat));
   if(ranzaiRes.ok) seats.push(mainSeatFrom(ranzaiRes));
   if(logicRes.ok) seats.push(mainSeatFrom(logicRes));
-  return [...new Set(seats)].filter(Boolean).slice(0,5);
+  if(rankOnlyRes.ok) seats.push(mainSeatFrom(rankOnlyRes));
+  return [...new Set(seats)].filter(Boolean).slice(0,6);
 }
+
 function run(){
   const raw=roomEl.value.trim().replace(/\s+/g,'');
   if(!/^\d{5}$/.test(raw)){
