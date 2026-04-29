@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="72050专属四模型">
+  <meta name="apple-mobile-web-app-title" content="72050专属五模型">
   <title>72050专属四模型</title>
   <style>
     :root{
@@ -107,6 +107,10 @@
       line-height:1.05;text-align:center;white-space:nowrap;
     }
     .hit.r4 .hit-seat{color:#00d4a8;text-shadow:0 0 12px rgba(0,200,160,.4);}
+    /* 然仔模型专属颜色：紫蓝色调 */
+    .hit.r5{border-color:rgba(120,120,255,.35);background:rgba(110,110,255,.08);}
+    .hit.r5 .hit-lbl{background:rgba(120,120,255,.25);color:#b8b8ff;}
+    .hit.r5 .hit-seat{color:#9ea8ff;text-shadow:0 0 12px rgba(120,120,255,.45);}
 
     .hit-body{line-height:1.4;min-width:0;}
     .hit-body .row1{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -162,7 +166,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">72050专属<span class="version">结构 / 强X / M / AB四模型</span></div>
+  <div class="title">72050专属<span class="version">结构 / 强X / M / AB / 然仔五模型</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -188,15 +192,17 @@
     </div>
 
     <div class="tiny">
-【72050专属四模型】
+【72050专属五模型】
 1）结构模型（奇偶）
 2）结构+强X
 3）M模型
 4）AB结构模型（新）
+5）然仔·72050 奇偶+X v1.2（实战版）
 
 A组=0/1/2/3/4  B组=5/6/7/8/9
-四模型独立输出，命中则显示。
-M模型与其余三个独立不叠加。
+前四模型为原网页八戒账号模型，保持不变。
+然仔模型独立输出，命中则显示。
+M模型与其余模型独立不叠加。
     </div>
 
   </div>
@@ -323,6 +329,72 @@ function getABModel(room5){
 }
 
 // ══════════════════════════════════════════════════════
+//  新增：然仔·72050 奇偶 + X 模型 v1.2（实战版）
+//  口径：主结构 + 白名单X + 灰X
+//  3号：EOEOE + X∈{4,2,6,8,3}
+//  4号：OEEEE / EEOOO / OOOEO + X∈{4,3,2,0}
+//  5号：OOEOO / OOOOE / OEOEO + X∈{1,6,9,7,2}
+//  6号：OEOEO / OEOOE / OEEOE + X∈{6,3,0,8,5}
+// ══════════════════════════════════════════════════════
+
+const RANZAI_RULES_72050 = {
+  3: {
+    patterns: new Set(['EOEOE']),
+    whiteX: new Set([4,2,6]),
+    grayX: new Set([8,3]),
+    note: '主结构+白名单X+灰X'
+  },
+  4: {
+    patterns: new Set(['OEEEE','EEOOO','OOOEO']),
+    whiteX: new Set([4,3,2]),
+    grayX: new Set([0]),
+    note: '主结构+白名单X+灰X'
+  },
+  5: {
+    patterns: new Set(['OOEOO','OOOOE','OEOEO']),
+    whiteX: new Set([1,6]),
+    grayX: new Set([9,7,2]),
+    note: '主结构+白名单X+灰X'
+  },
+  6: {
+    patterns: new Set(['OEOEO','OEOOE','OEEOE']),
+    whiteX: new Set([6,3,0,8]),
+    grayX: new Set([5]),
+    note: '主结构+白名单X+灰X'
+  }
+};
+
+function getEOPattern(room5){
+  return room5.split('').map(c => (parseInt(c,10)%2===0 ? 'E' : 'O')).join('');
+}
+
+function getRanzaiModel(room5){
+  const eoPat = getEOPattern(room5);
+  const hits = [];
+  for (const seat of [3,4,5,6]) {
+    const rule = RANZAI_RULES_72050[seat];
+    if (!rule.patterns.has(eoPat)) continue;
+    const x = getSeatX(room5, seat);
+    if (rule.whiteX.has(x) || rule.grayX.has(x)) {
+      const level = rule.whiteX.has(x) ? '白X' : '灰X';
+      hits.push({
+        seat,
+        X: x,
+        tag: '然仔',
+        wr: level,
+        avg: rule.note,
+        pattern: eoPat,
+        note: `${eoPat}｜${level}`
+      });
+    }
+  }
+  if (!hits.length) return { ok:false, pattern:eoPat, reason:'然仔未命中' };
+  const priority = {3:1,6:2,5:3,4:4};
+  hits.sort((a,b)=>(priority[a.seat]||9)-(priority[b.seat]||9));
+  return { ok:true, pattern:eoPat, hits };
+}
+
+// ══════════════════════════════════════════════════════
 //  原有函数（原封不动）
 // ══════════════════════════════════════════════════════
 
@@ -429,6 +501,7 @@ function render(room5){
   const strongRes  = getStructureStrongXModel(room5);
   const mRes       = getMModel(room5);
   const abRes      = getABModel(room5);  // 新增AB模型
+  const ranzaiRes  = getRanzaiModel(room5);  // 新增然仔模型
 
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
@@ -493,17 +566,37 @@ function render(room5){
     shown++;
   }
 
+  if(ranzaiRes.ok){
+    const whiteSeats = ranzaiRes.hits.filter(h=>h.wr==='白X').map(h=>h.seat);
+    const graySeats  = ranzaiRes.hits.filter(h=>h.wr==='灰X').map(h=>h.seat);
+    const seatParts = [];
+    if (whiteSeats.length) seatParts.push(`白X:${whiteSeats.join('/')}`);
+    if (graySeats.length)  seatParts.push(`灰X:${graySeats.join('/')}`);
+    hitListEl.appendChild(buildModelCard({
+      label:'然仔',
+      seatsText: formatSeats(ranzaiRes.hits),
+      pattern: `EO=${ranzaiRes.pattern}`,
+      row2Text: `位=${formatSeats(ranzaiRes.hits)}  X=${formatXs(ranzaiRes.hits)}`,
+      note: seatParts.join('  ') || '主结构+白名单X+灰X',
+      wr: 'v1.2',
+      avg: '实战版'
+    }, 5));
+    shown++;
+  }
+
   if(shown===0){
     const pp = getParityPattern(room5);
     const ab = getABPattern(room5);
-    resultHdr.textContent = `${pp} / AB:${ab}　四模型均未命中`;
+    const eo = getEOPattern(room5);
+    resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　五模型均未命中`;
     skipEl.style.display = 'block';
     return [];
   }
 
   const pp = getParityPattern(room5);
   const ab = getABPattern(room5);
-  resultHdr.textContent = `${pp} / AB:${ab}　命中 ${shown} 个模型`;
+  const eo = getEOPattern(room5);
+  resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　命中 ${shown} 个模型`;
   resultEl.style.display = 'block';
 
   const seats = [];
@@ -511,6 +604,7 @@ function render(room5){
   if(strongRes.ok)  seats.push(...strongRes.hits.map(h=>h.seat));
   if(mRes.ok)       seats.push(...mRes.hits.map(h=>h.seat));
   if(abRes.ok)      seats.push(...abRes.hits.map(h=>h.seat));
+  if(ranzaiRes.ok)  seats.push(...ranzaiRes.hits.map(h=>h.seat));
   return [...new Set(seats)].slice(0,5);
 }
 
