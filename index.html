@@ -186,6 +186,10 @@
       <div class="result-hdr" id="resultHdr">— 72050四模型结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
+    <div class="result" id="ranzaiResult">
+      <div class="result-hdr" id="ranzaiResultHdr">— 然仔账号独立命中 —</div>
+      <div class="hit-list" id="ranzaiHitList"></div>
+    </div>
     <div class="skip" id="skip">跳</div>
 
     <div class="history">
@@ -412,6 +416,9 @@ const msgEl      = document.getElementById('msg');
 const resultEl   = document.getElementById('result');
 const resultHdr  = document.getElementById('resultHdr');
 const hitListEl  = document.getElementById('hitList');
+const ranzaiResultEl = document.getElementById('ranzaiResult');
+const ranzaiResultHdr = document.getElementById('ranzaiResultHdr');
+const ranzaiHitListEl = document.getElementById('ranzaiHitList');
 const skipEl     = document.getElementById('skip');
 const histListEl = document.getElementById('histList');
 const clearBtnEl = document.getElementById('clearBtn');
@@ -505,14 +512,17 @@ function render(room5){
   const structRes  = getStructureModel(room5);
   const strongRes  = getStructureStrongXModel(room5);
   const mRes       = getMModel(room5);
-  const abRes      = getABModel(room5);  // 新增AB模型
-  const ranzaiRes  = getRanzaiModel(room5);  // 新增然仔模型
+  const abRes      = getABModel(room5);
+  const ranzaiRes  = getRanzaiModel(room5);
 
   resultEl.style.display = 'none';
+  ranzaiResultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
+  ranzaiHitListEl.innerHTML = '';
 
   let shown = 0;
+  let ranzaiShown = 0;
 
   if(structRes.ok){
     const stat = formatWrAvg(structRes.hits);
@@ -556,7 +566,6 @@ function render(room5){
     shown++;
   }
 
-  // ── 新增：AB结构模型 ──
   if(abRes.ok){
     const stat = formatWrAvg(abRes.hits);
     hitListEl.appendChild(buildModelCard({
@@ -572,41 +581,42 @@ function render(room5){
   }
 
   if(ranzaiRes.ok){
-    const whiteSeats = ranzaiRes.hits.filter(h=>h.wr==='白X').map(h=>h.seat);
-    const graySeats  = ranzaiRes.hits.filter(h=>h.wr==='灰X').map(h=>h.seat);
-    const seatParts = [];
-    if (whiteSeats.length) seatParts.push(`白X:${whiteSeats.join('/')}`);
-    if (graySeats.length)  seatParts.push(`灰X:${graySeats.join('/')}`);
-    const sep = document.createElement('div');
-    sep.className = 'section-sep';
-    sep.innerHTML = `<span class="line"></span><span class="txt">然仔账号独立模型</span><span class="line"></span>`;
-    hitListEl.appendChild(sep);
-    hitListEl.appendChild(buildModelCard({
+    const seatParts = ranzaiRes.hits.map(h => `${h.seat}号(X=${h.x})`).join(' / ');
+    const patternParts = [];
+    if(ranzaiRes.pattern) patternParts.push(`EO=${ranzaiRes.pattern}`);
+    if(ranzaiRes.hitPatterns && ranzaiRes.hitPatterns.length){
+      patternParts.push(`命中=${ranzaiRes.hitPatterns.join(' / ')}`);
+    }
+    ranzaiHitListEl.appendChild(buildModelCard({
       label:'然仔',
       seatsText: formatSeats(ranzaiRes.hits),
-      pattern: `EO=${ranzaiRes.pattern}`,
-      row2Text: `位=${formatSeats(ranzaiRes.hits)}  X=${formatXs(ranzaiRes.hits)}`,
-      note: seatParts.join('  ') || '主结构+白名单X+灰X',
+      pattern: patternParts.join('  '),
+      row2Text: `位=${formatSeats(ranzaiRes.hits)}  ${seatParts}`,
+      note: seatParts || '主结构+白名单X+灰X',
       wr: 'v1.2',
       avg: '实战版'
     }, 5));
-    shown++;
-  }
-
-  if(shown===0){
-    const pp = getParityPattern(room5);
-    const ab = getABPattern(room5);
-    const eo = getEOPattern(room5);
-    resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　八戒四模型 + 然仔独立模型均未命中`;
-    skipEl.style.display = 'block';
-    return [];
+    ranzaiShown++;
   }
 
   const pp = getParityPattern(room5);
   const ab = getABPattern(room5);
   const eo = getEOPattern(room5);
-  resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　八戒四模型 + 然仔独立模型，共命中 ${shown} 项`;
-  resultEl.style.display = 'block';
+
+  if(shown===0 && ranzaiShown===0){
+    resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　八戒四模型与然仔模型均未命中`;
+    skipEl.style.display = 'block';
+    return [];
+  }
+
+  if(shown>0){
+    resultHdr.textContent = `${pp} / AB:${ab}　八戒四模型，共命中 ${shown} 项`;
+    resultEl.style.display = 'block';
+  }
+  if(ranzaiShown>0){
+    ranzaiResultHdr.textContent = `${eo}　然仔账号独立命中`;
+    ranzaiResultEl.style.display = 'block';
+  }
 
   const seats = [];
   if(structRes.ok)  seats.push(...structRes.hits.map(h=>h.seat));
