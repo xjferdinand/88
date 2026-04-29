@@ -117,6 +117,7 @@
 
 注意：
 5号的 OEO + 第4名 已验证会亏，这条已杀。
+      </div>
     </div>
 
     <div class="tiny">
@@ -161,9 +162,11 @@ const STRUCT_RULES_72050 = {
   '偶奇奇偶偶': [{ seat: 6, tag: '后补', n: 1, net: 990, wr: '100%', avg: '+990' }],
   '奇偶偶奇奇_2号补充': [{ seat: 2, tag: '后补', n: 1, net: 2310, wr: '100%', avg: '+2310' }]
 };
+
 const STRONG_X_72050 = {
   2:new Set([4,8]), 3:new Set([2,6,7,8]), 4:new Set([0,2,4,5,6,7]), 5:new Set([0,1,3,7,9]), 6:new Set([1,2])
 };
+
 const M_STRONG = {2:new Set([3]),3:new Set([2]),4:new Set([9,-4,8]),5:new Set([2,3,7]),6:new Set([11,7,8])};
 const M_BLACK = {2:new Set([4,16,-2]),3:new Set([13,9,0,1]),4:new Set([4]),5:new Set([-1,5,9,4,12]),6:new Set([9,1,4,6])};
 const M_META = {
@@ -174,6 +177,7 @@ const M_META = {
   '6_11': { tag:'观察M', n:'1局', net:'+1350', wr:'100%', avg:'+1350' }, '6_7': { tag:'观察M', n:'1局', net:'+970', wr:'100%', avg:'+970' },
   '6_8': { tag:'观察M', n:'1局', net:'+520', wr:'100%', avg:'+520' }
 };
+
 const AB_RULES = {
   'BAAAA': [{ seat:1, tag:'AB纯净', wr:'100%', avg:'+425', n:'2局', net:'+850' }],
   'BABAB': [{ seat:2, tag:'AB纯净', wr:'100%', avg:'+375', n:'2局', net:'+750' }],
@@ -205,7 +209,7 @@ const LOCAL_RULES = {
     { local:'OOE', ranks:new Set([2]), tag:'高波动' },
     { local:'OOO', ranks:new Set([3]), tag:'高波动' },
     { local:'EOO', ranks:new Set([2]), tag:'观察' },
-    { local:'OEO', ranks:new Set([1]), tag:'主打' }, // 第4名已杀
+    { local:'OEO', ranks:new Set([1]), tag:'主打' }
   ],
   6: [
     { local:'OOE', ranks:new Set([1,5]), tag:'主打' },
