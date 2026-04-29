@@ -183,7 +183,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">72050专属<span class="version">结构 / 强X / M / AB / 然仔五模型</span></div>
+  <div class="title">72050专属<span class="version">结构 / 强X / M / AB / 然仔 / 选位六模型</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -204,6 +204,11 @@
       <div class="hit-list" id="ranzaiHitList"></div>
     </div>
 
+    <div class="result" id="logicResult">
+      <div class="result-hdr" id="logicResultHdr">— 然仔硬核选位输出 —</div>
+      <div class="hit-list" id="logicHitList"></div>
+    </div>
+
     <div class="skip" id="skip">跳</div>
 
     <div class="history">
@@ -215,28 +220,37 @@
     </div>
 
     <div class="logic-box">
-      <div class="logic-title">然仔·72050 硬核选位逻辑 v1.0</div>
-      <div class="logic-list">中段转强 → 3号
+      <div class="logic-title">然仔·72050 硬核选位逻辑 v1.2（主选过滤黑X）</div>
+      <div class="logic-list">全32种奇偶结构已覆盖：
+中段转强 → 3号
 尾段承接 → 6号
 末端放大 → 5号（必须叠加X）
 规整落地 → 4号
 
-已验证迁移：
-OEEEO → 3号（不优先给2/6）
-OOEEE → 5号（不优先给2/3）
-OEOOE → 6号（不优先给5）
-OOOEO → 4号（不优先给5）
-EEOOO → 4号（不优先给3）
-OOEOE → 3号（不优先给5）</div>
+已验证迁移优先：
+OEEEO → 3号
+OOEEE → 5号
+OEOOE → 6号
+OOOEO → 4号
+EEOOO → 4号
+OOEOE → 3号
+
+输出规则：
+1）每个奇偶结构都有主选位
+2）若存在次选位且X不过黑，则同时输出
+3）主选位如果撞黑X，则直接过滤，不再输出
+4）次选位若不过黑X可继续输出
+5）因此会更稳，但不保证每个房号都输出</div>
     </div>
 
     <div class="tiny">
-【72050专属五模型】
+【72050专属六模型】
 1）结构模型（奇偶）
 2）结构+强X
 3）M模型
 4）AB结构模型（新）
 5）然仔·72050 奇偶+X v1.2（实战版）
+6）然仔·硬核选位逻辑 v1.2（主选过滤黑X）
 
 A组=0/1/2/3/4  B组=5/6/7/8/9
 前四模型为原网页八戒账号模型，保持不变。
@@ -428,6 +442,9 @@ const hitListEl  = document.getElementById('hitList');
 const ranzaiResultEl = document.getElementById('ranzaiResult');
 const ranzaiResultHdr = document.getElementById('ranzaiResultHdr');
 const ranzaiHitListEl = document.getElementById('ranzaiHitList');
+const logicResultEl = document.getElementById('logicResult');
+const logicResultHdr = document.getElementById('logicResultHdr');
+const logicHitListEl = document.getElementById('logicHitList');
 const skipEl     = document.getElementById('skip');
 const histListEl = document.getElementById('histList');
 const clearBtnEl = document.getElementById('clearBtn');
@@ -523,6 +540,93 @@ function getRanzaiModel(room5){
   hits.sort((a,b)=>(priority[a.seat]||9)-(priority[b.seat]||9));
   return { ok:true, pattern:eoPat, hits };
 }
+
+
+const RANZAI_X_RULES = {
+  2: { white:new Set([3]), gray:new Set([]), black:new Set([6,7,2]) },
+  3: { white:new Set([4,2,6]), gray:new Set([8,3]), black:new Set([1]) },
+  4: { white:new Set([4,3,2]), gray:new Set([0]), black:new Set([9]) },
+  5: { white:new Set([1,6]), gray:new Set([9,7,2]), black:new Set([5,0,4]) },
+  6: { white:new Set([6,3,0,8]), gray:new Set([5]), black:new Set([]) },
+};
+
+const RANZAI_FULL32 = {
+  'EEEEE': {primary:3, secondary:4, cls:'谨慎', note:'更像3号弱扩容，次看4号'},
+  'EEEEO': {primary:3, secondary:5, cls:'候选', note:'靠近3号中段转强核'},
+  'EEEOE': {primary:3, secondary:6, cls:'候选', note:'接近3号核，也贴6号承接'},
+  'EEEOO': {primary:3, secondary:5, cls:'谨慎', note:'偏3号弱扩容'},
+  'EEOEE': {primary:6, secondary:3, cls:'谨慎', note:'更像6号补线'},
+  'EEOEO': {primary:6, secondary:5, cls:'候选', note:'接近6号主核OEOEO'},
+  'EEOOE': {primary:3, secondary:6, cls:'谨慎', note:'中段承接尚可'},
+  'EEOOO': {primary:4, secondary:6, cls:'主打', note:'已验证迁移：EEOOO → 4号'},
+  'EOEEE': {primary:3, secondary:5, cls:'可打', note:'3号偏正，5号次看'},
+  'EOEEO': {primary:3, secondary:5, cls:'候选', note:'更像3号中段转强线'},
+  'EOEOE': {primary:3, secondary:5, cls:'主打', note:'3号最强爆发核'},
+  'EOEOO': {primary:5, secondary:3, cls:'谨慎', note:'5号高波动，3号次看'},
+  'EOOEE': {primary:6, secondary:3, cls:'候选', note:'更偏6号承接，不给5号'},
+  'EOOEO': {primary:2, secondary:6, cls:'谨慎', note:'2号唯一亮点结构'},
+  'EOOOE': {primary:5, secondary:4, cls:'候选', note:'更像5号，不给3号'},
+  'EOOOO': {primary:6, secondary:5, cls:'可打', note:'更偏6号尾承接'},
+  'OEEEE': {primary:4, secondary:6, cls:'主打', note:'4号规整落地核'},
+  'OEEEO': {primary:3, secondary:4, cls:'可打', note:'已验证迁移：OEEEO → 3号'},
+  'OEEOE': {primary:6, secondary:3, cls:'可打', note:'更偏6号承接，也可看3号'},
+  'OEEOO': {primary:4, secondary:5, cls:'可打', note:'4号已有正支撑'},
+  'OEOEE': {primary:6, secondary:3, cls:'可打', note:'更偏6号，也可看3号'},
+  'OEOEO': {primary:6, secondary:5, cls:'主打', note:'6号主核，5号次核'},
+  'OEOOE': {primary:6, secondary:4, cls:'可打', note:'已验证迁移：OEOOE → 6号'},
+  'OEOOO': {primary:6, secondary:4, cls:'迁移', note:'4/5为黑坑，迁移优先6号'},
+  'OOEEE': {primary:5, secondary:6, cls:'可打', note:'已验证迁移：OOEEE → 5号'},
+  'OOEEO': {primary:3, secondary:5, cls:'可打', note:'3号补核'},
+  'OOEOE': {primary:3, secondary:6, cls:'可打', note:'已验证迁移：OOEOE → 3号'},
+  'OOEOO': {primary:5, secondary:4, cls:'主打', note:'5号最亮主核之一'},
+  'OOOEE': {primary:5, secondary:6, cls:'候选', note:'更像5号赢线'},
+  'OOOEO': {primary:4, secondary:5, cls:'可打', note:'已验证迁移：OOOEO → 4号'},
+  'OOOOE': {primary:5, secondary:3, cls:'主打', note:'5号主核，3号次核'},
+  'OOOOO': {primary:5, secondary:4, cls:'候选', note:'5号高波动，4号次看'},
+};
+
+function getXLevel(seat, x){
+  const conf = RANZAI_X_RULES[seat];
+  if(!conf) return '无X';
+  if(conf.white.has(x)) return '白X';
+  if(conf.gray.has(x)) return '灰X';
+  if(conf.black.has(x)) return '黑X';
+  return '无X';
+}
+
+function getHardLogicModel(room5){
+  const eoPat = getEOPattern(room5);
+  const rule = RANZAI_FULL32[eoPat];
+  if(!rule) return { ok:false, pattern: eoPat, reason:'全32覆盖未命中' };
+
+  const hits = [];
+  const tryAddSeat = (seat, role) => {
+    const X = getSeatX(room5, seat);
+    const xLevel = getXLevel(seat, X);
+    if (xLevel === '黑X') return;
+    hits.push({
+      seat,
+      X,
+      role,
+      xLevel,
+      reason: rule.note,
+      level: `${rule.cls}｜${role}｜${xLevel}`,
+      pattern: eoPat
+    });
+  };
+
+  tryAddSeat(rule.primary, '主选');
+  if (rule.secondary && rule.secondary !== rule.primary) {
+    tryAddSeat(rule.secondary, '次选');
+  }
+
+  if (!hits.length) return { ok:false, pattern: eoPat, reason:'硬核选位被黑X过滤' };
+
+  const priority = {3:1,6:2,5:3,4:4,2:5,1:6};
+  hits.sort((a,b)=>(priority[a.seat]||9)-(priority[b.seat]||9));
+  return { ok:true, pattern: eoPat, hits };
+}
+
 function formatSeats(hits){ return hits.map(h=>`${h.seat}`).join('/'); }
 function formatXs(hits){ return hits.map(h=>`${h.X}`).join('/'); }
 function formatMs(hits){ return hits.map(h=>`${h.M}`).join('/'); }
@@ -558,15 +662,19 @@ function render(room5){
   const mRes       = getMModel(room5);
   const abRes      = getABModel(room5);
   const ranzaiRes  = getRanzaiModel(room5);
+  const logicRes   = getHardLogicModel(room5);
 
   resultEl.style.display = 'none';
   ranzaiResultEl.style.display = 'none';
+  logicResultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
   ranzaiHitListEl.innerHTML = '';
+  logicHitListEl.innerHTML = '';
 
   let shown = 0;
   let ranzaiShown = 0;
+  let logicShown = 0;
 
   if(structRes.ok){
     const stat = formatWrAvg(structRes.hits);
@@ -639,12 +747,27 @@ function render(room5){
     ranzaiShown++;
   }
 
+  if(logicRes.ok){
+    const seatParts = logicRes.hits.map(h => `${h.seat}号(X=${h.X},${h.xLevel})`).join(' / ');
+    const noteParts = logicRes.hits.map(h => `${h.level}`).join(' / ');
+    logicHitListEl.appendChild(buildModelCard({
+      label:'选位',
+      seatsText: formatSeats(logicRes.hits),
+      pattern: `EO=${logicRes.pattern}`,
+      row2Text: `推荐位=${formatSeats(logicRes.hits)}  ${seatParts}`,
+      note: `${logicRes.hits[0].reason}｜${noteParts}`,
+      wr: 'v1.2',
+      avg: '黑X过滤'
+    }, 5));
+    logicShown++;
+  }
+
   const pp = getParityPattern(room5);
   const ab = getABPattern(room5);
   const eo = getEOPattern(room5);
 
-  if(shown===0 && ranzaiShown===0){
-    resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　八戒四模型与然仔模型均未命中`;
+  if(shown===0 && ranzaiShown===0 && logicShown===0){
+    resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　全部模型未命中`;
     skipEl.style.display = 'block';
     return [];
   }
@@ -657,6 +780,10 @@ function render(room5){
     ranzaiResultHdr.textContent = `${eo}　然仔账号独立命中`;
     ranzaiResultEl.style.display = 'block';
   }
+  if(logicShown>0){
+    logicResultHdr.textContent = `${eo}　然仔硬核选位输出（32种全覆盖）`;
+    logicResultEl.style.display = 'block';
+  }
 
   const seats = [];
   if(structRes.ok)  seats.push(...structRes.hits.map(h=>h.seat));
@@ -664,6 +791,7 @@ function render(room5){
   if(mRes.ok)       seats.push(...mRes.hits.map(h=>h.seat));
   if(abRes.ok)      seats.push(...abRes.hits.map(h=>h.seat));
   if(ranzaiRes.ok)  seats.push(...ranzaiRes.hits.map(h=>h.seat));
+  if(logicRes.ok)   seats.push(...logicRes.hits.map(h=>h.seat));
   return [...new Set(seats)].slice(0,5);
 }
 
