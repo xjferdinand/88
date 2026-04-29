@@ -152,6 +152,11 @@
       font-size:10px;color:rgba(255,255,255,.28);line-height:1.6;white-space:pre-line;
     }
 
+
+    .section-sep{display:flex;align-items:center;gap:8px;margin:6px 0 2px;}
+    .section-sep .line{flex:1;height:1px;background:rgba(255,255,255,.08);}
+    .section-sep .txt{font-size:10px;font-weight:900;letter-spacing:.4px;color:rgba(140,170,255,.9);white-space:nowrap;}
+
     @media (max-width: 430px){
       body{padding:10px;}
       .app{width:100%;}
@@ -572,6 +577,10 @@ function render(room5){
     const seatParts = [];
     if (whiteSeats.length) seatParts.push(`白X:${whiteSeats.join('/')}`);
     if (graySeats.length)  seatParts.push(`灰X:${graySeats.join('/')}`);
+    const sep = document.createElement('div');
+    sep.className = 'section-sep';
+    sep.innerHTML = `<span class="line"></span><span class="txt">然仔账号独立模型</span><span class="line"></span>`;
+    hitListEl.appendChild(sep);
     hitListEl.appendChild(buildModelCard({
       label:'然仔',
       seatsText: formatSeats(ranzaiRes.hits),
@@ -588,7 +597,7 @@ function render(room5){
     const pp = getParityPattern(room5);
     const ab = getABPattern(room5);
     const eo = getEOPattern(room5);
-    resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　五模型均未命中`;
+    resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　八戒四模型 + 然仔独立模型均未命中`;
     skipEl.style.display = 'block';
     return [];
   }
@@ -596,7 +605,7 @@ function render(room5){
   const pp = getParityPattern(room5);
   const ab = getABPattern(room5);
   const eo = getEOPattern(room5);
-  resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　命中 ${shown} 个模型`;
+  resultHdr.textContent = `${pp} / AB:${ab} / EO:${eo}　八戒四模型 + 然仔独立模型，共命中 ${shown} 项`;
   resultEl.style.display = 'block';
 
   const seats = [];
