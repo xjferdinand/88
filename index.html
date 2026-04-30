@@ -180,7 +180,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">72050专属<span class="version">八戒四模型 / 然仔 v3.7</span></div>
+  <div class="title">72050专属<span class="version">八戒四模型 / 然仔组合 v1.1</span></div>
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
     <div class="btn-wrap"><button class="btn-circle" id="go">开干</button></div>
@@ -192,7 +192,7 @@
     </div>
 
     <div class="result" id="ranzaiResult">
-      <div class="result-hdr" id="ranzaiResultHdr">— 然仔 v3.7 独立输出 —</div>
+      <div class="result-hdr" id="ranzaiResultHdr">— 然仔 组合结构 v1.1 独立输出 —</div>
       <div class="hit-list" id="ranzaiHitList"></div>
     </div>
 
@@ -204,31 +204,53 @@
     </div>
 
     <div class="logic-box">
-      <div class="logic-title">然仔·X排名邻居压力严格硬过滤模型 v3.7</div>
-      <div class="logic-list">输出规则：
-- 每个房号最多输出3个推荐位
-- 命中显示：推荐 X/Y/Z号位进
-- 只有1个命中则只显示1个
-- 未命中或硬过滤后无候选则显示：跳
-- 八戒四模型独立显示，不与然仔混在一起
+      <div class="logic-title">然仔·组合结构筛选模型 v1.1</div>
+      <div class="logic-list">执行逻辑：
+1）先硬跳
+2）再可进
+3）硬跳优先
+4）最多输出3个位子
+5）无命中则跳
 
-核心逻辑：
-X值映射：1=A，2=B，3=C，4=D，5=E，6=E
-X排名：X在ABCDE五位数字里从大到小排名，重复数字并列同名次
+硬跳库：
+- 高位7/8/9数量≥3，且C/D有9
+- 高位7/8/9数量≥3，且当前座位邻居双压
+- 连续999
+- 连续99且C/D有9
+- X=9且连续99
+- X=9且C/D有9
+- 5号邻居双压
+- E=5且有9
+- X=5且有9
 
-v3.7：
-先按v3.5生成候选位，再执行严格硬过滤：
-1）3号排名1，若B=C且E≥6，过滤3号
-2）3号排名3，若B>C且D>C，过滤3号
-3）6号排名5，若A+D≥17，过滤6号
+可进库：
+- X=3
+- 数根9
+- 数根8
+- 4号+0个9
+- 3号邻居双低
+- E=2
+- X=8+0个9
+- 6号+数根8
+- 4号+X=0
+- X=0
+- 5号X=6数根2
+- X=1+0个9+左右同值
+- X=5+0个9
 
-过滤后最多输出前3个位子；无候选则跳。</div>
+当前78局回测：
+39/78进房，进房率50.0%
+命中净分+23190
+胜率79.5%
+最大亏-230
+命中24/26个≥500大赢
+命中0个≤-500大输</div>
     </div>
 
     <div class="tiny">
 【说明】
 八戒四模型保持不变。
-网页旧然仔规则已替换为：然仔·X排名邻居压力严格硬过滤模型 v3.7。
+网页旧然仔规则已替换为：然仔·组合结构筛选模型 v1.1。
 然仔结果与八戒结果分开显示。
     </div>
   </div>
@@ -303,7 +325,7 @@ const AB_RULES = {
   'ABAAA': [{ seat:5, tag:'AB75%', wr:'75%', avg:'+703', n:'4局', net:'+2810' }]
 };
 
-const HISTORY_KEY='model_72050_ranzai_v37';
+const HISTORY_KEY='model_72050_ranzai_combo_v11';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -402,151 +424,241 @@ function getABModel(room5){
 }
 
 /* =========================
-   然仔 v3.7：X排名邻居压力严格硬过滤
+   然仔组合结构筛选模型 v1.1
    ========================= */
 
-function makeRanzaiCandidate(room5, seat, label, order){
-  return {
-    seat,
-    X:getSeatX(room5, seat),
-    rank:getXRank(room5, seat),
-    label,
-    order,
-    reason:label
-  };
+function getDigitalRoot(room){
+  let sum = room.split('').map(Number).reduce((a,b)=>a+b,0);
+  while(sum > 9){
+    sum = String(sum).split('').map(Number).reduce((a,b)=>a+b,0);
+  }
+  return sum;
 }
 
-function getRanzaiV37Model(room5){
+function countDigit(room, digit){
+  return room.split('').filter(x=>Number(x)===digit).length;
+}
+
+function hasConsecutive(room, pattern){
+  return room.includes(pattern);
+}
+
+function highCount789(room){
+  return room.split('').map(Number).filter(n=>n===7 || n===8 || n===9).length;
+}
+
+function hasCD9(room){
+  const [A,B,C,D,E]=getDigits(room);
+  return C===9 || D===9;
+}
+
+function getNeighborTriple(room, seat){
+  const [A,B,C,D,E]=getDigits(room);
+
+  if(seat===3){
+    return {L:B, X:C, R:D};
+  }
+
+  if(seat===4){
+    return {L:C, X:D, R:E};
+  }
+
+  if(seat===5 || seat===6){
+    return {L:D, X:E, R:A};
+  }
+
+  return {L:null, X:null, R:null};
+}
+
+function isNeighborDoublePressure(room, seat){
+  const t=getNeighborTriple(room, seat);
+  if(t.X===null) return false;
+  return t.L > t.X && t.R > t.X;
+}
+
+function isNeighborDoubleLow(room, seat){
+  const t=getNeighborTriple(room, seat);
+  if(t.X===null) return false;
+  return t.L < t.X && t.R < t.X;
+}
+
+function isNeighborAllSame(room, seat){
+  const t=getNeighborTriple(room, seat);
+  if(t.X===null) return false;
+  return t.L === t.X && t.R === t.X;
+}
+
+function getDistanceTo9(x){
+  const diff=Math.abs(9-x);
+  return Math.min(diff, 10-diff);
+}
+
+function getRanzaiComboV11Model(room5){
   const [A,B,C,D,E]=getDigits(room5);
-  const maxVal=Math.max(A,B,C,D,E);
-  const countMax=[A,B,C,D,E].filter(v=>v===maxVal).length;
+
+  const root=getDigitalRoot(room5);
+  const count9=countDigit(room5,9);
+  const has9=count9>0;
+  const has99=hasConsecutive(room5,'99');
+  const has999=hasConsecutive(room5,'999');
+  const highCnt=highCount789(room5);
+  const cdHas9=hasCD9(room5);
 
   const candidates=[];
 
-  const r3=getXRank(room5,3), x3=getSeatX(room5,3);
-  const r4=getXRank(room5,4), x4=getSeatX(room5,4);
-  const r5=getXRank(room5,5), x5=getSeatX(room5,5);
-  const r6=getXRank(room5,6), x6=getSeatX(room5,6);
+  for(const seat of [3,4,5,6]){
+    const X=getSeatX(room5, seat);
+    const xDist=getDistanceTo9(X);
+    const doublePressure=isNeighborDoublePressure(room5, seat);
+    const doubleLow=isNeighborDoubleLow(room5, seat);
+    const allSame=isNeighborAllSame(room5, seat);
 
-  // v3.5 修正A：C=E且E为最大/并列最大，同时D<E，则5号优先
-  if(C===E && E===maxVal && D<E && x5!==0){
+    const hardReasons=[];
+
+    // 硬跳库 v1.1
+    if(highCnt>=3 && cdHas9){
+      hardReasons.push('高位3+且C/D有9');
+    }
+
+    if(highCnt>=3 && doublePressure){
+      hardReasons.push('高位3+且邻居双压');
+    }
+
+    if(has999){
+      hardReasons.push('连续999');
+    }
+
+    if(has99 && cdHas9){
+      hardReasons.push('连续99且C/D有9');
+    }
+
+    if(X===9 && has99){
+      hardReasons.push('X=9且连续99');
+    }
+
+    if(X===9 && cdHas9){
+      hardReasons.push('X=9且C/D有9');
+    }
+
+    if(seat===5 && doublePressure){
+      hardReasons.push('5号邻居双压');
+    }
+
+    if(E===5 && has9){
+      hardReasons.push('E=5且有9');
+    }
+
+    if(X===5 && has9){
+      hardReasons.push('X=5且有9');
+    }
+
+    if(hardReasons.length){
+      continue;
+    }
+
+    const enterReasons=[];
+    let score=0;
+
+    // 可进库 v1
+    if(X===3){
+      enterReasons.push('X=3');
+      score += 100;
+    }
+
+    if(root===9){
+      enterReasons.push('数根9');
+      score += 90;
+    }
+
+    if(root===8){
+      enterReasons.push('数根8');
+      score += 90;
+    }
+
+    if(seat===4 && count9===0){
+      enterReasons.push('4号+0个9');
+      score += 85;
+    }
+
+    if(seat===3 && doubleLow){
+      enterReasons.push('3号邻居双低');
+      score += 85;
+    }
+
+    if(E===2){
+      enterReasons.push('E=2');
+      score += 75;
+    }
+
+    if(X===8 && count9===0){
+      enterReasons.push('X=8+0个9');
+      score += 75;
+    }
+
+    if(seat===6 && root===8){
+      enterReasons.push('6号+数根8');
+      score += 80;
+    }
+
+    if(seat===4 && X===0){
+      enterReasons.push('4号+X=0');
+      score += 80;
+    }
+
+    // v1.1 新增扩容
+    if(X===0){
+      enterReasons.push('X=0');
+      score += 70;
+    }
+
+    if(seat===5 && X===6 && root===2){
+      enterReasons.push('5号X=6数根2');
+      score += 80;
+    }
+
+    if(X===1 && count9===0 && allSame){
+      enterReasons.push('X=1+0个9+左右同值');
+      score += 80;
+    }
+
+    if(X===5 && count9===0){
+      enterReasons.push('X=5+0个9');
+      score += 70;
+    }
+
+    if(!enterReasons.length){
+      continue;
+    }
+
     candidates.push({
-      seat:5,
-      X:x5,
-      rank:r5,
-      label:'v3.5修正A',
-      order:0.1,
-      reason:'C=E且E为最大/并列最大，D<E'
+      seat,
+      X,
+      root,
+      xDist,
+      score,
+      label:'组合v1.1',
+      reason:enterReasons.join(' / ')
     });
-  }
-
-  // v3.5 修正B：E唯一最大且E=6/7，则6号优先
-  if(E===maxVal && countMax===1 && (E===6 || E===7) && x6!==5){
-    candidates.push({
-      seat:6,
-      X:x6,
-      rank:r6,
-      label:'v3.5修正B',
-      order:0.2,
-      reason:'E唯一最大且E=6/7'
-    });
-  }
-
-  // v3 主排序候选
-  if(r3===1){
-    candidates.push(makeRanzaiCandidate(room5,3,'3号排名1',1));
-  }
-
-  if(r6===5 && x6!==5){
-    candidates.push(makeRanzaiCandidate(room5,6,'6号排名5',2));
-  }
-
-  if(r4===2 && x4!==9){
-    candidates.push(makeRanzaiCandidate(room5,4,'4号排名2',3));
-  }
-
-  if(r4===5 && x4===0){
-    candidates.push(makeRanzaiCandidate(room5,4,'4号排名5低X',4));
-  }
-
-  if(r3===3){
-    candidates.push(makeRanzaiCandidate(room5,3,'3号排名3',5));
-  }
-
-  if(r5===1 && x5===9){
-    candidates.push(makeRanzaiCandidate(room5,5,'5号排名1高E',6));
-  }
-
-  if(r3===2 && [3,4,5].includes(x3)){
-    candidates.push(makeRanzaiCandidate(room5,3,'3号排名2安全扩容',7));
-  }
-
-  if(r5===2 && x5!==0){
-    candidates.push(makeRanzaiCandidate(room5,5,'5号排名2',8));
-  }
-
-  if(r6===2 && x6!==5){
-    candidates.push(makeRanzaiCandidate(room5,6,'6号排名2',9));
-  }
-
-  if(r5===3 && x5!==0){
-    candidates.push(makeRanzaiCandidate(room5,5,'5号排名3',10));
-  }
-
-  if(r4===3 && x4!==9){
-    candidates.push(makeRanzaiCandidate(room5,4,'4号排名3',11));
-  }
-
-  if(r6===1 && x6!==5){
-    candidates.push(makeRanzaiCandidate(room5,6,'6号排名1',12));
   }
 
   if(!candidates.length){
-    return {ok:false,reason:'然仔v3.7未命中'};
+    return {ok:false,reason:'组合结构v1.1未命中'};
   }
 
-  candidates.sort((a,b)=>a.order-b.order);
+  const seatPriority={3:1,4:2,6:3,5:4};
 
-  // 同座位去重
-  const unique=[];
-  const seen=new Set();
-  for(const c of candidates){
-    if(seen.has(c.seat)) continue;
-    seen.add(c.seat);
-    unique.push(c);
-  }
-
-  // v3.7 严格硬过滤
-  const filtered=unique.filter(c=>{
-    // 1）3号排名1，B=C且E>=6，过滤3号
-    if(c.seat===3 && c.rank===1 && B===C && E>=6){
-      return false;
-    }
-
-    // 2）3号排名3，B>C且D>C，过滤3号
-    if(c.seat===3 && c.rank===3 && B>C && D>C){
-      return false;
-    }
-
-    // 3）6号排名5，A+D>=17，过滤6号
-    if(c.seat===6 && c.rank===5 && (A+D)>=17){
-      return false;
-    }
-
-    return true;
+  candidates.sort((a,b)=>{
+    if(b.score!==a.score) return b.score-a.score;
+    return (seatPriority[a.seat]||9)-(seatPriority[b.seat]||9);
   });
 
-  if(!filtered.length){
-    return {ok:false,reason:'然仔v3.7硬过滤后无进位'};
-  }
-
-  const top=filtered.slice(0,3);
+  const top=candidates.slice(0,3);
 
   return {
     ok:true,
     main:top[0],
     top,
-    candidates:filtered
+    candidates
   };
 }
 
@@ -586,7 +698,7 @@ function render(room5){
   const strongRes=getStructureStrongXModel(room5);
   const mRes=getMModel(room5);
   const abRes=getABModel(room5);
-  const ranzaiRes=getRanzaiV37Model(room5);
+  const ranzaiRes=getRanzaiComboV11Model(room5);
 
   resultEl.style.display='none';
   ranzaiResultEl.style.display='none';
@@ -664,10 +776,10 @@ function render(room5){
     const top = ranzaiRes.top || [ranzaiRes.main];
     const seatsText = top.map(h=>h.seat).join('/');
     const row2Seats = top.map(h=>`${h.seat}号`).join(' / ');
-    const noteText = top.map(h=>`${h.seat}号：${h.label || h.reason || ''}，X=${h.X}，排名第${h.rank}`).join('｜');
+    const noteText = top.map(h=>`${h.seat}号：${h.reason}，X=${h.X}，数根${h.root}`).join('｜');
 
     ranzaiHitListEl.appendChild(buildModelCard({
-      label:'然仔v3.7',
+      label:'组合v1.1',
       seatsText:seatsText,
       pattern:'推荐位子',
       row2Text:`推荐：${row2Seats}位进`,
@@ -677,17 +789,17 @@ function render(room5){
     },5));
   }else{
     ranzaiHitListEl.appendChild(buildModelCard({
-      label:'然仔v3.7',
+      label:'组合v1.1',
       seatsText:'跳',
       pattern:'推荐位子',
       row2Text:'当前房号无进位',
-      note:'然仔v3.7未命中或硬过滤后跳',
+      note:'组合结构v1.1未命中或硬跳后无进位',
       wr:'跳',
       avg:'无进'
     },5));
   }
 
-  ranzaiResultHdr.textContent='— 然仔 v3.7 独立输出 —';
+  ranzaiResultHdr.textContent='— 然仔 组合结构 v1.1 独立输出 —';
   ranzaiResultEl.style.display='block';
 
   if(shown===0 && !ranzaiRes.ok){
