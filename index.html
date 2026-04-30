@@ -204,10 +204,11 @@
     </div>
 
     <div class="logic-box">
-      <div class="logic-title">然仔·X排名候选池单进模型 v3.5</div>
+      <div class="logic-title">然仔·X排名候选池模型 v3.5</div>
       <div class="logic-list">输出规则：
-- 每个房号只输出一个推荐位
-- 命中显示：推荐 X号位进
+- 每个房号最多输出3个推荐位
+- 命中显示：推荐 X/Y/Z号位进
+- 只有1个命中则只显示1个
 - 未命中显示：跳
 - 八戒四模型独立显示，不与然仔混在一起
 
@@ -224,7 +225,7 @@ v3.5：
     <div class="tiny">
 【说明】
 八戒四模型保持不变。
-网页旧然仔局部结构规则已替换为：然仔·X排名候选池单进模型 v3.5。
+网页旧然仔局部结构规则已替换为：然仔·X排名候选池模型 v3.5。
 然仔结果与八戒结果分开显示。
     </div>
   </div>
@@ -299,7 +300,7 @@ const AB_RULES = {
   'ABAAA': [{ seat:5, tag:'AB75%', wr:'75%', avg:'+703', n:'4局', net:'+2810' }]
 };
 
-const HISTORY_KEY='model_72050_ranzai_v35';
+const HISTORY_KEY='model_72050_ranzai_v35_multi';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -398,7 +399,7 @@ function getABModel(room5){
 }
 
 /* =========================
-   然仔 v3.5：核心模型
+   然仔 v3.5：最多输出3个位
    ========================= */
 
 function makeRanzaiCandidate(room5, seat, label, order){
@@ -407,7 +408,8 @@ function makeRanzaiCandidate(room5, seat, label, order){
     X:getSeatX(room5, seat),
     rank:getXRank(room5, seat),
     label,
-    order
+    order,
+    reason:label
   };
 }
 
@@ -426,39 +428,37 @@ function getRanzaiV35Model(room5){
   /*
     v3.5 泛化修正 A：
     C=E，且E为全房最大/并列最大，同时D<E，则5号优先。
+    这里不直接return，而是放入候选池第一优先级。
   */
   if(C===E && E===maxVal && D<E && x5!==0){
-    return {
-      ok:true,
-      main:{
-        seat:5,
-        X:x5,
-        rank:r5,
-        label:'v3.5修正A',
-        reason:'C=E且E为最大/并列最大，D<E，5号优先'
-      }
-    };
+    candidates.push({
+      seat:5,
+      X:x5,
+      rank:r5,
+      label:'v3.5修正A',
+      order:0.1,
+      reason:'C=E且E为最大/并列最大，D<E'
+    });
   }
 
   /*
     v3.5 泛化修正 B：
     E为唯一最大，且E=6/7，则6号优先。
+    这里不直接return，而是放入候选池第二优先级。
   */
   if(E===maxVal && countMax===1 && (E===6 || E===7) && x6!==5){
-    return {
-      ok:true,
-      main:{
-        seat:6,
-        X:x6,
-        rank:r6,
-        label:'v3.5修正B',
-        reason:'E唯一最大且E=6/7，6号优先'
-      }
-    };
+    candidates.push({
+      seat:6,
+      X:x6,
+      rank:r6,
+      label:'v3.5修正B',
+      order:0.2,
+      reason:'E唯一最大且E=6/7'
+    });
   }
 
   /*
-    v3 主排序：
+    v3主排序：
     1. 3号排名1
     2. 6号排名5
     3. 4号排名2
@@ -527,17 +527,22 @@ function getRanzaiV35Model(room5){
 
   candidates.sort((a,b)=>a.order-b.order);
 
-  const main=candidates[0];
+  const unique=[];
+  const seen=new Set();
+
+  for(const c of candidates){
+    if(seen.has(c.seat)) continue;
+    seen.add(c.seat);
+    unique.push(c);
+  }
+
+  const top=unique.slice(0,3);
+
   return {
     ok:true,
-    main:{
-      seat:main.seat,
-      X:main.X,
-      rank:main.rank,
-      label:main.label,
-      reason:`${main.label}｜X=${main.X}｜排名第${main.rank}`
-    },
-    candidates
+    main:top[0],
+    top,
+    candidates:unique
   };
 }
 
@@ -652,15 +657,19 @@ function render(room5){
   }
 
   if(ranzaiRes.ok){
-    const main=ranzaiRes.main;
+    const top = ranzaiRes.top || [ranzaiRes.main];
+    const seatsText = top.map(h=>h.seat).join('/');
+    const row2Seats = top.map(h=>`${h.seat}号`).join(' / ');
+    const noteText = top.map(h=>`${h.seat}号：${h.label || h.reason || ''}，X=${h.X}，排名第${h.rank}`).join('｜');
+
     ranzaiHitListEl.appendChild(buildModelCard({
       label:'然仔v3.5',
-      seatsText:`${main.seat}`,
+      seatsText:seatsText,
       pattern:'推荐位子',
-      row2Text:`推荐：${main.seat}号位进`,
-      note:`${main.reason}`,
+      row2Text:`推荐：${row2Seats}位进`,
+      note:noteText,
       wr:'进',
-      avg:'单进'
+      avg:`${top.length}位`
     },5));
   }else{
     ranzaiHitListEl.appendChild(buildModelCard({
@@ -673,6 +682,7 @@ function render(room5){
       avg:'无进'
     },5));
   }
+
   ranzaiResultHdr.textContent='— 然仔 v3.5 独立输出 —';
   ranzaiResultEl.style.display='block';
 
@@ -685,11 +695,15 @@ function render(room5){
   if(strongRes.ok) seats.push(...strongRes.hits.map(h=>h.seat));
   if(mRes.ok) seats.push(...mRes.hits.map(h=>h.seat));
   if(abRes.ok) seats.push(...abRes.hits.map(h=>h.seat));
-  if(ranzaiRes.ok) seats.push(ranzaiRes.main.seat);
+
+  if(ranzaiRes.ok){
+    const top = ranzaiRes.top || [ranzaiRes.main];
+    seats.push(...top.map(h=>h.seat));
+  }
 
   return {
     seats:[...new Set(seats)].filter(Boolean).slice(0,6),
-    ranzai:ranzaiRes.ok ? `${ranzaiRes.main.seat}号进` : '跳'
+    ranzai:ranzaiRes.ok ? `${(ranzaiRes.top || [ranzaiRes.main]).map(h=>h.seat).join('/')}号进` : '跳'
   };
 }
 
@@ -743,7 +757,11 @@ function pushHistory(room,res){
 goEl.addEventListener('click',run);
 roomEl.addEventListener('keydown',e=>{ if(e.key==='Enter') run(); });
 clearBtnEl.addEventListener('click',()=>{ localStorage.removeItem(HISTORY_KEY); renderHist(); });
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+}
+
 renderHist();
 roomEl.focus();
 </script>
