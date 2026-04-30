@@ -180,7 +180,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">72050专属<span class="version">八戒四模型 / 然仔 v3.5</span></div>
+  <div class="title">72050专属<span class="version">八戒四模型 / 然仔 v3.7</span></div>
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
     <div class="btn-wrap"><button class="btn-circle" id="go">开干</button></div>
@@ -192,7 +192,7 @@
     </div>
 
     <div class="result" id="ranzaiResult">
-      <div class="result-hdr" id="ranzaiResultHdr">— 然仔 v3.5 独立输出 —</div>
+      <div class="result-hdr" id="ranzaiResultHdr">— 然仔 v3.7 独立输出 —</div>
       <div class="hit-list" id="ranzaiHitList"></div>
     </div>
 
@@ -204,28 +204,31 @@
     </div>
 
     <div class="logic-box">
-      <div class="logic-title">然仔·X排名候选池模型 v3.5</div>
+      <div class="logic-title">然仔·X排名邻居压力严格硬过滤模型 v3.7</div>
       <div class="logic-list">输出规则：
 - 每个房号最多输出3个推荐位
 - 命中显示：推荐 X/Y/Z号位进
 - 只有1个命中则只显示1个
-- 未命中显示：跳
+- 未命中或硬过滤后无候选则显示：跳
 - 八戒四模型独立显示，不与然仔混在一起
 
 核心逻辑：
 X值映射：1=A，2=B，3=C，4=D，5=E，6=E
 X排名：X在ABCDE五位数字里从大到小排名，重复数字并列同名次
 
-v3.5：
-以v3主排序为基础，加入两个泛化修正：
-1）C=E，且E为全房最大/并列最大，同时D&lt;E，则5号优先
-2）E为唯一最大，且E∈{6,7}，则6号优先</div>
+v3.7：
+先按v3.5生成候选位，再执行严格硬过滤：
+1）3号排名1，若B=C且E≥6，过滤3号
+2）3号排名3，若B>C且D>C，过滤3号
+3）6号排名5，若A+D≥17，过滤6号
+
+过滤后最多输出前3个位子；无候选则跳。</div>
     </div>
 
     <div class="tiny">
 【说明】
 八戒四模型保持不变。
-网页旧然仔局部结构规则已替换为：然仔·X排名候选池模型 v3.5。
+网页旧然仔规则已替换为：然仔·X排名邻居压力严格硬过滤模型 v3.7。
 然仔结果与八戒结果分开显示。
     </div>
   </div>
@@ -300,7 +303,7 @@ const AB_RULES = {
   'ABAAA': [{ seat:5, tag:'AB75%', wr:'75%', avg:'+703', n:'4局', net:'+2810' }]
 };
 
-const HISTORY_KEY='model_72050_ranzai_v35_multi';
+const HISTORY_KEY='model_72050_ranzai_v37';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -399,7 +402,7 @@ function getABModel(room5){
 }
 
 /* =========================
-   然仔 v3.5：最多输出3个位
+   然仔 v3.7：X排名邻居压力严格硬过滤
    ========================= */
 
 function makeRanzaiCandidate(room5, seat, label, order){
@@ -413,7 +416,7 @@ function makeRanzaiCandidate(room5, seat, label, order){
   };
 }
 
-function getRanzaiV35Model(room5){
+function getRanzaiV37Model(room5){
   const [A,B,C,D,E]=getDigits(room5);
   const maxVal=Math.max(A,B,C,D,E);
   const countMax=[A,B,C,D,E].filter(v=>v===maxVal).length;
@@ -425,11 +428,7 @@ function getRanzaiV35Model(room5){
   const r5=getXRank(room5,5), x5=getSeatX(room5,5);
   const r6=getXRank(room5,6), x6=getSeatX(room5,6);
 
-  /*
-    v3.5 泛化修正 A：
-    C=E，且E为全房最大/并列最大，同时D<E，则5号优先。
-    这里不直接return，而是放入候选池第一优先级。
-  */
+  // v3.5 修正A：C=E且E为最大/并列最大，同时D<E，则5号优先
   if(C===E && E===maxVal && D<E && x5!==0){
     candidates.push({
       seat:5,
@@ -441,11 +440,7 @@ function getRanzaiV35Model(room5){
     });
   }
 
-  /*
-    v3.5 泛化修正 B：
-    E为唯一最大，且E=6/7，则6号优先。
-    这里不直接return，而是放入候选池第二优先级。
-  */
+  // v3.5 修正B：E唯一最大且E=6/7，则6号优先
   if(E===maxVal && countMax===1 && (E===6 || E===7) && x6!==5){
     candidates.push({
       seat:6,
@@ -457,22 +452,7 @@ function getRanzaiV35Model(room5){
     });
   }
 
-  /*
-    v3主排序：
-    1. 3号排名1
-    2. 6号排名5
-    3. 4号排名2
-    4. 4号排名5且X=0
-    5. 3号排名3
-    6. 5号排名1且X=9
-    7. 3号排名2且X=3/4/5
-    8. 5号排名2
-    9. 6号排名2
-    10. 5号排名3
-    11. 4号排名3
-    12. 6号排名1
-  */
-
+  // v3 主排序候选
   if(r3===1){
     candidates.push(makeRanzaiCandidate(room5,3,'3号排名1',1));
   }
@@ -522,27 +502,51 @@ function getRanzaiV35Model(room5){
   }
 
   if(!candidates.length){
-    return {ok:false,reason:'然仔v3.5未命中'};
+    return {ok:false,reason:'然仔v3.7未命中'};
   }
 
   candidates.sort((a,b)=>a.order-b.order);
 
+  // 同座位去重
   const unique=[];
   const seen=new Set();
-
   for(const c of candidates){
     if(seen.has(c.seat)) continue;
     seen.add(c.seat);
     unique.push(c);
   }
 
-  const top=unique.slice(0,3);
+  // v3.7 严格硬过滤
+  const filtered=unique.filter(c=>{
+    // 1）3号排名1，B=C且E>=6，过滤3号
+    if(c.seat===3 && c.rank===1 && B===C && E>=6){
+      return false;
+    }
+
+    // 2）3号排名3，B>C且D>C，过滤3号
+    if(c.seat===3 && c.rank===3 && B>C && D>C){
+      return false;
+    }
+
+    // 3）6号排名5，A+D>=17，过滤6号
+    if(c.seat===6 && c.rank===5 && (A+D)>=17){
+      return false;
+    }
+
+    return true;
+  });
+
+  if(!filtered.length){
+    return {ok:false,reason:'然仔v3.7硬过滤后无进位'};
+  }
+
+  const top=filtered.slice(0,3);
 
   return {
     ok:true,
     main:top[0],
     top,
-    candidates:unique
+    candidates:filtered
   };
 }
 
@@ -582,7 +586,7 @@ function render(room5){
   const strongRes=getStructureStrongXModel(room5);
   const mRes=getMModel(room5);
   const abRes=getABModel(room5);
-  const ranzaiRes=getRanzaiV35Model(room5);
+  const ranzaiRes=getRanzaiV37Model(room5);
 
   resultEl.style.display='none';
   ranzaiResultEl.style.display='none';
@@ -663,7 +667,7 @@ function render(room5){
     const noteText = top.map(h=>`${h.seat}号：${h.label || h.reason || ''}，X=${h.X}，排名第${h.rank}`).join('｜');
 
     ranzaiHitListEl.appendChild(buildModelCard({
-      label:'然仔v3.5',
+      label:'然仔v3.7',
       seatsText:seatsText,
       pattern:'推荐位子',
       row2Text:`推荐：${row2Seats}位进`,
@@ -673,17 +677,17 @@ function render(room5){
     },5));
   }else{
     ranzaiHitListEl.appendChild(buildModelCard({
-      label:'然仔v3.5',
+      label:'然仔v3.7',
       seatsText:'跳',
       pattern:'推荐位子',
       row2Text:'当前房号无进位',
-      note:'然仔v3.5未命中',
+      note:'然仔v3.7未命中或硬过滤后跳',
       wr:'跳',
       avg:'无进'
     },5));
   }
 
-  ranzaiResultHdr.textContent='— 然仔 v3.5 独立输出 —';
+  ranzaiResultHdr.textContent='— 然仔 v3.7 独立输出 —';
   ranzaiResultEl.style.display='block';
 
   if(shown===0 && !ranzaiRes.ok){
