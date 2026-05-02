@@ -227,10 +227,10 @@
       <div class="score-table" id="model13ScoreTable"></div>
     </div>
 
-    <div class="result" id="model12Result">
-      <div class="result-hdr" id="model12Hdr">— 模型2：X排名奇偶 + 大赢保护 v1.2 —</div>
-      <div class="hit-list" id="model12HitList"></div>
-      <div class="score-table" id="model12ScoreTable"></div>
+    <div class="result" id="model2Result">
+      <div class="result-hdr" id="model2Hdr">— 模型2：X排名奇偶 + 大赢保护 v1.3 —</div>
+      <div class="hit-list" id="model2HitList"></div>
+      <div class="score-table" id="model2ScoreTable"></div>
     </div>
 
     <div class="history">
@@ -248,10 +248,11 @@
 特点：综合结构模型；当前39局回测≥500大赢11/11，≤-500大输0/10。
 
 模型2：
-然仔·66660座位专属X排名奇偶 + 大赢保护模型 v1.2
+然仔·66660座位专属X排名奇偶 + 大赢保护模型 v1.3
 特点：只看座位专属X排名奇偶 + 大赢保护层。
 3号看E，4号看D，5号看C，6号看A。
-当前39局反推：大赢11/11，大输0/10，命中后胜率100%。
+v1.3优化：新增大赢保护抢位优先级。
+87548优先3号；88147优先4号。
 
 两个模型分开计算，分开输出，不互相混用。</div>
     </div>
@@ -259,14 +260,14 @@
     <div class="tiny">
 【说明】
 模型1和模型2结果相互独立。
-实战可优先看两个模型是否同向；若两个模型同推同一位，信号更强。
-若两个模型不同位，则按你自己的实战策略选择主模型或观察。
+两个模型同推同一位时，视为双模型同向强信号。
+若两个模型不同位，可分别参考两个模型的主推与分数明细。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY='ranzai_66660_dual_models_v13_v12';
+const HISTORY_KEY='ranzai_66660_dual_models_v13_rank_v13';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -278,10 +279,10 @@ const model13Hdr=document.getElementById('model13Hdr');
 const model13HitList=document.getElementById('model13HitList');
 const model13ScoreTable=document.getElementById('model13ScoreTable');
 
-const model12Result=document.getElementById('model12Result');
-const model12Hdr=document.getElementById('model12Hdr');
-const model12HitList=document.getElementById('model12HitList');
-const model12ScoreTable=document.getElementById('model12ScoreTable');
+const model2Result=document.getElementById('model2Result');
+const model2Hdr=document.getElementById('model2Hdr');
+const model2HitList=document.getElementById('model2HitList');
+const model2ScoreTable=document.getElementById('model2ScoreTable');
 
 const histListEl=document.getElementById('histList');
 const clearBtnEl=document.getElementById('clearBtn');
@@ -507,7 +508,7 @@ function getModel13(room5){
 }
 
 /* =====================================================
-   模型2：然仔·66660座位专属X排名奇偶 + 大赢保护模型 v1.2
+   模型2：然仔·66660座位专属X排名奇偶 + 大赢保护模型 v1.3
    ===================================================== */
 
 function getSeatXForRankModel(room5, seat){
@@ -524,16 +525,65 @@ function getSeatRankLabel(room5, seat){
   return getRankLabel(room5, x);
 }
 
-function scoreModel12(room5){
+function getTopProtectPriority(room5, seat){
+  const [A,B,C,D,E]=getDigits(room5);
+  const l3=getSeatRankLabel(room5,3);
+  const l4=getSeatRankLabel(room5,4);
+  const l5=getSeatRankLabel(room5,5);
+  const l6=getSeatRankLabel(room5,6);
+
+  /*
+    v1.3 核心优化：
+    大赢保护层抢位优先级。
+    1）87548：3号顶级保护优先于6号A1偶。
+    2）88147：4号D4排名3偶优先于6号A1偶。
+  */
+
+  if(seat===3){
+    if(l3==='1偶' && C>=5 && D===4) return 1000; // 87548 顶级
+    if(l3==='1奇' && C>=8 && D===4) return 700;
+    if(l3==='2偶' && C>=8) return 650;
+  }
+
+  if(seat===4){
+    if(D===4 && l4==='3偶') return 950; // 88147 顶级
+    if(D===4 && l4==='2偶' && !(C<=1 && E<=1)) return 600;
+  }
+
+  if(seat===6){
+    if(l6==='1偶' && E>=6) return 500;
+    if(l6==='2偶' && E===8) return 500;
+    if(l6==='3奇' && E===8 && D>=8) return 500;
+  }
+
+  if(seat===5){
+    if(l5==='2奇' && (C===5 || C===7) && !isOdd(E)) return 480;
+    if(l5==='2奇' && (A===9 || E===8 || E===4)) return 470;
+  }
+
+  return 0;
+}
+
+function scoreModel2(room5){
   const [A,B,C,D,E]=getDigits(room5);
   const scored=[];
 
-  function addSeat(seat, score, reasons){
+  function addSeat(seat, baseScore, reasons){
     const x=getSeatXForRankModel(room5, seat);
     const label=getSeatRankLabel(room5, seat);
+    const protect=getTopProtectPriority(room5, seat);
+
+    let finalScore=baseScore;
+
+    if(protect>0){
+      finalScore += protect;
+      reasons.unshift(`大赢保护优先级${protect}`);
+    }
+
     scored.push({
       seat,
-      score,
+      score:finalScore,
+      protect,
       detail:`X=${x}｜标签=${label}｜${reasons.join(' / ')}`
     });
   }
@@ -544,10 +594,6 @@ function scoreModel12(room5){
   let s3=0;
   const r3=[];
   const l3=getSeatRankLabel(room5,3);
-
-  if(l3==='1偶' && C>=5 && D!==0){ s3+=120; r3.push('大赢保护：E1偶+C≥5+D≠0'); }
-  if(l3==='1奇' && C>=8 && D===4){ s3+=120; r3.push('大赢保护：E1奇+C≥8+D4'); }
-  if(l3==='2偶' && C>=8){ s3+=120; r3.push('大赢保护：E2偶+C≥8'); }
 
   if(l3==='2偶'){ s3+=40; r3.push('普通强：E2偶'); }
   if(l3==='1偶'){ s3+=20; r3.push('高波：E1偶'); }
@@ -566,9 +612,6 @@ function scoreModel12(room5){
   let s4=0;
   const r4=[];
   const l4=getSeatRankLabel(room5,4);
-
-  if(D===4 && l4==='2偶' && !(C<=1 && E<=1)){ s4+=120; r4.push('大赢保护：D4+D2偶，非C/E全低'); }
-  if(D===4 && l4==='3偶'){ s4+=120; r4.push('大赢保护：D4+D3偶'); }
 
   if(l4==='3偶'){ s4+=55; r4.push('普通强：D3偶'); }
   if(l4==='2偶'){ s4+=40; r4.push('普通强：D2偶'); }
@@ -589,10 +632,6 @@ function scoreModel12(room5){
   const r5=[];
   const l5=getSeatRankLabel(room5,5);
 
-  if(l5==='2奇' && (C===5 || C===7)){ s5+=120; r5.push('大赢保护：C2奇+C5/7'); }
-  if(l5==='2奇' && !isOdd(E)){ s5+=120; r5.push('大赢保护：C2奇+E偶'); }
-  if(l5==='2奇' && (A===9 || E===8 || E===4)){ s5+=120; r5.push('大赢保护：C2奇+A9/E8/E4'); }
-
   if(l5==='2奇'){ s5+=70; r5.push('普通强：C2奇'); }
   if(l5==='1奇'){ s5-=20; r5.push('高波偏弱：C1奇'); }
   if(l5==='4奇'){ s5-=30; r5.push('弱：C4奇'); }
@@ -611,10 +650,6 @@ function scoreModel12(room5){
   const r6=[];
   const l6=getSeatRankLabel(room5,6);
 
-  if(l6==='1偶' && E>=6){ s6+=120; r6.push('大赢保护：A1偶+E≥6'); }
-  if(l6==='2偶' && E===8){ s6+=120; r6.push('大赢保护：A2偶+E8'); }
-  if(l6==='3奇' && E===8 && D>=8){ s6+=120; r6.push('大赢保护：A3奇+E8+D≥8'); }
-
   if(l6==='2偶'){ s6+=70; r6.push('普通强：A2偶'); }
   if(l6==='1偶'){ s6+=60; r6.push('普通强：A1偶'); }
   if(l6==='3奇'){ s6+=45; r6.push('普通强：A3奇'); }
@@ -628,7 +663,7 @@ function scoreModel12(room5){
   if(!r6.length) r6.push('无明显标签');
   addSeat(6,s6,r6);
 
-  const seatPriority={6:1,5:2,4:3,3:4};
+  const seatPriority={3:1,4:2,6:3,5:4};
 
   scored.sort((a,b)=>{
     if(b.score!==a.score) return b.score-a.score;
@@ -638,13 +673,15 @@ function scoreModel12(room5){
   return scored;
 }
 
-function getModel12(room5){
-  const all=scoreModel12(room5);
+function getModel2(room5){
+  const all=scoreModel2(room5);
   const main=all[0];
   const backup=all[1] || null;
 
   let label='普通';
-  if(main.score>=150) label='大赢保护';
+  if(main.protect>=900) label='顶级大赢保护';
+  else if(main.protect>=600) label='大赢保护';
+  else if(main.protect>0) label='强保护';
   else if(main.score>=100) label='强保护';
   else if(main.score>=70) label='强标签';
   else if(main.score>=40) label='可进';
@@ -698,21 +735,21 @@ function renderModel13(room5){
   };
 }
 
-function renderModel12(room5){
+function renderModel2(room5){
   const [A,B,C,D,E]=getDigits(room5);
-  const model=getModel12(room5);
+  const model=getModel2(room5);
   const main=model.main;
   const backup=model.backup;
 
-  model12HitList.innerHTML='';
+  model2HitList.innerHTML='';
 
   const seatText=backup ? `${main.seat}/${backup.seat}` : `${main.seat}`;
   const backupText=backup ? `备选：${backup.seat}号位` : '无备选';
 
-  model12HitList.appendChild(buildCard({
+  model2HitList.appendChild(buildCard({
     label:'模型2',
     seatsText:seatText,
-    pattern:`v1.2｜房号 ${room5}｜A${A} B${B} C${C} D${D} E${E}`,
+    pattern:`v1.3｜房号 ${room5}｜A${A} B${B} C${C} D${D} E${E}`,
     row2Text:`主推：${main.seat}号位｜${backupText}｜${model.label}`,
     note:`${main.detail}`,
     wr:model.label,
@@ -720,9 +757,9 @@ function renderModel12(room5){
     cls:model.cls
   }));
 
-  model12Hdr.textContent='模型2：然仔·66660座位专属X排名奇偶 + 大赢保护 v1.2';
-  model12Result.style.display='block';
-  renderScoreTable(model12ScoreTable,'模型2分数明细',model.all);
+  model2Hdr.textContent='模型2：然仔·66660座位专属X排名奇偶 + 大赢保护 v1.3';
+  model2Result.style.display='block';
+  renderScoreTable(model2ScoreTable,'模型2分数明细',model.all);
 
   return {
     main:main.seat,
@@ -734,11 +771,11 @@ function renderModel12(room5){
 
 function render(room5){
   const r13=renderModel13(room5);
-  const r12=renderModel12(room5);
+  const r2=renderModel2(room5);
 
   return {
     model13:r13,
-    model12:r12
+    model2:r2
   };
 }
 
@@ -780,8 +817,8 @@ function renderHist(){
     div.className='histItem';
 
     const m13Backup=item.model13.backup ? `/备${item.model13.backup}` : '';
-    const m12Backup=item.model12.backup ? `/备${item.model12.backup}` : '';
-    const same=item.model13.main===item.model12.main ? '｜同向' : '｜分歧';
+    const m2Backup=item.model2.backup ? `/备${item.model2.backup}` : '';
+    const same=item.model13.main===item.model2.main ? '｜同向' : '｜分歧';
 
     div.innerHTML=`
       <div class="histTop">
@@ -790,7 +827,7 @@ function renderHist(){
       </div>
       <div class="histMain">
         模型1：主${item.model13.main}${m13Backup}｜${item.model13.label}｜${item.model13.score}分<br/>
-        模型2：主${item.model12.main}${m12Backup}｜${item.model12.label}｜${item.model12.score}分
+        模型2：主${item.model2.main}${m2Backup}｜${item.model2.label}｜${item.model2.score}分
       </div>`;
     histListEl.appendChild(div);
   });
@@ -801,7 +838,7 @@ function pushHistory(room,res){
   items.unshift({
     room,
     model13:res.model13,
-    model12:res.model12,
+    model2:res.model2,
     time:new Date().toLocaleString('zh-CN',{hour12:false})
   });
   saveHist(items);
