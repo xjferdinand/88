@@ -211,7 +211,8 @@
 3）只按66660多X组合结构判断
 4）每个房号对3/4/5/6四个位子打分
 5）最高分为主推，第二高分≥10才显示备选
-6）最高分≥10输出；最高分＜10跳/观察
+6）无论分数多少都输出最高分位
+7）最高分＜10标记为“低分硬进”
 
 主看组合：
 3号：D/E为主，C辅助
@@ -224,7 +225,7 @@
 40-59 可进偏强
 20-39 可进
 10-19 低信号
-＜10 跳/观察
+＜10 低分硬进
 
 核心结构：
 3号：D4+E8/9强，D4可，E7/9且D不黑可，D2/D0或E1风险
@@ -240,6 +241,7 @@
 【说明】
 八戒四模型保持不变。
 然仔模型已替换为：然仔·66660高进房率多X组合模型 v1 试跑版。
+当前已放开低分局：所有房号默认输出最高分位，低于10分标记“低分硬进”。
 然仔不再使用已停用的五函数模型。
 然仔结果与八戒结果分开显示。
     </div>
@@ -315,7 +317,7 @@ const AB_RULES = {
   'ABAAA': [{ seat:5, tag:'AB75%', wr:'75%', avg:'+703', n:'4局', net:'+2810' }]
 };
 
-const HISTORY_KEY='model_66660_ranzai_multiX_v1_fixed';
+const HISTORY_KEY='model_66660_ranzai_multiX_v1_all_open';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -414,7 +416,7 @@ function getABModel(room5){
 }
 
 /* =========================
-   然仔·66660高进房率多X组合模型 v1 修正版
+   然仔·66660高进房率多X组合模型 v1 全放开版
    ========================= */
 
 function getSignalLabel(score){
@@ -422,7 +424,7 @@ function getSignalLabel(score){
   if(score>=40) return '可进偏强';
   if(score>=20) return '可进';
   if(score>=10) return '低信号';
-  return '跳/观察';
+  return '低分硬进';
 }
 
 function scoreRanzai66660Seats(room5){
@@ -646,7 +648,8 @@ function getRanzai66660MultiXModel(room5){
   const rawBackup = all[1] || null;
   const backup = rawBackup && rawBackup.score >= 10 ? rawBackup : null;
 
-  const ok=main.score>=10;
+  // 全放开：无论分数多少，都输出最高分位
+  const ok = true;
 
   return {
     ok,
@@ -654,7 +657,7 @@ function getRanzai66660MultiXModel(room5){
     backup,
     all,
     label:getSignalLabel(main.score),
-    threshold:'最高分≥10才进'
+    threshold:'100%输出最高分位；＜10分标记低分硬进'
   };
 }
 
@@ -773,27 +776,19 @@ function render(room5){
   const main=ranzaiRes.main;
   const backup=ranzaiRes.backup;
 
-  const seatText = ranzaiRes.ok
-    ? (backup ? `${main.seat}/${backup.seat}` : `${main.seat}`)
-    : '跳';
+  const seatText = backup ? `${main.seat}/${backup.seat}` : `${main.seat}`;
 
-  const row2 = ranzaiRes.ok
-    ? (backup
-        ? `主推：${main.seat}号位｜备选：${backup.seat}号位｜${ranzaiRes.label}`
-        : `主推：${main.seat}号位｜无明确备选｜${ranzaiRes.label}`)
-    : `跳/观察｜最高分${main.score}＜10`;
+  const row2 = backup
+    ? `主推：${main.seat}号位｜备选：${backup.seat}号位｜${ranzaiRes.label}`
+    : `主推：${main.seat}号位｜无明确备选｜${ranzaiRes.label}`;
 
   const scoreLine = ranzaiRes.all.map(x=>`${x.seat}号${x.score}`).join(' / ');
 
-  const note = ranzaiRes.ok
-    ? `主推：${main.combo}｜${main.reason}｜分数：${scoreLine}`
-    : `最高分：${main.seat}号${main.score}｜${main.combo}｜${main.reason}｜分数：${scoreLine}`;
+  const note = `主推：${main.combo}｜${main.reason}｜分数：${scoreLine}`;
 
-  ranzaiText = ranzaiRes.ok
-    ? (backup
-        ? `主${main.seat}号/备${backup.seat}号/${ranzaiRes.label}`
-        : `主${main.seat}号/无备选/${ranzaiRes.label}`)
-    : `跳/观察`;
+  ranzaiText = backup
+    ? `主${main.seat}号/备${backup.seat}号/${ranzaiRes.label}`
+    : `主${main.seat}号/无备选/${ranzaiRes.label}`;
 
   ranzaiHitListEl.appendChild(buildModelCard({
     label:'66660多X',
@@ -808,20 +803,14 @@ function render(room5){
   ranzaiResultHdr.textContent='— 然仔 66660 高进房率多X组合模型 —';
   ranzaiResultEl.style.display='block';
 
-  if(shown===0 && !ranzaiRes.ok){
-    skipEl.style.display='block';
-  }
-
   const seats=[];
   if(structRes.ok) seats.push(...structRes.hits.map(h=>h.seat));
   if(strongRes.ok) seats.push(...strongRes.hits.map(h=>h.seat));
   if(mRes.ok) seats.push(...mRes.hits.map(h=>h.seat));
   if(abRes.ok) seats.push(...abRes.hits.map(h=>h.seat));
 
-  if(ranzaiRes.ok){
-    seats.push(main.seat);
-    if(backup) seats.push(backup.seat);
-  }
+  seats.push(main.seat);
+  if(backup) seats.push(backup.seat);
 
   return {
     seats:[...new Set(seats)].filter(Boolean).slice(0,6),
