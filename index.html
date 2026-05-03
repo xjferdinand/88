@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="然仔66660差值链">
-  <title>然仔66660差值链</title>
+  <meta name="apple-mobile-web-app-title" content="然仔66660高进房">
+  <title>然仔66660高进房差值链</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -321,7 +321,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">五段闭环差值链 v1.1</span></div>
+  <div class="title">然仔66660<span class="version">高进房差值链 v1.2</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -333,7 +333,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660差值链结果 —</div>
+      <div class="result-hdr" id="resultHdr">— 然仔66660高进房结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
     <div class="skip" id="skip">跳</div>
@@ -347,23 +347,29 @@
     </div>
 
     <div class="tiny">
-【然仔·66660 五段闭环差值链模型 v1.1】
+【然仔·66660 高进房差值链模型 v1.2】
 D1=A-B，D2=B-C，D3=C-D，D4=D-E，D5=E-A
 
-主推优先级：
-5号特殊保护 > 6号 > 3号 > 4号
+强进优先：
+5号 > 6号 > 3号 > 4号
 
-只显示主推位。
-无命中直接跳。
-5号D5=0不打。
-6号D5≤-3显示高波降级，小注观察。
+观察优先：
+6号 > 3号 > 5号 > 4号
+
+显示规则：
+强进 = 正常主推
+观察 = 小注观察
+高波降级 = 谨慎小注
+无命中 = 跳
+
+本模型是高进房试跑版，不是重注模型。
     </div>
 
   </div>
 </div>
 
 <script>
-const HISTORY_KEY   = 'ranzai_66660_diff_chain_v11';
+const HISTORY_KEY   = 'ranzai_66660_high_entry_diff_v12';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -393,20 +399,6 @@ function getDiffData(room){
   return { A,B,C,D,E,roomSum,D1,D2,D3,D4,D5 };
 }
 
-function signText(n){
-  if(n > 0) return '正';
-  if(n < 0) return '负';
-  return '平';
-}
-
-function absLevel(n){
-  const a = Math.abs(n);
-  if(a === 0) return '0';
-  if(a <= 2) return '小差';
-  if(a <= 5) return '中差';
-  return '大差';
-}
-
 function evaluateRanZai66660(room){
   if(!/^\d{5}$/.test(room)){
     return {
@@ -420,160 +412,375 @@ function evaluateRanZai66660(room){
 
   const candidates = [];
 
-  // 5号优先保护
-  let hit5 = false;
+  function addCandidate(seat, valid, label, level, wr, avg, note, strength){
+    candidates.push({ seat, valid, label, level, wr, avg, note, strength });
+  }
+
+  // ===============================
+  // 5号强进 + 观察
+  // ===============================
+  let hit5Strong = false;
+  let hit5Observe = false;
   let reason5 = '';
 
   if(D3 === 5 && (D4 === -4 || D4 === -6)){
-    hit5 = true;
-    reason5 = `5号命中：D3=5 且 D4=${D4}`;
+    hit5Strong = true;
+    reason5 = `5号强进：D3=5 且 D4=${D4}`;
   }
 
   if(D3 <= -4 && D4 === 1){
-    hit5 = true;
-    reason5 = `5号命中：D3≤-4 且 D4=1`;
+    hit5Strong = true;
+    reason5 = `5号强进：D3≤-4 且 D4=1`;
   }
 
-  if(hit5){
-    if(D5 === 0){
-      candidates.push({
-        seat:5,
-        valid:false,
-        label:'5号过滤',
-        level:'过滤',
-        wr:'过滤',
-        avg:'D5=0',
-        note:`${reason5}；但D5=0，5号首尾闭死，不做主推。`
-      });
-    }else{
-      candidates.push({
-        seat:5,
-        valid:true,
-        label:'5号保护',
-        level:D5 > 0 ? 'H1强信号' : '普通信号',
-        wr:D5 > 0 ? '强' : '进',
-        avg:`D5=${D5}`,
-        note:`${reason5}；D5=${D5}，未触发5号D5=0过滤。`
-      });
+  if(!hit5Strong){
+    if(D3 === 5 && D4 < 0){
+      hit5Observe = true;
+      reason5 = `5号观察：D3=5 且 D4<0`;
+    }
+
+    if(D3 <= -3 && D4 === 1){
+      hit5Observe = true;
+      reason5 = `5号观察：D3≤-3 且 D4=1`;
+    }
+
+    if(D3 <= -4 && D4 > 0){
+      hit5Observe = true;
+      reason5 = `5号观察：D3≤-4 且 D4>0`;
     }
   }
 
-  // 6号主攻
-  let hit6 = false;
+  if(hit5Strong || hit5Observe){
+    if(D5 === 0){
+      addCandidate(
+        5,
+        false,
+        '5号过滤',
+        '过滤',
+        '过滤',
+        `D5=0`,
+        `${reason5}；但D5=0，5号首尾闭死，不做主推。`,
+        0
+      );
+    }else if(D4 <= -8){
+      addCandidate(
+        5,
+        false,
+        '5号过滤',
+        '过滤',
+        '过滤',
+        `D4=${D4}`,
+        `${reason5}；但D4≤-8，尾部断裂过大，不做主推。`,
+        0
+      );
+    }else if(D4 >= 5){
+      addCandidate(
+        5,
+        false,
+        '5号过滤',
+        '过滤',
+        '过滤',
+        `D4=${D4}`,
+        `${reason5}；但D4≥5，E被D强压，不做主推。`,
+        0
+      );
+    }else{
+      addCandidate(
+        5,
+        true,
+        hit5Strong ? '5号强进' : '5号观察',
+        hit5Strong ? (D5 > 0 ? 'H1强信号' : '普通信号') : '观察进',
+        hit5Strong ? (D5 > 0 ? '强' : '进') : '观察',
+        `D5=${D5}`,
+        `${reason5}；D5=${D5}，未触发5号过滤。`,
+        hit5Strong ? 100 : 50
+      );
+    }
+  }
+
+  // ===============================
+  // 6号强进 + 观察
+  // ===============================
+  let hit6Strong = false;
+  let hit6Observe = false;
   let reason6 = '';
 
   if(D4 === 0){
-    hit6 = true;
-    reason6 = '6号命中：D4=0，尾部D/E稳定';
+    hit6Strong = true;
+    reason6 = '6号强进：D4=0，尾部D/E稳定';
   }
 
   if(D4 < 0 && D1 > 0 && Math.abs(D1) <= 4 && Math.abs(D4) <= 3 && D3 >= 0){
-    hit6 = true;
-    reason6 = '6号命中：D4<0 且 D1>0 且 |D1|≤4 且 |D4|≤3 且 D3≥0';
+    hit6Strong = true;
+    reason6 = '6号强进：D4<0 且 D1>0 且 |D1|≤4 且 |D4|≤3 且 D3≥0';
   }
 
   if(D1 === -2 && D4 === -4){
-    hit6 = true;
-    reason6 = '6号命中：D1=-2 且 D4=-4';
+    hit6Strong = true;
+    reason6 = '6号强进：D1=-2 且 D4=-4';
   }
 
-  if(hit6){
-    let level = '普通信号';
-    let wr = '进';
-    let d5Note = '';
-
-    if(D5 >= 0){
-      level = 'H1强信号';
-      wr = '强';
-      d5Note = `D5=${D5}，6号加强。`;
-    }else if(D5 === -1 || D5 === -2){
-      level = '普通信号';
-      wr = '进';
-      d5Note = `D5=${D5}，6号正常允许。`;
-    }else{
-      level = '高波降级';
-      wr = '高波';
-      d5Note = `D5=${D5}，6号高波降级，但不硬过滤。`;
+  if(!hit6Strong){
+    if(D4 < 0 && Math.abs(D4) <= 4){
+      hit6Observe = true;
+      reason6 = '6号观察：D4<0 且 |D4|≤4';
     }
 
-    candidates.push({
-      seat:6,
-      valid:true,
-      label:'6号主攻',
-      level,
-      wr,
-      avg:`D5=${D5}`,
-      note:`${reason6}；${d5Note}`
-    });
+    if(D1 > 0 && D3 >= 0){
+      hit6Observe = true;
+      reason6 = '6号观察：D1>0 且 D3≥0';
+    }
+
+    if(D4 === 1 && D5 > 0){
+      hit6Observe = true;
+      reason6 = '6号观察：D4=1 且 D5>0';
+    }
   }
 
-  // 3号爆发
-  let hit3 = false;
+  if(hit6Strong || hit6Observe){
+    if(D4 >= 5){
+      addCandidate(
+        6,
+        false,
+        '6号过滤',
+        '过滤',
+        '过滤',
+        `D4=${D4}`,
+        `${reason6}；但D4≥5，尾部被强压，不做主推。`,
+        0
+      );
+    }else if(D1 <= -6){
+      addCandidate(
+        6,
+        false,
+        '6号过滤',
+        '过滤',
+        '过滤',
+        `D1=${D1}`,
+        `${reason6}；但D1≤-6，前端启动极弱，不做主推。`,
+        0
+      );
+    }else if(D5 <= -5){
+      addCandidate(
+        6,
+        false,
+        '6号过滤',
+        '过滤',
+        '过滤',
+        `D5=${D5}`,
+        `${reason6}；但D5≤-5，首尾闭环过弱，不做主推。`,
+        0
+      );
+    }else{
+      let level = hit6Strong ? '普通信号' : '观察进';
+      let wr = hit6Strong ? '进' : '观察';
+      let d5Note = '';
+
+      if(D5 >= 0){
+        level = hit6Strong ? 'H1强信号' : '观察加强';
+        wr = hit6Strong ? '强' : '观察';
+        d5Note = `D5=${D5}，6号加强。`;
+      }else if(D5 === -1 || D5 === -2){
+        d5Note = `D5=${D5}，6号正常允许。`;
+      }else{
+        level = '高波降级';
+        wr = '高波';
+        d5Note = `D5=${D5}，6号高波降级。`;
+      }
+
+      addCandidate(
+        6,
+        true,
+        hit6Strong ? '6号强进' : '6号观察',
+        level,
+        wr,
+        `D5=${D5}`,
+        `${reason6}；${d5Note}`,
+        hit6Strong ? 100 : 60
+      );
+    }
+  }
+
+  // ===============================
+  // 3号强进 + 观察
+  // ===============================
+  let hit3Strong = false;
+  let hit3Observe = false;
   let reason3 = '';
 
   if(D2 > 0 && D3 > 0 && D4 < 0){
-    hit3 = true;
-    reason3 = '3号命中：D2>0 且 D3>0 且 D4<0';
+    hit3Strong = true;
+    reason3 = '3号强进：D2>0 且 D3>0 且 D4<0';
   }
 
   if(D2 < 0 && D3 >= 4 && D4 < 0 && Math.abs(D4) <= 6){
-    hit3 = true;
-    reason3 = '3号命中：D2<0 且 D3≥4 且 D4<0 且 |D4|≤6';
+    hit3Strong = true;
+    reason3 = '3号强进：D2<0 且 D3≥4 且 D4<0 且 |D4|≤6';
   }
 
   if(D2 < 0 && D3 === 0 && D4 > 0){
-    hit3 = true;
-    reason3 = '3号命中：D2<0 且 D3=0 且 D4>0';
+    hit3Strong = true;
+    reason3 = '3号强进：D2<0 且 D3=0 且 D4>0';
   }
 
-  if(hit3){
-    candidates.push({
-      seat:3,
-      valid:true,
-      label:'3号爆发',
-      level:'普通信号',
-      wr:'进',
-      avg:`D5=${D5}`,
-      note:`${reason3}；D5=${D5}仅作解释项。`
-    });
+  if(!hit3Strong){
+    if(D2 > 0 && D3 > 0){
+      hit3Observe = true;
+      reason3 = '3号观察：D2>0 且 D3>0';
+    }
+
+    if(D3 >= 4 && D4 < 0){
+      hit3Observe = true;
+      reason3 = '3号观察：D3≥4 且 D4<0';
+    }
+
+    if(D2 < 0 && D4 > 0){
+      hit3Observe = true;
+      reason3 = '3号观察：D2<0 且 D4>0';
+    }
   }
 
-  // 4号补位
-  let hit4 = false;
+  if(hit3Strong || hit3Observe){
+    if(D4 <= -8){
+      addCandidate(
+        3,
+        false,
+        '3号过滤',
+        '过滤',
+        '过滤',
+        `D4=${D4}`,
+        `${reason3}；但D4≤-8，尾部断裂过大，不做主推。`,
+        0
+      );
+    }else if(D2 > 0 && D3 < 0){
+      addCandidate(
+        3,
+        false,
+        '3号过滤',
+        '过滤',
+        '过滤',
+        `D2=${D2}/D3=${D3}`,
+        `${reason3}；但D2>0且D3<0，中轴反冲，不做主推。`,
+        0
+      );
+    }else{
+      addCandidate(
+        3,
+        true,
+        hit3Strong ? '3号强进' : '3号观察',
+        hit3Strong ? '普通信号' : '观察进',
+        hit3Strong ? '进' : '观察',
+        `D5=${D5}`,
+        `${reason3}；D5=${D5}仅作解释项。`,
+        hit3Strong ? 100 : 55
+      );
+    }
+  }
+
+  // ===============================
+  // 4号强进 + 观察
+  // ===============================
+  let hit4Strong = false;
+  let hit4Observe = false;
   let reason4 = '';
 
   if(D3 > 0 && D4 > 0){
-    hit4 = true;
-    reason4 = '4号命中：D3>0 且 D4>0';
+    hit4Strong = true;
+    reason4 = '4号强进：D3>0 且 D4>0';
   }
 
   if(D3 < 0 && D4 < 0){
-    hit4 = true;
-    reason4 = '4号命中：D3<0 且 D4<0';
+    hit4Strong = true;
+    reason4 = '4号强进：D3<0 且 D4<0';
   }
 
-  if(hit4){
-    candidates.push({
-      seat:4,
-      valid:true,
-      label:'4号补位',
-      level:'低权重补位',
-      wr:'补',
-      avg:`D5=${D5}`,
-      note:`${reason4}；4号低权重补位，D5仅作解释项。`
-    });
+  if(!hit4Strong){
+    if(D3 >= 0 && D4 >= 0 && !(D3 === 0 && D4 === 0)){
+      hit4Observe = true;
+      reason4 = '4号观察：D3/D4同向偏正，允许一项为0';
+    }
+
+    if(D3 <= 0 && D4 <= 0 && !(D3 === 0 && D4 === 0)){
+      hit4Observe = true;
+      reason4 = '4号观察：D3/D4同向偏负，允许一项为0';
+    }
   }
 
-  // 主推优先级：5 > 6 > 3 > 4
-  const priority = [5,6,3,4];
+  if(hit4Strong || hit4Observe){
+    if(D3 === 0 && D4 === 0){
+      addCandidate(
+        4,
+        false,
+        '4号过滤',
+        '过滤',
+        '过滤',
+        `D3/D4=0/0`,
+        `${reason4}；但D3=0且D4=0，缺少动能，不做主推。`,
+        0
+      );
+    }else if(D3 > 0 && D4 < 0){
+      addCandidate(
+        4,
+        false,
+        '4号过滤',
+        '过滤',
+        '过滤',
+        `D3=${D3}/D4=${D4}`,
+        `${reason4}；但D3>0且D4<0，一正一负反冲，不做主推。`,
+        0
+      );
+    }else if(D3 < 0 && D4 > 0){
+      addCandidate(
+        4,
+        false,
+        '4号过滤',
+        '过滤',
+        '过滤',
+        `D3=${D3}/D4=${D4}`,
+        `${reason4}；但D3<0且D4>0，一负一正反冲，不做主推。`,
+        0
+      );
+    }else{
+      addCandidate(
+        4,
+        true,
+        hit4Strong ? '4号强进' : '4号观察',
+        hit4Strong ? '低权重补位' : '观察补位',
+        hit4Strong ? '补' : '观察',
+        `D5=${D5}`,
+        `${reason4}；4号整体高波，D5=${D5}仅作解释项。`,
+        hit4Strong ? 80 : 40
+      );
+    }
+  }
+
+  // ===============================
+  // 主推优先级
+  // 强进优先：5 > 6 > 3 > 4
+  // 观察优先：6 > 3 > 5 > 4
+  // ===============================
   const validCandidates = candidates.filter(x => x.valid);
 
+  const strongPriority = [5, 6, 3, 4];
+  const observePriority = [6, 3, 5, 4];
+
   let main = null;
-  for(const s of priority){
-    const found = validCandidates.find(x => x.seat === s);
+
+  for(const s of strongPriority){
+    const found = validCandidates.find(x => x.seat === s && x.strength >= 80);
     if(found){
       main = found;
       break;
+    }
+  }
+
+  if(!main){
+    for(const s of observePriority){
+      const found = validCandidates.find(x => x.seat === s && x.strength < 80);
+      if(found){
+        main = found;
+        break;
+      }
     }
   }
 
