@@ -1,652 +1,714 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>然仔·66660 五段闭环差值链模型 v1.1</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#b00000"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="然仔66660差值链">
+  <title>然仔66660差值链</title>
   <style>
-    * {
-      box-sizing: border-box;
+    :root{
+      --bg:#0b0b0f;
+      --card:#11111a;
+      --line:rgba(255,255,255,.10);
+      --text:#f5f5f7;
+      --muted:rgba(255,255,255,.50);
+      --red:#ff2d2d;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:
+        radial-gradient(800px 400px at 50% 15%,rgba(255,45,45,.20),transparent 60%),
+        radial-gradient(900px 500px at 50% 110%,rgba(176,0,0,.25),transparent 60%),
+        var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+      padding:12px;
     }
 
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+    .app{
+      width:min(430px,100%);
     }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
+    .title{
+      font-size:16px;
+      font-weight:900;
+      margin:0 0 12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .title::before{
+      content:"";
+      flex-shrink:0;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--red);
+      box-shadow:0 0 12px rgba(255,45,45,.9);
+    }
+    .version{
+      font-size:10px;
+      color:rgba(255,45,45,.6);
+      margin-left:4px;
+      font-weight:400;
     }
 
-    .title {
-      font-size: 26px;
-      font-weight: 800;
-      margin-bottom: 8px;
-      color: #facc15;
+    .panel{
+      background:linear-gradient(160deg,rgba(255,45,45,.07),transparent 55%),var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
     }
 
-    .sub-title {
-      font-size: 14px;
-      color: #94a3b8;
-      margin-bottom: 20px;
-      line-height: 1.6;
+    input{
+      width:100%;
+      padding:12px 14px;
+      font-size:22px;
+      letter-spacing:5px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.40);
+      color:var(--text);
+      outline:none;
+      text-align:center;
+      font-weight:700;
+    }
+    input:focus{
+      border-color:rgba(255,45,45,.65);
+      box-shadow:0 0 0 3px rgba(255,45,45,.12);
+    }
+    input::placeholder{
+      font-size:13px;
+      letter-spacing:1px;
+      font-weight:400;
     }
 
-    .card {
-      background: #111827;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    .btn-wrap{
+      display:flex;
+      justify-content:center;
+      margin:14px 0 8px;
+    }
+    .btn-circle{
+      width:66px;
+      height:66px;
+      border-radius:50%;
+      border:2px solid rgba(255,45,45,.55);
+      background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+      letter-spacing:1px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18);
+      transition:transform .1s,box-shadow .1s;
+    }
+    .btn-circle:active{transform:scale(.92);}
+
+    .msg{
+      text-align:center;
+      font-size:12px;
+      color:var(--muted);
+      min-height:14px;
+      margin-bottom:8px;
     }
 
-    label {
-      display: block;
-      font-size: 14px;
-      color: #cbd5e1;
-      margin-bottom: 8px;
+    .result{
+      display:none;
+      margin-top:4px;
+    }
+    .result-hdr{
+      text-align:center;
+      font-size:10px;
+      color:var(--muted);
+      margin-bottom:8px;
+      letter-spacing:.3px;
+    }
+    .hit-list{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
     }
 
-    input {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 12px;
-      border: 1px solid #475569;
-      background: #020617;
-      color: #f8fafc;
-      font-size: 22px;
-      letter-spacing: 4px;
-      outline: none;
+    .hit{
+      display:grid;
+      grid-template-columns:auto 52px 1fr auto;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(0,0,0,.22);
+    }
+    .hit.r1{border-color:rgba(255,45,45,.50);background:rgba(255,45,45,.10);}
+    .hit.r2{border-color:rgba(255,140,0,.28);}
+    .hit.r3{border-color:rgba(255,255,255,.10);}
+
+    .hit-lbl{
+      font-size:9px;
+      font-weight:900;
+      padding:2px 6px;
+      border-radius:999px;
+      background:rgba(255,45,45,.20);
+      color:#ff8080;
+      white-space:nowrap;
+      letter-spacing:.2px;
+    }
+    .hit.r1 .hit-lbl{
+      background:rgba(255,45,45,.38);
+      color:#ff9090;
     }
 
-    input:focus {
-      border-color: #facc15;
+    .hit-seat{
+      font-size:21px;
+      font-weight:1000;
+      color:var(--red);
+      text-shadow:0 0 12px rgba(255,45,45,.35);
+      line-height:1.05;
+      text-align:center;
+      white-space:nowrap;
     }
 
-    button {
-      width: 100%;
-      margin-top: 12px;
-      padding: 14px 16px;
-      border: 0;
-      border-radius: 12px;
-      background: #facc15;
-      color: #111827;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
+    .hit-body{
+      line-height:1.4;
+      min-width:0;
+    }
+    .hit-body .row1{
+      font-size:11px;
+      color:var(--text);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .hit-body .row2{
+      font-size:10px;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .hit-body .row3{
+      font-size:9px;
+      color:rgba(255,255,255,.30);
+      margin-top:1px;
+      line-height:1.25;
     }
 
-    button:active {
-      transform: scale(0.99);
+    .hit-right{
+      text-align:right;
+      min-width:42px;
+    }
+    .hit-wr{
+      font-size:11px;
+      font-weight:900;
+      color:rgba(80,255,140,.85);
+    }
+    .hit-avg{
+      font-size:9px;
+      color:rgba(255,255,255,.35);
+      margin-top:1px;
     }
 
-    .result-main {
-      text-align: center;
-      padding: 22px;
-      border-radius: 16px;
-      margin-top: 12px;
-      font-size: 28px;
-      font-weight: 900;
+    .skip{
+      display:none;
+      text-align:center;
+      padding:18px;
+      font-size:30px;
+      font-weight:1000;
+      color:rgba(255,255,255,.18);
+      letter-spacing:4px;
     }
 
-    .go {
-      background: linear-gradient(135deg, #16a34a, #22c55e);
-      color: #052e16;
+    .history{
+      margin-top:12px;
+      padding:10px 11px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+    }
+    .histHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:7px;
+    }
+    .histTitle{
+      font-size:11px;
+      font-weight:800;
+      color:var(--muted);
+    }
+    .clearBtn{
+      font-size:10px;
+      padding:4px 8px;
+      border-radius:7px;
+      cursor:pointer;
+      border:1px solid rgba(255,45,45,.35);
+      background:rgba(255,45,45,.10);
+      color:rgba(255,100,100,.85);
+    }
+    .histList{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+      max-height:180px;
+      overflow:auto;
+    }
+    .histItem{
+      border:1px solid rgba(255,255,255,.05);
+      border-radius:9px;
+      padding:7px 9px;
+      background:rgba(0,0,0,.14);
+    }
+    .histTop{
+      display:flex;
+      justify-content:space-between;
+      font-size:10px;
+      color:rgba(255,255,255,.35);
+      margin-bottom:2px;
+    }
+    .histMain{
+      font-size:11px;
+      color:rgba(255,255,255,.60);
+      line-height:1.35;
+    }
+    .pill{
+      display:inline-block;
+      padding:1px 6px;
+      border-radius:999px;
+      border:1px solid rgba(255,45,45,.35);
+      background:rgba(255,45,45,.10);
+      font-weight:800;
+      color:var(--red);
+      margin-right:3px;
     }
 
-    .skip {
-      background: linear-gradient(135deg, #475569, #1e293b);
-      color: #e2e8f0;
+    .tiny{
+      margin-top:12px;
+      padding-top:10px;
+      border-top:1px solid var(--line);
+      font-size:10px;
+      color:rgba(255,255,255,.28);
+      line-height:1.6;
+      white-space:pre-line;
     }
 
-    .warning {
-      background: linear-gradient(135deg, #f97316, #facc15);
-      color: #431407;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .grid4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .grid5 {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .cell {
-      background: #020617;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 10px;
-      text-align: center;
-    }
-
-    .cell .k {
-      color: #94a3b8;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .cell .v {
-      color: #f8fafc;
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .reason {
-      margin-top: 14px;
-      line-height: 1.7;
-      color: #dbeafe;
-      font-size: 15px;
-      white-space: pre-line;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      margin-right: 6px;
-      margin-bottom: 6px;
-    }
-
-    .tag-green {
-      background: #14532d;
-      color: #86efac;
-    }
-
-    .tag-yellow {
-      background: #713f12;
-      color: #fde68a;
-    }
-
-    .tag-red {
-      background: #7f1d1d;
-      color: #fecaca;
-    }
-
-    .tag-blue {
-      background: #1e3a8a;
-      color: #bfdbfe;
-    }
-
-    .rules {
-      font-size: 14px;
-      line-height: 1.8;
-      color: #cbd5e1;
-    }
-
-    .rules h3 {
-      color: #facc15;
-      margin-top: 18px;
-      margin-bottom: 8px;
-    }
-
-    .small {
-      font-size: 13px;
-      color: #94a3b8;
-      line-height: 1.7;
-    }
-
-    .copy-btn {
-      background: #334155;
-      color: #f8fafc;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 14px;
+    @media (max-width: 430px){
+      body{padding:10px;}
+      .app{width:100%;}
+      .panel{padding:10px;border-radius:15px;}
+      .hit{
+        grid-template-columns:auto 46px 1fr auto;
+        gap:6px;
+        padding:7px 8px;
       }
-
-      .title {
-        font-size: 22px;
-      }
-
-      .grid,
-      .grid4,
-      .grid5 {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .result-main {
-        font-size: 24px;
-      }
+      .hit-seat{font-size:19px;}
+      .result-hdr{font-size:10px;}
+      .histMain{font-size:10px;}
+      .tiny{font-size:9px;}
     }
   </style>
 </head>
 <body>
-  <div class="container">
+<div class="app">
+  <div class="title">然仔66660<span class="version">五段闭环差值链 v1.1</span></div>
+  <div class="panel">
 
-    <div class="title">然仔·66660 五段闭环差值链模型 v1.1</div>
-    <div class="sub-title">
-      当前主模型试跑版｜不是K模型｜不是重注模型｜只输出一个主推位｜无命中直接跳
+    <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
+
+    <div class="btn-wrap">
+      <button class="btn-circle" id="go">开干</button>
     </div>
 
-    <div class="card">
-      <label>输入5位房号</label>
-      <input id="roomInput" maxlength="5" placeholder="例如 57188" inputmode="numeric" />
-      <button onclick="runModel()">开始则房</button>
-      <button class="copy-btn" onclick="copyResult()">复制结果</button>
+    <div class="msg" id="msg"></div>
+
+    <div class="result" id="result">
+      <div class="result-hdr" id="resultHdr">— 然仔66660差值链结果 —</div>
+      <div class="hit-list" id="hitList"></div>
+    </div>
+    <div class="skip" id="skip">跳</div>
+
+    <div class="history">
+      <div class="histHead">
+        <span class="histTitle">最近记录</span>
+        <button class="clearBtn" id="clearBtn">清空</button>
+      </div>
+      <div class="histList" id="histList"></div>
     </div>
 
-    <div id="resultBox" class="card" style="display:none;"></div>
+    <div class="tiny">
+【然仔·66660 五段闭环差值链模型 v1.1】
+D1=A-B，D2=B-C，D3=C-D，D4=D-E，D5=E-A
 
-    <div class="card rules">
-      <h3>模型规则</h3>
+主推优先级：
+5号特殊保护 > 6号 > 3号 > 4号
 
-      <p><b>差值定义：</b></p>
-      <p>
-        D1 = A - B<br>
-        D2 = B - C<br>
-        D3 = C - D<br>
-        D4 = D - E<br>
-        D5 = E - A
-      </p>
-
-      <h3>主推优先级</h3>
-      <p>
-        5号特殊保护 &gt; 6号 &gt; 3号 &gt; 4号
-      </p>
-
-      <h3>5号规则</h3>
-      <p>
-        5号进：<br>
-        1）D3 = 5 且 D4 ∈ {-4, -6}<br>
-        或<br>
-        2）D3 ≤ -4 且 D4 = 1<br>
-        过滤：若5号命中但 D5 = 0，则不主推5号。
-      </p>
-
-      <h3>6号规则</h3>
-      <p>
-        6号进：<br>
-        1）D4 = 0<br>
-        或<br>
-        2）D4 &lt; 0 且 D1 &gt; 0 且 |D1| ≤ 4 且 |D4| ≤ 3 且 D3 ≥ 0<br>
-        或<br>
-        3）D1 = -2 且 D4 = -4<br>
-        D5状态：D5≥0加强；D5=-1/-2正常；D5≤-3高波降级。
-      </p>
-
-      <h3>3号规则</h3>
-      <p>
-        3号进：<br>
-        1）D2 &gt; 0 且 D3 &gt; 0 且 D4 &lt; 0<br>
-        或<br>
-        2）D2 &lt; 0 且 D3 ≥ 4 且 D4 &lt; 0 且 |D4| ≤ 6<br>
-        或<br>
-        3）D2 &lt; 0 且 D3 = 0 且 D4 &gt; 0
-      </p>
-
-      <h3>4号规则</h3>
-      <p>
-        4号进：<br>
-        1）D3 &gt; 0 且 D4 &gt; 0<br>
-        或<br>
-        2）D3 &lt; 0 且 D4 &lt; 0
-      </p>
-
-      <h3>实战纪律</h3>
-      <p>
-        只打主推；无主推跳；不打备选；5号D5=0不打；6号D5≤-3只小注观察；主推亏≤-300暂停复盘；亏≤-500模型降级；新增20-30局后重回测。
-      </p>
+只显示主推位。
+无命中直接跳。
+5号D5=0不打。
+6号D5≤-3显示高波降级，小注观察。
     </div>
 
   </div>
+</div>
 
-  <script>
-    let lastResultText = "";
+<script>
+const HISTORY_KEY   = 'ranzai_66660_diff_chain_v11';
+const HISTORY_LIMIT = 30;
 
-    function parseRoom(room) {
-      if (!/^\d{5}$/.test(room)) {
-        return null;
-      }
+const roomEl     = document.getElementById('room');
+const goEl       = document.getElementById('go');
+const msgEl      = document.getElementById('msg');
+const resultEl   = document.getElementById('result');
+const resultHdr  = document.getElementById('resultHdr');
+const hitListEl  = document.getElementById('hitList');
+const skipEl     = document.getElementById('skip');
+const histListEl = document.getElementById('histList');
+const clearBtnEl = document.getElementById('clearBtn');
 
-      const nums = room.split("").map(n => parseInt(n, 10));
-      const [A, B, C, D, E] = nums;
+function getDigits(room){
+  return room.split('').map(Number);
+}
 
-      const D1 = A - B;
-      const D2 = B - C;
-      const D3 = C - D;
-      const D4 = D - E;
-      const D5 = E - A;
+function getDiffData(room){
+  const [A,B,C,D,E] = getDigits(room);
+  const roomSum = A + B + C + D + E;
 
-      const roomSum = A + B + C + D + E;
+  const D1 = A - B;
+  const D2 = B - C;
+  const D3 = C - D;
+  const D4 = D - E;
+  const D5 = E - A;
 
-      return { A, B, C, D, E, D1, D2, D3, D4, D5, roomSum };
-    }
+  return { A,B,C,D,E,roomSum,D1,D2,D3,D4,D5 };
+}
 
-    function signText(n) {
-      if (n > 0) return "正";
-      if (n < 0) return "负";
-      return "平";
-    }
+function signText(n){
+  if(n > 0) return '正';
+  if(n < 0) return '负';
+  return '平';
+}
 
-    function absLevel(n) {
-      const a = Math.abs(n);
-      if (a === 0) return "0";
-      if (a <= 2) return "小差";
-      if (a <= 5) return "中差";
-      return "大差";
-    }
+function absLevel(n){
+  const a = Math.abs(n);
+  if(a === 0) return '0';
+  if(a <= 2) return '小差';
+  if(a <= 5) return '中差';
+  return '大差';
+}
 
-    function evaluate(roomData) {
-      const { D1, D2, D3, D4, D5 } = roomData;
+function evaluateRanZai66660(room){
+  if(!/^\d{5}$/.test(room)){
+    return {
+      ok:false,
+      reason:'请输入正确的5位数字'
+    };
+  }
 
-      const hits = [];
+  const d = getDiffData(room);
+  const {D1,D2,D3,D4,D5} = d;
 
-      // 5号优先保护
-      let seat5Hit = false;
-      let seat5Reason = "";
+  const candidates = [];
 
-      if (D3 === 5 && (D4 === -4 || D4 === -6)) {
-        seat5Hit = true;
-        seat5Reason = `5号命中：D3=5 且 D4=${D4}，属于5号特殊保护结构。`;
-      }
+  // 5号优先保护
+  let hit5 = false;
+  let reason5 = '';
 
-      if (D3 <= -4 && D4 === 1) {
-        seat5Hit = true;
-        seat5Reason = `5号命中：D3≤-4 且 D4=1，属于5号尾部落点保护结构。`;
-      }
+  if(D3 === 5 && (D4 === -4 || D4 === -6)){
+    hit5 = true;
+    reason5 = `5号命中：D3=5 且 D4=${D4}`;
+  }
 
-      if (seat5Hit) {
-        if (D5 === 0) {
-          hits.push({
-            seat: 5,
-            valid: false,
-            level: "过滤",
-            reason: `${seat5Reason}\n但D5=0，5号首尾闭死，过滤/降级，不做主推。`
-          });
-        } else {
-          hits.push({
-            seat: 5,
-            valid: true,
-            level: D5 > 0 ? "H1强信号" : "普通信号",
-            reason: `${seat5Reason}\nD5=${D5}，未触发D5=0过滤。`
-          });
-        }
-      }
+  if(D3 <= -4 && D4 === 1){
+    hit5 = true;
+    reason5 = `5号命中：D3≤-4 且 D4=1`;
+  }
 
-      // 6号主攻
-      let seat6Hit = false;
-      let seat6Reason = "";
-
-      if (D4 === 0) {
-        seat6Hit = true;
-        seat6Reason = "6号命中：D4=0，尾部D/E稳定。";
-      }
-
-      if (D4 < 0 && D1 > 0 && Math.abs(D1) <= 4 && Math.abs(D4) <= 3 && D3 >= 0) {
-        seat6Hit = true;
-        seat6Reason = "6号命中：D4<0 且 D1>0 且 |D1|≤4 且 |D4|≤3 且 D3≥0，尾部承接+前端启动成立。";
-      }
-
-      if (D1 === -2 && D4 === -4) {
-        seat6Hit = true;
-        seat6Reason = "6号命中：D1=-2 且 D4=-4，特殊反爆结构。";
-      }
-
-      if (seat6Hit) {
-        let d5Status = "";
-        let level = "普通信号";
-
-        if (D5 >= 0) {
-          d5Status = `D5=${D5}，6号加强。`;
-          level = "H1强信号";
-        } else if (D5 === -1 || D5 === -2) {
-          d5Status = `D5=${D5}，6号正常允许。`;
-          level = "普通信号";
-        } else {
-          d5Status = `D5=${D5}，6号高波降级，但不硬过滤。`;
-          level = "高波降级";
-        }
-
-        hits.push({
-          seat: 6,
-          valid: true,
-          level,
-          reason: `${seat6Reason}\n${d5Status}`
-        });
-      }
-
-      // 3号爆发
-      let seat3Hit = false;
-      let seat3Reason = "";
-
-      if (D2 > 0 && D3 > 0 && D4 < 0) {
-        seat3Hit = true;
-        seat3Reason = "3号命中：D2>0 且 D3>0 且 D4<0，中轴爆发结构。";
-      }
-
-      if (D2 < 0 && D3 >= 4 && D4 < 0 && Math.abs(D4) <= 6) {
-        seat3Hit = true;
-        seat3Reason = "3号命中：D2<0 且 D3≥4 且 D4<0 且 |D4|≤6，3号强承接结构。";
-      }
-
-      if (D2 < 0 && D3 === 0 && D4 > 0) {
-        seat3Hit = true;
-        seat3Reason = "3号命中：D2<0 且 D3=0 且 D4>0，3号特殊爆发结构。";
-      }
-
-      if (seat3Hit) {
-        hits.push({
-          seat: 3,
-          valid: true,
-          level: "普通信号",
-          reason: `${seat3Reason}\nD5=${D5}，D5仅作解释项，不参与3号硬规则。`
-        });
-      }
-
-      // 4号补位
-      let seat4Hit = false;
-      let seat4Reason = "";
-
-      if (D3 > 0 && D4 > 0) {
-        seat4Hit = true;
-        seat4Reason = "4号命中：D3>0 且 D4>0，D3/D4双正补位结构。";
-      }
-
-      if (D3 < 0 && D4 < 0) {
-        seat4Hit = true;
-        seat4Reason = "4号命中：D3<0 且 D4<0，D3/D4双负补位结构。";
-      }
-
-      if (seat4Hit) {
-        hits.push({
-          seat: 4,
-          valid: true,
-          level: "低权重补位",
-          reason: `${seat4Reason}\n4号整体高波，只做低权重补位。D5=${D5}仅作解释项。`
-        });
-      }
-
-      // 主推优先级：5 > 6 > 3 > 4
-      const priority = [5, 6, 3, 4];
-      const validHits = hits.filter(h => h.valid);
-
-      let main = null;
-      for (const s of priority) {
-        const found = validHits.find(h => h.seat === s);
-        if (found) {
-          main = found;
-          break;
-        }
-      }
-
-      return { hits, main };
-    }
-
-    function runModel() {
-      const input = document.getElementById("roomInput");
-      const room = input.value.trim();
-      const resultBox = document.getElementById("resultBox");
-
-      const data = parseRoom(room);
-
-      if (!data) {
-        resultBox.style.display = "block";
-        resultBox.innerHTML = `
-          <div class="result-main skip">请输入正确的5位房号</div>
-        `;
-        lastResultText = "请输入正确的5位房号";
-        return;
-      }
-
-      const { A, B, C, D, E, D1, D2, D3, D4, D5, roomSum } = data;
-      const evalResult = evaluate(data);
-      const { hits, main } = evalResult;
-
-      let resultClass = "skip";
-      let resultTitle = "跳";
-      let resultSub = "未命中v1.1规则";
-
-      if (main) {
-        if (main.level === "高波降级") {
-          resultClass = "warning";
-        } else {
-          resultClass = "go";
-        }
-        resultTitle = `主推：${main.seat}号位`;
-        resultSub = main.level;
-      }
-
-      const hitTags = hits.length
-        ? hits.map(h => {
-            let cls = h.valid ? "tag-green" : "tag-red";
-            if (h.level === "高波降级" || h.level === "低权重补位") cls = "tag-yellow";
-            if (h.level === "H1强信号") cls = "tag-blue";
-            return `<span class="tag ${cls}">${h.seat}号｜${h.level}</span>`;
-          }).join("")
-        : `<span class="tag tag-red">无命中｜跳</span>`;
-
-      const reasonText = main
-        ? main.reason
-        : "3/4/5/6均未命中v1.1规则，直接跳。";
-
-      const d5Status = getD5Status(D5, main ? main.seat : null);
-
-      resultBox.style.display = "block";
-      resultBox.innerHTML = `
-        <div class="result-main ${resultClass}">
-          ${resultTitle}
-          <div style="font-size:14px;margin-top:6px;font-weight:700;">${resultSub}</div>
-        </div>
-
-        <div class="grid">
-          <div class="cell"><div class="k">A</div><div class="v">${A}</div></div>
-          <div class="cell"><div class="k">B</div><div class="v">${B}</div></div>
-          <div class="cell"><div class="k">C</div><div class="v">${C}</div></div>
-          <div class="cell"><div class="k">D</div><div class="v">${D}</div></div>
-          <div class="cell"><div class="k">E</div><div class="v">${E}</div></div>
-        </div>
-
-        <div class="grid5">
-          <div class="cell"><div class="k">D1=A-B</div><div class="v">${D1}</div></div>
-          <div class="cell"><div class="k">D2=B-C</div><div class="v">${D2}</div></div>
-          <div class="cell"><div class="k">D3=C-D</div><div class="v">${D3}</div></div>
-          <div class="cell"><div class="k">D4=D-E</div><div class="v">${D4}</div></div>
-          <div class="cell"><div class="k">D5=E-A</div><div class="v">${D5}</div></div>
-        </div>
-
-        <div class="grid5">
-          <div class="cell"><div class="k">D1方向</div><div class="v">${signText(D1)}</div></div>
-          <div class="cell"><div class="k">D2方向</div><div class="v">${signText(D2)}</div></div>
-          <div class="cell"><div class="k">D3方向</div><div class="v">${signText(D3)}</div></div>
-          <div class="cell"><div class="k">D4方向</div><div class="v">${signText(D4)}</div></div>
-          <div class="cell"><div class="k">D5方向</div><div class="v">${signText(D5)}</div></div>
-        </div>
-
-        <div class="grid5">
-          <div class="cell"><div class="k">D1区间</div><div class="v">${absLevel(D1)}</div></div>
-          <div class="cell"><div class="k">D2区间</div><div class="v">${absLevel(D2)}</div></div>
-          <div class="cell"><div class="k">D3区间</div><div class="v">${absLevel(D3)}</div></div>
-          <div class="cell"><div class="k">D4区间</div><div class="v">${absLevel(D4)}</div></div>
-          <div class="cell"><div class="k">D5区间</div><div class="v">${absLevel(D5)}</div></div>
-        </div>
-
-        <div style="margin-top:14px;">${hitTags}</div>
-
-        <div class="reason">
-房号：${room}
-RoomSum：${roomSum}
-
-D5状态：
-${d5Status}
-
-命中原因：
-${reasonText}
-        </div>
-      `;
-
-      lastResultText = [
-        `房号：${room}`,
-        `A/B/C/D/E：${A}/${B}/${C}/${D}/${E}`,
-        `D1/D2/D3/D4/D5：${D1}/${D2}/${D3}/${D4}/${D5}`,
-        `结果：${resultTitle}`,
-        `信号：${resultSub}`,
-        `D5状态：${d5Status}`,
-        `原因：${reasonText}`
-      ].join("\n");
-    }
-
-    function getD5Status(D5, seat) {
-      if (seat === 5) {
-        if (D5 === 0) return "5号D5=0，首尾闭死，5号过滤。";
-        if (D5 > 0) return `5号D5=${D5}，尾部E强于A，属于加强。`;
-        return `5号D5=${D5}，不能直接过滤，需回到D3/D4判断。`;
-      }
-
-      if (seat === 6) {
-        if (D5 >= 0) return `6号D5=${D5}，首尾闭环加强。`;
-        if (D5 === -1 || D5 === -2) return `6号D5=${D5}，正常允许。`;
-        return `6号D5=${D5}，高波降级，但不硬过滤。`;
-      }
-
-      if (seat === 3 || seat === 4) {
-        return `D5=${D5}，对${seat}号仅作解释项，不参与硬规则。`;
-      }
-
-      return `D5=${D5}，本局无主推，仅作参考。`;
-    }
-
-    function copyResult() {
-      if (!lastResultText) {
-        alert("请先输入房号并则房");
-        return;
-      }
-
-      navigator.clipboard.writeText(lastResultText).then(() => {
-        alert("结果已复制");
-      }).catch(() => {
-        alert("复制失败，请手动复制");
+  if(hit5){
+    if(D5 === 0){
+      candidates.push({
+        seat:5,
+        valid:false,
+        label:'5号过滤',
+        level:'过滤',
+        wr:'过滤',
+        avg:'D5=0',
+        note:`${reason5}；但D5=0，5号首尾闭死，不做主推。`
+      });
+    }else{
+      candidates.push({
+        seat:5,
+        valid:true,
+        label:'5号保护',
+        level:D5 > 0 ? 'H1强信号' : '普通信号',
+        wr:D5 > 0 ? '强' : '进',
+        avg:`D5=${D5}`,
+        note:`${reason5}；D5=${D5}，未触发5号D5=0过滤。`
       });
     }
+  }
 
-    document.getElementById("roomInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        runModel();
-      }
+  // 6号主攻
+  let hit6 = false;
+  let reason6 = '';
+
+  if(D4 === 0){
+    hit6 = true;
+    reason6 = '6号命中：D4=0，尾部D/E稳定';
+  }
+
+  if(D4 < 0 && D1 > 0 && Math.abs(D1) <= 4 && Math.abs(D4) <= 3 && D3 >= 0){
+    hit6 = true;
+    reason6 = '6号命中：D4<0 且 D1>0 且 |D1|≤4 且 |D4|≤3 且 D3≥0';
+  }
+
+  if(D1 === -2 && D4 === -4){
+    hit6 = true;
+    reason6 = '6号命中：D1=-2 且 D4=-4';
+  }
+
+  if(hit6){
+    let level = '普通信号';
+    let wr = '进';
+    let d5Note = '';
+
+    if(D5 >= 0){
+      level = 'H1强信号';
+      wr = '强';
+      d5Note = `D5=${D5}，6号加强。`;
+    }else if(D5 === -1 || D5 === -2){
+      level = '普通信号';
+      wr = '进';
+      d5Note = `D5=${D5}，6号正常允许。`;
+    }else{
+      level = '高波降级';
+      wr = '高波';
+      d5Note = `D5=${D5}，6号高波降级，但不硬过滤。`;
+    }
+
+    candidates.push({
+      seat:6,
+      valid:true,
+      label:'6号主攻',
+      level,
+      wr,
+      avg:`D5=${D5}`,
+      note:`${reason6}；${d5Note}`
     });
-  </script>
+  }
+
+  // 3号爆发
+  let hit3 = false;
+  let reason3 = '';
+
+  if(D2 > 0 && D3 > 0 && D4 < 0){
+    hit3 = true;
+    reason3 = '3号命中：D2>0 且 D3>0 且 D4<0';
+  }
+
+  if(D2 < 0 && D3 >= 4 && D4 < 0 && Math.abs(D4) <= 6){
+    hit3 = true;
+    reason3 = '3号命中：D2<0 且 D3≥4 且 D4<0 且 |D4|≤6';
+  }
+
+  if(D2 < 0 && D3 === 0 && D4 > 0){
+    hit3 = true;
+    reason3 = '3号命中：D2<0 且 D3=0 且 D4>0';
+  }
+
+  if(hit3){
+    candidates.push({
+      seat:3,
+      valid:true,
+      label:'3号爆发',
+      level:'普通信号',
+      wr:'进',
+      avg:`D5=${D5}`,
+      note:`${reason3}；D5=${D5}仅作解释项。`
+    });
+  }
+
+  // 4号补位
+  let hit4 = false;
+  let reason4 = '';
+
+  if(D3 > 0 && D4 > 0){
+    hit4 = true;
+    reason4 = '4号命中：D3>0 且 D4>0';
+  }
+
+  if(D3 < 0 && D4 < 0){
+    hit4 = true;
+    reason4 = '4号命中：D3<0 且 D4<0';
+  }
+
+  if(hit4){
+    candidates.push({
+      seat:4,
+      valid:true,
+      label:'4号补位',
+      level:'低权重补位',
+      wr:'补',
+      avg:`D5=${D5}`,
+      note:`${reason4}；4号低权重补位，D5仅作解释项。`
+    });
+  }
+
+  // 主推优先级：5 > 6 > 3 > 4
+  const priority = [5,6,3,4];
+  const validCandidates = candidates.filter(x => x.valid);
+
+  let main = null;
+  for(const s of priority){
+    const found = validCandidates.find(x => x.seat === s);
+    if(found){
+      main = found;
+      break;
+    }
+  }
+
+  return {
+    ok:true,
+    room,
+    ...d,
+    candidates,
+    main
+  };
+}
+
+function buildModelCard(hit, data, rank=1){
+  const cls = rank <= 3 ? `r${rank}` : '';
+  const div = document.createElement('div');
+  div.className = `hit ${cls}`;
+  div.innerHTML = `
+    <div class="hit-lbl">${hit.label}</div>
+    <div class="hit-seat">${hit.seat}</div>
+    <div class="hit-body">
+      <div class="row1">D1/D2/D3/D4/D5=${data.D1}/${data.D2}/${data.D3}/${data.D4}/${data.D5}</div>
+      <div class="row2">${hit.level}</div>
+      <div class="row3">${hit.note}</div>
+    </div>
+    <div class="hit-right">
+      <div class="hit-wr">${hit.wr}</div>
+      <div class="hit-avg">${hit.avg}</div>
+    </div>
+  `;
+  return div;
+}
+
+function render(room5){
+  const data = evaluateRanZai66660(room5);
+
+  resultEl.style.display = 'none';
+  skipEl.style.display   = 'none';
+  hitListEl.innerHTML    = '';
+
+  if(!data.ok){
+    msgEl.textContent = data.reason;
+    return [];
+  }
+
+  msgEl.textContent = '';
+
+  if(!data.main){
+    resultHdr.textContent = `D1/D2/D3/D4/D5=${data.D1}/${data.D2}/${data.D3}/${data.D4}/${data.D5}　未命中`;
+    skipEl.style.display = 'block';
+    return [];
+  }
+
+  resultHdr.textContent = `主推 ${data.main.seat}号｜${data.main.level}`;
+  resultEl.style.display = 'block';
+
+  hitListEl.appendChild(buildModelCard(data.main, data, 1));
+
+  const filtered = data.candidates.filter(x => !x.valid);
+  filtered.forEach((h, idx) => {
+    hitListEl.appendChild(buildModelCard(h, data, idx + 2));
+  });
+
+  return [data.main.seat];
+}
+
+function run(){
+  const raw = roomEl.value.trim().replace(/\s+/g, '');
+  if(!/^\d{5}$/.test(raw)){
+    msgEl.textContent = '请输入正确的5位数字';
+    return;
+  }
+  msgEl.textContent = '';
+  const seats = render(raw);
+  pushHistory(raw, seats);
+  setTimeout(() => { roomEl.value = ''; roomEl.focus(); }, 180);
+}
+
+function loadHist(){
+  try{
+    return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+  }catch{
+    return [];
+  }
+}
+
+function saveHist(items){
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, HISTORY_LIMIT)));
+}
+
+function renderHist(){
+  const items = loadHist();
+  histListEl.innerHTML = '';
+  if(!items.length){
+    histListEl.innerHTML = `<div class="histItem"><div class="histMain" style="color:rgba(255,255,255,.2)">暂无记录</div></div>`;
+    return;
+  }
+
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'histItem';
+    const res = item.seats.length ? item.seats.map(s=>`${s}号`).join(' / ') : '跳';
+    div.innerHTML = `
+      <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
+      <div class="histMain">${item.diff} → ${res}</div>`;
+    histListEl.appendChild(div);
+  });
+}
+
+function pushHistory(room, seats){
+  const data = evaluateRanZai66660(room);
+  const items = loadHist();
+  items.unshift({
+    room,
+    seats,
+    diff: data.ok ? `D=${data.D1}/${data.D2}/${data.D3}/${data.D4}/${data.D5}` : 'D=—',
+    time: new Date().toLocaleString('zh-CN', {hour12:false})
+  });
+  saveHist(items);
+  renderHist();
+}
+
+goEl.addEventListener('click', run);
+roomEl.addEventListener('keydown', e => { if(e.key === 'Enter') run(); });
+
+clearBtnEl.addEventListener('click', () => {
+  localStorage.removeItem(HISTORY_KEY);
+  renderHist();
+});
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+}
+
+renderHist();
+roomEl.focus();
+</script>
 </body>
 </html>
