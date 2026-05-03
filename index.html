@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="然仔66660双模型">
-  <title>然仔·66660双模型</title>
+  <meta name="apple-mobile-web-app-title" content="然仔66660">
+  <title>然仔66660 X交叉奇偶过滤模型</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -21,7 +21,6 @@
       --gold:#ffe27a;
       --purple:#c9a8ff;
       --orange:#ffb36b;
-      --cyan:#72e7ff;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
@@ -46,7 +45,12 @@
       content:"";flex-shrink:0;width:8px;height:8px;border-radius:50%;
       background:var(--red);box-shadow:0 0 12px rgba(255,45,45,.9);
     }
-    .version{font-size:10px;color:rgba(255,45,45,.65);margin-left:4px;font-weight:500}
+    .version{
+      font-size:10px;
+      color:rgba(255,45,45,.65);
+      margin-left:4px;
+      font-weight:500;
+    }
     .panel{
       background:linear-gradient(160deg,rgba(255,45,45,.07),transparent 55%),var(--card);
       border:1px solid var(--line);
@@ -67,24 +71,61 @@
       text-align:center;
       font-weight:800;
     }
-    input:focus{border-color:rgba(255,45,45,.65);box-shadow:0 0 0 3px rgba(255,45,45,.12)}
-    input::placeholder{font-size:13px;letter-spacing:1px;font-weight:400}
-    .btn-wrap{display:flex;justify-content:center;margin:14px 0 8px}
+    input:focus{
+      border-color:rgba(255,45,45,.65);
+      box-shadow:0 0 0 3px rgba(255,45,45,.12)
+    }
+    input::placeholder{
+      font-size:13px;
+      letter-spacing:1px;
+      font-weight:400
+    }
+    .btn-wrap{
+      display:flex;
+      justify-content:center;
+      margin:14px 0 8px
+    }
     .btn-circle{
-      width:66px;height:66px;border-radius:50%;
+      width:66px;
+      height:66px;
+      border-radius:50%;
       border:2px solid rgba(255,45,45,.55);
       background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
-      color:#fff;font-size:15px;font-weight:900;letter-spacing:1px;
-      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+      letter-spacing:1px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18);
       transition:transform .1s,box-shadow .1s;
     }
     .btn-circle:active{transform:scale(.92)}
-    .msg{text-align:center;font-size:12px;color:var(--muted);min-height:14px;margin-bottom:8px}
-
-    .result{display:none;margin-top:10px}
-    .result-hdr{text-align:center;font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.3px}
-    .hit-list{display:flex;flex-direction:column;gap:6px}
+    .msg{
+      text-align:center;
+      font-size:12px;
+      color:var(--muted);
+      min-height:14px;
+      margin-bottom:8px
+    }
+    .result{
+      display:none;
+      margin-top:10px
+    }
+    .result-hdr{
+      text-align:center;
+      font-size:10px;
+      color:var(--muted);
+      margin-bottom:8px;
+      letter-spacing:.3px
+    }
+    .hit-list{
+      display:flex;
+      flex-direction:column;
+      gap:6px
+    }
     .hit{
       display:grid;
       grid-template-columns:auto 52px 1fr auto;
@@ -95,44 +136,107 @@
       border:1px solid rgba(255,255,255,.07);
       background:rgba(0,0,0,.22);
     }
-    .hit.boom{border-color:rgba(255,215,0,.50);background:rgba(255,215,0,.10)}
-    .hit.strong{border-color:rgba(255,45,45,.50);background:rgba(255,45,45,.10)}
-    .hit.good{border-color:rgba(0,200,160,.35);background:rgba(0,180,140,.07)}
-    .hit.mid{border-color:rgba(120,120,255,.35);background:rgba(110,110,255,.08)}
-    .hit.low{border-color:rgba(168,120,255,.35);background:rgba(150,100,255,.08)}
-    .hit.hard{border-color:rgba(255,140,0,.35);background:rgba(255,140,0,.08)}
-    .hit.sizeModel{border-color:rgba(114,231,255,.42);background:rgba(114,231,255,.08)}
+    .hit.main{
+      border-color:rgba(255,45,45,.55);
+      background:rgba(255,45,45,.11)
+    }
+    .hit.backup{
+      border-color:rgba(120,120,255,.35);
+      background:rgba(110,110,255,.08)
+    }
+    .hit.skip{
+      border-color:rgba(255,140,0,.35);
+      background:rgba(255,140,0,.08)
+    }
+    .hit.good{
+      border-color:rgba(0,200,160,.35);
+      background:rgba(0,180,140,.07)
+    }
     .hit-lbl{
-      font-size:9px;font-weight:900;padding:2px 6px;border-radius:999px;
-      background:rgba(255,45,45,.20);color:#ff8080;white-space:nowrap;letter-spacing:.2px;
+      font-size:9px;
+      font-weight:900;
+      padding:2px 6px;
+      border-radius:999px;
+      background:rgba(255,45,45,.20);
+      color:#ff8080;
+      white-space:nowrap;
+      letter-spacing:.2px;
     }
-    .hit.boom .hit-lbl{background:rgba(255,215,0,.24);color:#ffe27a}
-    .hit.strong .hit-lbl{background:rgba(255,45,45,.34);color:#ff9090}
-    .hit.good .hit-lbl{background:rgba(0,200,160,.25);color:#00d4a8}
-    .hit.mid .hit-lbl{background:rgba(120,120,255,.25);color:#b8b8ff}
-    .hit.low .hit-lbl{background:rgba(168,120,255,.25);color:#d7b8ff}
-    .hit.hard .hit-lbl{background:rgba(255,140,0,.22);color:#ffb36b}
-    .hit.sizeModel .hit-lbl{background:rgba(114,231,255,.20);color:#72e7ff}
+    .hit.main .hit-lbl{
+      background:rgba(255,45,45,.34);
+      color:#ff9090
+    }
+    .hit.backup .hit-lbl{
+      background:rgba(120,120,255,.25);
+      color:#b8b8ff
+    }
+    .hit.skip .hit-lbl{
+      background:rgba(255,140,0,.22);
+      color:#ffb36b
+    }
+    .hit.good .hit-lbl{
+      background:rgba(0,200,160,.25);
+      color:#00d4a8
+    }
     .hit-seat{
-      font-size:21px;font-weight:1000;color:var(--red);
+      font-size:21px;
+      font-weight:1000;
+      color:var(--red);
       text-shadow:0 0 12px rgba(255,45,45,.35);
-      line-height:1.05;text-align:center;white-space:nowrap;
+      line-height:1.05;
+      text-align:center;
+      white-space:nowrap;
     }
-    .hit.boom .hit-seat{color:var(--gold);text-shadow:0 0 12px rgba(255,215,0,.45)}
-    .hit.strong .hit-seat{color:#ff8080;text-shadow:0 0 12px rgba(255,45,45,.45)}
-    .hit.good .hit-seat{color:var(--green);text-shadow:0 0 12px rgba(0,200,160,.4)}
-    .hit.mid .hit-seat{color:var(--blue);text-shadow:0 0 12px rgba(120,120,255,.45)}
-    .hit.low .hit-seat{color:var(--purple);text-shadow:0 0 12px rgba(168,120,255,.45)}
-    .hit.hard .hit-seat{color:var(--orange);text-shadow:0 0 12px rgba(255,140,0,.45)}
-    .hit.sizeModel .hit-seat{color:var(--cyan);text-shadow:0 0 12px rgba(114,231,255,.45)}
-    .hit-body{line-height:1.4;min-width:0}
-    .hit-body .row1{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .hit-body .row2{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .hit-body .row3{font-size:9px;color:rgba(255,255,255,.34);margin-top:1px;line-height:1.25}
-    .hit-right{text-align:right;min-width:42px}
-    .hit-wr{font-size:11px;font-weight:900;color:rgba(80,255,140,.85)}
-    .hit-avg{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px}
-
+    .hit.backup .hit-seat{
+      color:var(--blue);
+      text-shadow:0 0 12px rgba(120,120,255,.45)
+    }
+    .hit.skip .hit-seat{
+      color:var(--orange);
+      text-shadow:0 0 12px rgba(255,140,0,.45)
+    }
+    .hit.good .hit-seat{
+      color:var(--green);
+      text-shadow:0 0 12px rgba(0,200,160,.4)
+    }
+    .hit-body{
+      line-height:1.4;
+      min-width:0
+    }
+    .hit-body .row1{
+      font-size:11px;
+      color:var(--text);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis
+    }
+    .hit-body .row2{
+      font-size:10px;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis
+    }
+    .hit-body .row3{
+      font-size:9px;
+      color:rgba(255,255,255,.34);
+      margin-top:1px;
+      line-height:1.25
+    }
+    .hit-right{
+      text-align:right;
+      min-width:42px
+    }
+    .hit-wr{
+      font-size:11px;
+      font-weight:900;
+      color:rgba(80,255,140,.85)
+    }
+    .hit-avg{
+      font-size:9px;
+      color:rgba(255,255,255,.35);
+      margin-top:1px
+    }
     .score-table{
       margin-top:8px;
       border:1px solid rgba(255,255,255,.07);
@@ -156,46 +260,126 @@
       background:rgba(0,0,0,.15);
       align-items:center;
     }
-    .score-seat{font-size:13px;font-weight:900;color:rgba(255,255,255,.85)}
-    .score-val{font-size:13px;font-weight:900;color:var(--red);text-align:right}
-    .score-reason{font-size:9px;color:rgba(255,255,255,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-    .history{
-      margin-top:12px;padding:10px 11px;border-radius:12px;
-      border:1px solid var(--line);background:rgba(255,255,255,.02);
+    .score-seat{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.85)
     }
-    .histHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-    .histTitle{font-size:11px;font-weight:800;color:var(--muted)}
+    .score-val{
+      font-size:13px;
+      font-weight:900;
+      color:var(--red);
+      text-align:right
+    }
+    .score-reason{
+      font-size:9px;
+      color:rgba(255,255,255,.45);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis
+    }
+    .history{
+      margin-top:12px;
+      padding:10px 11px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+    }
+    .histHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:7px
+    }
+    .histTitle{
+      font-size:11px;
+      font-weight:800;
+      color:var(--muted)
+    }
     .clearBtn{
-      font-size:10px;padding:4px 8px;border-radius:7px;cursor:pointer;
-      border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);
+      font-size:10px;
+      padding:4px 8px;
+      border-radius:7px;
+      cursor:pointer;
+      border:1px solid rgba(255,45,45,.35);
+      background:rgba(255,45,45,.10);
       color:rgba(255,100,100,.85);
     }
-    .histList{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow:auto}
-    .histItem{border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:7px 9px;background:rgba(0,0,0,.14)}
-    .histTop{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:2px}
-    .histMain{font-size:11px;color:rgba(255,255,255,.60);line-height:1.35}
-    .pill{
-      display:inline-block;padding:1px 6px;border-radius:999px;
-      border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);
-      font-weight:800;color:var(--red);margin-right:3px;
+    .histList{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+      max-height:180px;
+      overflow:auto
     }
-
+    .histItem{
+      border:1px solid rgba(255,255,255,.05);
+      border-radius:9px;
+      padding:7px 9px;
+      background:rgba(0,0,0,.14)
+    }
+    .histTop{
+      display:flex;
+      justify-content:space-between;
+      font-size:10px;
+      color:rgba(255,255,255,.35);
+      margin-bottom:2px
+    }
+    .histMain{
+      font-size:11px;
+      color:rgba(255,255,255,.60);
+      line-height:1.35
+    }
+    .pill{
+      display:inline-block;
+      padding:1px 6px;
+      border-radius:999px;
+      border:1px solid rgba(255,45,45,.35);
+      background:rgba(255,45,45,.10);
+      font-weight:800;
+      color:var(--red);
+      margin-right:3px;
+    }
     .logic-box{
-      margin-top:12px;padding:10px 11px;border-radius:12px;
-      border:1px solid rgba(120,120,255,.22);background:rgba(110,110,255,.06);
+      margin-top:12px;
+      padding:10px 11px;
+      border-radius:12px;
+      border:1px solid rgba(120,120,255,.22);
+      background:rgba(110,110,255,.06);
     }
     .logic-title{
-      font-size:11px;font-weight:900;color:#bfc6ff;margin-bottom:6px;
-      display:flex;align-items:center;gap:6px;
+      font-size:11px;
+      font-weight:900;
+      color:#bfc6ff;
+      margin-bottom:6px;
+      display:flex;
+      align-items:center;
+      gap:6px;
     }
     .logic-title::before{
-      content:"";width:6px;height:6px;border-radius:50%;
-      background:#9ea8ff;box-shadow:0 0 10px rgba(120,120,255,.85);flex-shrink:0;
+      content:"";
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:#9ea8ff;
+      box-shadow:0 0 10px rgba(120,120,255,.85);
+      flex-shrink:0;
     }
-    .logic-list{font-size:10px;line-height:1.7;color:rgba(255,255,255,.72);white-space:pre-line}
-    .tiny{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:10px;color:rgba(255,255,255,.28);line-height:1.7;white-space:pre-line}
-
+    .logic-list{
+      font-size:10px;
+      line-height:1.7;
+      color:rgba(255,255,255,.72);
+      white-space:pre-line
+    }
+    .tiny{
+      margin-top:12px;
+      padding-top:10px;
+      border-top:1px solid var(--line);
+      font-size:10px;
+      color:rgba(255,255,255,.28);
+      line-height:1.7;
+      white-space:pre-line
+    }
     @media (max-width:430px){
       body{padding:10px}
       .app{width:100%}
@@ -210,23 +394,17 @@
 
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">v1.4 + 大小结构v1</span></div>
+  <div class="title">然仔66660<span class="version">X交叉奇偶过滤 v1</span></div>
 
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
     <div class="btn-wrap"><button class="btn-circle" id="go">开干</button></div>
     <div class="msg" id="msg"></div>
 
-    <div class="result" id="model14Result">
-      <div class="result-hdr" id="model14Hdr">— 模型1：奇偶位联动 + 奇偶结构 v1.4 —</div>
-      <div class="hit-list" id="model14HitList"></div>
-      <div class="score-table" id="model14ScoreTable"></div>
-    </div>
-
-    <div class="result" id="sizeResult">
-      <div class="result-hdr" id="sizeHdr">— 模型2：座位专属大小结构 v1 —</div>
-      <div class="hit-list" id="sizeHitList"></div>
-      <div class="score-table" id="sizeScoreTable"></div>
+    <div class="result" id="result">
+      <div class="result-hdr" id="resultHdr">— 然仔66660 X交叉奇偶过滤模型 v1 —</div>
+      <div class="hit-list" id="hitList"></div>
+      <div class="score-table" id="scoreTable"></div>
     </div>
 
     <div class="history">
@@ -238,45 +416,45 @@
     </div>
 
     <div class="logic-box">
-      <div class="logic-title">当前网页模型</div>
-      <div class="logic-list">模型1：
-然仔·66660奇偶位联动 + 奇偶结构模型 v1.4 试跑版
-核心：3号E主C承接；5号C主E/A承接；4号B-D轴；6号B-D轴+A/E承接。
-v1.4新增：6号E=0断尾雷、A弱+E弱、D/E低位断尾过滤。
+      <div class="logic-title">模型规则</div>
+      <div class="logic-list">模型名称：
+然仔66660 X交叉奇偶过滤模型 v1
 
-模型2：
-然仔·66660座位专属大小结构模型 v1 试跑版
-大小定义：0/1/2/3/4=小，5/6/7/8/9=大。
-核心：3号看ACE/BCD/CDE，4号看CDE/BDE/BD，5号看CE/CEA/CDEA，6号看AE/ADE/ABDE。
-推荐口径：分数≥20为可进；低于20显示低信号。</div>
+执行口径：
+只输出模型命中的主推位。
+无命中则跳。
+不再使用两个模型同向，不再使用X排名奇偶旧模型。
+
+规则：
+3号：C奇E偶；或C偶E奇且C≥8、E≥9；过滤C≤2且E≥9。
+4号：B/D同奇偶；过滤B=D≥5；过滤C=0且E=0。
+5号：C奇E偶且C≥5；过滤D≥8且E≤4。
+6号：A偶且E∈{1,3,6,7,8,9}；或A奇A≥5且D≥7且E≥7；过滤D=0、E=0。
+
+主推优先级：
+5号 > 6号 > 3号 > 4号</div>
     </div>
 
     <div class="tiny">
-【说明】
-两个模型分开计算，分开输出。
-模型2已替换为“座位专属大小结构模型 v1”，旧的“X排名奇偶 + 大赢保护模型”已删除。
-两个模型同推同一位时，可视为同向强信号；若分歧，看分数和原因。
+【历史回测口径】
+当前51局样本，单主推输出33局，进房率64.7%，命中12局，命中后胜率100%，命中净分+9060，≤-500大输命中0局。
+此模型为试跑版，新增大输需立即复盘。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY='ranzai_66660_model14_size_v1';
+const HISTORY_KEY='ranzai_66660_cross_parity_filter_v1';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
 const goEl=document.getElementById('go');
 const msgEl=document.getElementById('msg');
 
-const model14Result=document.getElementById('model14Result');
-const model14Hdr=document.getElementById('model14Hdr');
-const model14HitList=document.getElementById('model14HitList');
-const model14ScoreTable=document.getElementById('model14ScoreTable');
-
-const sizeResult=document.getElementById('sizeResult');
-const sizeHdr=document.getElementById('sizeHdr');
-const sizeHitList=document.getElementById('sizeHitList');
-const sizeScoreTable=document.getElementById('sizeScoreTable');
+const resultEl=document.getElementById('result');
+const resultHdr=document.getElementById('resultHdr');
+const hitListEl=document.getElementById('hitList');
+const scoreTableEl=document.getElementById('scoreTable');
 
 const histListEl=document.getElementById('histList');
 const clearBtnEl=document.getElementById('clearBtn');
@@ -301,51 +479,17 @@ function getParityPattern(room){
   return room.split('').map(n => (parseInt(n,10)%2===0?'偶':'奇')).join('');
 }
 
-function bigSmall(n){
-  return n >= 5 ? '大' : '小';
+function isDHighPressure(D,E){
+  return D >= 8 && E <= 4;
 }
 
-function getSizePattern(nums){
-  return nums.map(bigSmall).join('');
-}
-
-function getSignalLabel(score){
-  if(score>=100) return '爆点强进';
-  if(score>=80) return '强进';
-  if(score>=60) return '可进偏强';
-  if(score>=40) return '可进';
-  if(score>=20) return '低信号';
-  return '低分硬进';
-}
-
-function getSignalClass(score){
-  if(score>=100) return 'boom';
-  if(score>=80) return 'strong';
-  if(score>=60) return 'good';
-  if(score>=40) return 'mid';
-  if(score>=20) return 'low';
-  return 'hard';
-}
-
-function getSizeLabel(score){
-  if(score>=70) return '强进';
-  if(score>=40) return '可进';
-  if(score>=20) return '低信号可进';
-  if(score>=0) return '低分观察';
-  return '跳/不建议';
-}
-
-function getSizeClass(score){
-  if(score>=70) return 'sizeModel';
-  if(score>=40) return 'good';
-  if(score>=20) return 'mid';
-  if(score>=0) return 'low';
-  return 'hard';
+function isENotWeakFor6(E){
+  return [1,3,6,7,8,9].includes(E);
 }
 
 function buildCard({label,seatsText,pattern,row2Text,note,wr,avg,cls}){
   const div=document.createElement('div');
-  div.className=`hit ${cls||'strong'}`;
+  div.className=`hit ${cls||'main'}`;
   div.innerHTML=`
     <div class="hit-lbl">${label}</div>
     <div class="hit-seat">${seatsText}</div>
@@ -361,398 +505,254 @@ function buildCard({label,seatsText,pattern,row2Text,note,wr,avg,cls}){
   return div;
 }
 
-function renderScoreTable(el, title, all){
-  el.innerHTML='';
-  const t=document.createElement('div');
-  t.className='score-title';
-  t.textContent=title;
-  el.appendChild(t);
+function renderScoreTable(all){
+  scoreTableEl.innerHTML='';
+  const title=document.createElement('div');
+  title.className='score-title';
+  title.textContent='3/4/5/6命中与过滤明细';
+  scoreTableEl.appendChild(title);
 
   all.forEach(x=>{
     const row=document.createElement('div');
     row.className='score-row';
     row.innerHTML=`
       <div class="score-seat">${x.seat}号</div>
-      <div class="score-val">${x.score}</div>
-      <div class="score-reason">${x.detail}</div>
+      <div class="score-val">${x.pass ? '进' : '跳'}</div>
+      <div class="score-reason">${x.reason}</div>
     `;
-    el.appendChild(row);
+    scoreTableEl.appendChild(row);
   });
-  el.style.display='block';
+
+  scoreTableEl.style.display='block';
 }
 
-/* =====================================================
-   模型1：然仔·66660奇偶位联动 + 奇偶结构模型 v1.4
-   ===================================================== */
+/*
+  然仔66660 X交叉奇偶过滤模型 v1
 
-function scoreModel14(room5){
+  3号：C奇E偶；或C偶E奇且C>=8,E>=9；过滤C<=2,E>=9
+  4号：B/D同奇偶；过滤B=D>=5；过滤C=0,E=0
+  5号：C奇E偶且C>=5；过滤D>=8,E<=4
+  6号：A偶且E不弱；或A奇A>=5,D>=7,E>=7；过滤D=0,E=0
+  主推优先级：5 > 6 > 3 > 4
+*/
+
+function evaluateModel(room5){
   const [A,B,C,D,E]=getDigits(room5);
-  const CE = pairParity(C,E);
-  const BD = pairParity(B,D);
-  const AE = pairParity(A,E);
+  const CE=pairParity(C,E);
+  const BD=pairParity(B,D);
+  const AE=pairParity(A,E);
+  const fullParity=getParityPattern(room5);
 
-  const bdGap = Math.abs(B-D);
-  const bdHasGap = bdGap>=3;
-  const highBD = (B>=7 && D>=7);
-  const bdLowClose = bdGap<=1 && B<=4 && D<=4;
-  const eWeak = [0,2,4,5].includes(E);
-  const eNotWeak = !eWeak;
+  const results=[];
 
-  const scored=[];
+  // 3号
+  let pass3=false;
+  let reason3=[];
+  let filter3=[];
 
-  let s3=5;
-  const r3=['底分'];
-  if((E===8 || E===9) && C>=4 && D===4){
-    s3 += 85; r3.push('E8/9+C≥4+D4强');
-  }else if((E===8 || E===9) && C>=4){
-    s3 += 50; r3.push('E8/9+C≥4可');
+  const rule3Main = isOdd(C) && !isOdd(E);
+  const rule3Ext = !isOdd(C) && isOdd(E) && C>=8 && E>=9;
+  const rule3Filter = C<=2 && E>=9;
+
+  if(rule3Main){
+    pass3=true;
+    reason3.push('C奇E偶主规则');
   }
-  if(E===7 && C>=4){ s3 += 35; r3.push('E7+C≥4可'); }
-  if([4,5,6,8,9].includes(C)){ s3 += 10; r3.push('C承接辅助'); }
-  if((E===8 || E===9) && CE==='奇偶' && C>=5){
-    s3 += 15; r3.push('C/E奇偶且C≥5助推');
+  if(rule3Ext){
+    pass3=true;
+    reason3.push('C偶E奇且C≥8/E≥9扩容');
   }
-  if(D===2 && C>=8 && (E===8 || E===9)){
-    s3 -= 5; r3.push('D2但C高E强，仅轻降');
-  }else if(D===2){
-    s3 -= 25; r3.push('D2降级');
+  if(rule3Filter){
+    pass3=false;
+    filter3.push('过滤：C≤2且E≥9，C低E强诱多');
   }
-  if(E===1){ s3 -= 70; r3.push('E1硬黑'); }
-  if((E===8 || E===9) && C<=2){ s3 -= 70; r3.push('E强+C≤2诱多雷'); }
-  if(C<=2 && B>C && D>C){ s3 -= 60; r3.push('C低且B/D双压'); }
-  if(CE==='偶偶'){ s3 -= 45; r3.push('C/E偶偶强降级'); }
-  if(D===0){ s3 -= 40; r3.push('D0拖死'); }
 
-  scored.push({
+  results.push({
     seat:3,
-    score:s3,
-    detail:`C/E=${CE}｜3号E主C承接：C${C} D${D} E${E}｜${r3.join(' / ')}`
+    pass:pass3,
+    priority:3,
+    label:pass3 ? '命中' : '未命中',
+    reason:`C/E=${CE}｜C=${C} E=${E}｜${reason3.concat(filter3).join('；') || '无进位条件'}`
   });
 
-  let s4=5;
-  const r4=['底分'];
-  if(D===4){ s4 += 75; r4.push('D4核心强'); }
-  if(D===4 && B!==D){ s4 += 15; r4.push('D4+BD有跨度'); }
-  if((E===2 || E===7) && D===4){ s4 += 15; r4.push('D4+E2/7辅助'); }
-  if(D===2 && C<=1){ s4 += 25; r4.push('D2+C低可'); }
-  if(bdHasGap && ![1,6,7].includes(D)){ s4 += 10; r4.push('BD有跨度且D不黑'); }
-  if(D===4 && C<=1 && E<=1){ s4 -= 35; r4.push('D4但C/E全低降级'); }
-  if(B===6 && D===6){ s4 -= 75; r4.push('B=D=6平台雷'); }
-  if([6,7,1].includes(D)){ s4 -= 50; r4.push('D6/7/1风险'); }
-  if(D===2 && C>=8){ s4 -= 45; r4.push('D2+C高压'); }
-  if(Math.abs(B-D)<=1 && C>=8){ s4 -= 35; r4.push('BD贴近+C高压'); }
-  if(E===5 && D!==4){ s4 -= 20; r4.push('E5且D非4降级'); }
+  // 4号
+  let pass4=false;
+  let reason4=[];
+  let filter4=[];
 
-  scored.push({
+  const rule4Main = parity(B)===parity(D);
+  const rule4Filter1 = B===D && B>=5;
+  const rule4Filter2 = C===0 && E===0;
+
+  if(rule4Main){
+    pass4=true;
+    reason4.push('B/D同奇偶');
+  }
+  if(rule4Filter1){
+    pass4=false;
+    filter4.push('过滤：B=D≥5，高位平台压死');
+  }
+  if(rule4Filter2){
+    pass4=false;
+    filter4.push('过滤：C=0且E=0，4号孤岛');
+  }
+
+  results.push({
     seat:4,
-    score:s4,
-    detail:`B/D=${BD}｜4号BD轴落D：B${B} C${C} D${D} E${E}｜${r4.join(' / ')}`
+    pass:pass4,
+    priority:4,
+    label:pass4 ? '命中' : '未命中',
+    reason:`B/D=${BD}｜B=${B} D=${D}｜${reason4.concat(filter4).join('；') || '无进位条件'}`
   });
 
-  let s5=5;
-  const r5=['底分'];
-  if(C===7 && E===8){ s5 += 70; r5.push('C7+E8强'); }
-  if(C===5 && E===4 && A===9){ s5 += 65; r5.push('C5+E4+A9强'); }
-  if(A===9 && E===4 && C>=5){ s5 += 40; r5.push('A9+E4+C≥5可'); }
-  if(C===7){ s5 += 35; r5.push('C7门票'); }
-  if(C===6){ s5 += 15; r5.push('C6观察'); }
-  if(E===8){ s5 += 15; r5.push('E8辅助'); }
-  if(C===7 && !isOdd(E)){ s5 += 12; r5.push('C7+E偶加分'); }
-  if(CE==='奇偶' && (C===5 || C===7)){ s5 += 12; r5.push('C/E奇偶且C5/7'); }
-  if(E===5){ s5 -= 35; r5.push('E5弱尾降级'); }
-  if(C===0 || C===3){ s5 -= 45; r5.push('C0/C3黑'); }
-  if(C===5 && E<=2){ s5 -= 30; r5.push('C5+E低降级'); }
-  if(C===9){ s5 -= 10; r5.push('C9不强'); }
-  if(CE==='偶奇' && C<=2){ s5 -= 25; r5.push('C/E偶奇且C低'); }
-  if(CE==='奇奇' && C===9){ s5 -= 20; r5.push('C9奇奇弱'); }
+  // 5号
+  let pass5=false;
+  let reason5=[];
+  let filter5=[];
 
-  scored.push({
+  const rule5Main = isOdd(C) && !isOdd(E) && C>=5;
+  const rule5Filter = isDHighPressure(D,E);
+
+  if(rule5Main){
+    pass5=true;
+    reason5.push('C奇E偶且C≥5');
+  }
+  if(rule5Filter){
+    pass5=false;
+    filter5.push('过滤：D≥8且E≤4，D高压');
+  }
+
+  results.push({
     seat:5,
-    score:s5,
-    detail:`C/E=${CE}｜5号C主E/A承接：A${A} C${C} E${E}｜${r5.join(' / ')}`
+    pass:pass5,
+    priority:1,
+    label:pass5 ? '命中' : '未命中',
+    reason:`C/E=${CE}｜C=${C} D=${D} E=${E}｜${reason5.concat(filter5).join('；') || '无进位条件'}`
   });
 
-  let s6=5;
-  const r6=['底分'];
+  // 6号
+  let pass6=false;
+  let reason6=[];
+  let filter6=[];
 
-  if(A===8 && eNotWeak){ s6 += 45; r6.push('A8+E不弱强'); }
-  if(A===8 && (E===6 || E===7)){ s6 += 30; r6.push('A8+E6/7增强'); }
-  if((A===5 || A===6) && E===8){ s6 += 60; r6.push('A5/6+E8强'); }
-  if(A===7 && E===7){ s6 += 40; r6.push('A7+E7可'); }
-  if(A===8 && D===4){ s6 += 35; r6.push('A8+D4可'); }
-  if(bdGap>=3 && A>=6 && eNotWeak){ s6 += 20; r6.push('BD跨度+A/E顺'); }
-  if(highBD && E>=7){ s6 += 25; r6.push('BD高位+E≥7'); }
-  if(BD==='奇奇' && A>=7 && eNotWeak){ s6 += 25; r6.push('BD奇奇+A/E顺'); }
-  if(A===6 || A===7){ s6 += 15; r6.push('A6/7可'); }
-  if(A===5){ s6 += 10; r6.push('A5观察'); }
+  const rule6Main = !isOdd(A) && isENotWeakFor6(E);
+  const rule6Ext = isOdd(A) && A>=5 && D>=7 && E>=7;
+  const rule6Filter1 = D===0;
+  const rule6Filter2 = E===0;
 
-  if(A===1){ s6 -= 60; r6.push('A1硬黑'); }
-  if(E===0){ s6 -= 90; r6.push('v1.4新增：E0断尾硬黑'); }
-  if(A<=3 && E<=2){ s6 -= 75; r6.push('v1.4新增：A弱+E弱'); }
-  if(D<=2 && E<=2){ s6 -= 60; r6.push('v1.4新增：D/E低位断尾'); }
-  if(E===2 || E===4){ s6 -= 35; r6.push('E2/E4弱尾'); }
-  if(E===5){ s6 -= 30; r6.push('E5弱尾'); }
-  if(BD==='偶偶' && (E===2 || E===4)){ s6 -= 25; r6.push('BD偶偶+弱尾'); }
-  if(bdLowClose && A<6){ s6 -= 25; r6.push('BD低位贴近+A弱'); }
-  if(A<=4 && B>=7 && C>=7 && D<=2 && E<=2){
-    s6 -= 45; r6.push('v1.4新增：前段高压+后段断尾');
+  if(rule6Main){
+    pass6=true;
+    reason6.push('A偶且E不弱');
+  }
+  if(rule6Ext){
+    pass6=true;
+    reason6.push('A奇A≥5且D/E双强');
+  }
+  if(rule6Filter1){
+    pass6=false;
+    filter6.push('过滤：D=0，支撑断');
+  }
+  if(rule6Filter2){
+    pass6=false;
+    filter6.push('过滤：E=0，断尾');
   }
 
-  scored.push({
+  results.push({
     seat:6,
-    score:s6,
-    detail:`B/D=${BD}｜A/E=${AE}｜6号BD轴+A/E承接：A${A} B${B} D${D} E${E}｜${r6.join(' / ')}`
+    pass:pass6,
+    priority:2,
+    label:pass6 ? '命中' : '未命中',
+    reason:`A/E=${AE}｜A=${A} D=${D} E=${E}｜${reason6.concat(filter6).join('；') || '无进位条件'}`
   });
 
-  const seatPriority={6:1,3:2,4:3,5:4};
-  scored.sort((a,b)=>{
-    if(b.score!==a.score) return b.score-a.score;
-    return (seatPriority[a.seat]||9)-(seatPriority[b.seat]||9);
-  });
+  const candidates=results
+    .filter(x=>x.pass)
+    .sort((a,b)=>a.priority-b.priority);
 
-  return scored;
-}
+  const main=candidates[0] || null;
+  const backup=candidates[1] || null;
 
-function getModel14(room5){
-  const all=scoreModel14(room5);
-  const main=all[0];
-  const backup=all[1] && all[1].score>=20 ? all[1] : null;
   return {
+    A,B,C,D,E,
+    fullParity,
+    CE,BD,AE,
+    all:results.sort((a,b)=>a.seat-b.seat),
+    candidates,
     main,
-    backup,
-    all,
-    label:getSignalLabel(main.score),
-    cls:getSignalClass(main.score)
-  };
-}
-
-/* =====================================================
-   模型2：然仔·66660座位专属大小结构模型 v1
-   ===================================================== */
-
-function getSizeEnv(room5){
-  const [A,B,C,D,E]=getDigits(room5);
-  const full=getSizePattern([A,B,C,D,E]);
-
-  const strong=new Set(['大大大大大','大大小大大','大大小小大','大小小大大','小小大小小']);
-  const black=new Set(['大小小小大','大小小小小','小大大小小','小大小大大','小小小小大']);
-  const wave=new Set(['大大大小大','小小大小大','大小大小大','小大大小大','大小大小小']);
-
-  if(strong.has(full)) return {type:'强环境',score:10,full};
-  if(black.has(full)) return {type:'黑环境',score:-20,full};
-  if(wave.has(full)) return {type:'高波环境',score:-10,full};
-  return {type:'普通环境',score:0,full};
-}
-
-function scoreSizeModel(room5){
-  const [A,B,C,D,E]=getDigits(room5);
-  const env=getSizeEnv(room5);
-  const scored=[];
-
-  function add(seat, score, detail){
-    scored.push({seat,score,detail});
-  }
-
-  /*
-    3号：主看 ACE / BCD / CDE / CE
-  */
-  let s3=env.score;
-  const r3=[`完整=${env.full}(${env.type}${env.score>=0?'+':''}${env.score})`];
-
-  const CE=getSizePattern([C,E]);
-  const ACE=getSizePattern([A,C,E]);
-  const BCD=getSizePattern([B,C,D]);
-  const CDE=getSizePattern([C,D,E]);
-  const BCDE=getSizePattern([B,C,D,E]);
-
-  if(ACE==='大大大'){ s3+=70; r3.push('黄金：ACE大大大'); }
-  if(BCD==='大大小'){ s3+=70; r3.push('黄金：BCD大大小'); }
-  if(BCDE==='大大小大'){ s3+=60; r3.push('黄金：BCDE大大小大'); }
-  if(CE==='大大'){ s3+=30; r3.push('可进：CE大大'); }
-  if(CDE==='大小大'){ s3+=20; r3.push('高波可进：CDE大小大'); }
-
-  if(CE==='大小'){ s3-=60; r3.push('黑：CE大小'); }
-  if(CDE==='大小小'){ s3-=70; r3.push('黑：CDE大小小'); }
-  if(BCD==='小小小'){ s3-=70; r3.push('黑：BCD小小小'); }
-  if(env.full==='大小小小大'){ s3-=60; r3.push('黑：完整大小小小大'); }
-  if(env.full==='大小大小小'){ s3-=60; r3.push('黑：完整大小大小小'); }
-
-  add(3,s3,`3号｜CE=${CE} ACE=${ACE} BCD=${BCD} CDE=${CDE}｜${r3.join(' / ')}`);
-
-  /*
-    4号：主看 CDE / BDE / BD
-  */
-  let s4=env.score;
-  const r4=[`完整=${env.full}(${env.type}${env.score>=0?'+':''}${env.score})`];
-
-  const BD=getSizePattern([B,D]);
-  const BDE=getSizePattern([B,D,E]);
-
-  if(CDE==='小小大'){ s4+=70; r4.push('黄金：CDE小小大'); }
-  if(CDE==='大小小'){ s4+=55; r4.push('黄金观察：CDE大小小'); }
-  if(BDE==='大小大'){ s4+=65; r4.push('黄金辅助：BDE大小大'); }
-  if(BD==='大小'){ s4+=35; r4.push('可进：BD大小'); }
-
-  if(CDE==='小大大'){ s4-=80; r4.push('黑：CDE小大大'); }
-  if(CDE==='大小大'){ s4-=60; r4.push('黑：CDE大小大'); }
-  if(BD==='大大'){ s4-=60; r4.push('黑：BD大大'); }
-  if(BDE==='大大大'){ s4-=80; r4.push('黑：BDE大大大'); }
-  if(BDE==='小小大'){ s4-=45; r4.push('黑：BDE小小大'); }
-
-  add(4,s4,`4号｜CDE=${CDE} BD=${BD} BDE=${BDE}｜${r4.join(' / ')}`);
-
-  /*
-    5号：主看 CE / CEA / CDEA
-  */
-  let s5=env.score;
-  const r5=[`完整=${env.full}(${env.type}${env.score>=0?'+':''}${env.score})`];
-
-  const CEA=getSizePattern([C,E,A]);
-  const CDEA=getSizePattern([C,D,E,A]);
-
-  if(CE==='大小'){ s5+=70; r5.push('黄金：CE大小'); }
-  if(CDEA==='大小小大'){ s5+=65; r5.push('黄金观察：CDEA大小小大'); }
-  if(CDEA==='大小大小'){ s5+=65; r5.push('黄金观察：CDEA大小大小'); }
-  if(CEA==='大小小'){ s5+=30; r5.push('可进：CEA大小小'); }
-  if(CEA==='大大小'){ s5+=30; r5.push('可进：CEA大大小'); }
-
-  if(CE==='小小'){ s5-=60; r5.push('黑：CE小小'); }
-  if(CEA==='大大大'){ s5-=60; r5.push('黑：CEA大大大'); }
-  if(CDEA==='小小小大'){ s5-=65; r5.push('黑：CDEA小小小大'); }
-  if(CDEA==='大小大大'){ s5-=65; r5.push('黑：CDEA大小大大'); }
-
-  add(5,s5,`5号｜CE=${CE} CEA=${CEA} CDEA=${CDEA}｜${r5.join(' / ')}`);
-
-  /*
-    6号：主看 AE / ADE / ABDE
-  */
-  let s6=env.score;
-  const r6=[`完整=${env.full}(${env.type}${env.score>=0?'+':''}${env.score})`];
-
-  const AE=getSizePattern([A,E]);
-  const ADE=getSizePattern([A,D,E]);
-  const ABDE=getSizePattern([A,B,D,E]);
-
-  if(AE==='大大'){ s6+=80; r6.push('顶级黄金：AE大大'); }
-  if(ADE==='大大大'){ s6+=80; r6.push('顶级黄金：ADE大大大'); }
-  if(ADE==='大小大'){ s6+=55; r6.push('黄金：ADE大小大'); }
-  if(ABDE==='大大大大'){ s6+=60; r6.push('黄金：ABDE大大大大'); }
-  if(ABDE==='大大小大'){ s6+=40; r6.push('可进：ABDE大大小大'); }
-  if(ABDE==='大小大大'){ s6+=40; r6.push('可进：ABDE大小大大'); }
-
-  if(AE==='小大'){ s6-=75; r6.push('黑：AE小大'); }
-  if(AE==='小小'){ s6-=85; r6.push('硬黑：AE小小'); }
-  if(ADE==='小小大'){ s6-=80; r6.push('黑：ADE小小大'); }
-  if(ADE==='小小小'){ s6-=90; r6.push('硬黑：ADE小小小'); }
-  if(ADE==='大大小'){ s6-=55; r6.push('弱尾风险：ADE大大小'); }
-  if(ABDE==='小大小大'){ s6-=70; r6.push('黑：ABDE小大小大'); }
-  if(ABDE==='小大小小'){ s6-=85; r6.push('硬黑：ABDE小大小小'); }
-
-  add(6,s6,`6号｜AE=${AE} ADE=${ADE} ABDE=${ABDE}｜${r6.join(' / ')}`);
-
-  const seatPriority={6:1,4:2,5:3,3:4};
-  scored.sort((a,b)=>{
-    if(b.score!==a.score) return b.score-a.score;
-    return (seatPriority[a.seat]||9)-(seatPriority[b.seat]||9);
-  });
-
-  return scored;
-}
-
-function getSizeModel(room5){
-  const all=scoreSizeModel(room5);
-  const main=all[0];
-  const backup=all[1] && all[1].score>=20 ? all[1] : null;
-  return {
-    main,
-    backup,
-    all,
-    label:getSizeLabel(main.score),
-    cls:getSizeClass(main.score)
-  };
-}
-
-/* =====================================================
-   渲染
-   ===================================================== */
-
-function renderModel14(room5){
-  const [A,B,C,D,E]=getDigits(room5);
-  const model=getModel14(room5);
-  const main=model.main;
-  const backup=model.backup;
-
-  model14HitList.innerHTML='';
-
-  const seatText=backup ? `${main.seat}/${backup.seat}` : `${main.seat}`;
-  const backupText=backup ? `备选：${backup.seat}号位` : '无明确备选';
-
-  model14HitList.appendChild(buildCard({
-    label:'模型1',
-    seatsText:seatText,
-    pattern:`v1.4｜房号 ${room5}｜A${A} B${B} C${C} D${D} E${E}`,
-    row2Text:`主推：${main.seat}号位｜${backupText}｜${model.label}`,
-    note:`${main.detail}`,
-    wr:model.label,
-    avg:`${main.score}分`,
-    cls:model.cls
-  }));
-
-  model14Hdr.textContent=`模型1：然仔·66660奇偶位联动 + 奇偶结构 v1.4｜${getParityPattern(room5)}`;
-  model14Result.style.display='block';
-  renderScoreTable(model14ScoreTable,'模型1分数明细',model.all);
-
-  return {
-    main:main.seat,
-    backup:backup ? backup.seat : null,
-    label:model.label,
-    score:main.score
-  };
-}
-
-function renderSizeModel(room5){
-  const [A,B,C,D,E]=getDigits(room5);
-  const model=getSizeModel(room5);
-  const main=model.main;
-  const backup=model.backup;
-  const fullSize=getSizePattern([A,B,C,D,E]);
-
-  sizeHitList.innerHTML='';
-
-  const seatText=backup ? `${main.seat}/${backup.seat}` : `${main.seat}`;
-  const backupText=backup ? `备选：${backup.seat}号位` : '无明确备选';
-  const advice=main.score>=20 ? '建议可看' : '低分不建议';
-
-  sizeHitList.appendChild(buildCard({
-    label:'大小v1',
-    seatsText:seatText,
-    pattern:`大小结构｜${fullSize}｜A${A} B${B} C${C} D${D} E${E}`,
-    row2Text:`主推：${main.seat}号位｜${backupText}｜${model.label}`,
-    note:`${main.detail}`,
-    wr:advice,
-    avg:`${main.score}分`,
-    cls:model.cls
-  }));
-
-  sizeHdr.textContent=`模型2：然仔·66660座位专属大小结构 v1｜完整大小：${fullSize}`;
-  sizeResult.style.display='block';
-  renderScoreTable(sizeScoreTable,'模型2分数明细',model.all);
-
-  return {
-    main:main.seat,
-    backup:backup ? backup.seat : null,
-    label:model.label,
-    score:main.score
+    backup
   };
 }
 
 function render(room5){
-  const r14=renderModel14(room5);
-  const rs=renderSizeModel(room5);
+  const data=evaluateModel(room5);
+  hitListEl.innerHTML='';
+
+  resultHdr.textContent=`然仔66660 X交叉奇偶过滤模型 v1｜完整奇偶：${data.fullParity}`;
+  resultEl.style.display='block';
+
+  if(data.main){
+    hitListEl.appendChild(buildCard({
+      label:'主推',
+      seatsText:`${data.main.seat}`,
+      pattern:`房号 ${room5}｜A${data.A} B${data.B} C${data.C} D${data.D} E${data.E}`,
+      row2Text:`主推：${data.main.seat}号位｜优先级：5 > 6 > 3 > 4`,
+      note:data.main.reason,
+      wr:'进',
+      avg:'主推',
+      cls:'main'
+    }));
+
+    if(data.backup){
+      hitListEl.appendChild(buildCard({
+        label:'备选',
+        seatsText:`${data.backup.seat}`,
+        pattern:`备选位：${data.backup.seat}号`,
+        row2Text:'仅作参考，实战只按主推',
+        note:data.backup.reason,
+        wr:'备',
+        avg:'参考',
+        cls:'backup'
+      }));
+    }
+
+    const otherCandidates=data.candidates
+      .filter(x=>!data.backup || x.seat!==data.backup.seat)
+      .filter(x=>x.seat!==data.main.seat);
+
+    if(otherCandidates.length){
+      hitListEl.appendChild(buildCard({
+        label:'同命中',
+        seatsText:otherCandidates.map(x=>x.seat).join('/'),
+        pattern:'其他候选位',
+        row2Text:'命中规则但优先级靠后',
+        note:otherCandidates.map(x=>`${x.seat}号：${x.reason}`).join('｜'),
+        wr:'候选',
+        avg:'不主推',
+        cls:'good'
+      }));
+    }
+
+  }else{
+    hitListEl.appendChild(buildCard({
+      label:'结果',
+      seatsText:'跳',
+      pattern:`房号 ${room5}｜A${data.A} B${data.B} C${data.C} D${data.D} E${data.E}`,
+      row2Text:'当前房号没有命中进位规则',
+      note:'3/4/5/6均未通过X交叉奇偶过滤条件，建议跳',
+      wr:'跳',
+      avg:'无进',
+      cls:'skip'
+    }));
+  }
+
+  renderScoreTable(data.all);
 
   return {
-    model14:r14,
-    sizeModel:rs
+    room:room5,
+    main:data.main ? data.main.seat : null,
+    backup:data.backup ? data.backup.seat : null,
+    candidates:data.candidates.map(x=>x.seat),
+    fullParity:data.fullParity
   };
 }
 
@@ -764,13 +764,9 @@ function run(){
   }
   msgEl.textContent='';
   const res=render(raw);
-  pushHistory(raw,res);
+  pushHistory(res);
   setTimeout(()=>{ roomEl.value=''; roomEl.focus(); },180);
 }
-
-/* =====================================================
-   历史记录
-   ===================================================== */
 
 function loadHist(){
   try{return JSON.parse(localStorage.getItem(HISTORY_KEY))||[]}catch{return[]}
@@ -793,29 +789,31 @@ function renderHist(){
     const div=document.createElement('div');
     div.className='histItem';
 
-    const m14Backup=item.model14.backup ? `/备${item.model14.backup}` : '';
-    const sizeBackup=item.sizeModel.backup ? `/备${item.sizeModel.backup}` : '';
-    const same=item.model14.main===item.sizeModel.main ? '｜同向' : '｜分歧';
+    const mainText=item.main ? `主${item.main}号` : '跳';
+    const backupText=item.backup ? `｜备${item.backup}号` : '';
+    const candText=item.candidates && item.candidates.length ? `｜候选：${item.candidates.join('/')}` : '';
 
     div.innerHTML=`
       <div class="histTop">
-        <span>房号 <span class="pill">${item.room}</span>${same}</span>
+        <span>房号 <span class="pill">${item.room}</span></span>
         <span>${item.time}</span>
       </div>
       <div class="histMain">
-        模型1：主${item.model14.main}${m14Backup}｜${item.model14.label}｜${item.model14.score}分<br/>
-        大小v1：主${item.sizeModel.main}${sizeBackup}｜${item.sizeModel.label}｜${item.sizeModel.score}分
+        ${mainText}${backupText}${candText}<br/>
+        完整奇偶：${item.fullParity}
       </div>`;
     histListEl.appendChild(div);
   });
 }
 
-function pushHistory(room,res){
+function pushHistory(res){
   const items=loadHist();
   items.unshift({
-    room,
-    model14:res.model14,
-    sizeModel:res.sizeModel,
+    room:res.room,
+    main:res.main,
+    backup:res.backup,
+    candidates:res.candidates,
+    fullParity:res.fullParity,
     time:new Date().toLocaleString('zh-CN',{hour12:false})
   });
   saveHist(items);
