@@ -321,7 +321,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">高进房差值链 v1.2.1</span></div>
+  <div class="title">然仔66660<span class="version">高进房差值链 v1.2.2</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -347,7 +347,7 @@
     </div>
 
     <div class="tiny">
-【然仔·66660 高进房差值链模型 v1.2.1】
+【然仔·66660 高进房差值链模型 v1.2.2】
 D1=A-B，D2=B-C，D3=C-D，D4=D-E，D5=E-A
 
 强进优先：
@@ -356,8 +356,10 @@ D1=A-B，D2=B-C，D3=C-D，D4=D-E，D5=E-A
 观察优先：
 6号 > 3号 > 5号 > 4号
 
-v1.2.1新增：
-6号观察若 D4<=-4 且 D3>0，过滤。
+v1.2.2新增：
+1）4号双负遇D5强尾降级；
+2）6号强尾观察；
+3）4号特殊反冲观察。
 
 显示规则：
 强进 = 正常主推
@@ -372,7 +374,7 @@ v1.2.1新增：
 </div>
 
 <script>
-const HISTORY_KEY   = 'ranzai_66660_high_entry_diff_v121';
+const HISTORY_KEY   = 'ranzai_66660_high_entry_diff_v122';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -538,9 +540,17 @@ function evaluateRanZai66660(room){
       hit6Observe = true;
       reason6 = '6号观察：D4=1 且 D5>0';
     }
+
+    // v1.2.2新增：6号强尾观察
+    if(D5 >= 6 && D4 <= -4 && D1 < 0){
+      hit6Observe = true;
+      reason6 = '6号强尾观察：D5>=6 且 D4<=-4 且 D1<0';
+    }
   }
 
   if(hit6Strong || hit6Observe){
+    const isStrongTail6 = (D5 >= 6 && D4 <= -4 && D1 < 0);
+
     if(D4 >= 5){
       addCandidate(
         6,
@@ -549,7 +559,7 @@ function evaluateRanZai66660(room){
         '过滤',
         '过滤',
         `D4=${D4}`,
-        `${reason6}；但D4≥5，尾部被强压，不做主推。`,
+        `${reason6}；但D4>=5，尾部被强压，不做主推。`,
         0
       );
     }else if(D1 <= -6){
@@ -560,7 +570,7 @@ function evaluateRanZai66660(room){
         '过滤',
         '过滤',
         `D1=${D1}`,
-        `${reason6}；但D1≤-6，前端启动极弱，不做主推。`,
+        `${reason6}；但D1<=-6，前端启动极弱，不做主推。`,
         0
       );
     }else if(D5 <= -5){
@@ -571,10 +581,10 @@ function evaluateRanZai66660(room){
         '过滤',
         '过滤',
         `D5=${D5}`,
-        `${reason6}；但D5≤-5，首尾闭环过弱，不做主推。`,
+        `${reason6}；但D5<=-5，首尾闭环过弱，不做主推。`,
         0
       );
-    }else if(hit6Observe && D4 <= -4 && D3 > 0){
+    }else if(hit6Observe && !isStrongTail6 && D4 <= -4 && D3 > 0){
       addCandidate(
         6,
         false,
@@ -582,7 +592,7 @@ function evaluateRanZai66660(room){
         '过滤',
         '过滤',
         `D3=${D3}/D4=${D4}`,
-        `${reason6}；但这是6号观察层，且D4≤-4、D3>0，中轴冲尾，高波过滤。`,
+        `${reason6}；但这是6号观察层，且D4<=-4、D3>0，中轴冲尾，高波过滤。`,
         0
       );
     }else{
@@ -590,7 +600,11 @@ function evaluateRanZai66660(room){
       let wr = hit6Strong ? '进' : '观察';
       let d5Note = '';
 
-      if(D5 >= 0){
+      if(isStrongTail6){
+        level = '强尾观察';
+        wr = '观察';
+        d5Note = `D5=${D5}，强尾观察结构，尾端E强于A。`;
+      }else if(D5 >= 0){
         level = hit6Strong ? 'H1强信号' : '观察加强';
         wr = hit6Strong ? '强' : '观察';
         d5Note = `D5=${D5}，6号加强。`;
@@ -605,7 +619,7 @@ function evaluateRanZai66660(room){
       addCandidate(
         6,
         true,
-        hit6Strong ? '6号强进' : '6号观察',
+        hit6Strong ? '6号强进' : (isStrongTail6 ? '6号强尾' : '6号观察'),
         level,
         wr,
         `D5=${D5}`,
@@ -629,7 +643,7 @@ function evaluateRanZai66660(room){
 
   if(D2 < 0 && D3 >= 4 && D4 < 0 && Math.abs(D4) <= 6){
     hit3Strong = true;
-    reason3 = '3号强进：D2<0 且 D3≥4 且 D4<0 且 |D4|≤6';
+    reason3 = '3号强进：D2<0 且 D3>=4 且 D4<0 且 |D4|<=6';
   }
 
   if(D2 < 0 && D3 === 0 && D4 > 0){
@@ -645,7 +659,7 @@ function evaluateRanZai66660(room){
 
     if(D3 >= 4 && D4 < 0){
       hit3Observe = true;
-      reason3 = '3号观察：D3≥4 且 D4<0';
+      reason3 = '3号观察：D3>=4 且 D4<0';
     }
 
     if(D2 < 0 && D4 > 0){
@@ -663,7 +677,7 @@ function evaluateRanZai66660(room){
         '过滤',
         '过滤',
         `D4=${D4}`,
-        `${reason3}；但D4≤-8，尾部断裂过大，不做主推。`,
+        `${reason3}；但D4<=-8，尾部断裂过大，不做主推。`,
         0
       );
     }else if(D2 > 0 && D3 < 0){
@@ -697,6 +711,7 @@ function evaluateRanZai66660(room){
   let hit4Strong = false;
   let hit4Observe = false;
   let reason4 = '';
+  let downgrade4StrongTail = false;
 
   if(D3 > 0 && D4 > 0){
     hit4Strong = true;
@@ -706,6 +721,11 @@ function evaluateRanZai66660(room){
   if(D3 < 0 && D4 < 0){
     hit4Strong = true;
     reason4 = '4号强进：D3<0 且 D4<0';
+
+    // v1.2.2新增：4号双负强尾降级
+    if(D5 >= 6 && D4 <= -4){
+      downgrade4StrongTail = true;
+    }
   }
 
   if(!hit4Strong){
@@ -718,10 +738,29 @@ function evaluateRanZai66660(room){
       hit4Observe = true;
       reason4 = '4号观察：D3/D4同向偏负，允许一项为0';
     }
+
+    // v1.2.2新增：4号特殊反冲观察
+    if(D1 >= 3 && D2 <= -4 && D3 > 0 && D4 < 0 && D5 > 0){
+      hit4Observe = true;
+      reason4 = '4号特殊反冲观察：D1>=3 且 D2<=-4 且 D3>0 且 D4<0 且 D5>0';
+    }
   }
 
   if(hit4Strong || hit4Observe){
-    if(D3 === 0 && D4 === 0){
+    const isSpecialRebound4 = (D1 >= 3 && D2 <= -4 && D3 > 0 && D4 < 0 && D5 > 0);
+
+    if(downgrade4StrongTail){
+      addCandidate(
+        4,
+        false,
+        '4号降级',
+        '强尾降级',
+        '降级',
+        `D5=${D5}`,
+        `${reason4}；但D5>=6且D4<=-4，尾端强，4号降级，优先检查6号。`,
+        0
+      );
+    }else if(D3 === 0 && D4 === 0){
       addCandidate(
         4,
         false,
@@ -732,7 +771,7 @@ function evaluateRanZai66660(room){
         `${reason4}；但D3=0且D4=0，缺少动能，不做主推。`,
         0
       );
-    }else if(D3 > 0 && D4 < 0){
+    }else if(D3 > 0 && D4 < 0 && !isSpecialRebound4){
       addCandidate(
         4,
         false,
@@ -740,7 +779,7 @@ function evaluateRanZai66660(room){
         '过滤',
         '过滤',
         `D3=${D3}/D4=${D4}`,
-        `${reason4}；但D3>0且D4<0，一正一负反冲，不做主推。`,
+        `${reason4}；但D3>0且D4<0，一正一负反冲，不做普通4号。`,
         0
       );
     }else if(D3 < 0 && D4 > 0){
@@ -758,8 +797,8 @@ function evaluateRanZai66660(room){
       addCandidate(
         4,
         true,
-        hit4Strong ? '4号强进' : '4号观察',
-        hit4Strong ? '低权重补位' : '观察补位',
+        hit4Strong ? '4号强进' : (isSpecialRebound4 ? '4号反冲' : '4号观察'),
+        hit4Strong ? '低权重补位' : (isSpecialRebound4 ? '特殊反冲观察' : '观察补位'),
         hit4Strong ? '补' : '观察',
         `D5=${D5}`,
         `${reason4}；4号整体高波，D5=${D5}仅作解释项。`,
@@ -844,6 +883,15 @@ function render(room5){
   if(!data.main){
     resultHdr.textContent = `D1/D2/D3/D4/D5=${data.D1}/${data.D2}/${data.D3}/${data.D4}/${data.D5}　未命中`;
     skipEl.style.display = 'block';
+
+    const filtered = data.candidates.filter(x => !x.valid);
+    if(filtered.length){
+      resultEl.style.display = 'block';
+      filtered.forEach((h, idx) => {
+        hitListEl.appendChild(buildModelCard(h, data, idx + 1));
+      });
+    }
+
     return [];
   }
 
