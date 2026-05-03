@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="然仔66660">
-  <title>然仔66660 X交叉奇偶过滤模型 v1.1</title>
+  <meta name="apple-mobile-web-app-title" content="然仔66660 T1">
+  <title>然仔66660 真实结构分层模型 T1</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -21,6 +21,7 @@
       --gold:#ffe27a;
       --purple:#c9a8ff;
       --orange:#ffb36b;
+      --cyan:#72e7ff;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
@@ -38,12 +39,21 @@
     }
     .app{width:min(430px,100%)}
     .title{
-      font-size:16px;font-weight:900;margin:0 0 12px;
-      display:flex;align-items:center;gap:8px;
+      font-size:16px;
+      font-weight:900;
+      margin:0 0 12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
     .title::before{
-      content:"";flex-shrink:0;width:8px;height:8px;border-radius:50%;
-      background:var(--red);box-shadow:0 0 12px rgba(255,45,45,.9);
+      content:"";
+      flex-shrink:0;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--red);
+      box-shadow:0 0 12px rgba(255,45,45,.9);
     }
     .version{
       font-size:10px;
@@ -152,6 +162,10 @@
       border-color:rgba(0,200,160,.35);
       background:rgba(0,180,140,.07)
     }
+    .hit.warn{
+      border-color:rgba(255,210,80,.35);
+      background:rgba(255,210,80,.08)
+    }
     .hit-lbl{
       font-size:9px;
       font-weight:900;
@@ -178,6 +192,10 @@
       background:rgba(0,200,160,.25);
       color:#00d4a8
     }
+    .hit.warn .hit-lbl{
+      background:rgba(255,210,80,.22);
+      color:#ffe27a
+    }
     .hit-seat{
       font-size:21px;
       font-weight:1000;
@@ -198,6 +216,10 @@
     .hit.good .hit-seat{
       color:var(--green);
       text-shadow:0 0 12px rgba(0,200,160,.4)
+    }
+    .hit.warn .hit-seat{
+      color:var(--gold);
+      text-shadow:0 0 12px rgba(255,210,80,.45)
     }
     .hit-body{
       line-height:1.4;
@@ -253,7 +275,7 @@
     }
     .score-row{
       display:grid;
-      grid-template-columns:42px 48px 1fr;
+      grid-template-columns:42px 58px 1fr;
       gap:6px;
       padding:7px 8px;
       border-top:1px solid rgba(255,255,255,.06);
@@ -266,7 +288,7 @@
       color:rgba(255,255,255,.85)
     }
     .score-val{
-      font-size:13px;
+      font-size:12px;
       font-weight:900;
       color:var(--red);
       text-align:right
@@ -394,7 +416,7 @@
 
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">X交叉奇偶过滤 v1.1</span></div>
+  <div class="title">然仔66660<span class="version">真实结构分层 T1</span></div>
 
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -402,7 +424,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660 X交叉奇偶过滤模型 v1.1 —</div>
+      <div class="result-hdr" id="resultHdr">— 然仔·66660真实结构分层模型 T1 —</div>
       <div class="hit-list" id="hitList"></div>
       <div class="score-table" id="scoreTable"></div>
     </div>
@@ -416,39 +438,53 @@
     </div>
 
     <div class="logic-box">
-      <div class="logic-title">模型规则</div>
+      <div class="logic-title">T1模型规则</div>
       <div class="logic-list">模型名称：
-然仔66660 X交叉奇偶过滤模型 v1.1
+然仔·66660真实结构分层模型 T1
 
-执行口径：
-只输出模型命中的主推位。
-无命中则跳。
-不再使用两个模型同向，不再使用X排名奇偶旧模型。
+模型定位：
+3号、6号主攻；
+4号明确结构补位；
+5号极窄补位；
+其余跳。
+旧X交叉奇偶过滤模型 v1.2 暂停。
 
-规则：
-3号：C奇E偶；或C偶E奇且C≥8、E≥9；过滤C≤2且E≥9。
-4号：B/D同奇偶；过滤B=D≥5；过滤C=0且E=0。
-5号：C奇E偶且C≥5；过滤E=2；过滤D=0且E≤2；过滤D≥8且E≤4。
-6号：A偶且E∈{1,3,6,7,8,9}；或A奇A≥5且D≥7且E≥7；过滤D=0、E=0。
+3号主攻：
+1）C奇E偶，C≥5，E∈{4,8}，且不能B=0+D≥8；
+2）C偶E奇，C≥8，E≥9。
+过滤：C≤2且E≥9；E=0/2；B=0且D≥8。
+
+6号主攻：
+1）A偶，E≥6，D≠0；
+2）A奇，A≥5，D≥7，E≥7。
+过滤：E=0；D=0；A奇但D/E不双强；A弱E弱。
+
+4号补位：
+1）C/D/E大小=小小大，且D≥2，E≥5；
+2）C/D/E大小=大小小，且D∈{1,4}，E≤4。
+删除：B/D同奇偶主进。
+
+5号极窄补位：
+1）C=7，E=8；
+2）C=5，E=4，A≥9，D≤2；
+3）C=7，E=4，2≤D≤5，A≤3。
+删除：C奇E偶主进。
 
 主推优先级：
-5号 > 6号 > 3号 > 4号</div>
+5号极窄补位 > 3号主攻 > 6号主攻 > 4号补位</div>
     </div>
 
     <div class="tiny">
-【历史回测口径】
-当前53局样本，单主推输出35局，进房率66.0%，命中13局，命中后胜率100%，命中净分+10390，≤-500大输命中0局。
-此模型为试跑版，新增大输需立即复盘。
-
-网页测试：
-50502 必须不能输出5号进。
-28994 必须输出3号进。
+【试跑说明】
+T1不是历史100%胜率模型，是试跑观察模型。
+当前目标：删除已被实战打穿的4号/5号普通结构，保留3/6主攻，4/5仅补位。
+新增样本若命中主推后≤-500，必须暂停复盘。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY='ranzai_66660_cross_parity_filter_v11';
+const HISTORY_KEY='ranzai_66660_T1_truth_model';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -479,16 +515,16 @@ function pairParity(x,y){
   return `${parity(x)}${parity(y)}`;
 }
 
+function bigSmall(n){
+  return n >= 5 ? '大' : '小';
+}
+
 function getParityPattern(room){
   return room.split('').map(n => (parseInt(n,10)%2===0?'偶':'奇')).join('');
 }
 
-function isDHighPressure(D,E){
-  return D >= 8 && E <= 4;
-}
-
-function isENotWeakFor6(E){
-  return [1,3,6,7,8,9].includes(E);
+function getSizePattern(nums){
+  return nums.map(bigSmall).join('');
 }
 
 function buildCard({label,seatsText,pattern,row2Text,note,wr,avg,cls}){
@@ -513,7 +549,7 @@ function renderScoreTable(all){
   scoreTableEl.innerHTML='';
   const title=document.createElement('div');
   title.className='score-title';
-  title.textContent='3/4/5/6命中与过滤明细';
+  title.textContent='3/4/5/6结构明细';
   scoreTableEl.appendChild(title);
 
   all.forEach(x=>{
@@ -521,7 +557,7 @@ function renderScoreTable(all){
     row.className='score-row';
     row.innerHTML=`
       <div class="score-seat">${x.seat}号</div>
-      <div class="score-val">${x.pass ? '进' : '跳'}</div>
+      <div class="score-val">${x.pass ? x.type : '跳'}</div>
       <div class="score-reason">${x.reason}</div>
     `;
     scoreTableEl.appendChild(row);
@@ -531,40 +567,47 @@ function renderScoreTable(all){
 }
 
 /*
-  然仔66660 X交叉奇偶过滤模型 v1.1
+  然仔·66660真实结构分层模型 T1
 
-  3号：
-  - 主进：C奇E偶
-  - 扩容：C偶E奇且C>=8,E>=9
-  - 过滤：C<=2,E>=9
+  3号主攻：
+  1）C奇E偶，C>=5，E∈{4,8}，且不能B=0且D>=8
+  2）C偶E奇，C>=8，E>=9
+  过滤：C<=2且E>=9；E=0/2；B=0且D>=8
 
-  4号：
-  - 主进：B/D同奇偶
-  - 过滤：B=D>=5
-  - 过滤：C=0,E=0
+  6号主攻：
+  1）A偶，E>=6，D!=0
+  2）A奇，A>=5，D>=7，E>=7
+  过滤：E=0；D=0；A奇但D/E不双强；A弱E弱
 
-  5号：
-  - 主进：C奇E偶且C>=5
-  - 新增过滤：E=2
-  - 新增过滤：D=0且E<=2
-  - 保留过滤：D>=8且E<=4
+  4号补位：
+  1）C/D/E大小=小小大，且D>=2，E>=5
+  2）C/D/E大小=大小小，且D∈{1,4}，E<=4
 
-  6号：
-  - 主进：A偶且E∈{1,3,6,7,8,9}
-  - 扩容：A奇A>=5且D>=7,E>=7
-  - 过滤：D=0
-  - 过滤：E=0
+  5号极窄补位：
+  1）C=7,E=8
+  2）C=5,E=4,A>=9,D<=2
+  3）C=7,E=4,2<=D<=5,A<=3
 
   主推优先级：
-  5 > 6 > 3 > 4
+  5 > 3 > 6 > 4
 */
 
 function evaluateModel(room5){
   const [A,B,C,D,E]=getDigits(room5);
+
+  const fullParity=getParityPattern(room5);
+  const fullSize=getSizePattern([A,B,C,D,E]);
+
   const CE=pairParity(C,E);
   const BD=pairParity(B,D);
   const AE=pairParity(A,E);
-  const fullParity=getParityPattern(room5);
+
+  const CDE_size=getSizePattern([C,D,E]);
+  const ADE_size=getSizePattern([A,D,E]);
+  const BCD_size=getSizePattern([B,C,D]);
+  const CEA_size=getSizePattern([C,E,A]);
+  const CDEA_size=getSizePattern([C,D,E,A]);
+  const ABDE_size=getSizePattern([A,B,D,E]);
 
   const results=[];
 
@@ -573,29 +616,39 @@ function evaluateModel(room5){
   let reason3=[];
   let filter3=[];
 
-  const rule3Main = isOdd(C) && !isOdd(E);
+  const rule3Main = isOdd(C) && !isOdd(E) && C>=5 && [4,8].includes(E);
   const rule3Ext = !isOdd(C) && isOdd(E) && C>=8 && E>=9;
-  const rule3Filter = C<=2 && E>=9;
+  const rule3FilterLowCStrongE = C<=2 && E>=9;
+  const rule3FilterWeakE = [0,2].includes(E);
+  const rule3FilterB0DHigh = B===0 && D>=8;
 
   if(rule3Main){
     pass3=true;
-    reason3.push('C奇E偶主规则');
+    reason3.push('3号主攻：C奇E偶，C≥5，E=4/8');
   }
   if(rule3Ext){
     pass3=true;
-    reason3.push('C偶E奇且C≥8/E≥9扩容');
+    reason3.push('3号扩容：C偶E奇且C≥8/E≥9');
   }
-  if(rule3Filter){
+  if(rule3FilterLowCStrongE){
     pass3=false;
     filter3.push('过滤：C≤2且E≥9，C低E强诱多');
+  }
+  if(rule3FilterWeakE){
+    pass3=false;
+    filter3.push('过滤：E=0/2弱尾');
+  }
+  if(rule3FilterB0DHigh){
+    pass3=false;
+    filter3.push('过滤：B=0且D≥8，右压过强');
   }
 
   results.push({
     seat:3,
     pass:pass3,
-    priority:3,
-    label:pass3 ? '命中' : '未命中',
-    reason:`C/E=${CE}｜C=${C} E=${E}｜${reason3.concat(filter3).join('；') || '无进位条件'}`
+    priority:2,
+    type:'主攻',
+    reason:`C/E=${CE}｜B/C/D大小=${BCD_size}｜C/D/E大小=${CDE_size}｜${reason3.concat(filter3).join('；') || '无T1进位结构'}`
   });
 
   // 4号
@@ -603,29 +656,24 @@ function evaluateModel(room5){
   let reason4=[];
   let filter4=[];
 
-  const rule4Main = parity(B)===parity(D);
-  const rule4Filter1 = B===D && B>=5;
-  const rule4Filter2 = C===0 && E===0;
+  const rule4A = CDE_size==='小小大' && D>=2 && E>=5;
+  const rule4B = CDE_size==='大小小' && [1,4].includes(D) && E<=4;
 
-  if(rule4Main){
+  if(rule4A){
     pass4=true;
-    reason4.push('B/D同奇偶');
+    reason4.push('4号补位：C/D/E大小=小小大，D≥2，E≥5');
   }
-  if(rule4Filter1){
-    pass4=false;
-    filter4.push('过滤：B=D≥5，高位平台压死');
-  }
-  if(rule4Filter2){
-    pass4=false;
-    filter4.push('过滤：C=0且E=0，4号孤岛');
+  if(rule4B){
+    pass4=true;
+    reason4.push('4号补位：C/D/E大小=大小小，D=1/4，E≤4');
   }
 
   results.push({
     seat:4,
     pass:pass4,
     priority:4,
-    label:pass4 ? '命中' : '未命中',
-    reason:`B/D=${BD}｜B=${B} D=${D}｜${reason4.concat(filter4).join('；') || '无进位条件'}`
+    type:'补位',
+    reason:`B/D=${BD}｜C/D/E大小=${CDE_size}｜D=${D} E=${E}｜${reason4.concat(filter4).join('；') || '无T1补位结构'}`
   });
 
   // 5号
@@ -633,34 +681,29 @@ function evaluateModel(room5){
   let reason5=[];
   let filter5=[];
 
-  const rule5Main = isOdd(C) && !isOdd(E) && C>=5;
-  const rule5FilterE2 = E === 2;
-  const rule5FilterBrokenSupport = D === 0 && E <= 2;
-  const rule5FilterHighPressure = isDHighPressure(D,E);
+  const rule5A = C===7 && E===8;
+  const rule5B = C===5 && E===4 && A>=9 && D<=2;
+  const rule5C = C===7 && E===4 && D>=2 && D<=5 && A<=3;
 
-  if(rule5Main){
+  if(rule5A){
     pass5=true;
-    reason5.push('C奇E偶且C≥5');
+    reason5.push('5号极窄补位：C=7，E=8');
   }
-  if(rule5FilterE2){
-    pass5=false;
-    filter5.push('过滤：E=2弱尾，5号不进');
+  if(rule5B){
+    pass5=true;
+    reason5.push('5号极窄补位：C=5，E=4，A≥9，D≤2');
   }
-  if(rule5FilterBrokenSupport){
-    pass5=false;
-    filter5.push('过滤：D=0且E≤2，左支撑断');
-  }
-  if(rule5FilterHighPressure){
-    pass5=false;
-    filter5.push('过滤：D≥8且E≤4，D高压');
+  if(rule5C){
+    pass5=true;
+    reason5.push('5号极窄补位：C=7，E=4，2≤D≤5，A≤3');
   }
 
   results.push({
     seat:5,
     pass:pass5,
     priority:1,
-    label:pass5 ? '命中' : '未命中',
-    reason:`C/E=${CE}｜C=${C} D=${D} E=${E}｜${reason5.concat(filter5).join('；') || '无进位条件'}`
+    type:'极窄补位',
+    reason:`C/E=${CE}｜C=${C} D=${D} E=${E} A=${A}｜${reason5.concat(filter5).join('；') || '无T1极窄补位结构'}`
   });
 
   // 6号
@@ -668,34 +711,44 @@ function evaluateModel(room5){
   let reason6=[];
   let filter6=[];
 
-  const rule6Main = !isOdd(A) && isENotWeakFor6(E);
+  const rule6Main = !isOdd(A) && E>=6 && D!==0;
   const rule6Ext = isOdd(A) && A>=5 && D>=7 && E>=7;
-  const rule6FilterD0 = D===0;
   const rule6FilterE0 = E===0;
+  const rule6FilterD0 = D===0;
+  const rule6FilterWeakAE = A<=3 && E<=5;
 
   if(rule6Main){
     pass6=true;
-    reason6.push('A偶且E不弱');
+    reason6.push('6号主攻：A偶，E≥6，D不断');
   }
   if(rule6Ext){
     pass6=true;
-    reason6.push('A奇A≥5且D/E双强');
-  }
-  if(rule6FilterD0){
-    pass6=false;
-    filter6.push('过滤：D=0，支撑断');
+    reason6.push('6号扩容：A奇A≥5且D/E双强');
   }
   if(rule6FilterE0){
     pass6=false;
-    filter6.push('过滤：E=0，断尾');
+    filter6.push('过滤：E=0断尾');
+  }
+  if(rule6FilterD0){
+    pass6=false;
+    filter6.push('过滤：D=0支撑断');
+  }
+  if(isOdd(A) && !(D>=7 && E>=7)){
+    if(!rule6Ext){
+      filter6.push('风险：A奇且D/E不双强，不进6号');
+    }
+  }
+  if(rule6FilterWeakAE){
+    pass6=false;
+    filter6.push('过滤：A弱E弱');
   }
 
   results.push({
     seat:6,
     pass:pass6,
-    priority:2,
-    label:pass6 ? '命中' : '未命中',
-    reason:`A/E=${AE}｜A=${A} D=${D} E=${E}｜${reason6.concat(filter6).join('；') || '无进位条件'}`
+    priority:3,
+    type:'主攻',
+    reason:`A/E=${AE}｜A/D/E大小=${ADE_size}｜A/B/D/E大小=${ABDE_size}｜${reason6.concat(filter6).join('；') || '无T1进位结构'}`
   });
 
   const candidates=results
@@ -708,7 +761,9 @@ function evaluateModel(room5){
   return {
     A,B,C,D,E,
     fullParity,
+    fullSize,
     CE,BD,AE,
+    CDE_size,ADE_size,BCD_size,CEA_size,CDEA_size,ABDE_size,
     all:results.sort((a,b)=>a.seat-b.seat),
     candidates,
     main,
@@ -720,19 +775,21 @@ function render(room5){
   const data=evaluateModel(room5);
   hitListEl.innerHTML='';
 
-  resultHdr.textContent=`然仔66660 X交叉奇偶过滤模型 v1.1｜完整奇偶：${data.fullParity}`;
+  resultHdr.textContent=`然仔·66660真实结构分层模型 T1｜奇偶：${data.fullParity}｜大小：${data.fullSize}`;
   resultEl.style.display='block';
 
   if(data.main){
+    const cls = data.main.type === '主攻' ? 'main' : (data.main.type === '极窄补位' ? 'warn' : 'backup');
+
     hitListEl.appendChild(buildCard({
       label:'主推',
       seatsText:`${data.main.seat}`,
       pattern:`房号 ${room5}｜A${data.A} B${data.B} C${data.C} D${data.D} E${data.E}`,
-      row2Text:`主推：${data.main.seat}号位｜优先级：5 > 6 > 3 > 4`,
+      row2Text:`主推：${data.main.seat}号位｜类型：${data.main.type}`,
       note:data.main.reason,
-      wr:'进',
+      wr:data.main.type,
       avg:'主推',
-      cls:'main'
+      cls:cls
     }));
 
     if(data.backup){
@@ -740,7 +797,7 @@ function render(room5){
         label:'备选',
         seatsText:`${data.backup.seat}`,
         pattern:`备选位：${data.backup.seat}号`,
-        row2Text:'仅作参考，实战只按主推',
+        row2Text:`类型：${data.backup.type}｜仅作参考`,
         note:data.backup.reason,
         wr:'备',
         avg:'参考',
@@ -757,7 +814,7 @@ function render(room5){
         label:'同命中',
         seatsText:otherCandidates.map(x=>x.seat).join('/'),
         pattern:'其他候选位',
-        row2Text:'命中规则但优先级靠后',
+        row2Text:'命中T1结构但优先级靠后',
         note:otherCandidates.map(x=>`${x.seat}号：${x.reason}`).join('｜'),
         wr:'候选',
         avg:'不主推',
@@ -770,8 +827,8 @@ function render(room5){
       label:'结果',
       seatsText:'跳',
       pattern:`房号 ${room5}｜A${data.A} B${data.B} C${data.C} D${data.D} E${data.E}`,
-      row2Text:'当前房号没有命中进位规则',
-      note:'3/4/5/6均未通过X交叉奇偶过滤条件，建议跳',
+      row2Text:'当前房号没有命中T1可用结构',
+      note:'3/6主攻未命中，4/5补位也未命中，建议跳。',
       wr:'跳',
       avg:'无进',
       cls:'skip'
@@ -783,9 +840,12 @@ function render(room5){
   return {
     room:room5,
     main:data.main ? data.main.seat : null,
+    mainType:data.main ? data.main.type : '跳',
     backup:data.backup ? data.backup.seat : null,
+    backupType:data.backup ? data.backup.type : '',
     candidates:data.candidates.map(x=>x.seat),
-    fullParity:data.fullParity
+    fullParity:data.fullParity,
+    fullSize:data.fullSize
   };
 }
 
@@ -822,7 +882,7 @@ function renderHist(){
     const div=document.createElement('div');
     div.className='histItem';
 
-    const mainText=item.main ? `主${item.main}号` : '跳';
+    const mainText=item.main ? `主${item.main}号｜${item.mainType}` : '跳';
     const backupText=item.backup ? `｜备${item.backup}号` : '';
     const candText=item.candidates && item.candidates.length ? `｜候选：${item.candidates.join('/')}` : '';
 
@@ -833,7 +893,7 @@ function renderHist(){
       </div>
       <div class="histMain">
         ${mainText}${backupText}${candText}<br/>
-        完整奇偶：${item.fullParity}
+        奇偶：${item.fullParity}｜大小：${item.fullSize}
       </div>`;
     histListEl.appendChild(div);
   });
@@ -844,9 +904,12 @@ function pushHistory(res){
   items.unshift({
     room:res.room,
     main:res.main,
+    mainType:res.mainType,
     backup:res.backup,
+    backupType:res.backupType,
     candidates:res.candidates,
     fullParity:res.fullParity,
+    fullSize:res.fullSize,
     time:new Date().toLocaleString('zh-CN',{hour12:false})
   });
   saveHist(items);
