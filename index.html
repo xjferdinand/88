@@ -321,7 +321,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">高进房差值链 v1.2</span></div>
+  <div class="title">然仔66660<span class="version">高进房差值链 v1.2.1</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -347,7 +347,7 @@
     </div>
 
     <div class="tiny">
-【然仔·66660 高进房差值链模型 v1.2】
+【然仔·66660 高进房差值链模型 v1.2.1】
 D1=A-B，D2=B-C，D3=C-D，D4=D-E，D5=E-A
 
 强进优先：
@@ -355,6 +355,9 @@ D1=A-B，D2=B-C，D3=C-D，D4=D-E，D5=E-A
 
 观察优先：
 6号 > 3号 > 5号 > 4号
+
+v1.2.1新增：
+6号观察若 D4<=-4 且 D3>0，过滤。
 
 显示规则：
 强进 = 正常主推
@@ -369,7 +372,7 @@ D1=A-B，D2=B-C，D3=C-D，D4=D-E，D5=E-A
 </div>
 
 <script>
-const HISTORY_KEY   = 'ranzai_66660_high_entry_diff_v12';
+const HISTORY_KEY   = 'ranzai_66660_high_entry_diff_v121';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -569,6 +572,17 @@ function evaluateRanZai66660(room){
         '过滤',
         `D5=${D5}`,
         `${reason6}；但D5≤-5，首尾闭环过弱，不做主推。`,
+        0
+      );
+    }else if(hit6Observe && D4 <= -4 && D3 > 0){
+      addCandidate(
+        6,
+        false,
+        '6号观察过滤',
+        '过滤',
+        '过滤',
+        `D3=${D3}/D4=${D4}`,
+        `${reason6}；但这是6号观察层，且D4≤-4、D3>0，中轴冲尾，高波过滤。`,
         0
       );
     }else{
