@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="然仔66660 T1">
-  <title>然仔66660 真实结构分层模型 T1</title>
+  <meta name="apple-mobile-web-app-title" content="然仔66660">
+  <title>然仔66660 双模型</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -19,9 +19,9 @@
       --green:#00d4a8;
       --blue:#9ea8ff;
       --gold:#ffe27a;
-      --purple:#c9a8ff;
       --orange:#ffb36b;
       --cyan:#72e7ff;
+      --purple:#c9a8ff;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
@@ -37,7 +37,7 @@
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
       padding:12px;
     }
-    .app{width:min(430px,100%)}
+    .app{width:min(460px,100%)}
     .title{
       font-size:16px;
       font-weight:900;
@@ -124,17 +124,57 @@
       display:none;
       margin-top:10px
     }
-    .result-hdr{
+    .base-info{
       text-align:center;
       font-size:10px;
-      color:var(--muted);
-      margin-bottom:8px;
-      letter-spacing:.3px
+      color:rgba(255,255,255,.42);
+      margin:6px 0 10px;
+      line-height:1.6;
+    }
+    .model-box{
+      margin-top:10px;
+      border-radius:15px;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .model-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:9px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.035);
+    }
+    .model-title{
+      font-size:12px;
+      font-weight:1000;
+      color:rgba(255,255,255,.88);
+      display:flex;
+      align-items:center;
+      gap:7px;
+      min-width:0;
+    }
+    .dot{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      flex-shrink:0;
+      background:var(--red);
+      box-shadow:0 0 10px rgba(255,45,45,.85);
+    }
+    .dot.k{background:var(--cyan);box-shadow:0 0 10px rgba(114,231,255,.85)}
+    .model-tag{
+      font-size:9px;
+      color:rgba(255,255,255,.38);
+      white-space:nowrap;
     }
     .hit-list{
       display:flex;
       flex-direction:column;
-      gap:6px
+      gap:6px;
+      padding:9px;
     }
     .hit{
       display:grid;
@@ -149,6 +189,10 @@
     .hit.main{
       border-color:rgba(255,45,45,.55);
       background:rgba(255,45,45,.11)
+    }
+    .hit.kmain{
+      border-color:rgba(114,231,255,.50);
+      background:rgba(114,231,255,.09)
     }
     .hit.backup{
       border-color:rgba(120,120,255,.35);
@@ -180,6 +224,10 @@
       background:rgba(255,45,45,.34);
       color:#ff9090
     }
+    .hit.kmain .hit-lbl{
+      background:rgba(114,231,255,.20);
+      color:#9af0ff
+    }
     .hit.backup .hit-lbl{
       background:rgba(120,120,255,.25);
       color:#b8b8ff
@@ -204,6 +252,10 @@
       line-height:1.05;
       text-align:center;
       white-space:nowrap;
+    }
+    .hit.kmain .hit-seat{
+      color:var(--cyan);
+      text-shadow:0 0 12px rgba(114,231,255,.45)
     }
     .hit.backup .hit-seat{
       color:var(--blue);
@@ -259,21 +311,21 @@
       color:rgba(255,255,255,.35);
       margin-top:1px
     }
-    .score-table{
-      margin-top:8px;
+    .detail-table{
+      margin:0 9px 9px;
       border:1px solid rgba(255,255,255,.07);
       border-radius:12px;
       overflow:hidden;
       display:none;
     }
-    .score-title{
+    .detail-title{
       font-size:10px;
       color:rgba(255,255,255,.45);
       padding:7px 8px;
       background:rgba(255,255,255,.04);
       font-weight:900;
     }
-    .score-row{
+    .detail-row{
       display:grid;
       grid-template-columns:42px 58px 1fr;
       gap:6px;
@@ -282,18 +334,18 @@
       background:rgba(0,0,0,.15);
       align-items:center;
     }
-    .score-seat{
+    .detail-seat{
       font-size:13px;
       font-weight:900;
       color:rgba(255,255,255,.85)
     }
-    .score-val{
+    .detail-val{
       font-size:12px;
       font-weight:900;
       color:var(--red);
       text-align:right
     }
-    .score-reason{
+    .detail-reason{
       font-size:9px;
       color:rgba(255,255,255,.45);
       white-space:nowrap;
@@ -408,7 +460,6 @@
       .panel{padding:10px;border-radius:15px}
       .hit{grid-template-columns:auto 46px 1fr auto;gap:6px;padding:7px 8px}
       .hit-seat{font-size:19px}
-      .result-hdr{font-size:10px}
       .histMain,.tiny,.logic-list{font-size:9px}
     }
   </style>
@@ -416,7 +467,7 @@
 
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">真实结构分层 T1</span></div>
+  <div class="title">然仔66660<span class="version">T1 + K值双模型</span></div>
 
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -424,9 +475,25 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔·66660真实结构分层模型 T1 —</div>
-      <div class="hit-list" id="hitList"></div>
-      <div class="score-table" id="scoreTable"></div>
+      <div class="base-info" id="baseInfo"></div>
+
+      <div class="model-box">
+        <div class="model-head">
+          <div class="model-title"><span class="dot"></span>模型1：真实结构分层 T1</div>
+          <div class="model-tag">3/6主攻｜4/5补位</div>
+        </div>
+        <div class="hit-list" id="t1HitList"></div>
+        <div class="detail-table" id="t1DetailTable"></div>
+      </div>
+
+      <div class="model-box">
+        <div class="model-head">
+          <div class="model-title"><span class="dot k"></span>模型2：Sum-X K值 v1</div>
+          <div class="model-tag">K具体值主模型</div>
+        </div>
+        <div class="hit-list" id="kHitList"></div>
+        <div class="detail-table" id="kDetailTable"></div>
+      </div>
     </div>
 
     <div class="history">
@@ -438,53 +505,31 @@
     </div>
 
     <div class="logic-box">
-      <div class="logic-title">T1模型规则</div>
-      <div class="logic-list">模型名称：
-然仔·66660真实结构分层模型 T1
+      <div class="logic-title">模型规则</div>
+      <div class="logic-list">模型1：然仔·66660真实结构分层模型 T1
+定位：3号/6号主攻，4号明确结构补位，5号极窄补位，其余跳。
+主推优先级：5号极窄补位 > 3号主攻 > 6号主攻 > 4号补位。
 
-模型定位：
-3号、6号主攻；
-4号明确结构补位；
-5号极窄补位；
-其余跳。
-旧X交叉奇偶过滤模型 v1.2 暂停。
-
-3号主攻：
-1）C奇E偶，C≥5，E∈{4,8}，且不能B=0+D≥8；
-2）C偶E奇，C≥8，E≥9。
-过滤：C≤2且E≥9；E=0/2；B=0且D≥8。
-
-6号主攻：
-1）A偶，E≥6，D≠0；
-2）A奇，A≥5，D≥7，E≥7。
-过滤：E=0；D=0；A奇但D/E不双强；A弱E弱。
-
-4号补位：
-1）C/D/E大小=小小大，且D≥2，E≥5；
-2）C/D/E大小=大小小，且D∈{1,4}，E≤4。
-删除：B/D同奇偶主进。
-
-5号极窄补位：
-1）C=7，E=8；
-2）C=5，E=4，A≥9，D≤2；
-3）C=7，E=4，2≤D≤5，A≤3。
-删除：C奇E偶主进。
-
-主推优先级：
-5号极窄补位 > 3号主攻 > 6号主攻 > 4号补位</div>
+模型2：然仔·66660 Sum-X K值模型 v1
+Sum=A+B+C+D+E。
+3号：X=C，K=Sum-C。
+4号：X=D，K=Sum-D。
+5号：X=E，K=Sum-E。
+6号：X=E，K=Sum-E。
+主推优先级：5号 > 3号 > 4号 > 6号。</div>
     </div>
 
     <div class="tiny">
-【试跑说明】
-T1不是历史100%胜率模型，是试跑观察模型。
-当前目标：删除已被实战打穿的4号/5号普通结构，保留3/6主攻，4/5仅补位。
-新增样本若命中主推后≤-500，必须暂停复盘。
+【提醒】
+两个模型各自独立输出，不互相覆盖。
+如果两个模型同向，可视为更强参考；如果不同向，按你当前实战策略选择是否跳或小注验证。
+此网页为试跑工具，新增命中亏损≤-500需暂停复盘。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY='ranzai_66660_T1_truth_model';
+const HISTORY_KEY='ranzai_66660_dual_T1_K_v1';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -492,9 +537,12 @@ const goEl=document.getElementById('go');
 const msgEl=document.getElementById('msg');
 
 const resultEl=document.getElementById('result');
-const resultHdr=document.getElementById('resultHdr');
-const hitListEl=document.getElementById('hitList');
-const scoreTableEl=document.getElementById('scoreTable');
+const baseInfoEl=document.getElementById('baseInfo');
+
+const t1HitListEl=document.getElementById('t1HitList');
+const t1DetailTableEl=document.getElementById('t1DetailTable');
+const kHitListEl=document.getElementById('kHitList');
+const kDetailTableEl=document.getElementById('kDetailTable');
 
 const histListEl=document.getElementById('histList');
 const clearBtnEl=document.getElementById('clearBtn');
@@ -545,54 +593,32 @@ function buildCard({label,seatsText,pattern,row2Text,note,wr,avg,cls}){
   return div;
 }
 
-function renderScoreTable(all){
-  scoreTableEl.innerHTML='';
+function renderDetailTable(tableEl, all, titleText){
+  tableEl.innerHTML='';
   const title=document.createElement('div');
-  title.className='score-title';
-  title.textContent='3/4/5/6结构明细';
-  scoreTableEl.appendChild(title);
+  title.className='detail-title';
+  title.textContent=titleText;
+  tableEl.appendChild(title);
 
   all.forEach(x=>{
     const row=document.createElement('div');
-    row.className='score-row';
+    row.className='detail-row';
     row.innerHTML=`
-      <div class="score-seat">${x.seat}号</div>
-      <div class="score-val">${x.pass ? x.type : '跳'}</div>
-      <div class="score-reason">${x.reason}</div>
+      <div class="detail-seat">${x.seat}号</div>
+      <div class="detail-val">${x.pass ? x.type : '跳'}</div>
+      <div class="detail-reason">${x.reason}</div>
     `;
-    scoreTableEl.appendChild(row);
+    tableEl.appendChild(row);
   });
 
-  scoreTableEl.style.display='block';
+  tableEl.style.display='block';
 }
 
-/*
-  然仔·66660真实结构分层模型 T1
+/* =========================
+   模型1：T1
+========================= */
 
-  3号主攻：
-  1）C奇E偶，C>=5，E∈{4,8}，且不能B=0且D>=8
-  2）C偶E奇，C>=8，E>=9
-  过滤：C<=2且E>=9；E=0/2；B=0且D>=8
-
-  6号主攻：
-  1）A偶，E>=6，D!=0
-  2）A奇，A>=5，D>=7，E>=7
-  过滤：E=0；D=0；A奇但D/E不双强；A弱E弱
-
-  4号补位：
-  1）C/D/E大小=小小大，且D>=2，E>=5
-  2）C/D/E大小=大小小，且D∈{1,4}，E<=4
-
-  5号极窄补位：
-  1）C=7,E=8
-  2）C=5,E=4,A>=9,D<=2
-  3）C=7,E=4,2<=D<=5,A<=3
-
-  主推优先级：
-  5 > 3 > 6 > 4
-*/
-
-function evaluateModel(room5){
+function evaluateT1(room5){
   const [A,B,C,D,E]=getDigits(room5);
 
   const fullParity=getParityPattern(room5);
@@ -605,13 +631,11 @@ function evaluateModel(room5){
   const CDE_size=getSizePattern([C,D,E]);
   const ADE_size=getSizePattern([A,D,E]);
   const BCD_size=getSizePattern([B,C,D]);
-  const CEA_size=getSizePattern([C,E,A]);
-  const CDEA_size=getSizePattern([C,D,E,A]);
   const ABDE_size=getSizePattern([A,B,D,E]);
 
   const results=[];
 
-  // 3号
+  // 3号 T1
   let pass3=false;
   let reason3=[];
   let filter3=[];
@@ -624,15 +648,15 @@ function evaluateModel(room5){
 
   if(rule3Main){
     pass3=true;
-    reason3.push('3号主攻：C奇E偶，C≥5，E=4/8');
+    reason3.push('C奇E偶，C≥5，E=4/8');
   }
   if(rule3Ext){
     pass3=true;
-    reason3.push('3号扩容：C偶E奇且C≥8/E≥9');
+    reason3.push('C偶E奇且C≥8/E≥9');
   }
   if(rule3FilterLowCStrongE){
     pass3=false;
-    filter3.push('过滤：C≤2且E≥9，C低E强诱多');
+    filter3.push('过滤：C≤2且E≥9');
   }
   if(rule3FilterWeakE){
     pass3=false;
@@ -640,7 +664,7 @@ function evaluateModel(room5){
   }
   if(rule3FilterB0DHigh){
     pass3=false;
-    filter3.push('过滤：B=0且D≥8，右压过强');
+    filter3.push('过滤：B=0且D≥8');
   }
 
   results.push({
@@ -648,24 +672,23 @@ function evaluateModel(room5){
     pass:pass3,
     priority:2,
     type:'主攻',
-    reason:`C/E=${CE}｜B/C/D大小=${BCD_size}｜C/D/E大小=${CDE_size}｜${reason3.concat(filter3).join('；') || '无T1进位结构'}`
+    reason:`C/E=${CE}｜BCD大小=${BCD_size}｜CDE大小=${CDE_size}｜${reason3.concat(filter3).join('；') || '无T1进位结构'}`
   });
 
-  // 4号
+  // 4号 T1
   let pass4=false;
   let reason4=[];
-  let filter4=[];
 
   const rule4A = CDE_size==='小小大' && D>=2 && E>=5;
   const rule4B = CDE_size==='大小小' && [1,4].includes(D) && E<=4;
 
   if(rule4A){
     pass4=true;
-    reason4.push('4号补位：C/D/E大小=小小大，D≥2，E≥5');
+    reason4.push('C/D/E大小=小小大，D≥2，E≥5');
   }
   if(rule4B){
     pass4=true;
-    reason4.push('4号补位：C/D/E大小=大小小，D=1/4，E≤4');
+    reason4.push('C/D/E大小=大小小，D=1/4，E≤4');
   }
 
   results.push({
@@ -673,13 +696,12 @@ function evaluateModel(room5){
     pass:pass4,
     priority:4,
     type:'补位',
-    reason:`B/D=${BD}｜C/D/E大小=${CDE_size}｜D=${D} E=${E}｜${reason4.concat(filter4).join('；') || '无T1补位结构'}`
+    reason:`B/D=${BD}｜CDE大小=${CDE_size}｜D=${D} E=${E}｜${reason4.join('；') || '无T1补位结构'}`
   });
 
-  // 5号
+  // 5号 T1
   let pass5=false;
   let reason5=[];
-  let filter5=[];
 
   const rule5A = C===7 && E===8;
   const rule5B = C===5 && E===4 && A>=9 && D<=2;
@@ -687,15 +709,15 @@ function evaluateModel(room5){
 
   if(rule5A){
     pass5=true;
-    reason5.push('5号极窄补位：C=7，E=8');
+    reason5.push('C=7，E=8');
   }
   if(rule5B){
     pass5=true;
-    reason5.push('5号极窄补位：C=5，E=4，A≥9，D≤2');
+    reason5.push('C=5，E=4，A≥9，D≤2');
   }
   if(rule5C){
     pass5=true;
-    reason5.push('5号极窄补位：C=7，E=4，2≤D≤5，A≤3');
+    reason5.push('C=7，E=4，2≤D≤5，A≤3');
   }
 
   results.push({
@@ -703,10 +725,10 @@ function evaluateModel(room5){
     pass:pass5,
     priority:1,
     type:'极窄补位',
-    reason:`C/E=${CE}｜C=${C} D=${D} E=${E} A=${A}｜${reason5.concat(filter5).join('；') || '无T1极窄补位结构'}`
+    reason:`C/E=${CE}｜C=${C} D=${D} E=${E} A=${A}｜${reason5.join('；') || '无T1极窄补位结构'}`
   });
 
-  // 6号
+  // 6号 T1
   let pass6=false;
   let reason6=[];
   let filter6=[];
@@ -719,11 +741,11 @@ function evaluateModel(room5){
 
   if(rule6Main){
     pass6=true;
-    reason6.push('6号主攻：A偶，E≥6，D不断');
+    reason6.push('A偶，E≥6，D不断');
   }
   if(rule6Ext){
     pass6=true;
-    reason6.push('6号扩容：A奇A≥5且D/E双强');
+    reason6.push('A奇A≥5且D/E双强');
   }
   if(rule6FilterE0){
     pass6=false;
@@ -733,10 +755,8 @@ function evaluateModel(room5){
     pass6=false;
     filter6.push('过滤：D=0支撑断');
   }
-  if(isOdd(A) && !(D>=7 && E>=7)){
-    if(!rule6Ext){
-      filter6.push('风险：A奇且D/E不双强，不进6号');
-    }
+  if(isOdd(A) && !(D>=7 && E>=7) && !rule6Ext){
+    filter6.push('风险：A奇且D/E不双强');
   }
   if(rule6FilterWeakAE){
     pass6=false;
@@ -748,48 +768,233 @@ function evaluateModel(room5){
     pass:pass6,
     priority:3,
     type:'主攻',
-    reason:`A/E=${AE}｜A/D/E大小=${ADE_size}｜A/B/D/E大小=${ABDE_size}｜${reason6.concat(filter6).join('；') || '无T1进位结构'}`
+    reason:`A/E=${AE}｜ADE大小=${ADE_size}｜ABDE大小=${ABDE_size}｜${reason6.concat(filter6).join('；') || '无T1进位结构'}`
   });
 
-  const candidates=results
-    .filter(x=>x.pass)
-    .sort((a,b)=>a.priority-b.priority);
-
+  const candidates=results.filter(x=>x.pass).sort((a,b)=>a.priority-b.priority);
   const main=candidates[0] || null;
   const backup=candidates[1] || null;
 
   return {
-    A,B,C,D,E,
-    fullParity,
-    fullSize,
-    CE,BD,AE,
-    CDE_size,ADE_size,BCD_size,CEA_size,CDEA_size,ABDE_size,
+    model:'T1',
     all:results.sort((a,b)=>a.seat-b.seat),
-    candidates,
-    main,
-    backup
+    candidates, main, backup
   };
 }
 
-function render(room5){
-  const data=evaluateModel(room5);
+/* =========================
+   模型2：Sum-X K值模型 v1
+========================= */
+
+function evaluateKModel(room5){
+  const [A,B,C,D,E]=getDigits(room5);
+  const Sum=A+B+C+D+E;
+  const results=[];
+
+  // 3号 K
+  {
+    const X=C;
+    const K=Sum-X;
+    let pass=false;
+    let reason=[];
+    let filter=[];
+
+    const ruleA = isOdd(X) && isOdd(K) && C>=5 && !isOdd(E) && K>=21;
+    const ruleB = !isOdd(X) && isOdd(K) && C>=8 && E>=9;
+
+    const filterA = C<=2 && E>=9;
+    const filterB = [0,2].includes(E);
+    const filterC = K<21;
+
+    if(ruleA){
+      pass=true;
+      reason.push('3号：X奇K奇，C≥5，E偶，K≥21');
+    }
+    if(ruleB){
+      pass=true;
+      reason.push('3号：X偶K奇，C≥8，E≥9');
+    }
+    if(filterA){
+      pass=false;
+      filter.push('过滤：C≤2且E≥9');
+    }
+    if(filterB){
+      pass=false;
+      filter.push('过滤：E=0/2');
+    }
+    if(filterC && !ruleB){
+      pass=false;
+      filter.push('过滤：K<21');
+    }
+
+    results.push({
+      seat:3,
+      pass,
+      priority:2,
+      type:'K进',
+      reason:`Sum=${Sum}｜X=C=${X}｜K=${K}｜X/K=${parity(X)}${parity(K)}｜${reason.concat(filter).join('；') || '无K进位'}`
+    });
+  }
+
+  // 4号 K
+  {
+    const X=D;
+    const K=Sum-X;
+    let pass=false;
+    let reason=[];
+    let filter=[];
+
+    const ruleA = [17,23,24].includes(K);
+    const ruleB = K===13 && D===4;
+
+    const filterA = [4,7,16].includes(K);
+    const filterB = D===0;
+    const filterC = B===D && B>=5;
+
+    if(ruleA){
+      pass=true;
+      reason.push('4号：K=17/23/24');
+    }
+    if(ruleB){
+      pass=true;
+      reason.push('4号：K=13且D=4');
+    }
+    if(filterA){
+      pass=false;
+      filter.push('过滤：K=4/7/16');
+    }
+    if(filterB){
+      pass=false;
+      filter.push('过滤：D=0');
+    }
+    if(filterC){
+      pass=false;
+      filter.push('过滤：B=D≥5');
+    }
+
+    results.push({
+      seat:4,
+      pass,
+      priority:3,
+      type:'K进',
+      reason:`Sum=${Sum}｜X=D=${X}｜K=${K}｜X/K=${parity(X)}${parity(K)}｜${reason.concat(filter).join('；') || '无K进位'}`
+    });
+  }
+
+  // 5号 K
+  {
+    const X=E;
+    const K=Sum-X;
+    let pass=false;
+    let reason=[];
+    let filter=[];
+
+    const ruleA = [14,15].includes(K);
+    const ruleB = K===16 && C===7 && E===4;
+
+    const filterA = [10,19,23,24].includes(K);
+    const filterB = [2,5].includes(E);
+    const filterC = D>=8 && E<=4;
+
+    if(ruleA){
+      pass=true;
+      reason.push('5号：K=14/15');
+    }
+    if(ruleB){
+      pass=true;
+      reason.push('5号：K=16且C=7/E=4');
+    }
+    if(filterA){
+      pass=false;
+      filter.push('过滤：K=10/19/23/24');
+    }
+    if(filterB){
+      pass=false;
+      filter.push('过滤：E=2/5');
+    }
+    if(filterC){
+      pass=false;
+      filter.push('过滤：D≥8且E≤4');
+    }
+
+    results.push({
+      seat:5,
+      pass,
+      priority:1,
+      type:'K进',
+      reason:`Sum=${Sum}｜X=E=${X}｜K=${K}｜X/K=${parity(X)}${parity(K)}｜${reason.concat(filter).join('；') || '无K进位'}`
+    });
+  }
+
+  // 6号 K
+  {
+    const X=E;
+    const K=Sum-X;
+    let pass=false;
+    let reason=[];
+    let filter=[];
+
+    const ruleA = [20,21,24,25,27].includes(K);
+
+    const filterA = [11,17,19,22].includes(K);
+    const filterB = E===0;
+    const filterC = D===0;
+
+    if(ruleA){
+      pass=true;
+      reason.push('6号：K=20/21/24/25/27');
+    }
+    if(filterA){
+      pass=false;
+      filter.push('过滤：K=11/17/19/22');
+    }
+    if(filterB){
+      pass=false;
+      filter.push('过滤：E=0');
+    }
+    if(filterC){
+      pass=false;
+      filter.push('过滤：D=0');
+    }
+
+    results.push({
+      seat:6,
+      pass,
+      priority:4,
+      type:'K进',
+      reason:`Sum=${Sum}｜X=E=${X}｜K=${K}｜X/K=${parity(X)}${parity(K)}｜${reason.concat(filter).join('；') || '无K进位'}`
+    });
+  }
+
+  const candidates=results.filter(x=>x.pass).sort((a,b)=>a.priority-b.priority);
+  const main=candidates[0] || null;
+  const backup=candidates[1] || null;
+
+  return {
+    model:'K',
+    Sum,
+    all:results.sort((a,b)=>a.seat-b.seat),
+    candidates, main, backup
+  };
+}
+
+/* =========================
+   渲染
+========================= */
+
+function renderModelResult({hitListEl, tableEl, data, room5, A,B,C,D,E, clsMain}){
   hitListEl.innerHTML='';
 
-  resultHdr.textContent=`然仔·66660真实结构分层模型 T1｜奇偶：${data.fullParity}｜大小：${data.fullSize}`;
-  resultEl.style.display='block';
-
   if(data.main){
-    const cls = data.main.type === '主攻' ? 'main' : (data.main.type === '极窄补位' ? 'warn' : 'backup');
-
     hitListEl.appendChild(buildCard({
       label:'主推',
       seatsText:`${data.main.seat}`,
-      pattern:`房号 ${room5}｜A${data.A} B${data.B} C${data.C} D${data.D} E${data.E}`,
+      pattern:`房号 ${room5}｜A${A} B${B} C${C} D${D} E${E}`,
       row2Text:`主推：${data.main.seat}号位｜类型：${data.main.type}`,
       note:data.main.reason,
       wr:data.main.type,
       avg:'主推',
-      cls:cls
+      cls:clsMain
     }));
 
     if(data.backup){
@@ -805,17 +1010,17 @@ function render(room5){
       }));
     }
 
-    const otherCandidates=data.candidates
+    const others=data.candidates
       .filter(x=>!data.backup || x.seat!==data.backup.seat)
       .filter(x=>x.seat!==data.main.seat);
 
-    if(otherCandidates.length){
+    if(others.length){
       hitListEl.appendChild(buildCard({
         label:'同命中',
-        seatsText:otherCandidates.map(x=>x.seat).join('/'),
+        seatsText:others.map(x=>x.seat).join('/'),
         pattern:'其他候选位',
-        row2Text:'命中T1结构但优先级靠后',
-        note:otherCandidates.map(x=>`${x.seat}号：${x.reason}`).join('｜'),
+        row2Text:'命中规则但优先级靠后',
+        note:others.map(x=>`${x.seat}号：${x.reason}`).join('｜'),
         wr:'候选',
         avg:'不主推',
         cls:'good'
@@ -826,26 +1031,55 @@ function render(room5){
     hitListEl.appendChild(buildCard({
       label:'结果',
       seatsText:'跳',
-      pattern:`房号 ${room5}｜A${data.A} B${data.B} C${data.C} D${data.D} E${data.E}`,
-      row2Text:'当前房号没有命中T1可用结构',
-      note:'3/6主攻未命中，4/5补位也未命中，建议跳。',
+      pattern:`房号 ${room5}｜A${A} B${B} C${C} D${D} E${E}`,
+      row2Text:'当前模型没有命中进位规则',
+      note:'该模型建议跳。',
       wr:'跳',
       avg:'无进',
       cls:'skip'
     }));
   }
 
-  renderScoreTable(data.all);
+  renderDetailTable(tableEl, data.all, `${data.model}模型 3/4/5/6明细`);
+}
+
+function render(room5){
+  const [A,B,C,D,E]=getDigits(room5);
+  const Sum=A+B+C+D+E;
+  const fullParity=getParityPattern(room5);
+  const fullSize=getSizePattern([A,B,C,D,E]);
+
+  const t1=evaluateT1(room5);
+  const k=evaluateKModel(room5);
+
+  baseInfoEl.textContent=`房号 ${room5}｜A${A} B${B} C${C} D${D} E${E}｜Sum=${Sum}｜奇偶=${fullParity}｜大小=${fullSize}`;
+  resultEl.style.display='block';
+
+  renderModelResult({
+    hitListEl:t1HitListEl,
+    tableEl:t1DetailTableEl,
+    data:t1,
+    room5,A,B,C,D,E,
+    clsMain:'main'
+  });
+
+  renderModelResult({
+    hitListEl:kHitListEl,
+    tableEl:kDetailTableEl,
+    data:k,
+    room5,A,B,C,D,E,
+    clsMain:'kmain'
+  });
 
   return {
     room:room5,
-    main:data.main ? data.main.seat : null,
-    mainType:data.main ? data.main.type : '跳',
-    backup:data.backup ? data.backup.seat : null,
-    backupType:data.backup ? data.backup.type : '',
-    candidates:data.candidates.map(x=>x.seat),
-    fullParity:data.fullParity,
-    fullSize:data.fullSize
+    sum:Sum,
+    fullParity,
+    fullSize,
+    t1Main:t1.main ? t1.main.seat : null,
+    t1Backup:t1.backup ? t1.backup.seat : null,
+    kMain:k.main ? k.main.seat : null,
+    kBackup:k.backup ? k.backup.seat : null
   };
 }
 
@@ -882,9 +1116,10 @@ function renderHist(){
     const div=document.createElement('div');
     div.className='histItem';
 
-    const mainText=item.main ? `主${item.main}号｜${item.mainType}` : '跳';
-    const backupText=item.backup ? `｜备${item.backup}号` : '';
-    const candText=item.candidates && item.candidates.length ? `｜候选：${item.candidates.join('/')}` : '';
+    const t1Text=item.t1Main ? `T1主${item.t1Main}` : 'T1跳';
+    const t1Backup=item.t1Backup ? `备${item.t1Backup}` : '';
+    const kText=item.kMain ? `K主${item.kMain}` : 'K跳';
+    const kBackup=item.kBackup ? `备${item.kBackup}` : '';
 
     div.innerHTML=`
       <div class="histTop">
@@ -892,8 +1127,9 @@ function renderHist(){
         <span>${item.time}</span>
       </div>
       <div class="histMain">
-        ${mainText}${backupText}${candText}<br/>
-        奇偶：${item.fullParity}｜大小：${item.fullSize}
+        ${t1Text}${t1Backup ? '｜' + t1Backup : ''}<br/>
+        ${kText}${kBackup ? '｜' + kBackup : ''}<br/>
+        Sum=${item.sum}｜奇偶：${item.fullParity}｜大小：${item.fullSize}
       </div>`;
     histListEl.appendChild(div);
   });
@@ -902,14 +1138,7 @@ function renderHist(){
 function pushHistory(res){
   const items=loadHist();
   items.unshift({
-    room:res.room,
-    main:res.main,
-    mainType:res.mainType,
-    backup:res.backup,
-    backupType:res.backupType,
-    candidates:res.candidates,
-    fullParity:res.fullParity,
-    fullSize:res.fullSize,
+    ...res,
     time:new Date().toLocaleString('zh-CN',{hour12:false})
   });
   saveHist(items);
