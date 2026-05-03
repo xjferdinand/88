@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="然仔66660">
-  <title>然仔66660 X交叉奇偶过滤模型</title>
+  <title>然仔66660 X交叉奇偶过滤模型 v1.1</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -394,7 +394,7 @@
 
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">X交叉奇偶过滤 v1</span></div>
+  <div class="title">然仔66660<span class="version">X交叉奇偶过滤 v1.1</span></div>
 
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -402,7 +402,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660 X交叉奇偶过滤模型 v1 —</div>
+      <div class="result-hdr" id="resultHdr">— 然仔66660 X交叉奇偶过滤模型 v1.1 —</div>
       <div class="hit-list" id="hitList"></div>
       <div class="score-table" id="scoreTable"></div>
     </div>
@@ -418,7 +418,7 @@
     <div class="logic-box">
       <div class="logic-title">模型规则</div>
       <div class="logic-list">模型名称：
-然仔66660 X交叉奇偶过滤模型 v1
+然仔66660 X交叉奇偶过滤模型 v1.1
 
 执行口径：
 只输出模型命中的主推位。
@@ -428,7 +428,7 @@
 规则：
 3号：C奇E偶；或C偶E奇且C≥8、E≥9；过滤C≤2且E≥9。
 4号：B/D同奇偶；过滤B=D≥5；过滤C=0且E=0。
-5号：C奇E偶且C≥5；过滤D≥8且E≤4。
+5号：C奇E偶且C≥5；过滤E=2；过滤D=0且E≤2；过滤D≥8且E≤4。
 6号：A偶且E∈{1,3,6,7,8,9}；或A奇A≥5且D≥7且E≥7；过滤D=0、E=0。
 
 主推优先级：
@@ -437,14 +437,18 @@
 
     <div class="tiny">
 【历史回测口径】
-当前51局样本，单主推输出33局，进房率64.7%，命中12局，命中后胜率100%，命中净分+9060，≤-500大输命中0局。
+当前53局样本，单主推输出35局，进房率66.0%，命中13局，命中后胜率100%，命中净分+10390，≤-500大输命中0局。
 此模型为试跑版，新增大输需立即复盘。
+
+网页测试：
+50502 必须不能输出5号进。
+28994 必须输出3号进。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY='ranzai_66660_cross_parity_filter_v1';
+const HISTORY_KEY='ranzai_66660_cross_parity_filter_v11';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -527,13 +531,32 @@ function renderScoreTable(all){
 }
 
 /*
-  然仔66660 X交叉奇偶过滤模型 v1
+  然仔66660 X交叉奇偶过滤模型 v1.1
 
-  3号：C奇E偶；或C偶E奇且C>=8,E>=9；过滤C<=2,E>=9
-  4号：B/D同奇偶；过滤B=D>=5；过滤C=0,E=0
-  5号：C奇E偶且C>=5；过滤D>=8,E<=4
-  6号：A偶且E不弱；或A奇A>=5,D>=7,E>=7；过滤D=0,E=0
-  主推优先级：5 > 6 > 3 > 4
+  3号：
+  - 主进：C奇E偶
+  - 扩容：C偶E奇且C>=8,E>=9
+  - 过滤：C<=2,E>=9
+
+  4号：
+  - 主进：B/D同奇偶
+  - 过滤：B=D>=5
+  - 过滤：C=0,E=0
+
+  5号：
+  - 主进：C奇E偶且C>=5
+  - 新增过滤：E=2
+  - 新增过滤：D=0且E<=2
+  - 保留过滤：D>=8且E<=4
+
+  6号：
+  - 主进：A偶且E∈{1,3,6,7,8,9}
+  - 扩容：A奇A>=5且D>=7,E>=7
+  - 过滤：D=0
+  - 过滤：E=0
+
+  主推优先级：
+  5 > 6 > 3 > 4
 */
 
 function evaluateModel(room5){
@@ -611,13 +634,23 @@ function evaluateModel(room5){
   let filter5=[];
 
   const rule5Main = isOdd(C) && !isOdd(E) && C>=5;
-  const rule5Filter = isDHighPressure(D,E);
+  const rule5FilterE2 = E === 2;
+  const rule5FilterBrokenSupport = D === 0 && E <= 2;
+  const rule5FilterHighPressure = isDHighPressure(D,E);
 
   if(rule5Main){
     pass5=true;
     reason5.push('C奇E偶且C≥5');
   }
-  if(rule5Filter){
+  if(rule5FilterE2){
+    pass5=false;
+    filter5.push('过滤：E=2弱尾，5号不进');
+  }
+  if(rule5FilterBrokenSupport){
+    pass5=false;
+    filter5.push('过滤：D=0且E≤2，左支撑断');
+  }
+  if(rule5FilterHighPressure){
     pass5=false;
     filter5.push('过滤：D≥8且E≤4，D高压');
   }
@@ -637,8 +670,8 @@ function evaluateModel(room5){
 
   const rule6Main = !isOdd(A) && isENotWeakFor6(E);
   const rule6Ext = isOdd(A) && A>=5 && D>=7 && E>=7;
-  const rule6Filter1 = D===0;
-  const rule6Filter2 = E===0;
+  const rule6FilterD0 = D===0;
+  const rule6FilterE0 = E===0;
 
   if(rule6Main){
     pass6=true;
@@ -648,11 +681,11 @@ function evaluateModel(room5){
     pass6=true;
     reason6.push('A奇A≥5且D/E双强');
   }
-  if(rule6Filter1){
+  if(rule6FilterD0){
     pass6=false;
     filter6.push('过滤：D=0，支撑断');
   }
-  if(rule6Filter2){
+  if(rule6FilterE0){
     pass6=false;
     filter6.push('过滤：E=0，断尾');
   }
@@ -687,7 +720,7 @@ function render(room5){
   const data=evaluateModel(room5);
   hitListEl.innerHTML='';
 
-  resultHdr.textContent=`然仔66660 X交叉奇偶过滤模型 v1｜完整奇偶：${data.fullParity}`;
+  resultHdr.textContent=`然仔66660 X交叉奇偶过滤模型 v1.1｜完整奇偶：${data.fullParity}`;
   resultEl.style.display='block';
 
   if(data.main){
