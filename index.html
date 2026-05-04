@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="然仔66660">
-  <title>然仔66660 M1 / M1.1</title>
+  <title>然仔66660 S1.1 / M1.1</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -191,7 +191,6 @@
       text-align:center;
       white-space:nowrap;
     }
-
     .hit.r1 .hit-seat{
       color:rgba(80,255,140,.95);
       text-shadow:0 0 12px rgba(80,255,140,.25);
@@ -346,7 +345,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">M1 / M1.1 双模型</span></div>
+  <div class="title">然仔66660<span class="version">S1.1 / M1.1 双模型</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -358,7 +357,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660 M1 / M1.1结果 —</div>
+      <div class="result-hdr" id="resultHdr">— 然仔66660 S1.1 / M1.1结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
     <div class="skip" id="skip">跳</div>
@@ -372,16 +371,19 @@
     </div>
 
     <div class="tiny">
-【模型1：M1】
-S1.1原规则 + 6号S动能补位
-回测：94局｜输出40局｜命中26局｜净分+21240｜≤-400大输命中0
+【模型1：S1.1 邻位和值结构模型】
+固定和值主模型。
+回测：94局｜输出34局｜命中25局｜净分+20640｜≤-400大输命中0
 
-【模型2：M1.1】
-S1.1原规则 + 6号S动能补位 + 2号极窄保护位
+【模型2：M1.1 S值动能排名模型】
+S1.1原规则 + 6号S动能补位 + 2号极窄保护。
 回测：94局｜输出41局｜命中27局｜净分+22820｜≤-400大输命中0
 
-M1.1的2号保护只在3/4/5/6和6号补位都未命中后才检查。
-2号保护属于极窄结构，不重注。
+显示逻辑：
+S1.1 与 M1.1 同向 = 基础强信号
+M1.1 独有6号 = 动能补位
+M1.1 独有2号 = 极窄保护
+两个都跳 = 跳
 
 亏损 ≤ -400 按大输统计。
     </div>
@@ -390,7 +392,7 @@ M1.1的2号保护只在3/4/5/6和6号补位都未命中后才检查。
 </div>
 
 <script>
-const HISTORY_KEY = 'ranzai_66660_m1_m11';
+const HISTORY_KEY = 'ranzai_66660_s11_m11';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -461,7 +463,7 @@ function getBaseData(room5){
   };
 }
 
-function evaluateBaseS11(room5){
+function evaluateS11(room5){
   const d = getBaseData(room5);
   const {A,B,C,D,E,S1,S2,S3,S4} = d;
   const candidates = [];
@@ -515,7 +517,19 @@ function evaluateBaseS11(room5){
   }
 
   if(!candidates.length){
-    return {ok:false, data:d, candidates:[]};
+    return {
+      ok:false,
+      model:"S1.1",
+      seat:null,
+      score:null,
+      source:"跳",
+      label:"S1.1跳",
+      reason:"S1.1未命中固定和值结构",
+      risk:"主模型未命中",
+      stage:"跳",
+      data:d,
+      candidates:[]
+    };
   }
 
   const priority = {3:1,6:2,5:3,4:4};
@@ -525,33 +539,38 @@ function evaluateBaseS11(room5){
     return priority[a.seat]-priority[b.seat];
   });
 
+  const best = candidates[0];
+
   return {
     ok:true,
-    seat:candidates[0].seat,
-    score:candidates[0].score,
-    source:candidates[0].source,
-    reason:candidates[0].reason,
-    risk:candidates[0].risk,
+    model:"S1.1",
+    seat:best.seat,
+    score:best.score,
+    source:best.source,
+    label:"S1.1主推",
+    reason:best.reason,
+    risk:best.risk,
+    stage:"固定和值",
     data:d,
     candidates
   };
 }
 
-function evaluateM1(room5, includeTwoProtect=false){
-  const baseResult = evaluateBaseS11(room5);
-  const d = baseResult.data;
+function evaluateM11(room5){
+  const s11 = evaluateS11(room5);
+  const d = s11.data;
 
-  if(baseResult.ok){
+  if(s11.ok){
     return {
       ok:true,
-      model: includeTwoProtect ? "M1.1" : "M1",
-      seat:baseResult.seat,
-      score:baseResult.score,
-      source:baseResult.source,
-      label: includeTwoProtect ? "M1.1主推" : "M1主推",
-      reason:baseResult.reason,
-      risk:baseResult.risk,
-      stage:"S1.1原规则",
+      model:"M1.1",
+      seat:s11.seat,
+      score:s11.score,
+      source:"S1.1原规则",
+      label:"M1.1主推",
+      reason:s11.reason,
+      risk:s11.risk,
+      stage:"继承S1.1",
       data:d
     };
   }
@@ -559,90 +578,96 @@ function evaluateM1(room5, includeTwoProtect=false){
   const {A,B,C,D,E,S1,S2,S3,S4,rankB,rankE} = d;
   const sArr = [S1,S2,S3,S4];
 
-  // M1：6号S动能补位
+  // 6号M1动能补位
   if(uniqueMax(S4, sArr) && rankE <= 2 && S4 >= 10){
     return {
       ok:true,
-      model: includeTwoProtect ? "M1.1" : "M1",
+      model:"M1.1",
       seat:6,
       score:76,
       source:"M1补位",
-      label: includeTwoProtect ? "M1.1补位" : "M1补位",
+      label:"M1.1补位",
       reason:"6号：S4唯一最大 且 E排名第1/第2 且 S4>=10，尾段动能补位",
       risk:"补位结构，正常小注，不重注",
-      stage:"6号M1动能补位",
+      stage:"6号动能补位",
       data:d
     };
   }
 
-  // M1.1：2号极窄保护
-  if(includeTwoProtect){
-    if(
-      uniqueMax(S2, sArr) &&
-      rankB === 2 &&
-      B >= 5 &&
-      C === B + 1 &&
-      A === E &&
-      A <= 2 &&
-      S4 <= 4
-    ){
-      return {
-        ok:true,
-        model:"M1.1",
-        seat:2,
-        score:68,
-        source:"2号保护",
-        label:"2号保护",
-        reason:"2号极窄保护：S2唯一最大、B排名第2、B>=5、C=B+1、A=E<=2、S4<=4",
-        risk:"极窄保护位，样本少，只能正常小注，不重注",
-        stage:"2号极窄保护",
-        data:d
-      };
-    }
+  // 2号极窄保护
+  if(
+    uniqueMax(S2, sArr) &&
+    rankB === 2 &&
+    B >= 5 &&
+    C === B + 1 &&
+    A === E &&
+    A <= 2 &&
+    S4 <= 4
+  ){
+    return {
+      ok:true,
+      model:"M1.1",
+      seat:2,
+      score:68,
+      source:"2号保护",
+      label:"2号保护",
+      reason:"2号极窄保护：S2唯一最大、B排名第2、B>=5、C=B+1、A=E<=2、S4<=4",
+      risk:"极窄保护位，样本少，只能正常小注，不重注",
+      stage:"2号极窄保护",
+      data:d
+    };
   }
 
   return {
     ok:false,
-    model: includeTwoProtect ? "M1.1" : "M1",
+    model:"M1.1",
     seat:null,
     score:null,
     source:"跳",
-    label: includeTwoProtect ? "M1.1跳" : "M1跳",
-    reason: includeTwoProtect ? "M1.1未命中S1.1、6号补位、2号保护" : "M1未命中S1.1和6号补位",
+    label:"M1.1跳",
+    reason:"M1.1未命中S1.1、6号补位、2号保护",
     risk:"无命中，直接跳",
     stage:"跳",
     data:d
   };
 }
 
-function getRelation(m1,m11){
-  if(m1.ok && m11.ok && m1.seat === m11.seat){
+function getRelation(s11,m11){
+  if(s11.ok && m11.ok && s11.seat === m11.seat){
     return {
-      title:`同向｜${m1.seat}号`,
-      text:"M1与M1.1同向，说明2号保护未改变主判断；按M1主逻辑执行。",
+      title:`同向基础强信号｜${s11.seat}号`,
+      text:"S1.1与M1.1同向，属于固定和值主结构命中。",
       cls:"r5"
     };
   }
 
-  if(!m1.ok && m11.ok && m11.seat === 2){
+  if(!s11.ok && m11.ok && m11.seat === 6){
     return {
-      title:"M1.1独有｜2号保护",
-      text:"M1跳，M1.1触发2号极窄保护；样本少，不重注。",
+      title:"M1.1独有｜6号动能补位",
+      text:"S1.1跳，M1.1触发6号尾段动能补位；正常小注，不重注。",
       cls:"r3"
     };
   }
 
-  if(m1.ok && !m11.ok){
+  if(!s11.ok && m11.ok && m11.seat === 2){
     return {
-      title:`M1命中｜${m1.seat}号`,
-      text:"M1命中，M1.1异常未命中；按M1谨慎处理。",
+      title:"M1.1独有｜2号极窄保护",
+      text:"S1.1跳，M1.1触发2号极窄保护；样本少，不重注。",
+      cls:"r3"
+    };
+  }
+
+  if(s11.ok && !m11.ok){
+    return {
+      title:`S1.1命中｜${s11.seat}号`,
+      text:"S1.1命中但M1.1未命中，理论上不应出现，请检查规则。",
       cls:"r2"
     };
   }
 
   return {
     title:"双模型均跳",
-    text:"M1与M1.1均未命中，直接跳。",
+    text:"S1.1与M1.1均未命中，直接跳。",
     cls:"r4"
   };
 }
@@ -656,7 +681,7 @@ function buildRelationCard(relation){
     <div class="hit-body">
       <div class="row1">${relation.title}</div>
       <div class="row2">${relation.text}</div>
-      <div class="row3">规则：M1是基础主模型；M1.1额外加入2号极窄保护。</div>
+      <div class="row3">S1.1是固定和值模型；M1.1是在S1.1基础上补6号动能和2号保护。</div>
     </div>
     <div class="hit-right">
       <div class="hit-wr">总</div>
@@ -691,27 +716,27 @@ function buildModelCard(result, room5, rankClass){
 }
 
 function render(room5){
-  const m1 = evaluateM1(room5, false);
-  const m11 = evaluateM1(room5, true);
-  const relation = getRelation(m1,m11);
+  const s11 = evaluateS11(room5);
+  const m11 = evaluateM11(room5);
+  const relation = getRelation(s11,m11);
 
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
 
-  resultHdr.textContent = `然仔66660｜M1=${m1.ok ? m1.seat + '号' : '跳'}｜M1.1=${m11.ok ? m11.seat + '号' : '跳'}`;
+  resultHdr.textContent = `然仔66660｜S1.1=${s11.ok ? s11.seat + '号' : '跳'}｜M1.1=${m11.ok ? m11.seat + '号' : '跳'}`;
 
   hitListEl.appendChild(buildRelationCard(relation));
-  hitListEl.appendChild(buildModelCard(m1, room5, 'r1'));
+  hitListEl.appendChild(buildModelCard(s11, room5, 'r1'));
   hitListEl.appendChild(buildModelCard(m11, room5, 'r5'));
 
   resultEl.style.display = 'block';
 
-  if(!m1.ok && !m11.ok){
+  if(!s11.ok && !m11.ok){
     skipEl.style.display = 'block';
   }
 
-  return {m1,m11,relation};
+  return {s11,m11,relation};
 }
 
 function run(){
@@ -749,13 +774,13 @@ function renderHist(){
     const div = document.createElement('div');
     div.className = 'histItem';
 
-    const m1Res = item.m1 && item.m1.ok ? `${item.m1.seat}号M1` : '跳';
+    const s11Res = item.s11 && item.s11.ok ? `${item.s11.seat}号S1.1` : '跳';
     const m11Res = item.m11 && item.m11.ok ? `${item.m11.seat}号M1.1` : '跳';
     const relation = item.relationTitle || '—';
 
     div.innerHTML = `
       <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">${relation}<br>M1 → ${m1Res}｜M1.1 → ${m11Res}</div>`;
+      <div class="histMain">${relation}<br>S1.1 → ${s11Res}｜M1.1 → ${m11Res}</div>`;
     histListEl.appendChild(div);
   });
 }
@@ -764,10 +789,10 @@ function pushHistory(room, results){
   const items = loadHist();
   items.unshift({
     room,
-    m1: {
-      ok: results.m1.ok,
-      seat: results.m1.seat,
-      stage: results.m1.stage || '跳'
+    s11: {
+      ok: results.s11.ok,
+      seat: results.s11.seat,
+      stage: results.s11.stage || '跳'
     },
     m11: {
       ok: results.m11.ok,
