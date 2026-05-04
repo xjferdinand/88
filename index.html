@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="然仔66660 W1">
-  <title>然仔66660 W1</title>
+  <meta name="apple-mobile-web-app-title" content="然仔66660">
+  <title>然仔66660 L2.2</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -345,7 +345,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">大赢触发库 W1</span></div>
+  <div class="title">然仔66660<span class="version">局部三连泛化 L2.2</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -357,7 +357,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660 W1结果 —</div>
+      <div class="result-hdr" id="resultHdr">— 然仔66660 L2.2结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
     <div class="skip" id="skip">跳</div>
@@ -371,14 +371,13 @@
     </div>
 
     <div class="tiny">
-【然仔66660｜大赢触发库 W1 研究版】
-逻辑：命中座位专属“大赢DNA”才进，否则跳。
-回测：94局｜输出48局｜命中28局｜净分+22860
-≥500大赢命中20/20｜≤-400大输命中0｜最大命中亏-340
+【然仔66660｜局部三连泛化模型 L2.2 研究版】
+逻辑：看当前位子的 左邻-X-右邻，判断承接、平台、反冲、过热、断尾。
+新增：63330 5号+1000 的“5号低尾反爆观察”结构。
+大输口径：盈亏 ≤ -400 算大输。
 
-实战纪律：
-W1是研究版主模型候选，不是重注模型。
-只打W1主推；无主推跳。
+当前定位：研究版主模型候选，不是重注模型。
+只打主推；无主推跳。
 主推亏≤-300暂停复盘；亏≤-400模型降级重做。
     </div>
 
@@ -386,7 +385,7 @@ W1是研究版主模型候选，不是重注模型。
 </div>
 
 <script>
-const HISTORY_KEY = 'ranzai_66660_w1_bigwin';
+const HISTORY_KEY = 'ranzai_66660_l22_local_triplet';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -407,18 +406,24 @@ function rankDesc(x, digits){
   return digits.filter(n => n > x).length + 1;
 }
 
-function uniqueMax(value, arr){
-  const max = Math.max(...arr);
-  return value === max && arr.filter(n => n === max).length === 1;
+function abs(n){ return Math.abs(n); }
+
+function numClass(n){
+  if([0,2,4].includes(n)) return '小偶';
+  if([1,3].includes(n)) return '小奇';
+  if([6,8].includes(n)) return '大偶';
+  return '大奇';
 }
 
-function isMaxOrNearMax(value, arr, gap=1){
-  return value >= Math.max(...arr) - gap;
+function tripletClass(a,b,c){
+  return `${numClass(a)}+${numClass(b)}+${numClass(c)}`;
 }
 
 function getBaseData(room5){
   const [A,B,C,D,E] = getDigits(room5);
   const digits = [A,B,C,D,E];
+
+  const RoomSum = A+B+C+D+E;
 
   const S1 = A+B;
   const S2 = B+C;
@@ -432,9 +437,6 @@ function getBaseData(room5){
   const P4 = D+E+A;
   const P5 = E+A+B;
 
-  const PArr = [P1,P2,P3,P4,P5];
-  const SArr = [S1,S2,S3,S4];
-
   const MidPower = S2 + S3;
   const TailPower = S3 + S4;
 
@@ -444,261 +446,353 @@ function getBaseData(room5){
   const rankD = rankDesc(D,digits);
   const rankE = rankDesc(E,digits);
 
-  const RoomSum = A+B+C+D+E;
-
   return {
-    A,B,C,D,E,digits,
-    S1,S2,S3,S4,S5,SArr,
-    P1,P2,P3,P4,P5,PArr,
-    MidPower,TailPower,RoomSum,
-    rankA,rankB,rankC,rankD,rankE
+    A,B,C,D,E,digits,RoomSum,
+    S1,S2,S3,S4,S5,
+    P1,P2,P3,P4,P5,
+    MidPower,TailPower,
+    rankA,rankB,rankC,rankD,rankE,
+    t2: tripletClass(A,B,C),
+    t3: tripletClass(B,C,D),
+    t4: tripletClass(C,D,E),
+    t5: tripletClass(D,E,A),
+    t6: tripletClass(D,E,A)
   };
 }
 
-function evaluateW1(room5){
+function evaluateL22(room5){
   const d = getBaseData(room5);
   const {
-    A,B,C,D,E,
-    S1,S2,S3,S4,S5,SArr,
-    P1,P2,P3,P4,P5,PArr,
-    MidPower,RoomSum,
+    A,B,C,D,E,digits,RoomSum,
+    S1,S2,S3,S4,S5,
+    P1,P2,P3,P4,P5,
+    MidPower,
     rankB,rankC,rankD,rankE
   } = d;
 
   const triggers = [];
 
-  function addTrigger(seat, priority, name, reason, risk, score){
-    triggers.push({seat, priority, name, reason, risk, score});
+  function add(seat, priority, name, reason, risk, score, mode='主推'){
+    triggers.push({seat,priority,name,reason,risk,score,mode});
   }
 
-  // =====================
-  // 2号｜前中轴爆发
-  // =====================
+  // =========================
+  // 2号｜前低右抬
+  // 看 A-B-C
+  // =========================
   if(
-    uniqueMax(S2, SArr) &&
-    rankB <= 2 &&
-    B >= 5 &&
+    A <= 3 &&
+    B >= 4 &&
+    C > B &&
+    E <= 4 &&
+    S4 <= 6 &&
+    (S2 >= 10 || P1 >= 10)
+  ){
+    add(
+      2, 10,
+      '2号前低右抬',
+      'A低，B不弱，C右侧抬升，D/E尾段不抢2号',
+      '2号极窄承接结构，正常小注',
+      96
+    );
+  }
+
+  // =========================
+  // 3号｜中轴高点
+  // 看 B-C-D
+  // =========================
+  if(
+    C >= 6 &&
     C >= B &&
-    S4 <= 4 &&
-    A === E &&
-    A <= 2
-  ){
-    addTrigger(
-      2,
-      1,
-      '2号前中轴爆发',
-      'S2唯一最大，B排名前2，B/C承接，A=E低位闭环，尾段S4低不抢位',
-      '2号极窄爆点，样本少，正常小注，不重注',
-      98
-    );
-  }
-
-  // =====================
-  // 6号｜低位反爆
-  // =====================
-  if(
-    RoomSum <= 10 &&
-    E === Math.max(...d.digits) &&
-    E > D &&
-    A <= 5 &&
-    E !== 0
-  ){
-    addTrigger(
-      6,
-      2,
-      '6号低位反爆',
-      'RoomSum低，E为全房最大，E>D，A端不压死尾端',
-      '低位反爆结构，正常小注',
-      95
-    );
-  }
-
-  // =====================
-  // 6号｜低位闭环
-  // =====================
-  if(
-    RoomSum <= 10 &&
-    E > 0 &&
-    S1 <= 6 &&
-    S2 <= 3 &&
-    D <= 1
-  ){
-    addTrigger(
-      6,
-      3,
-      '6号低位闭环',
-      '低位房，E>0，S1/S2低启，D低不压E',
-      '低位闭环结构，已过滤E=0风险',
-      93
-    );
-  }
-
-  // =====================
-  // 3号｜中轴强爆
-  // =====================
-  if(
+    C >= D &&
     MidPower >= 24 &&
     S3 >= 11 &&
     S4 <= S3 + 2 &&
     !(B > C && D > C)
   ){
-    addTrigger(
-      3,
-      4,
-      '3号中轴强爆',
-      'MidPower>=24，S3>=11，S4不明显压制中轴，C不被B/D双压',
-      '3号中轴强爆，正常小注',
+    add(
+      3, 30,
+      '3号中轴高点',
+      'C为中轴高点，MidPower强，S4不明显压制中轴',
+      '3号中轴结构，正常小注',
       90
     );
   }
 
-  // =====================
-  // 6号｜首尾闭环承接
-  // =====================
+  // =========================
+  // 3号｜首尾环托
+  // 泛化87548
+  // =========================
   if(
-    S1 >= 15 &&
-    S3 === 9 &&
-    S4 === 9 &&
-    E !== 0
+    B >= 5 &&
+    C >= 5 &&
+    D <= 4 &&
+    A >= 6 &&
+    E >= 6 &&
+    !(B > C && D > C)
   ){
-    addTrigger(
-      6,
-      5,
-      '6号首尾闭环承接',
-      'S1强，S3/S4平衡，E能承接A端',
-      '单样本结构，正常小注，不重注',
+    add(
+      3, 31,
+      '3号首尾环托',
+      'B/C不弱，D低不抢，A/E首尾强托住中轴',
+      '3号首尾环托结构，正常小注',
       88
     );
   }
 
-  // =====================
-  // 4号｜后中轴承接
-  // =====================
+  // =========================
+  // 4号｜左托承接
+  // 看 C-D-E
+  // =========================
   if(
-    S3 >= 10 &&
-    rankD !== 1 &&
-    (C - D) >= 2 &&
-    (C - D) <= 6 &&
-    (E - D) >= -2
+    C >= 6 &&
+    D <= 4 &&
+    E <= 4 &&
+    C > D &&
+    D !== 0
   ){
-    addTrigger(
-      4,
-      6,
-      '4号后中轴承接',
-      'S3>=10，D非rank1孤高，C-D承接，E端不过度压低',
-      '4号后中轴承接，正常小注',
+    add(
+      4, 40,
+      '4号左托承接',
+      'C强托D，E低不抢，4号吃左侧承接',
+      '4号左托结构，正常小注',
       84
     );
   }
 
-  // =====================
-  // 4号｜反冲承接
-  // =====================
+  // =========================
+  // 4号｜低位反冲
+  // =========================
   if(
-    (P5 === Math.max(...PArr) || P3 === Math.max(...PArr)) &&
-    rankD === 4 &&
-    (C - D) >= -3 &&
-    (C - D) <= 2 &&
-    (E - D) >= 2 &&
-    (E - D) <= 4
+    C <= 3 &&
+    D >= 3 &&
+    D <= 4 &&
+    E >= 5 &&
+    E > D &&
+    rankD !== 1
   ){
-    addTrigger(
-      4,
-      7,
-      '4号反冲承接',
-      'P5或P3为最大窗口，D排名4，C/E形成反冲托举',
-      '4号反冲结构，允许小波，正常小注',
+    add(
+      4, 41,
+      '4号低位反冲',
+      'C低，D低但不死，E高托起，4号处在反冲承接点',
+      '4号反冲结构，正常小注',
+      83
+    );
+  }
+
+  // =========================
+  // 4号｜双侧夹持
+  // =========================
+  if(
+    C >= 6 &&
+    E >= 6 &&
+    D >= 3 &&
+    D <= 5 &&
+    abs(C-D) <= 4 &&
+    abs(E-D) <= 4
+  ){
+    add(
+      4, 42,
+      '4号双侧夹持',
+      'C/E两侧强，D为中低承接点，形成双侧夹持反冲',
+      '4号夹持结构，正常小注',
       82
     );
   }
 
-  // =====================
-  // 5号｜尾部落点
-  // =====================
+  // =========================
+  // 5号｜后段平台
+  // 看 D-E-A，同时看 C-D-E
+  // =========================
   if(
+    D >= 5 &&
+    E >= 5 &&
+    A <= 4 &&
+    abs(D-E) <= 2 &&
+    C >= 5 &&
+    abs(C-E) <= 2 &&
+    E !== 9
+  ){
+    add(
+      5, 20,
+      '5号后段平台',
+      'C/D/E形成后段平台，E参与高点，A小不抢尾',
+      '5号平台结构，正常小注',
+      92
+    );
+  }
+
+  // =========================
+  // 5号｜低D落点
+  // =========================
+  if(
+    D <= 2 &&
+    E >= 4 &&
+    E <= 8 &&
+    C >= 5 &&
+    D < E &&
+    S4 <= 10 &&
     (
-      E === 4 &&
-      D <= 1 &&
-      (P1 === Math.max(...PArr) || P5 === Math.max(...PArr))
-    ) ||
-    (
-      E === 8 &&
-      rankE === 1 &&
-      Math.abs(S4 - S3) <= 2 &&
-      D <= C
-    ) ||
-    (
-      E === 4 &&
-      P5 === Math.max(...PArr) &&
-      D <= E + 1
+      (E === 4 && A >= 3) ||
+      (E === 8 && C >= 7 && A <= 4) ||
+      ([5,6].includes(E) && A >= 3)
     )
   ){
-    addTrigger(
-      5,
-      8,
-      '5号尾部落点',
-      '5号极窄尾部落点结构，E/D/S3/S4/P窗口匹配',
-      '5号高波位，只按极窄触发，小注',
-      80
+    add(
+      5, 21,
+      '5号低D落点',
+      'D低不压E，E形成尾部落点，A端托住或不抢',
+      '5号落点结构，正常小注',
+      88
     );
   }
 
-  // =====================
-  // 6号｜强尾稳定
-  // =====================
+  // =========================
+  // 5号｜低D强A托尾
+  // 补91504，过滤50502
+  // =========================
   if(
-    rankE <= 2 &&
-    E !== 0 &&
-    S4 >= 13 &&
-    S3 >= 7 &&
-    !(A > E && S4 < 13)
+    numClass(D) === '小偶' &&
+    numClass(E) === '小偶' &&
+    numClass(A) === '大奇' &&
+    D < E &&
+    A >= 7 &&
+    E >= 4 &&
+    S5 >= 12
   ){
-    addTrigger(
-      6,
-      9,
-      '6号强尾稳定',
-      'E排名前2，S4>=13，S3>=7，尾段强且E不为0',
-      '6号强尾稳定，正常小注',
-      78
+    add(
+      5, 22,
+      '5号低D强A托尾',
+      'D低不压E，A端强托尾，S5首尾托力足',
+      '5号强A托尾结构，正常小注',
+      87
     );
   }
 
-  // =====================
-  // 6号｜尾段唯一爆
-  // =====================
+  // =========================
+  // 5号｜低尾反爆观察
+  // 新增63330，不能重注
+  // =========================
   if(
-    uniqueMax(S4, SArr) &&
-    rankE <= 2 &&
-    S4 >= 10 &&
+    E === 0 &&
+    numClass(D) === '小奇' &&
+    numClass(A) === '大偶' &&
+    B >= 1 && B <= 4 &&
+    C >= 1 && C <= 4 &&
+    D >= 1 && D <= 4 &&
+    abs(B-C) <= 1 &&
+    abs(C-D) <= 1 &&
+    A >= 6 &&
+    S1 <= 10
+  ){
+    add(
+      5, 23,
+      '5号低尾反爆观察',
+      'E=0但B/C/D低位平台，D不强压E，A大偶托尾',
+      '新增观察结构；只小注，若亏≤-400立即删除',
+      75,
+      '观察'
+    );
+  }
+
+  // =========================
+  // 6号｜稳定尾平台
+  // =========================
+  if(
+    D >= 5 &&
+    E >= 6 &&
+    abs(D-E) <= 2 &&
+    E !== 0 &&
+    !(E === 9 && S4 >= 15)
+  ){
+    add(
+      6, 50,
+      '6号稳定尾平台',
+      'D/E稳定成平台，E不为0，不是E单点过热',
+      '6号稳定尾平台，正常小注',
+      86
+    );
+  }
+
+  // =========================
+  // 6号｜首尾闭环承接
+  // 补87636
+  // =========================
+  if(
+    numClass(D) === '小奇' &&
+    numClass(E) === '大偶' &&
+    numClass(A) === '大偶' &&
+    D < E &&
+    A >= E &&
     E !== 0
   ){
-    addTrigger(
-      6,
-      10,
-      '6号尾段唯一爆',
-      'S4唯一最大，E排名前2，S4>=10，E不为0',
-      '6号尾段补位结构，正常小注',
-      76
+    add(
+      6, 51,
+      '6号首尾闭环承接',
+      'D低，E大偶，A大偶闭环承接，首尾托尾',
+      '6号闭环承接，正常小注',
+      85
     );
   }
 
-  // =====================
-  // 3号｜首尾环托
-  // =====================
+  // =========================
+  // 6号｜低位反爆
+  // =========================
   if(
-    A >= 7 &&
-    E >= 7 &&
-    isMaxOrNearMax(P5, PArr, 1) &&
-    C >= 4 &&
-    !(B > C && D > C)
+    RoomSum <= 12 &&
+    E > D &&
+    E > 0 &&
+    E >= Math.max(A,B,C,D) - 1
   ){
-    addTrigger(
-      3,
-      11,
-      '3号首尾环托',
-      'A/E首尾强托，P5接近最大，C不被B/D双压',
-      '3号首尾环托结构，正常小注',
-      74
+    add(
+      6, 52,
+      '6号低位反爆',
+      '全房低位，E为相对高点，D不压E',
+      '6号低位反爆，正常小注',
+      84
+    );
+  }
+
+  // =========================
+  // 6号｜低位A托尾
+  // 补51201
+  // =========================
+  if(
+    numClass(D) === '小偶' &&
+    numClass(E) === '小奇' &&
+    numClass(A) === '大奇' &&
+    RoomSum <= 12 &&
+    D < E &&
+    E > 0 &&
+    A >= 5
+  ){
+    add(
+      6, 53,
+      '6号低位A托尾',
+      'D低，E小但不为0，A大奇托尾，形成低位闭环',
+      '6号低位A托尾，正常小注',
+      83
+    );
+  }
+
+  // =========================
+  // 6号｜尾强反冲
+  // =========================
+  if(
+    D <= 5 &&
+    E >= 6 &&
+    A <= 4 &&
+    E > D &&
+    E !== 0 &&
+    S4 <= 14 &&
+    !(E === 9 && (P3 >= 19 || S5 >= 12))
+  ){
+    add(
+      6, 54,
+      '6号尾强反冲',
+      'D中低，E抬升，A低不抢，尾强但不过热',
+      '6号尾强反冲，正常小注',
+      82
     );
   }
 
@@ -706,10 +800,11 @@ function evaluateW1(room5){
     return {
       ok:false,
       seat:null,
-      label:'W1跳',
+      label:'跳',
+      mode:'跳',
       triggerName:'无触发',
-      reason:'未命中任何座位专属大赢DNA',
-      risk:'无W1主推，直接跳',
+      reason:'未命中L2.2局部三连泛化结构',
+      risk:'无主推，直接跳',
       score:null,
       data:d,
       triggers:[]
@@ -726,7 +821,8 @@ function evaluateW1(room5){
   return {
     ok:true,
     seat:best.seat,
-    label:'W1主推',
+    label:best.mode === '观察' ? '观察' : '主推',
+    mode:best.mode,
     triggerName:best.name,
     reason:best.reason,
     risk:best.risk,
@@ -741,6 +837,8 @@ function buildModelCard(result, room5){
 
   if(!result.ok){
     div.className = 'hit r5';
+  }else if(result.mode === '观察'){
+    div.className = 'hit r2';
   }else if(result.seat === 6){
     div.className = 'hit r1';
   }else if(result.seat === 5){
@@ -754,14 +852,14 @@ function buildModelCard(result, room5){
   const d = result.data;
   const seatText = result.ok ? `${result.seat}` : '跳';
   const wrText = result.ok ? `${result.score}分` : '—';
-  const avgText = result.ok ? '主推' : '跳';
+  const avgText = result.ok ? result.mode : '跳';
 
   div.innerHTML = `
     <div class="hit-lbl">${result.label}</div>
     <div class="hit-seat">${seatText}</div>
     <div class="hit-body">
       <div class="row1">房号=${room5}　A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
-      <div class="row2">S=${d.S1}/${d.S2}/${d.S3}/${d.S4}/${d.S5}｜P=${d.P1}/${d.P2}/${d.P3}/${d.P4}/${d.P5}</div>
+      <div class="row2">局部：2=${d.t2}｜3=${d.t3}｜4=${d.t4}｜5/6=${d.t5}</div>
       <div class="row3">${result.triggerName}｜${result.reason}｜${result.risk}</div>
     </div>
     <div class="hit-right">
@@ -772,48 +870,49 @@ function buildModelCard(result, room5){
   return div;
 }
 
-function buildTriggerListCard(result){
+function buildDataCard(result){
+  const d = result.data;
   const div = document.createElement('div');
   div.className = 'hit r5';
 
-  const list = result.triggers && result.triggers.length
+  const allTriggers = result.triggers && result.triggers.length
     ? result.triggers.map(t => `${t.seat}号-${t.name}`).join('；')
     : '无';
 
   div.innerHTML = `
-    <div class="hit-lbl">触发</div>
+    <div class="hit-lbl">数据</div>
     <div class="hit-seat">${result.triggers ? result.triggers.length : 0}</div>
     <div class="hit-body">
-      <div class="row1">全部命中触发</div>
-      <div class="row2">${list}</div>
-      <div class="row3">多触发时按W1优先级只取一个主推。</div>
+      <div class="row1">S=${d.S1}/${d.S2}/${d.S3}/${d.S4}/${d.S5}｜RoomSum=${d.RoomSum}</div>
+      <div class="row2">P=${d.P1}/${d.P2}/${d.P3}/${d.P4}/${d.P5}</div>
+      <div class="row3">全部触发：${allTriggers}</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">W1</div>
-      <div class="hit-avg">DNA</div>
+      <div class="hit-wr">L2.2</div>
+      <div class="hit-avg">结构</div>
     </div>
   `;
   return div;
 }
 
 function render(room5){
-  const res = evaluateW1(room5);
+  const res = evaluateL22(room5);
 
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
 
   if(!res.ok){
-    resultHdr.textContent = `然仔66660 W1　无大赢触发`;
+    resultHdr.textContent = `然仔66660 L2.2　无主推`;
     hitListEl.appendChild(buildModelCard(res, room5));
     resultEl.style.display = 'block';
     skipEl.style.display = 'block';
     return res;
   }
 
-  resultHdr.textContent = `然仔66660 W1　主推 ${res.seat}号｜${res.triggerName}`;
+  resultHdr.textContent = `然仔66660 L2.2　${res.label} ${res.seat}号｜${res.triggerName}`;
   hitListEl.appendChild(buildModelCard(res, room5));
-  hitListEl.appendChild(buildTriggerListCard(res));
+  hitListEl.appendChild(buildDataCard(res));
   resultEl.style.display = 'block';
 
   return res;
@@ -856,11 +955,13 @@ function renderHist(){
     const div = document.createElement('div');
     div.className = 'histItem';
 
-    const resText = item.ok ? `${item.seat}号｜${item.triggerName}` : '跳';
+    const resText = item.ok
+      ? `${item.seat}号${item.mode === '观察' ? '观察' : '主推'}｜${item.triggerName}`
+      : '跳';
 
     div.innerHTML = `
       <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">W1 → ${resText}</div>
+      <div class="histMain">L2.2 → ${resText}</div>
     `;
     histListEl.appendChild(div);
   });
@@ -872,6 +973,7 @@ function pushHistory(room, res){
     room,
     ok: res.ok,
     seat: res.seat,
+    mode: res.mode,
     triggerName: res.triggerName,
     time: new Date().toLocaleString('zh-CN', {hour12:false})
   });
