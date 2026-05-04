@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="然仔66660">
-  <title>然仔66660 S1.1主模型</title>
+  <title>然仔66660 M1 / M1.1</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -346,7 +346,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">S1.1主模型 + v2.1辅助</span></div>
+  <div class="title">然仔66660<span class="version">M1 / M1.1 双模型</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -358,7 +358,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660 双模型结果 —</div>
+      <div class="result-hdr" id="resultHdr">— 然仔66660 M1 / M1.1结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
     <div class="skip" id="skip">跳</div>
@@ -372,22 +372,16 @@
     </div>
 
     <div class="tiny">
-【主模型：然仔·66660 邻位和值结构模型 S1.1】
-S1=A+B，S2=B+C，S3=C+D，S4=D+E
-删除旧低启：S1<=6 且 S2<=3
-改为：S1<=6 且 S2<=3 且 E>D
-回测：94局｜输出34局｜命中25局｜净分+20640｜≤-400大输命中0
+【模型1：M1】
+S1.1原规则 + 6号S动能补位
+回测：94局｜输出40局｜命中26局｜净分+21240｜≤-400大输命中0
 
-【辅助模型：然仔66660｜X排名邻居黑白模型 v2.1】
-用于补S1.1跳过的尾强结构，尤其6号rank1尾强承接。
-v2.1单独命中只能小注观察。
+【模型2：M1.1】
+S1.1原规则 + 6号S动能补位 + 2号极窄保护位
+回测：94局｜输出41局｜命中27局｜净分+22820｜≤-400大输命中0
 
-显示逻辑：
-S1.1命中 = 主模型命中
-S1.1跳 + v2.1命中 = 辅助观察
-两个模型同向 = 同向加强
-两个模型冲突 = 谨慎/跳
-两个都跳 = 跳
+M1.1的2号保护只在3/4/5/6和6号补位都未命中后才检查。
+2号保护属于极窄结构，不重注。
 
 亏损 ≤ -400 按大输统计。
     </div>
@@ -396,7 +390,7 @@ S1.1跳 + v2.1命中 = 辅助观察
 </div>
 
 <script>
-const HISTORY_KEY = 'ranzai_66660_s11_main_v21_aux';
+const HISTORY_KEY = 'ranzai_66660_m1_m11';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -413,402 +407,242 @@ function getDigits(room){
   return room.split('').map(Number);
 }
 
-function digitRoot(sum){
-  const r = sum % 9;
-  return r === 0 ? 9 : r;
-}
-
 function rankDesc(x, digits){
   return digits.filter(n => n > x).length + 1;
 }
 
-function between(x, left, right){
-  return (left >= x && x >= right) || (left <= x && x <= right);
+function uniqueMax(value, arr){
+  const max = Math.max(...arr);
+  return value === max && arr.filter(n => n === max).length === 1;
 }
 
 function getBaseData(room5){
   const [A,B,C,D,E] = getDigits(room5);
   const digits = [A,B,C,D,E];
 
-  const RoomSum = A+B+C+D+E;
-  const root = digitRoot(RoomSum);
-
-  const D1 = A-B;
-  const D2 = B-C;
-  const D3 = C-D;
-  const D4 = D-E;
-  const D5 = E-A;
-
   const S1 = A+B;
   const S2 = B+C;
   const S3 = C+D;
   const S4 = D+E;
 
-  return {A,B,C,D,E,digits,RoomSum,root,D1,D2,D3,D4,D5,S1,S2,S3,S4};
+  const T1 = S2-S1;
+  const T2 = S3-S2;
+  const T3 = S4-S3;
+
+  const FrontPower = S1+S2;
+  const BackPower = S3+S4;
+  const PowerDiff = BackPower-FrontPower;
+
+  const MidPower = S2+S3;
+  const TailPower = S3+S4;
+  const TailLift = S4-S3;
+  const HeadTailDiff = S4-S1;
+
+  const SArr = [S1,S2,S3,S4];
+  const SMax = Math.max(...SArr);
+  const SMin = Math.min(...SArr);
+  const SMaxPos = "S" + (SArr.indexOf(SMax)+1);
+  const SMinPos = "S" + (SArr.indexOf(SMin)+1);
+
+  const rankA = rankDesc(A,digits);
+  const rankB = rankDesc(B,digits);
+  const rankC = rankDesc(C,digits);
+  const rankD = rankDesc(D,digits);
+  const rankE = rankDesc(E,digits);
+
+  return {
+    A,B,C,D,E,digits,
+    S1,S2,S3,S4,
+    T1,T2,T3,
+    FrontPower,BackPower,PowerDiff,
+    MidPower,TailPower,TailLift,HeadTailDiff,
+    SMax,SMin,SMaxPos,SMinPos,
+    rankA,rankB,rankC,rankD,rankE
+  };
 }
 
-/* ==================================================
-   主模型：S1.1 邻位和值结构模型
-================================================== */
-function evaluateS11(room5){
-  const base = getBaseData(room5);
-  const {A,B,C,D,E,S1,S2,S3,S4} = base;
+function evaluateBaseS11(room5){
+  const d = getBaseData(room5);
+  const {A,B,C,D,E,S1,S2,S3,S4} = d;
   const candidates = [];
 
-  function addCandidate(seat, score, level, reason, risk){
-    candidates.push({seat, score, level, reason, risk});
+  function add(seat, score, source, reason, risk){
+    candidates.push({seat, score, source, reason, risk});
   }
 
-  // 3号规则
+  // 3号
   if(S2 >= 13 && S3 >= 11){
-    addCandidate(3, 90, "主模型命中", "3号：S2>=13 且 S3>=11，中轴和值强", "S1.1主模型，可正常试跑");
+    add(3, 90, "S1.1", "3号：S2>=13 且 S3>=11，中轴和值强", "正常试跑");
   }
-
   if(S1 >= 15 && S2 >= 12 && S4 >= 12){
-    addCandidate(3, 88, "主模型命中", "3号：S1>=15 且 S2>=12 且 S4>=12，首前高+尾承接", "S1.1主模型，可正常试跑");
+    add(3, 88, "S1.1", "3号：S1>=15 且 S2>=12 且 S4>=12，首前高+尾承接", "正常试跑");
   }
 
-  // 4号规则
-  if(S3 === 12 && (S4 === 5 || S4 === 6)){
-    addCandidate(4, 70, "主模型命中", "4号：S3=12 且 S4=5/6，后中轴精准组合", "4号精确组合，正常试跑");
-  }
-
-  if(S3 === 5 && S4 === 11){
-    addCandidate(4, 70, "主模型命中", "4号：S3=5 且 S4=11，后段反冲组合", "4号精确组合，正常试跑");
-  }
-
-  if(S3 === 4 && S4 === 10){
-    addCandidate(4, 70, "主模型命中", "4号：S3=4 且 S4=10，低中轴反冲组合", "4号精确组合，正常试跑");
-  }
-
-  if(S2 === 7 && S3 === 10 && S4 === 12){
-    addCandidate(4, 72, "主模型命中", "4号：S2=7 且 S3=10 且 S4=12，特殊和值反冲", "4号特殊结构，正常试跑");
-  }
-
-  // 5号规则
-  if(S3 === 5 && S4 === 4){
-    addCandidate(5, 80, "主模型命中", "5号：S3=5 且 S4=4，尾位落点黄金组合", "5号窄进，正常试跑");
-  }
-
-  if(S3 === 9 && S4 === 10){
-    addCandidate(5, 80, "主模型命中", "5号：S3=9 且 S4=10，尾轴承接黄金组合", "5号窄进，正常试跑");
-  }
-
-  if(S3 === 6 && S4 === 9){
-    addCandidate(5, 80, "主模型命中", "5号：S3=6 且 S4=9，尾位爆发组合", "5号窄进，正常试跑");
-  }
-
-  // 6号规则
+  // 6号
   if(S4 >= 13 && S3 >= 7){
-    addCandidate(6, 85, "主模型命中", "6号：S4>=13 且 S3>=7，尾轴和值强", "6号尾轴强结构，正常试跑");
+    add(6, 85, "S1.1", "6号：S4>=13 且 S3>=7，尾轴和值强", "正常试跑");
   }
-
   if(S1 >= 15 && S3 === 9 && S4 === 9){
-    addCandidate(6, 82, "主模型命中", "6号：S1>=15 且 S3=9 且 S4=9，首端强+尾端平衡", "6号特殊强结构，正常试跑");
+    add(6, 82, "S1.1", "6号：S1>=15 且 S3=9 且 S4=9，首端强+尾端平衡", "正常试跑");
   }
-
-  // S1.1修正版：低启必须 E>D，过滤20030
   if(S1 <= 6 && S2 <= 3 && E > D){
-    addCandidate(6, 82, "主模型命中", "6号：S1<=6 且 S2<=3 且 E>D，低启修正版", "已过滤旧低启大输风险，正常试跑");
+    add(6, 82, "S1.1", "6号：S1<=6 且 S2<=3 且 E>D，低启修正版", "已过滤20030型风险");
   }
 
-  if(candidates.length === 0){
-    return {
-      ok:false,
-      model:"S1.1",
-      seat:null,
-      status:"跳",
-      label:"S1.1跳",
-      score:null,
-      reason:"S1.1和值主模型未命中黄金结构",
-      risk:"主模型强过滤，无命中直接跳",
-      data:base
-    };
+  // 5号
+  if(S3 === 5 && S4 === 4){
+    add(5, 80, "S1.1", "5号：S3=5 且 S4=4，尾位落点黄金组合", "5号窄进");
+  }
+  if(S3 === 9 && S4 === 10){
+    add(5, 80, "S1.1", "5号：S3=9 且 S4=10，尾轴承接黄金组合", "5号窄进");
+  }
+  if(S3 === 6 && S4 === 9){
+    add(5, 80, "S1.1", "5号：S3=6 且 S4=9，尾位爆发组合", "5号窄进");
+  }
+
+  // 4号
+  if(S3 === 12 && (S4 === 5 || S4 === 6)){
+    add(4, 70, "S1.1", "4号：S3=12 且 S4=5/6，后中轴精准组合", "4号精确组合");
+  }
+  if(S3 === 5 && S4 === 11){
+    add(4, 70, "S1.1", "4号：S3=5 且 S4=11，后段反冲组合", "4号精确组合");
+  }
+  if(S3 === 4 && S4 === 10){
+    add(4, 70, "S1.1", "4号：S3=4 且 S4=10，低中轴反冲组合", "4号精确组合");
+  }
+  if(S2 === 7 && S3 === 10 && S4 === 12){
+    add(4, 72, "S1.1", "4号：S2=7 且 S3=10 且 S4=12，特殊和值反冲", "4号特殊结构");
+  }
+
+  if(!candidates.length){
+    return {ok:false, data:d, candidates:[]};
   }
 
   const priority = {3:1,6:2,5:3,4:4};
 
   candidates.sort((a,b)=>{
-    if(b.score !== a.score) return b.score - a.score;
-    return priority[a.seat] - priority[b.seat];
+    if(b.score !== a.score) return b.score-a.score;
+    return priority[a.seat]-priority[b.seat];
   });
-
-  const best = candidates[0];
 
   return {
     ok:true,
-    model:"S1.1",
-    seat:best.seat,
-    status:best.level,
-    label:"S1.1主推",
-    mode:"主模型",
-    score:best.score,
-    reason:best.reason,
-    risk:best.risk,
-    candidates,
-    data:base
+    seat:candidates[0].seat,
+    score:candidates[0].score,
+    source:candidates[0].source,
+    reason:candidates[0].reason,
+    risk:candidates[0].risk,
+    data:d,
+    candidates
   };
 }
 
-/* ==================================================
-   辅助模型：v2.1 X排名邻居黑白模型
-================================================== */
-function evaluateV21(room5){
-  const base = getBaseData(room5);
-  const {A,B,C,D,E,digits,RoomSum,root,D1,D2,D3,D4,D5} = base;
+function evaluateM1(room5, includeTwoProtect=false){
+  const baseResult = evaluateBaseS11(room5);
+  const d = baseResult.data;
 
-  const candidates = [];
-
-  function addCandidate(seat, score, level, reason, risk, mode){
-    candidates.push({ seat, score, level, reason, risk, mode });
-  }
-
-  // 3号
-  const X3 = C;
-  const rank3 = rankDesc(X3, digits);
-  const K3 = RoomSum - X3;
-
-  let black3Reason = "";
-
-  if(D4 <= -8){
-    black3Reason = "D4<=-8，尾端E强压D";
-  }else if(B > C && D > C){
-    black3Reason = "邻居双压，B/D都压C";
-  }else if(D3 > 0 && D4 > 0){
-    black3Reason = "D3/D4双正，3号历史风险";
-  }else if(D3 < 0 && D4 > 0){
-    black3Reason = "D3负D4正，C被D压";
-  }
-
-  if(!black3Reason){
-    if(D3 === 0 && D4 > 0){
-      addCandidate(3, 7, "主推", "3号主推：D3=0且D4>0，中轴反冲", "辅助模型，单独命中谨慎", "main");
-    }
-    if(D3 >= 4 && D4 >= -6 && D4 < 0){
-      addCandidate(3, 7, "主推", "3号主推：D3>=4且-6<=D4<0，C强压D但尾负不过深", "辅助模型，单独命中谨慎", "main");
-    }
-    if(rank3 === 4 && D1 >= 0 && D3 > 0 && D4 < 0){
-      addCandidate(3, 8, "主推", "3号主推：rank4低位承接爆发", "辅助模型，单独命中谨慎", "main");
-    }
-    if(
-      (rank3 === 3 || rank3 === 4) &&
-      D2 > 0 &&
-      D3 >= -3 && D3 < 0 &&
-      D4 > 0 && D4 <= 3 &&
-      D5 >= 3
-    ){
-      addCandidate(3, 3, "观察", "3号观察：小反冲正闭环", "观察小注", "observe");
-    }
-  }
-
-  // 4号
-  const X4 = D;
-  const rank4 = rankDesc(X4, digits);
-  const K4 = RoomSum - X4;
-
-  let black4Reason = "";
-
-  if(rank4 === 1){
-    black4Reason = "D为rank1，4号历史大输风险";
-  }else if(D3 < 0 && D4 > 0){
-    black4Reason = "D3负D4正，4号承接断层";
-  }else if(C < D && E < D){
-    black4Reason = "邻居双低，D孤高无承接";
-  }else if(D3 === 0 && D4 < 0){
-    black4Reason = "D3=0且D4<0，尾端压走4号";
-  }
-
-  if(!black4Reason){
-    if(rank4 === 2 && D3 > 0 && D4 > 0){
-      addCandidate(4, 6, "主推", "4号主推：rank2且D3/D4双正", "辅助模型，单独命中谨慎", "main");
-    }
-    if(rank4 === 4 && between(D, C, E) && D3 < 0 && D4 < 0){
-      addCandidate(4, 8, "主推", "4号主推：rank4中承接双负", "辅助模型，单独命中谨慎", "main");
-    }
-    if(D1 >= 3 && D2 <= -4 && D3 > 0 && D4 < 0 && D5 > 0){
-      addCandidate(4, 8, "高波", "4号高波：特殊反冲结构", "高波小注", "main");
-    }
-    if(rank4 === 2 && D3 < 0 && D4 > 0 && D5 <= -4){
-      addCandidate(4, 3, "观察", "4号观察：rank2弱反冲", "观察小注", "observe");
-    }
-    if(rank4 === 5 && D3 > 0 && D4 < 0 && D5 === 0 && A <= 2){
-      addCandidate(4, 2, "观察", "4号观察：低位D5归零反抽", "高波观察", "observe");
-    }
-  }
-
-  // 5号
-  const X5 = E;
-  const rank5 = rankDesc(X5, digits);
-  const K5 = RoomSum - X5;
-
-  let black5Reason = "";
-
-  if(D5 === 0){
-    black5Reason = "D5=0，首尾闭死";
-  }else if([1,2,5,9].includes(X5)){
-    black5Reason = "5号X在{1,2,5,9}，历史不稳";
-  }
-
-  if(!black5Reason){
-    if(X5 === 4 && rank5 === 3 && K5 === 15 && root === 1){
-      addCandidate(5, 9, "主推", "5号主推：X=4、rank3、K=15、数根=1", "辅助模型，单独命中谨慎", "main");
-    }
-    if(X5 === 8 && rank5 === 1 && D3 === 5 && D4 === -6){
-      addCandidate(5, 9, "主推", "5号主推：X=8、rank1、D3=5、D4=-6", "辅助模型，单独命中谨慎", "main");
-    }
-  }
-
-  // 6号
-  const X6 = E;
-  const rank6 = rankDesc(X6, digits);
-  const K6 = RoomSum - X6;
-
-  let black6Reason = "";
-
-  if(D4 >= 5){
-    black6Reason = "D4>=5，D强压E";
-  }else if(D1 <= -6){
-    black6Reason = "D1<=-6，前端压制";
-  }else if(D5 <= -5){
-    black6Reason = "D5<=-5，E弱于A";
-  }else if(rank6 === 2 && D3 > 0 && D4 < 0){
-    black6Reason = "rank2伪强，中轴抢位";
-  }else if(D3 > 0 && D4 <= -4 && D5 <= 0){
-    black6Reason = "尾负但闭环不足";
-  }
-
-  if(!black6Reason){
-    if(D4 === 0 && D3 <= 0){
-      addCandidate(6, 7, "主推", "6号主推：D4=0且D3<=0，尾部归零承接", "辅助模型，单独命中谨慎", "main");
-    }
-    if(D3 === 0 && D4 < 0){
-      addCandidate(6, 7, "主推", "6号主推：D3=0且D4<0，尾反压", "辅助模型，单独命中谨慎", "main");
-    }
-    if(rank6 === 1 && (D3 <= 0 || D4 === 0 || D5 >= 2)){
-      addCandidate(6, 6, "主推", "6号主推：rank1尾强承接", "S1.1跳时可作为辅助观察", "main");
-    }
-    if(rank6 === 3 && between(E, D, A) && D4 >= -3 && D4 <= -1){
-      addCandidate(6, 5, "观察", "6号观察：rank3中承接轻负", "观察小注", "main");
-    }
-    if(X6 === 7 && rank6 === 2 && D3 === 0 && D4 < 0){
-      addCandidate(6, 7, "主推", "6号主推：X=7、rank2、D3=0、D4<0", "辅助模型，单独命中谨慎", "main");
-    }
-    if(D5 >= 6 && D4 <= -4 && D1 < 0){
-      addCandidate(6, 6, "观察", "6号观察：强尾观察", "观察小注", "main");
-    }
-    if(
-      rank6 === 5 &&
-      D4 >= 1 && D4 <= 5 &&
-      D1 >= -5 && D1 <= 1 &&
-      D5 <= -3
-    ){
-      addCandidate(6, 3, "观察", "6号观察：弱尾反弹", "观察小注", "observe");
-    }
-    if(
-      D4 === 1 &&
-      D5 >= 0 &&
-      rank6 <= 3 &&
-      A >= 6
-    ){
-      addCandidate(6, 3, "观察", "6号观察：轻承接", "观察小注", "observe");
-    }
-  }
-
-  if(candidates.length === 0){
-    const blackReasons = [];
-    if(black3Reason) blackReasons.push("3号黑：" + black3Reason);
-    if(black4Reason) blackReasons.push("4号黑：" + black4Reason);
-    if(black5Reason) blackReasons.push("5号黑：" + black5Reason);
-    if(black6Reason) blackReasons.push("6号黑：" + black6Reason);
-
+  if(baseResult.ok){
     return {
-      ok:false,
-      model:"v2.1",
-      seat:null,
-      status:"跳",
-      label:"v2.1跳",
-      score:null,
-      reason:blackReasons.length ? blackReasons.join("；") : "没有命中任何主推/观察结构",
-      risk:"辅助模型也未命中",
-      data:{...base,rank3,rank4,rank5,rank6}
+      ok:true,
+      model: includeTwoProtect ? "M1.1" : "M1",
+      seat:baseResult.seat,
+      score:baseResult.score,
+      source:baseResult.source,
+      label: includeTwoProtect ? "M1.1主推" : "M1主推",
+      reason:baseResult.reason,
+      risk:baseResult.risk,
+      stage:"S1.1原规则",
+      data:d
     };
   }
 
-  const mainCandidates = candidates.filter(c => c.mode === "main");
-  const observeCandidates = candidates.filter(c => c.mode === "observe");
+  const {A,B,C,D,E,S1,S2,S3,S4,rankB,rankE} = d;
+  const sArr = [S1,S2,S3,S4];
 
-  const priority = {5:1,3:2,4:3,6:4};
-
-  function sortCandidates(arr){
-    arr.sort((a,b)=>{
-      if(b.score !== a.score) return b.score - a.score;
-      return priority[a.seat] - priority[b.seat];
-    });
-    return arr;
+  // M1：6号S动能补位
+  if(uniqueMax(S4, sArr) && rankE <= 2 && S4 >= 10){
+    return {
+      ok:true,
+      model: includeTwoProtect ? "M1.1" : "M1",
+      seat:6,
+      score:76,
+      source:"M1补位",
+      label: includeTwoProtect ? "M1.1补位" : "M1补位",
+      reason:"6号：S4唯一最大 且 E排名第1/第2 且 S4>=10，尾段动能补位",
+      risk:"补位结构，正常小注，不重注",
+      stage:"6号M1动能补位",
+      data:d
+    };
   }
 
-  let best;
-  let outputMode;
-
-  if(mainCandidates.length){
-    best = sortCandidates(mainCandidates)[0];
-    outputMode = "辅助主推";
-  }else{
-    best = sortCandidates(observeCandidates)[0];
-    outputMode = "辅助观察";
+  // M1.1：2号极窄保护
+  if(includeTwoProtect){
+    if(
+      uniqueMax(S2, sArr) &&
+      rankB === 2 &&
+      B >= 5 &&
+      C === B + 1 &&
+      A === E &&
+      A <= 2 &&
+      S4 <= 4
+    ){
+      return {
+        ok:true,
+        model:"M1.1",
+        seat:2,
+        score:68,
+        source:"2号保护",
+        label:"2号保护",
+        reason:"2号极窄保护：S2唯一最大、B排名第2、B>=5、C=B+1、A=E<=2、S4<=4",
+        risk:"极窄保护位，样本少，只能正常小注，不重注",
+        stage:"2号极窄保护",
+        data:d
+      };
+    }
   }
 
   return {
-    ok:true,
-    model:"v2.1",
-    seat:best.seat,
-    status:outputMode,
-    label:outputMode,
-    mode:outputMode,
-    score:best.score,
-    reason:best.reason,
-    risk:best.risk,
-    candidates,
-    data:{...base,rank3,rank4,rank5,rank6,K3,K4,K5,K6}
+    ok:false,
+    model: includeTwoProtect ? "M1.1" : "M1",
+    seat:null,
+    score:null,
+    source:"跳",
+    label: includeTwoProtect ? "M1.1跳" : "M1跳",
+    reason: includeTwoProtect ? "M1.1未命中S1.1、6号补位、2号保护" : "M1未命中S1.1和6号补位",
+    risk:"无命中，直接跳",
+    stage:"跳",
+    data:d
   };
 }
 
-function getRelation(s11, v21){
-  if(s11.ok && v21.ok && s11.seat === v21.seat){
+function getRelation(m1,m11){
+  if(m1.ok && m11.ok && m1.seat === m11.seat){
     return {
-      title:`同向加强｜${s11.seat}号`,
-      text:"S1.1主模型与v2.1辅助模型同向，信号增强；仍按试跑纪律，不重注。",
+      title:`同向｜${m1.seat}号`,
+      text:"M1与M1.1同向，说明2号保护未改变主判断；按M1主逻辑执行。",
       cls:"r5"
     };
   }
 
-  if(s11.ok && v21.ok && s11.seat !== v21.seat){
+  if(!m1.ok && m11.ok && m11.seat === 2){
     return {
-      title:`模型冲突｜S1.1=${s11.seat}号 / v2.1=${v21.seat}号`,
-      text:"两个模型冲突，优先看S1.1；实战建议谨慎，冲突局不重注，可直接跳。",
+      title:"M1.1独有｜2号保护",
+      text:"M1跳，M1.1触发2号极窄保护；样本少，不重注。",
       cls:"r3"
     };
   }
 
-  if(s11.ok && !v21.ok){
+  if(m1.ok && !m11.ok){
     return {
-      title:`主模型命中｜${s11.seat}号`,
-      text:"S1.1主模型命中，v2.1未命中；按主模型正常试跑。",
-      cls:"r1"
-    };
-  }
-
-  if(!s11.ok && v21.ok){
-    return {
-      title:`辅助观察｜${v21.seat}号`,
-      text:"S1.1跳，v2.1辅助命中；只能小注观察，不按主模型打。",
-      cls:"r3"
+      title:`M1命中｜${m1.seat}号`,
+      text:"M1命中，M1.1异常未命中；按M1谨慎处理。",
+      cls:"r2"
     };
   }
 
   return {
     title:"双模型均跳",
-    text:"S1.1与v2.1均未命中，直接跳。",
+    text:"M1与M1.1均未命中，直接跳。",
     cls:"r4"
   };
 }
@@ -822,7 +656,7 @@ function buildRelationCard(relation){
     <div class="hit-body">
       <div class="row1">${relation.title}</div>
       <div class="row2">${relation.text}</div>
-      <div class="row3">规则：S1.1为主，v2.1为辅；同向加强，冲突谨慎。</div>
+      <div class="row3">规则：M1是基础主模型；M1.1额外加入2号极窄保护。</div>
     </div>
     <div class="hit-right">
       <div class="hit-wr">总</div>
@@ -832,55 +666,20 @@ function buildRelationCard(relation){
   return div;
 }
 
-function buildS11Card(result, room5){
+function buildModelCard(result, room5, rankClass){
   const div = document.createElement('div');
-  div.className = result.ok ? 'hit r1' : 'hit r4';
-
+  div.className = `hit ${result.ok ? rankClass : 'r4'}`;
   const d = result.data;
   const seatText = result.ok ? `${result.seat}` : '跳';
-  const label = result.ok ? result.label : 'S1.1跳';
   const wrText = result.ok ? `${result.score}分` : '—';
-  const avgText = result.ok ? '主模型' : '跳';
+  const avgText = result.ok ? result.stage : '跳';
 
   div.innerHTML = `
-    <div class="hit-lbl">${label}</div>
+    <div class="hit-lbl">${result.label}</div>
     <div class="hit-seat">${seatText}</div>
     <div class="hit-body">
-      <div class="row1">模型1｜S1.1主模型｜房号=${room5}</div>
-      <div class="row2">S1=${d.S1} S2=${d.S2} S3=${d.S3} S4=${d.S4}</div>
-      <div class="row3">${result.reason}｜${result.risk}</div>
-    </div>
-    <div class="hit-right">
-      <div class="hit-wr">${wrText}</div>
-      <div class="hit-avg">${avgText}</div>
-    </div>
-  `;
-  return div;
-}
-
-function buildV21Card(result, room5){
-  const div = document.createElement('div');
-
-  if(!result.ok){
-    div.className = 'hit r4';
-  }else if(result.mode === "辅助观察" || result.status === "辅助观察"){
-    div.className = 'hit r3';
-  }else{
-    div.className = 'hit r2';
-  }
-
-  const d = result.data;
-  const seatText = result.ok ? `${result.seat}` : '跳';
-  const label = result.ok ? `v2.1 ${result.label}` : 'v2.1跳';
-  const wrText = result.ok ? `${result.score}分` : '—';
-  const avgText = result.ok ? result.mode : '跳';
-
-  div.innerHTML = `
-    <div class="hit-lbl">${label}</div>
-    <div class="hit-seat">${seatText}</div>
-    <div class="hit-body">
-      <div class="row1">模型2｜v2.1辅助｜房号=${room5}　A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
-      <div class="row2">D1=${d.D1} D2=${d.D2} D3=${d.D3} D4=${d.D4} D5=${d.D5}</div>
+      <div class="row1">${result.model}｜房号=${room5}　A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
+      <div class="row2">S1=${d.S1} S2=${d.S2} S3=${d.S3} S4=${d.S4}｜E排名=${d.rankE} B排名=${d.rankB}</div>
       <div class="row3">${result.reason}｜${result.risk}</div>
     </div>
     <div class="hit-right">
@@ -892,27 +691,27 @@ function buildV21Card(result, room5){
 }
 
 function render(room5){
-  const s11 = evaluateS11(room5);
-  const v21 = evaluateV21(room5);
-  const relation = getRelation(s11, v21);
+  const m1 = evaluateM1(room5, false);
+  const m11 = evaluateM1(room5, true);
+  const relation = getRelation(m1,m11);
 
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
 
-  resultHdr.textContent = `然仔66660｜S1.1=${s11.ok ? s11.seat + '号' : '跳'}｜v2.1=${v21.ok ? v21.seat + '号' : '跳'}`;
+  resultHdr.textContent = `然仔66660｜M1=${m1.ok ? m1.seat + '号' : '跳'}｜M1.1=${m11.ok ? m11.seat + '号' : '跳'}`;
 
   hitListEl.appendChild(buildRelationCard(relation));
-  hitListEl.appendChild(buildS11Card(s11, room5));
-  hitListEl.appendChild(buildV21Card(v21, room5));
+  hitListEl.appendChild(buildModelCard(m1, room5, 'r1'));
+  hitListEl.appendChild(buildModelCard(m11, room5, 'r5'));
 
   resultEl.style.display = 'block';
 
-  if(!s11.ok && !v21.ok){
+  if(!m1.ok && !m11.ok){
     skipEl.style.display = 'block';
   }
 
-  return { s11, v21, relation };
+  return {m1,m11,relation};
 }
 
 function run(){
@@ -950,13 +749,13 @@ function renderHist(){
     const div = document.createElement('div');
     div.className = 'histItem';
 
-    const s11Res = item.s11 && item.s11.ok ? `${item.s11.seat}号S1.1` : '跳';
-    const v21Res = item.v21 && item.v21.ok ? `${item.v21.seat}号v2.1` : '跳';
+    const m1Res = item.m1 && item.m1.ok ? `${item.m1.seat}号M1` : '跳';
+    const m11Res = item.m11 && item.m11.ok ? `${item.m11.seat}号M1.1` : '跳';
     const relation = item.relationTitle || '—';
 
     div.innerHTML = `
       <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">${relation}<br>S1.1 → ${s11Res}｜v2.1 → ${v21Res}</div>`;
+      <div class="histMain">${relation}<br>M1 → ${m1Res}｜M1.1 → ${m11Res}</div>`;
     histListEl.appendChild(div);
   });
 }
@@ -965,15 +764,15 @@ function pushHistory(room, results){
   const items = loadHist();
   items.unshift({
     room,
-    s11: {
-      ok: results.s11.ok,
-      seat: results.s11.seat,
-      mode: results.s11.mode || '跳'
+    m1: {
+      ok: results.m1.ok,
+      seat: results.m1.seat,
+      stage: results.m1.stage || '跳'
     },
-    v21: {
-      ok: results.v21.ok,
-      seat: results.v21.seat,
-      mode: results.v21.mode || '跳'
+    m11: {
+      ok: results.m11.ok,
+      seat: results.m11.seat,
+      stage: results.m11.stage || '跳'
     },
     relationTitle: results.relation.title,
     time: new Date().toLocaleString('zh-CN', {hour12:false})
