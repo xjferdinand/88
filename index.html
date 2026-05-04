@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="然仔66660">
-  <title>然仔66660 v2.1</title>
+  <title>然仔66660 双模型</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -151,7 +151,8 @@
     }
     .hit.r1{border-color:rgba(255,45,45,.50);background:rgba(255,45,45,.10);}
     .hit.r2{border-color:rgba(255,140,0,.38);background:rgba(255,140,0,.08);}
-    .hit.r3{border-color:rgba(255,255,255,.10);}
+    .hit.r3{border-color:rgba(80,255,140,.38);background:rgba(80,255,140,.08);}
+    .hit.r4{border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.03);}
 
     .hit-lbl{
       font-size:9px;
@@ -171,6 +172,10 @@
       background:rgba(255,140,0,.26);
       color:#ffbd6b;
     }
+    .hit.r3 .hit-lbl{
+      background:rgba(80,255,140,.20);
+      color:rgba(120,255,170,.95);
+    }
 
     .hit-seat{
       font-size:21px;
@@ -185,6 +190,10 @@
     .hit.r2 .hit-seat{
       color:#ff9f1c;
       text-shadow:0 0 12px rgba(255,159,28,.25);
+    }
+    .hit.r3 .hit-seat{
+      color:rgba(80,255,140,.95);
+      text-shadow:0 0 12px rgba(80,255,140,.25);
     }
 
     .hit-body{
@@ -328,7 +337,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">v2.1 主推 / 观察双档</span></div>
+  <div class="title">然仔66660<span class="version">v2.1 + S1双模型</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -340,7 +349,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660 v2.1结果 —</div>
+      <div class="result-hdr" id="resultHdr">— 然仔66660 双模型结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
     <div class="skip" id="skip">跳</div>
@@ -354,22 +363,23 @@
     </div>
 
     <div class="tiny">
-【然仔66660｜X排名邻居黑白模型 v2.1】
-逻辑：先排雷，再进房。
-主推正常试跑；观察只能小注。
-无主推/观察直接跳。
-亏损 ≤ -400 按大输统计。
+【模型1：然仔66660｜X排名邻居黑白模型 v2.1】
+主推/观察双档；观察只能小注。
 
-回测：92局｜主推52局｜观察10局｜总输出62局
-总进房率67.4%｜综合命中32局
-综合命中净分 +20870｜≤-400大输命中0
+【模型2：然仔·66660 邻位和值结构模型 S1】
+S1=A+B，S2=B+C，S3=C+D，S4=D+E
+强过滤主模型候选；不命中直接跳。
+回测：92局｜输出37局｜命中25局｜命中净分+20640｜≤-400大输命中0
+
+两个模型分开输出，不互相覆盖。
+亏损 ≤ -400 按大输统计。
     </div>
 
   </div>
 </div>
 
 <script>
-const HISTORY_KEY = 'ranzai_66660_v21_dual_mode';
+const HISTORY_KEY = 'ranzai_66660_v21_plus_s1_dual';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -399,10 +409,9 @@ function between(x, left, right){
   return (left >= x && x >= right) || (left <= x && x <= right);
 }
 
-function evaluateRanZai66660(room5){
+function getBaseData(room5){
   const [A,B,C,D,E] = getDigits(room5);
   const digits = [A,B,C,D,E];
-
   const RoomSum = A+B+C+D+E;
   const root = digitRoot(RoomSum);
 
@@ -412,15 +421,28 @@ function evaluateRanZai66660(room5){
   const D4 = D-E;
   const D5 = E-A;
 
+  const S1 = A+B;
+  const S2 = B+C;
+  const S3 = C+D;
+  const S4 = D+E;
+
+  return {A,B,C,D,E,digits,RoomSum,root,D1,D2,D3,D4,D5,S1,S2,S3,S4};
+}
+
+/* ==================================================
+   模型1：当前网页 v2.1 X排名邻居黑白模型
+================================================== */
+function evaluateV21(room5){
+  const base = getBaseData(room5);
+  const {A,B,C,D,E,digits,RoomSum,root,D1,D2,D3,D4,D5} = base;
+
   const candidates = [];
 
   function addCandidate(seat, score, level, reason, risk, mode){
     candidates.push({ seat, score, level, reason, risk, mode });
   }
 
-  // =========================
-  // 3号：X=C，邻居B/D
-  // =========================
+  // 3号
   const X3 = C;
   const rank3 = rankDesc(X3, digits);
   const K3 = RoomSum - X3;
@@ -438,20 +460,15 @@ function evaluateRanZai66660(room5){
   }
 
   if(!black3Reason){
-    // v2.0主推结构
     if(D3 === 0 && D4 > 0){
       addCandidate(3, 7, "主推", "3号主推：D3=0且D4>0，中轴反冲", "正常试跑", "main");
     }
-
     if(D3 >= 4 && D4 >= -6 && D4 < 0){
       addCandidate(3, 7, "主推", "3号主推：D3>=4且-6<=D4<0，C强压D但尾负不过深", "正常试跑", "main");
     }
-
     if(rank3 === 4 && D1 >= 0 && D3 > 0 && D4 < 0){
       addCandidate(3, 8, "主推", "3号主推：rank4低位承接爆发", "正常试跑", "main");
     }
-
-    // v2.1新增观察：3号小反冲正闭环
     if(
       (rank3 === 3 || rank3 === 4) &&
       D2 > 0 &&
@@ -463,9 +480,7 @@ function evaluateRanZai66660(room5){
     }
   }
 
-  // =========================
-  // 4号：X=D，邻居C/E
-  // =========================
+  // 4号
   const X4 = D;
   const rank4 = rankDesc(X4, digits);
   const K4 = RoomSum - X4;
@@ -483,33 +498,24 @@ function evaluateRanZai66660(room5){
   }
 
   if(!black4Reason){
-    // v2.0主推结构
     if(rank4 === 2 && D3 > 0 && D4 > 0){
       addCandidate(4, 6, "主推", "4号主推：rank2且D3/D4双正", "正常试跑", "main");
     }
-
     if(rank4 === 4 && between(D, C, E) && D3 < 0 && D4 < 0){
       addCandidate(4, 8, "主推", "4号主推：rank4中承接双负", "正常试跑", "main");
     }
-
     if(D1 >= 3 && D2 <= -4 && D3 > 0 && D4 < 0 && D5 > 0){
       addCandidate(4, 8, "高波", "4号高波：特殊反冲结构", "高波小注；亏≤-300暂停复盘", "main");
     }
-
-    // v2.1新增观察：4号rank2弱反冲
     if(rank4 === 2 && D3 < 0 && D4 > 0 && D5 <= -4){
       addCandidate(4, 3, "观察", "4号观察：rank2弱反冲", "观察小注；该结构不做主推", "observe");
     }
-
-    // v2.1新增观察：4号低位D5归零反抽
     if(rank4 === 5 && D3 > 0 && D4 < 0 && D5 === 0 && A <= 2){
       addCandidate(4, 2, "观察", "4号观察：低位D5归零反抽", "高波观察，极小注；观察亏≤-300暂停", "observe");
     }
   }
 
-  // =========================
-  // 5号：X=E，邻居D/A
-  // =========================
+  // 5号
   const X5 = E;
   const rank5 = rankDesc(X5, digits);
   const K5 = RoomSum - X5;
@@ -523,19 +529,15 @@ function evaluateRanZai66660(room5){
   }
 
   if(!black5Reason){
-    // v2.0主推结构，v2.1不扩5号
     if(X5 === 4 && rank5 === 3 && K5 === 15 && root === 1){
       addCandidate(5, 9, "主推", "5号主推：X=4、rank3、K=15、数根=1", "正常试跑", "main");
     }
-
     if(X5 === 8 && rank5 === 1 && D3 === 5 && D4 === -6){
       addCandidate(5, 9, "主推", "5号主推：X=8、rank1、D3=5、D4=-6", "正常试跑", "main");
     }
   }
 
-  // =========================
-  // 6号：X=E，邻居D/A
-  // =========================
+  // 6号
   const X6 = E;
   const rank6 = rankDesc(X6, digits);
   const K6 = RoomSum - X6;
@@ -555,32 +557,24 @@ function evaluateRanZai66660(room5){
   }
 
   if(!black6Reason){
-    // v2.0主推结构
     if(D4 === 0 && D3 <= 0){
       addCandidate(6, 7, "主推", "6号主推：D4=0且D3<=0，尾部归零承接", "正常试跑", "main");
     }
-
     if(D3 === 0 && D4 < 0){
       addCandidate(6, 7, "主推", "6号主推：D3=0且D4<0，尾反压", "正常试跑", "main");
     }
-
     if(rank6 === 1 && (D3 <= 0 || D4 === 0 || D5 >= 2)){
       addCandidate(6, 6, "主推", "6号主推：rank1尾强承接", "谨慎试跑；亏≤-300暂停复盘", "main");
     }
-
     if(rank6 === 3 && between(E, D, A) && D4 >= -3 && D4 <= -1){
       addCandidate(6, 5, "观察", "6号观察：rank3中承接轻负", "观察小注", "main");
     }
-
     if(X6 === 7 && rank6 === 2 && D3 === 0 && D4 < 0){
       addCandidate(6, 7, "主推", "6号主推：X=7、rank2、D3=0、D4<0", "正常试跑", "main");
     }
-
     if(D5 >= 6 && D4 <= -4 && D1 < 0){
       addCandidate(6, 6, "观察", "6号观察：强尾观察", "观察小注", "main");
     }
-
-    // v2.1新增观察：6号弱尾反弹
     if(
       rank6 === 5 &&
       D4 >= 1 && D4 <= 5 &&
@@ -589,8 +583,6 @@ function evaluateRanZai66660(room5){
     ){
       addCandidate(6, 3, "观察", "6号观察：弱尾反弹", "观察小注；观察亏≤-300暂停观察档", "observe");
     }
-
-    // v2.1新增观察：6号轻承接
     if(
       D4 === 1 &&
       D5 >= 0 &&
@@ -610,13 +602,14 @@ function evaluateRanZai66660(room5){
 
     return {
       ok:false,
+      model:"v2.1",
       seat:null,
       status:"跳",
-      label:"跳",
+      label:"v2.1跳",
       score:null,
       reason:blackReasons.length ? blackReasons.join("；") : "没有命中任何主推/观察结构",
       risk:"无主推/观察，直接跳",
-      data:{ A,B,C,D,E,RoomSum,root,D1,D2,D3,D4,D5,rank3,rank4,rank5,rank6 }
+      data:{...base,rank3,rank4,rank5,rank6}
     };
   }
 
@@ -646,6 +639,7 @@ function evaluateRanZai66660(room5){
 
   return {
     ok:true,
+    model:"v2.1",
     seat:best.seat,
     status:outputMode === "主推" ? best.level : "观察",
     label:outputMode === "主推" ? best.level : "观察",
@@ -654,14 +648,118 @@ function evaluateRanZai66660(room5){
     reason:best.reason,
     risk:best.risk,
     candidates,
-    data:{ A,B,C,D,E,RoomSum,root,D1,D2,D3,D4,D5,rank3,rank4,rank5,rank6,K3,K4,K5,K6 }
+    data:{...base,rank3,rank4,rank5,rank6,K3,K4,K5,K6}
   };
 }
 
-function buildModelCard(result, room5){
+/* ==================================================
+   模型2：S1 邻位和值结构模型
+================================================== */
+function evaluateS1(room5){
+  const base = getBaseData(room5);
+  const {A,B,C,D,E,S1,S2,S3,S4} = base;
+  const candidates = [];
+
+  function addCandidate(seat, score, level, reason, risk){
+    candidates.push({seat, score, level, reason, risk});
+  }
+
+  // 3号规则
+  if(S2 >= 13 && S3 >= 11){
+    addCandidate(3, 90, "S1主推", "3号：S2>=13 且 S3>=11，中轴和值强", "S1强过滤结构");
+  }
+
+  if(S1 >= 15 && S2 >= 12 && S4 >= 12){
+    addCandidate(3, 88, "S1主推", "3号：S1>=15 且 S2>=12 且 S4>=12，首前高+尾承接", "S1强过滤结构");
+  }
+
+  // 4号规则
+  if(S3 === 12 && (S4 === 5 || S4 === 6)){
+    addCandidate(4, 70, "S1主推", "4号：S3=12 且 S4=5/6，后中轴精准组合", "S1精确组合");
+  }
+
+  if(S3 === 5 && S4 === 11){
+    addCandidate(4, 70, "S1主推", "4号：S3=5 且 S4=11，后段反冲组合", "S1精确组合");
+  }
+
+  if(S3 === 4 && S4 === 10){
+    addCandidate(4, 70, "S1主推", "4号：S3=4 且 S4=10，低中轴反冲组合", "S1精确组合");
+  }
+
+  if(S2 === 7 && S3 === 10 && S4 === 12){
+    addCandidate(4, 72, "S1主推", "4号：S2=7 且 S3=10 且 S4=12，特殊和值反冲", "S1特殊结构");
+  }
+
+  // 5号规则
+  if(S3 === 5 && S4 === 4){
+    addCandidate(5, 80, "S1主推", "5号：S3=5 且 S4=4，尾位落点黄金组合", "5号窄进");
+  }
+
+  if(S3 === 9 && S4 === 10){
+    addCandidate(5, 80, "S1主推", "5号：S3=9 且 S4=10，尾轴承接黄金组合", "5号窄进");
+  }
+
+  if(S3 === 6 && S4 === 9){
+    addCandidate(5, 80, "S1主推", "5号：S3=6 且 S4=9，尾位爆发组合", "5号窄进");
+  }
+
+  // 6号规则
+  if(S4 >= 13 && S3 >= 7){
+    addCandidate(6, 85, "S1主推", "6号：S4>=13 且 S3>=7，尾轴和值强", "6号尾轴强结构");
+  }
+
+  if(S1 >= 15 && S3 === 9 && S4 === 9){
+    addCandidate(6, 82, "S1主推", "6号：S1>=15 且 S3=9 且 S4=9，首端强+尾端平衡", "6号特殊强结构");
+  }
+
+  if(S1 <= 6 && S2 <= 3){
+    addCandidate(6, 82, "S1主推", "6号：S1<=6 且 S2<=3，前段极低启动结构", "6号特殊低启结构");
+  }
+
+  if(candidates.length === 0){
+    return {
+      ok:false,
+      model:"S1",
+      seat:null,
+      status:"跳",
+      label:"S1跳",
+      score:null,
+      reason:"S1和值模型未命中黄金结构",
+      risk:"S1强过滤，无命中直接跳",
+      data:base
+    };
+  }
+
+  const priority = {3:1,6:2,5:3,4:4};
+
+  candidates.sort((a,b)=>{
+    if(b.score !== a.score) return b.score - a.score;
+    return priority[a.seat] - priority[b.seat];
+  });
+
+  const best = candidates[0];
+
+  return {
+    ok:true,
+    model:"S1",
+    seat:best.seat,
+    status:best.level,
+    label:"S1主推",
+    mode:"S1主推",
+    score:best.score,
+    reason:best.reason,
+    risk:best.risk,
+    candidates,
+    data:base
+  };
+}
+
+function buildV21Card(result, room5){
   const div = document.createElement('div');
 
-  if(result.mode === "观察" || result.status === "观察"){
+  if(!result.ok){
+    div.className = 'hit r4';
+  }else if(result.mode === "观察" || result.status === "观察"){
     div.className = 'hit r2';
   }else{
     div.className = 'hit r1';
@@ -669,15 +767,15 @@ function buildModelCard(result, room5){
 
   const d = result.data;
   const seatText = result.ok ? `${result.seat}` : '跳';
-  const label = result.ok ? result.label : '跳';
+  const label = result.ok ? `v2.1 ${result.label}` : 'v2.1跳';
   const wrText = result.ok ? `${result.score}分` : '—';
-  const avgText = result.mode || '跳';
+  const avgText = result.ok ? result.mode : '跳';
 
   div.innerHTML = `
     <div class="hit-lbl">${label}</div>
     <div class="hit-seat">${seatText}</div>
     <div class="hit-body">
-      <div class="row1">房号=${room5}　A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
+      <div class="row1">模型1｜房号=${room5}　A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
       <div class="row2">D1=${d.D1} D2=${d.D2} D3=${d.D3} D4=${d.D4} D5=${d.D5}</div>
       <div class="row3">${result.reason}｜${result.risk}</div>
     </div>
@@ -689,28 +787,55 @@ function buildModelCard(result, room5){
   return div;
 }
 
+function buildS1Card(result, room5){
+  const div = document.createElement('div');
+
+  div.className = result.ok ? 'hit r3' : 'hit r4';
+
+  const d = result.data;
+  const seatText = result.ok ? `${result.seat}` : '跳';
+  const label = result.ok ? result.label : 'S1跳';
+  const wrText = result.ok ? `${result.score}分` : '—';
+  const avgText = result.ok ? 'S1' : '跳';
+
+  div.innerHTML = `
+    <div class="hit-lbl">${label}</div>
+    <div class="hit-seat">${seatText}</div>
+    <div class="hit-body">
+      <div class="row1">模型2｜S1邻位和值｜房号=${room5}</div>
+      <div class="row2">S1=${d.S1} S2=${d.S2} S3=${d.S3} S4=${d.S4}</div>
+      <div class="row3">${result.reason}｜${result.risk}</div>
+    </div>
+    <div class="hit-right">
+      <div class="hit-wr">${wrText}</div>
+      <div class="hit-avg">${avgText}</div>
+    </div>
+  `;
+  return div;
+}
+
 function render(room5){
-  const res = evaluateRanZai66660(room5);
+  const v21 = evaluateV21(room5);
+  const s1 = evaluateS1(room5);
 
   resultEl.style.display = 'none';
   skipEl.style.display   = 'none';
   hitListEl.innerHTML    = '';
 
-  if(!res.ok){
-    resultHdr.textContent = `然仔66660 v2.1　无主推/观察`;
-    skipEl.style.display = 'block';
-    return [];
-  }
+  const anyHit = v21.ok || s1.ok;
 
-  resultHdr.textContent = `然仔66660 v2.1　${res.mode}命中`;
-  hitListEl.appendChild(buildModelCard(res, room5));
+  resultHdr.textContent = `然仔66660 双模型｜v2.1=${v21.ok ? v21.seat + '号' : '跳'}｜S1=${s1.ok ? s1.seat + '号' : '跳'}`;
+
+  hitListEl.appendChild(buildV21Card(v21, room5));
+  hitListEl.appendChild(buildS1Card(s1, room5));
+
   resultEl.style.display = 'block';
 
-  return [{
-    seat: res.seat,
-    mode: res.mode,
-    label: res.label
-  }];
+  if(!anyHit){
+    skipEl.style.display = 'block';
+  }
+
+  return { v21, s1 };
 }
 
 function run(){
@@ -748,14 +873,12 @@ function renderHist(){
     const div = document.createElement('div');
     div.className = 'histItem';
 
-    let res = '跳';
-    if(item.results && item.results.length){
-      res = item.results.map(r => `${r.seat}号${r.mode === '观察' ? '观察' : '主推'}`).join(' / ');
-    }
+    const v21Res = item.v21 && item.v21.ok ? `${item.v21.seat}号${item.v21.mode === '观察' ? '观察' : '主推'}` : '跳';
+    const s1Res = item.s1 && item.s1.ok ? `${item.s1.seat}号S1` : '跳';
 
     div.innerHTML = `
       <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">然仔66660 v2.1 → ${res}</div>`;
+      <div class="histMain">v2.1 → ${v21Res}｜S1 → ${s1Res}</div>`;
     histListEl.appendChild(div);
   });
 }
@@ -764,7 +887,16 @@ function pushHistory(room, results){
   const items = loadHist();
   items.unshift({
     room,
-    results,
+    v21: {
+      ok: results.v21.ok,
+      seat: results.v21.seat,
+      mode: results.v21.mode || '跳'
+    },
+    s1: {
+      ok: results.s1.ok,
+      seat: results.s1.seat,
+      mode: results.s1.mode || '跳'
+    },
     time: new Date().toLocaleString('zh-CN', {hour12:false})
   });
   saveHist(items);
