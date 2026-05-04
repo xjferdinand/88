@@ -1,983 +1,824 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#b00000"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="然仔66660高进房">
-  <title>然仔66660高进房差值链</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>然仔66660 X排名邻居黑白模型 v2.0</title>
   <style>
-    :root{
-      --bg:#0b0b0f;
-      --card:#11111a;
-      --line:rgba(255,255,255,.10);
-      --text:#f5f5f7;
-      --muted:rgba(255,255,255,.50);
-      --red:#ff2d2d;
-    }
-    *{box-sizing:border-box;margin:0;padding:0;}
-
-    body{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:
-        radial-gradient(800px 400px at 50% 15%,rgba(255,45,45,.20),transparent 60%),
-        radial-gradient(900px 500px at 50% 110%,rgba(176,0,0,.25),transparent 60%),
-        var(--bg);
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-      padding:12px;
+    * {
+      box-sizing: border-box;
     }
 
-    .app{
-      width:min(430px,100%);
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", Arial, sans-serif;
+      background: #f4f6f8;
+      color: #111827;
     }
 
-    .title{
-      font-size:16px;
-      font-weight:900;
-      margin:0 0 12px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-    .title::before{
-      content:"";
-      flex-shrink:0;
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--red);
-      box-shadow:0 0 12px rgba(255,45,45,.9);
-    }
-    .version{
-      font-size:10px;
-      color:rgba(255,45,45,.6);
-      margin-left:4px;
-      font-weight:400;
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
     }
 
-    .panel{
-      background:linear-gradient(160deg,rgba(255,45,45,.07),transparent 55%),var(--card);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      box-shadow:0 20px 60px rgba(0,0,0,.55);
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
     }
 
-    input{
-      width:100%;
-      padding:12px 14px;
-      font-size:22px;
-      letter-spacing:5px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.40);
-      color:var(--text);
-      outline:none;
-      text-align:center;
-      font-weight:700;
-    }
-    input:focus{
-      border-color:rgba(255,45,45,.65);
-      box-shadow:0 0 0 3px rgba(255,45,45,.12);
-    }
-    input::placeholder{
-      font-size:13px;
-      letter-spacing:1px;
-      font-weight:400;
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.3;
     }
 
-    .btn-wrap{
-      display:flex;
-      justify-content:center;
-      margin:14px 0 8px;
-    }
-    .btn-circle{
-      width:66px;
-      height:66px;
-      border-radius:50%;
-      border:2px solid rgba(255,45,45,.55);
-      background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
-      color:#fff;
-      font-size:15px;
-      font-weight:900;
-      letter-spacing:1px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18);
-      transition:transform .1s,box-shadow .1s;
-    }
-    .btn-circle:active{transform:scale(.92);}
-
-    .msg{
-      text-align:center;
-      font-size:12px;
-      color:var(--muted);
-      min-height:14px;
-      margin-bottom:8px;
+    h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
     }
 
-    .result{
-      display:none;
-      margin-top:4px;
-    }
-    .result-hdr{
-      text-align:center;
-      font-size:10px;
-      color:var(--muted);
-      margin-bottom:8px;
-      letter-spacing:.3px;
-    }
-    .hit-list{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
+    .sub {
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
-    .hit{
-      display:grid;
-      grid-template-columns:auto 52px 1fr auto;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.07);
-      background:rgba(0,0,0,.22);
-    }
-    .hit.r1{border-color:rgba(255,45,45,.50);background:rgba(255,45,45,.10);}
-    .hit.r2{border-color:rgba(255,140,0,.28);}
-    .hit.r3{border-color:rgba(255,255,255,.10);}
-
-    .hit-lbl{
-      font-size:9px;
-      font-weight:900;
-      padding:2px 6px;
-      border-radius:999px;
-      background:rgba(255,45,45,.20);
-      color:#ff8080;
-      white-space:nowrap;
-      letter-spacing:.2px;
-    }
-    .hit.r1 .hit-lbl{
-      background:rgba(255,45,45,.38);
-      color:#ff9090;
+    .model-note {
+      font-size: 14px;
+      line-height: 1.7;
+      background: #f9fafb;
+      border-left: 4px solid #111827;
+      padding: 12px;
+      border-radius: 10px;
+      color: #374151;
     }
 
-    .hit-seat{
-      font-size:21px;
-      font-weight:1000;
-      color:var(--red);
-      text-shadow:0 0 12px rgba(255,45,45,.35);
-      line-height:1.05;
-      text-align:center;
-      white-space:nowrap;
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
     }
 
-    .hit-body{
-      line-height:1.4;
-      min-width:0;
-    }
-    .hit-body .row1{
-      font-size:11px;
-      color:var(--text);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .hit-body .row2{
-      font-size:10px;
-      color:var(--muted);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .hit-body .row3{
-      font-size:9px;
-      color:rgba(255,255,255,.30);
-      margin-top:1px;
-      line-height:1.25;
+    input {
+      flex: 1;
+      height: 48px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 0 14px;
+      font-size: 20px;
+      outline: none;
+      letter-spacing: 2px;
     }
 
-    .hit-right{
-      text-align:right;
-      min-width:42px;
-    }
-    .hit-wr{
-      font-size:11px;
-      font-weight:900;
-      color:rgba(80,255,140,.85);
-    }
-    .hit-avg{
-      font-size:9px;
-      color:rgba(255,255,255,.35);
-      margin-top:1px;
+    input:focus {
+      border-color: #111827;
     }
 
-    .skip{
-      display:none;
-      text-align:center;
-      padding:18px;
-      font-size:30px;
-      font-weight:1000;
-      color:rgba(255,255,255,.18);
-      letter-spacing:4px;
+    button {
+      height: 48px;
+      border: none;
+      border-radius: 12px;
+      padding: 0 18px;
+      background: #111827;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
-    .history{
-      margin-top:12px;
-      padding:10px 11px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
-    }
-    .histHead{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:7px;
-    }
-    .histTitle{
-      font-size:11px;
-      font-weight:800;
-      color:var(--muted);
-    }
-    .clearBtn{
-      font-size:10px;
-      padding:4px 8px;
-      border-radius:7px;
-      cursor:pointer;
-      border:1px solid rgba(255,45,45,.35);
-      background:rgba(255,45,45,.10);
-      color:rgba(255,100,100,.85);
-    }
-    .histList{
-      display:flex;
-      flex-direction:column;
-      gap:5px;
-      max-height:180px;
-      overflow:auto;
-    }
-    .histItem{
-      border:1px solid rgba(255,255,255,.05);
-      border-radius:9px;
-      padding:7px 9px;
-      background:rgba(0,0,0,.14);
-    }
-    .histTop{
-      display:flex;
-      justify-content:space-between;
-      font-size:10px;
-      color:rgba(255,255,255,.35);
-      margin-bottom:2px;
-    }
-    .histMain{
-      font-size:11px;
-      color:rgba(255,255,255,.60);
-      line-height:1.35;
-    }
-    .pill{
-      display:inline-block;
-      padding:1px 6px;
-      border-radius:999px;
-      border:1px solid rgba(255,45,45,.35);
-      background:rgba(255,45,45,.10);
-      font-weight:800;
-      color:var(--red);
-      margin-right:3px;
+    button:active {
+      transform: scale(0.98);
     }
 
-    .tiny{
-      margin-top:12px;
-      padding-top:10px;
-      border-top:1px solid var(--line);
-      font-size:10px;
-      color:rgba(255,255,255,.28);
-      line-height:1.6;
-      white-space:pre-line;
+    .result {
+      margin-top: 16px;
+      border-radius: 16px;
+      padding: 16px;
+      display: none;
     }
 
-    @media (max-width: 430px){
-      body{padding:10px;}
-      .app{width:100%;}
-      .panel{padding:10px;border-radius:15px;}
-      .hit{
-        grid-template-columns:auto 46px 1fr auto;
-        gap:6px;
-        padding:7px 8px;
+    .result.show {
+      display: block;
+    }
+
+    .result-main {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .result-sub {
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .go {
+      background: #ecfdf5;
+      border: 1px solid #10b981;
+      color: #065f46;
+    }
+
+    .watch {
+      background: #fffbeb;
+      border: 1px solid #f59e0b;
+      color: #92400e;
+    }
+
+    .risk {
+      background: #fff7ed;
+      border: 1px solid #f97316;
+      color: #9a3412;
+    }
+
+    .skip {
+      background: #f3f4f6;
+      border: 1px solid #9ca3af;
+      color: #374151;
+    }
+
+    .invalid {
+      background: #fef2f2;
+      border: 1px solid #ef4444;
+      color: #991b1b;
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .data-box {
+      background: rgba(255, 255, 255, 0.65);
+      border-radius: 10px;
+      padding: 8px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .data-box b {
+      display: block;
+      font-size: 16px;
+      margin-top: 2px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .history-item {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.6;
+      border: 1px solid #e5e7eb;
+    }
+
+    .history-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    .small-btn {
+      height: 36px;
+      font-size: 14px;
+      padding: 0 12px;
+      background: #6b7280;
+    }
+
+    .footer {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 12px;
+      margin-top: 22px;
+    }
+
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.7);
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 12px;
       }
-      .hit-seat{font-size:19px;}
-      .result-hdr{font-size:10px;}
-      .histMain{font-size:10px;}
-      .tiny{font-size:9px;}
+
+      .input-row {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .data-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .result-main {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
+
 <body>
-<div class="app">
-  <div class="title">然仔66660<span class="version">高进房差值链 v1.2.2</span></div>
-  <div class="panel">
-
-    <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
-
-    <div class="btn-wrap">
-      <button class="btn-circle" id="go">开干</button>
-    </div>
-
-    <div class="msg" id="msg"></div>
-
-    <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660高进房结果 —</div>
-      <div class="hit-list" id="hitList"></div>
-    </div>
-    <div class="skip" id="skip">跳</div>
-
-    <div class="history">
-      <div class="histHead">
-        <span class="histTitle">最近记录</span>
-        <button class="clearBtn" id="clearBtn">清空</button>
+  <div class="container">
+    <div class="card">
+      <h1>然仔66660｜X排名邻居黑白模型 v2.0</h1>
+      <div class="sub">
+        先排雷，再进房。只输出一个主推位；无主推直接跳；不输出备选。
       </div>
-      <div class="histList" id="histList"></div>
+
+      <div class="model-note" style="margin-top: 14px;">
+        <b>模型口径</b><br>
+        当前模型：然仔66660 X排名邻居黑白模型 v2.0 试跑版<br>
+        核心逻辑：综合 X排名、邻居承接、黑白结构评分。<br>
+        大输口径：亏损 ≤ -400 算大输。<br>
+        实战纪律：主推亏 ≤ -300 暂停复盘；主推亏 ≤ -400 重点复盘；主推亏 ≤ -500 模型降级。
+      </div>
+
+      <div class="input-row">
+        <input id="roomInput" maxlength="5" inputmode="numeric" placeholder="输入5位房号，例如 57188" />
+        <button onclick="runEvaluate()">开始则房</button>
+      </div>
+
+      <div id="resultBox" class="result"></div>
     </div>
 
-    <div class="tiny">
-【然仔·66660 高进房差值链模型 v1.2.2】
-D1=A-B，D2=B-C，D3=C-D，D4=D-E，D5=E-A
-
-强进优先：
-5号 > 6号 > 3号 > 4号
-
-观察优先：
-6号 > 3号 > 5号 > 4号
-
-v1.2.2新增：
-1）4号双负遇D5强尾降级；
-2）6号强尾观察；
-3）4号特殊反冲观察。
-
-显示规则：
-强进 = 正常主推
-观察 = 小注观察
-高波降级 = 谨慎小注
-无命中 = 跳
-
-本模型是高进房试跑版，不是重注模型。
+    <div class="card">
+      <h2>历史记录</h2>
+      <button class="small-btn" onclick="clearHistory()">清空历史</button>
+      <div id="historyList" class="history-list"></div>
     </div>
 
+    <div class="card">
+      <h2>当前回测口径</h2>
+      <div class="model-note">
+        回测样本：92局<br>
+        主推输出：52局<br>
+        进房率：56.5%<br>
+        主推命中：25局<br>
+        命中后胜率：88.0%<br>
+        命中净分：+19830<br>
+        ≤ -400 大输命中：0局<br>
+        最大命中亏：-310
+      </div>
+    </div>
+
+    <div class="footer">
+      然仔账号｜比赛场66660｜v2.0 试跑版
+    </div>
   </div>
-</div>
 
-<script>
-const HISTORY_KEY   = 'ranzai_66660_high_entry_diff_v122';
-const HISTORY_LIMIT = 30;
+  <script>
+    function evaluateRanZai66660(room) {
+      // ==============================
+      // 然仔66660 X排名邻居黑白模型 v2.0 试跑版
+      // 逻辑：先排雷，再进房
+      // 只输出一个主推位；无主推直接跳；不输出备选
+      // 大输口径：≤ -400
+      // ==============================
 
-const roomEl     = document.getElementById('room');
-const goEl       = document.getElementById('go');
-const msgEl      = document.getElementById('msg');
-const resultEl   = document.getElementById('result');
-const resultHdr  = document.getElementById('resultHdr');
-const hitListEl  = document.getElementById('hitList');
-const skipEl     = document.getElementById('skip');
-const histListEl = document.getElementById('histList');
-const clearBtnEl = document.getElementById('clearBtn');
+      room = String(room).trim();
 
-function getDigits(room){
-  return room.split('').map(Number);
-}
-
-function getDiffData(room){
-  const [A,B,C,D,E] = getDigits(room);
-  const roomSum = A + B + C + D + E;
-
-  const D1 = A - B;
-  const D2 = B - C;
-  const D3 = C - D;
-  const D4 = D - E;
-  const D5 = E - A;
-
-  return { A,B,C,D,E,roomSum,D1,D2,D3,D4,D5 };
-}
-
-function evaluateRanZai66660(room){
-  if(!/^\d{5}$/.test(room)){
-    return {
-      ok:false,
-      reason:'请输入正确的5位数字'
-    };
-  }
-
-  const d = getDiffData(room);
-  const {D1,D2,D3,D4,D5} = d;
-
-  const candidates = [];
-
-  function addCandidate(seat, valid, label, level, wr, avg, note, strength){
-    candidates.push({ seat, valid, label, level, wr, avg, note, strength });
-  }
-
-  // ===============================
-  // 5号强进 + 观察
-  // ===============================
-  let hit5Strong = false;
-  let hit5Observe = false;
-  let reason5 = '';
-
-  if(D3 === 5 && (D4 === -4 || D4 === -6)){
-    hit5Strong = true;
-    reason5 = `5号强进：D3=5 且 D4=${D4}`;
-  }
-
-  if(D3 <= -4 && D4 === 1){
-    hit5Strong = true;
-    reason5 = `5号强进：D3≤-4 且 D4=1`;
-  }
-
-  if(!hit5Strong){
-    if(D3 === 5 && D4 < 0){
-      hit5Observe = true;
-      reason5 = `5号观察：D3=5 且 D4<0`;
-    }
-
-    if(D3 <= -3 && D4 === 1){
-      hit5Observe = true;
-      reason5 = `5号观察：D3≤-3 且 D4=1`;
-    }
-
-    if(D3 <= -4 && D4 > 0){
-      hit5Observe = true;
-      reason5 = `5号观察：D3≤-4 且 D4>0`;
-    }
-  }
-
-  if(hit5Strong || hit5Observe){
-    if(D5 === 0){
-      addCandidate(
-        5,
-        false,
-        '5号过滤',
-        '过滤',
-        '过滤',
-        `D5=0`,
-        `${reason5}；但D5=0，5号首尾闭死，不做主推。`,
-        0
-      );
-    }else if(D4 <= -8){
-      addCandidate(
-        5,
-        false,
-        '5号过滤',
-        '过滤',
-        '过滤',
-        `D4=${D4}`,
-        `${reason5}；但D4≤-8，尾部断裂过大，不做主推。`,
-        0
-      );
-    }else if(D4 >= 5){
-      addCandidate(
-        5,
-        false,
-        '5号过滤',
-        '过滤',
-        '过滤',
-        `D4=${D4}`,
-        `${reason5}；但D4≥5，E被D强压，不做主推。`,
-        0
-      );
-    }else{
-      addCandidate(
-        5,
-        true,
-        hit5Strong ? '5号强进' : '5号观察',
-        hit5Strong ? (D5 > 0 ? 'H1强信号' : '普通信号') : '观察进',
-        hit5Strong ? (D5 > 0 ? '强' : '进') : '观察',
-        `D5=${D5}`,
-        `${reason5}；D5=${D5}，未触发5号过滤。`,
-        hit5Strong ? 100 : 50
-      );
-    }
-  }
-
-  // ===============================
-  // 6号强进 + 观察
-  // ===============================
-  let hit6Strong = false;
-  let hit6Observe = false;
-  let reason6 = '';
-
-  if(D4 === 0){
-    hit6Strong = true;
-    reason6 = '6号强进：D4=0，尾部D/E稳定';
-  }
-
-  if(D4 < 0 && D1 > 0 && Math.abs(D1) <= 4 && Math.abs(D4) <= 3 && D3 >= 0){
-    hit6Strong = true;
-    reason6 = '6号强进：D4<0 且 D1>0 且 |D1|≤4 且 |D4|≤3 且 D3≥0';
-  }
-
-  if(D1 === -2 && D4 === -4){
-    hit6Strong = true;
-    reason6 = '6号强进：D1=-2 且 D4=-4';
-  }
-
-  if(!hit6Strong){
-    if(D4 < 0 && Math.abs(D4) <= 4){
-      hit6Observe = true;
-      reason6 = '6号观察：D4<0 且 |D4|≤4';
-    }
-
-    if(D1 > 0 && D3 >= 0){
-      hit6Observe = true;
-      reason6 = '6号观察：D1>0 且 D3≥0';
-    }
-
-    if(D4 === 1 && D5 > 0){
-      hit6Observe = true;
-      reason6 = '6号观察：D4=1 且 D5>0';
-    }
-
-    // v1.2.2新增：6号强尾观察
-    if(D5 >= 6 && D4 <= -4 && D1 < 0){
-      hit6Observe = true;
-      reason6 = '6号强尾观察：D5>=6 且 D4<=-4 且 D1<0';
-    }
-  }
-
-  if(hit6Strong || hit6Observe){
-    const isStrongTail6 = (D5 >= 6 && D4 <= -4 && D1 < 0);
-
-    if(D4 >= 5){
-      addCandidate(
-        6,
-        false,
-        '6号过滤',
-        '过滤',
-        '过滤',
-        `D4=${D4}`,
-        `${reason6}；但D4>=5，尾部被强压，不做主推。`,
-        0
-      );
-    }else if(D1 <= -6){
-      addCandidate(
-        6,
-        false,
-        '6号过滤',
-        '过滤',
-        '过滤',
-        `D1=${D1}`,
-        `${reason6}；但D1<=-6，前端启动极弱，不做主推。`,
-        0
-      );
-    }else if(D5 <= -5){
-      addCandidate(
-        6,
-        false,
-        '6号过滤',
-        '过滤',
-        '过滤',
-        `D5=${D5}`,
-        `${reason6}；但D5<=-5，首尾闭环过弱，不做主推。`,
-        0
-      );
-    }else if(hit6Observe && !isStrongTail6 && D4 <= -4 && D3 > 0){
-      addCandidate(
-        6,
-        false,
-        '6号观察过滤',
-        '过滤',
-        '过滤',
-        `D3=${D3}/D4=${D4}`,
-        `${reason6}；但这是6号观察层，且D4<=-4、D3>0，中轴冲尾，高波过滤。`,
-        0
-      );
-    }else{
-      let level = hit6Strong ? '普通信号' : '观察进';
-      let wr = hit6Strong ? '进' : '观察';
-      let d5Note = '';
-
-      if(isStrongTail6){
-        level = '强尾观察';
-        wr = '观察';
-        d5Note = `D5=${D5}，强尾观察结构，尾端E强于A。`;
-      }else if(D5 >= 0){
-        level = hit6Strong ? 'H1强信号' : '观察加强';
-        wr = hit6Strong ? '强' : '观察';
-        d5Note = `D5=${D5}，6号加强。`;
-      }else if(D5 === -1 || D5 === -2){
-        d5Note = `D5=${D5}，6号正常允许。`;
-      }else{
-        level = '高波降级';
-        wr = '高波';
-        d5Note = `D5=${D5}，6号高波降级。`;
+      if (!/^\\d{5}$/.test(room)) {
+        return {
+          status: "无效",
+          seat: null,
+          title: "房号格式错误",
+          message: "请输入5位数字房号",
+          reason: "房号必须是五位数字",
+          risk: "无"
+        };
       }
 
-      addCandidate(
-        6,
-        true,
-        hit6Strong ? '6号强进' : (isStrongTail6 ? '6号强尾' : '6号观察'),
-        level,
-        wr,
-        `D5=${D5}`,
-        `${reason6}；${d5Note}`,
-        hit6Strong ? 100 : 60
-      );
-    }
-  }
+      const A = Number(room[0]);
+      const B = Number(room[1]);
+      const C = Number(room[2]);
+      const D = Number(room[3]);
+      const E = Number(room[4]);
 
-  // ===============================
-  // 3号强进 + 观察
-  // ===============================
-  let hit3Strong = false;
-  let hit3Observe = false;
-  let reason3 = '';
+      const RoomSum = A + B + C + D + E;
 
-  if(D2 > 0 && D3 > 0 && D4 < 0){
-    hit3Strong = true;
-    reason3 = '3号强进：D2>0 且 D3>0 且 D4<0';
-  }
+      const D1 = A - B;
+      const D2 = B - C;
+      const D3 = C - D;
+      const D4 = D - E;
+      const D5 = E - A;
 
-  if(D2 < 0 && D3 >= 4 && D4 < 0 && Math.abs(D4) <= 6){
-    hit3Strong = true;
-    reason3 = '3号强进：D2<0 且 D3>=4 且 D4<0 且 |D4|<=6';
-  }
+      const digits = [A, B, C, D, E];
 
-  if(D2 < 0 && D3 === 0 && D4 > 0){
-    hit3Strong = true;
-    reason3 = '3号强进：D2<0 且 D3=0 且 D4>0';
-  }
-
-  if(!hit3Strong){
-    if(D2 > 0 && D3 > 0){
-      hit3Observe = true;
-      reason3 = '3号观察：D2>0 且 D3>0';
-    }
-
-    if(D3 >= 4 && D4 < 0){
-      hit3Observe = true;
-      reason3 = '3号观察：D3>=4 且 D4<0';
-    }
-
-    if(D2 < 0 && D4 > 0){
-      hit3Observe = true;
-      reason3 = '3号观察：D2<0 且 D4>0';
-    }
-  }
-
-  if(hit3Strong || hit3Observe){
-    if(D4 <= -8){
-      addCandidate(
-        3,
-        false,
-        '3号过滤',
-        '过滤',
-        '过滤',
-        `D4=${D4}`,
-        `${reason3}；但D4<=-8，尾部断裂过大，不做主推。`,
-        0
-      );
-    }else if(D2 > 0 && D3 < 0){
-      addCandidate(
-        3,
-        false,
-        '3号过滤',
-        '过滤',
-        '过滤',
-        `D2=${D2}/D3=${D3}`,
-        `${reason3}；但D2>0且D3<0，中轴反冲，不做主推。`,
-        0
-      );
-    }else{
-      addCandidate(
-        3,
-        true,
-        hit3Strong ? '3号强进' : '3号观察',
-        hit3Strong ? '普通信号' : '观察进',
-        hit3Strong ? '进' : '观察',
-        `D5=${D5}`,
-        `${reason3}；D5=${D5}仅作解释项。`,
-        hit3Strong ? 100 : 55
-      );
-    }
-  }
-
-  // ===============================
-  // 4号强进 + 观察
-  // ===============================
-  let hit4Strong = false;
-  let hit4Observe = false;
-  let reason4 = '';
-  let downgrade4StrongTail = false;
-
-  if(D3 > 0 && D4 > 0){
-    hit4Strong = true;
-    reason4 = '4号强进：D3>0 且 D4>0';
-  }
-
-  if(D3 < 0 && D4 < 0){
-    hit4Strong = true;
-    reason4 = '4号强进：D3<0 且 D4<0';
-
-    // v1.2.2新增：4号双负强尾降级
-    if(D5 >= 6 && D4 <= -4){
-      downgrade4StrongTail = true;
-    }
-  }
-
-  if(!hit4Strong){
-    if(D3 >= 0 && D4 >= 0 && !(D3 === 0 && D4 === 0)){
-      hit4Observe = true;
-      reason4 = '4号观察：D3/D4同向偏正，允许一项为0';
-    }
-
-    if(D3 <= 0 && D4 <= 0 && !(D3 === 0 && D4 === 0)){
-      hit4Observe = true;
-      reason4 = '4号观察：D3/D4同向偏负，允许一项为0';
-    }
-
-    // v1.2.2新增：4号特殊反冲观察
-    if(D1 >= 3 && D2 <= -4 && D3 > 0 && D4 < 0 && D5 > 0){
-      hit4Observe = true;
-      reason4 = '4号特殊反冲观察：D1>=3 且 D2<=-4 且 D3>0 且 D4<0 且 D5>0';
-    }
-  }
-
-  if(hit4Strong || hit4Observe){
-    const isSpecialRebound4 = (D1 >= 3 && D2 <= -4 && D3 > 0 && D4 < 0 && D5 > 0);
-
-    if(downgrade4StrongTail){
-      addCandidate(
-        4,
-        false,
-        '4号降级',
-        '强尾降级',
-        '降级',
-        `D5=${D5}`,
-        `${reason4}；但D5>=6且D4<=-4，尾端强，4号降级，优先检查6号。`,
-        0
-      );
-    }else if(D3 === 0 && D4 === 0){
-      addCandidate(
-        4,
-        false,
-        '4号过滤',
-        '过滤',
-        '过滤',
-        `D3/D4=0/0`,
-        `${reason4}；但D3=0且D4=0，缺少动能，不做主推。`,
-        0
-      );
-    }else if(D3 > 0 && D4 < 0 && !isSpecialRebound4){
-      addCandidate(
-        4,
-        false,
-        '4号过滤',
-        '过滤',
-        '过滤',
-        `D3=${D3}/D4=${D4}`,
-        `${reason4}；但D3>0且D4<0，一正一负反冲，不做普通4号。`,
-        0
-      );
-    }else if(D3 < 0 && D4 > 0){
-      addCandidate(
-        4,
-        false,
-        '4号过滤',
-        '过滤',
-        '过滤',
-        `D3=${D3}/D4=${D4}`,
-        `${reason4}；但D3<0且D4>0，一负一正反冲，不做主推。`,
-        0
-      );
-    }else{
-      addCandidate(
-        4,
-        true,
-        hit4Strong ? '4号强进' : (isSpecialRebound4 ? '4号反冲' : '4号观察'),
-        hit4Strong ? '低权重补位' : (isSpecialRebound4 ? '特殊反冲观察' : '观察补位'),
-        hit4Strong ? '补' : '观察',
-        `D5=${D5}`,
-        `${reason4}；4号整体高波，D5=${D5}仅作解释项。`,
-        hit4Strong ? 80 : 40
-      );
-    }
-  }
-
-  // ===============================
-  // 主推优先级
-  // 强进优先：5 > 6 > 3 > 4
-  // 观察优先：6 > 3 > 5 > 4
-  // ===============================
-  const validCandidates = candidates.filter(x => x.valid);
-
-  const strongPriority = [5, 6, 3, 4];
-  const observePriority = [6, 3, 5, 4];
-
-  let main = null;
-
-  for(const s of strongPriority){
-    const found = validCandidates.find(x => x.seat === s && x.strength >= 80);
-    if(found){
-      main = found;
-      break;
-    }
-  }
-
-  if(!main){
-    for(const s of observePriority){
-      const found = validCandidates.find(x => x.seat === s && x.strength < 80);
-      if(found){
-        main = found;
-        break;
+      function digitRoot(sum) {
+        const r = sum % 9;
+        return r === 0 ? 9 : r;
       }
-    }
-  }
 
-  return {
-    ok:true,
-    room,
-    ...d,
-    candidates,
-    main
-  };
-}
+      const root = digitRoot(RoomSum);
 
-function buildModelCard(hit, data, rank=1){
-  const cls = rank <= 3 ? `r${rank}` : '';
-  const div = document.createElement('div');
-  div.className = `hit ${cls}`;
-  div.innerHTML = `
-    <div class="hit-lbl">${hit.label}</div>
-    <div class="hit-seat">${hit.seat}</div>
-    <div class="hit-body">
-      <div class="row1">D1/D2/D3/D4/D5=${data.D1}/${data.D2}/${data.D3}/${data.D4}/${data.D5}</div>
-      <div class="row2">${hit.level}</div>
-      <div class="row3">${hit.note}</div>
-    </div>
-    <div class="hit-right">
-      <div class="hit-wr">${hit.wr}</div>
-      <div class="hit-avg">${hit.avg}</div>
-    </div>
-  `;
-  return div;
-}
+      // X排名：从大到小，最大rank=1，最小rank=5，并列按相同排名处理
+      function rankDesc(x) {
+        let bigger = digits.filter(n => n > x).length;
+        return bigger + 1;
+      }
 
-function render(room5){
-  const data = evaluateRanZai66660(room5);
+      // 承接判断：x在left/right之间
+      function between(x, left, right) {
+        return (left >= x && x >= right) || (left <= x && x <= right);
+      }
 
-  resultEl.style.display = 'none';
-  skipEl.style.display   = 'none';
-  hitListEl.innerHTML    = '';
+      const candidates = [];
 
-  if(!data.ok){
-    msgEl.textContent = data.reason;
-    return [];
-  }
+      function addCandidate(seat, score, level, reason, risk) {
+        candidates.push({
+          seat,
+          score,
+          level,
+          reason,
+          risk
+        });
+      }
 
-  msgEl.textContent = '';
+      // ==================================================
+      // 3号规则
+      // X = C，左邻B，右邻D
+      // ==================================================
 
-  if(!data.main){
-    resultHdr.textContent = `D1/D2/D3/D4/D5=${data.D1}/${data.D2}/${data.D3}/${data.D4}/${data.D5}　未命中`;
-    skipEl.style.display = 'block';
+      const X3 = C;
+      const rank3 = rankDesc(X3);
+      const K3 = RoomSum - X3;
 
-    const filtered = data.candidates.filter(x => !x.valid);
-    if(filtered.length){
-      resultEl.style.display = 'block';
-      filtered.forEach((h, idx) => {
-        hitListEl.appendChild(buildModelCard(h, data, idx + 1));
+      let black3Reason = "";
+
+      if (D4 <= -8) {
+        black3Reason = "3号黑结构：D4<=-8，尾端E强压D，3号容易被尾端抽走";
+      } else if (B > C && D > C) {
+        black3Reason = "3号黑结构：邻居双压，B和D都压住C";
+      } else if (D3 > 0 && D4 > 0) {
+        black3Reason = "3号黑结构：D3/D4双正，历史3号大输风险高";
+      } else if (D3 < 0 && D4 > 0) {
+        black3Reason = "3号黑结构：D3负D4正，C被D压，3号承接弱";
+      }
+
+      if (!black3Reason) {
+        if (D3 === 0 && D4 > 0) {
+          addCandidate(
+            3,
+            7,
+            "强结构",
+            "3号白结构：D3=0且D4>0，中轴反冲",
+            "正常试跑"
+          );
+        }
+
+        if (D3 >= 4 && D4 >= -6 && D4 < 0) {
+          addCandidate(
+            3,
+            7,
+            "强结构",
+            "3号白结构：D3>=4且-6<=D4<0，C强压D但尾端负不过深",
+            "正常试跑"
+          );
+        }
+
+        if (rank3 === 4 && D1 >= 0 && D3 > 0 && D4 < 0) {
+          addCandidate(
+            3,
+            8,
+            "强结构",
+            "3号白结构：rank4低位承接爆发，D1>=0且D3>0且D4<0",
+            "正常试跑"
+          );
+        }
+      }
+
+      // ==================================================
+      // 4号规则
+      // X = D，左邻C，右邻E
+      // ==================================================
+
+      const X4 = D;
+      const rank4 = rankDesc(X4);
+      const K4 = RoomSum - X4;
+
+      let black4Reason = "";
+
+      if (rank4 === 1) {
+        black4Reason = "4号黑结构：X排名第1，D过高，历史4号大输风险高";
+      } else if (D3 < 0 && D4 > 0) {
+        black4Reason = "4号黑结构：D3负D4正，4号承接断层";
+      } else if (C < D && E < D) {
+        black4Reason = "4号黑结构：邻居双低，D孤高无承接";
+      } else if (D3 === 0 && D4 < 0) {
+        black4Reason = "4号黑结构：D3=0且D4<0，尾端压走4号";
+      }
+
+      if (!black4Reason) {
+        if (rank4 === 2 && D3 > 0 && D4 > 0) {
+          addCandidate(
+            4,
+            6,
+            "强结构",
+            "4号白结构：rank2且D3/D4双正",
+            "正常试跑"
+          );
+        }
+
+        if (rank4 === 4 && between(D, C, E) && D3 < 0 && D4 < 0) {
+          addCandidate(
+            4,
+            8,
+            "强结构",
+            "4号白结构：rank4中承接双负，D在C/E之间承接",
+            "正常试跑"
+          );
+        }
+
+        if (D1 >= 3 && D2 <= -4 && D3 > 0 && D4 < 0 && D5 > 0) {
+          addCandidate(
+            4,
+            8,
+            "高波结构",
+            "4号特殊反冲：D1>=3、D2<=-4、D3>0、D4<0、D5>0",
+            "高波结构，小注观察；若实战亏≤-300需暂停复盘"
+          );
+        }
+      }
+
+      // ==================================================
+      // 5号规则
+      // X = E，左邻D，右邻A
+      // 5号整体历史最差，只窄进
+      // ==================================================
+
+      const X5 = E;
+      const rank5 = rankDesc(X5);
+      const K5 = RoomSum - X5;
+
+      let black5Reason = "";
+
+      if (D5 === 0) {
+        black5Reason = "5号黑结构：D5=0，首尾闭死，5号历史大输风险高";
+      } else if ([1, 2, 5, 9].includes(X5)) {
+        black5Reason = "5号黑结构：X∈{1,2,5,9}，5号不稳定";
+      }
+
+      if (!black5Reason) {
+        if (X5 === 4 && rank5 === 3 && K5 === 15 && root === 1) {
+          addCandidate(
+            5,
+            9,
+            "强结构",
+            "5号白结构：X=4、rank3、K=15、数根=1",
+            "正常试跑"
+          );
+        }
+
+        if (X5 === 8 && rank5 === 1 && D3 === 5 && D4 === -6) {
+          addCandidate(
+            5,
+            9,
+            "强结构",
+            "5号白结构：X=8、rank1、D3=5、D4=-6，高位尾冲",
+            "正常试跑"
+          );
+        }
+      }
+
+      // ==================================================
+      // 6号规则
+      // X = E，左邻D，右邻A
+      // ==================================================
+
+      const X6 = E;
+      const rank6 = rankDesc(X6);
+      const K6 = RoomSum - X6;
+
+      let black6Reason = "";
+
+      if (D4 >= 5) {
+        black6Reason = "6号黑结构：D4>=5，D强压E，尾端承接弱";
+      } else if (D1 <= -6) {
+        black6Reason = "6号黑结构：D1<=-6，前端A被B强压，尾端不稳";
+      } else if (D5 <= -5) {
+        black6Reason = "6号黑结构：D5<=-5，E明显弱于A，首尾闭环差";
+      } else if (rank6 === 2 && D3 > 0 && D4 < 0) {
+        black6Reason = "6号黑结构：rank2伪强，D3>0且D4<0，容易被中轴抢走";
+      } else if (D3 > 0 && D4 <= -4 && D5 <= 0) {
+        black6Reason = "6号黑结构：D3>0且D4<=-4且D5<=0，尾端强负但闭环不足";
+      }
+
+      if (!black6Reason) {
+        if (D4 === 0 && D3 <= 0) {
+          addCandidate(
+            6,
+            7,
+            "强结构",
+            "6号白结构：D4=0且D3<=0，尾部归零承接",
+            "正常试跑"
+          );
+        }
+
+        if (D3 === 0 && D4 < 0) {
+          addCandidate(
+            6,
+            7,
+            "强结构",
+            "6号白结构：D3=0且D4<0，D3归零后尾反压",
+            "正常试跑"
+          );
+        }
+
+        if (rank6 === 1 && (D3 <= 0 || D4 === 0 || D5 >= 2)) {
+          addCandidate(
+            6,
+            6,
+            "强结构",
+            "6号白结构：rank1尾强承接",
+            "谨慎正常试跑；若实战亏≤-300需暂停复盘"
+          );
+        }
+
+        if (rank6 === 3 && between(E, D, A) && D4 >= -3 && D4 <= -1) {
+          addCandidate(
+            6,
+            5,
+            "观察",
+            "6号白结构：rank3中承接轻负，E在D/A之间承接",
+            "观察结构，小注"
+          );
+        }
+
+        if (X6 === 7 && rank6 === 2 && D3 === 0 && D4 < 0) {
+          addCandidate(
+            6,
+            7,
+            "强结构",
+            "6号白结构：X=7、rank2、D3=0、D4<0",
+            "正常试跑"
+          );
+        }
+
+        if (D5 >= 6 && D4 <= -4 && D1 < 0) {
+          addCandidate(
+            6,
+            6,
+            "观察",
+            "6号强尾观察：D5>=6、D4<=-4、D1<0",
+            "观察结构，小注"
+          );
+        }
+      }
+
+      // ==================================================
+      // 最终选择
+      // 同分优先级：5 > 3 > 4 > 6
+      // ==================================================
+
+      if (candidates.length === 0) {
+        const blackReasons = [];
+        if (black3Reason) blackReasons.push(black3Reason);
+        if (black4Reason) blackReasons.push(black4Reason);
+        if (black5Reason) blackReasons.push(black5Reason);
+        if (black6Reason) blackReasons.push(black6Reason);
+
+        return {
+          status: "跳",
+          seat: null,
+          title: "跳",
+          message: "无有效主推位，建议跳过",
+          reason: blackReasons.length ? blackReasons.join("；") : "没有命中任何白结构",
+          risk: "无主推直接跳",
+          data: {
+            A, B, C, D, E,
+            RoomSum,
+            D1, D2, D3, D4, D5,
+            root,
+            ranks: {
+              seat3: rank3,
+              seat4: rank4,
+              seat5: rank5,
+              seat6: rank6
+            }
+          }
+        };
+      }
+
+      const priority = {
+        5: 1,
+        3: 2,
+        4: 3,
+        6: 4
+      };
+
+      candidates.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return priority[a.seat] - priority[b.seat];
       });
+
+      const best = candidates[0];
+
+      let status = "主推";
+      if (best.level === "观察") status = "观察";
+      if (best.level === "高波结构") status = "高波";
+
+      return {
+        status: status,
+        seat: best.seat,
+        title: `${best.seat}号位 ${status}`,
+        message: `推荐：${best.seat}号位`,
+        reason: best.reason,
+        risk: best.risk,
+        score: best.score,
+        level: best.level,
+        allCandidates: candidates,
+        data: {
+          A, B, C, D, E,
+          RoomSum,
+          D1, D2, D3, D4, D5,
+          root,
+          ranks: {
+            seat3: rank3,
+            seat4: rank4,
+            seat5: rank5,
+            seat6: rank6
+          },
+          K: {
+            seat3: K3,
+            seat4: K4,
+            seat5: K5,
+            seat6: K6
+          }
+        }
+      };
     }
 
-    return [];
-  }
+    function runEvaluate() {
+      const input = document.getElementById("roomInput");
+      const room = input.value.trim();
+      const result = evaluateRanZai66660(room);
+      renderResult(room, result);
 
-  resultHdr.textContent = `主推 ${data.main.seat}号｜${data.main.level}`;
-  resultEl.style.display = 'block';
+      if (result.status !== "无效") {
+        saveHistory(room, result);
+      }
+    }
 
-  hitListEl.appendChild(buildModelCard(data.main, data, 1));
+    function renderResult(room, result) {
+      const box = document.getElementById("resultBox");
+      box.className = "result show";
 
-  const filtered = data.candidates.filter(x => !x.valid);
-  filtered.forEach((h, idx) => {
-    hitListEl.appendChild(buildModelCard(h, data, idx + 2));
-  });
+      if (result.status === "无效") {
+        box.classList.add("invalid");
+      } else if (result.status === "跳") {
+        box.classList.add("skip");
+      } else if (result.status === "观察") {
+        box.classList.add("watch");
+      } else if (result.status === "高波") {
+        box.classList.add("risk");
+      } else {
+        box.classList.add("go");
+      }
 
-  return [data.main.seat];
-}
+      let mainText = "";
+      if (result.status === "跳") {
+        mainText = "跳";
+      } else if (result.status === "无效") {
+        mainText = "房号无效";
+      } else {
+        mainText = `${result.seat}号位 ${result.status}`;
+      }
 
-function run(){
-  const raw = roomEl.value.trim().replace(/\s+/g, '');
-  if(!/^\d{5}$/.test(raw)){
-    msgEl.textContent = '请输入正确的5位数字';
-    return;
-  }
-  msgEl.textContent = '';
-  const seats = render(raw);
-  pushHistory(raw, seats);
-  setTimeout(() => { roomEl.value = ''; roomEl.focus(); }, 180);
-}
+      let dataHtml = "";
+      if (result.data) {
+        const d = result.data;
+        dataHtml = `
+          <div class="data-grid">
+            <div class="data-box">A<b>${d.A}</b></div>
+            <div class="data-box">B<b>${d.B}</b></div>
+            <div class="data-box">C<b>${d.C}</b></div>
+            <div class="data-box">D<b>${d.D}</b></div>
+            <div class="data-box">E<b>${d.E}</b></div>
+            <div class="data-box">D1<b>${d.D1}</b></div>
+            <div class="data-box">D2<b>${d.D2}</b></div>
+            <div class="data-box">D3<b>${d.D3}</b></div>
+            <div class="data-box">D4<b>${d.D4}</b></div>
+            <div class="data-box">D5<b>${d.D5}</b></div>
+          </div>
+        `;
+      }
 
-function loadHist(){
-  try{
-    return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
-  }catch{
-    return [];
-  }
-}
+      let candidateHtml = "";
+      if (result.allCandidates && result.allCandidates.length > 1) {
+        candidateHtml = `
+          <div style="margin-top:10px;">
+            <b>候选评分：</b><br>
+            ${result.allCandidates.map(c => {
+              return `${c.seat}号｜${c.level}｜${c.score}分｜${c.reason}`;
+            }).join("<br>")}
+          </div>
+        `;
+      }
 
-function saveHist(items){
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, HISTORY_LIMIT)));
-}
+      box.innerHTML = `
+        <div class="result-main">${mainText}</div>
+        <div class="result-sub">
+          <span class="badge">房号：${room || "-"}</span><br><br>
+          <b>原因：</b>${result.reason || "-"}<br>
+          <b>风险：</b>${result.risk || "-"}<br>
+          ${result.score !== undefined ? `<b>评分：</b>${result.score}分<br>` : ""}
+          ${candidateHtml}
+          ${dataHtml}
+        </div>
+      `;
+    }
 
-function renderHist(){
-  const items = loadHist();
-  histListEl.innerHTML = '';
-  if(!items.length){
-    histListEl.innerHTML = `<div class="histItem"><div class="histMain" style="color:rgba(255,255,255,.2)">暂无记录</div></div>`;
-    return;
-  }
+    function saveHistory(room, result) {
+      const item = {
+        room,
+        time: new Date().toLocaleString(),
+        status: result.status,
+        seat: result.seat,
+        reason: result.reason,
+        risk: result.risk,
+        score: result.score
+      };
 
-  items.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'histItem';
-    const res = item.seats.length ? item.seats.map(s=>`${s}号`).join(' / ') : '跳';
-    div.innerHTML = `
-      <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">${item.diff} → ${res}</div>`;
-    histListEl.appendChild(div);
-  });
-}
+      const list = JSON.parse(localStorage.getItem("ranzai66660History") || "[]");
+      list.unshift(item);
 
-function pushHistory(room, seats){
-  const data = evaluateRanZai66660(room);
-  const items = loadHist();
-  items.unshift({
-    room,
-    seats,
-    diff: data.ok ? `D=${data.D1}/${data.D2}/${data.D3}/${data.D4}/${data.D5}` : 'D=—',
-    time: new Date().toLocaleString('zh-CN', {hour12:false})
-  });
-  saveHist(items);
-  renderHist();
-}
+      if (list.length > 50) {
+        list.pop();
+      }
 
-goEl.addEventListener('click', run);
-roomEl.addEventListener('keydown', e => { if(e.key === 'Enter') run(); });
+      localStorage.setItem("ranzai66660History", JSON.stringify(list));
+      renderHistory();
+    }
 
-clearBtnEl.addEventListener('click', () => {
-  localStorage.removeItem(HISTORY_KEY);
-  renderHist();
-});
+    function renderHistory() {
+      const box = document.getElementById("historyList");
+      const list = JSON.parse(localStorage.getItem("ranzai66660History") || "[]");
 
-if('serviceWorker' in navigator){
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
-}
+      if (!list.length) {
+        box.innerHTML = `<div class="sub">暂无历史记录</div>`;
+        return;
+      }
 
-renderHist();
-roomEl.focus();
-</script>
+      box.innerHTML = list.map(item => {
+        let resultText = item.status === "跳"
+          ? "跳"
+          : `${item.seat}号位 ${item.status}`;
+
+        return `
+          <div class="history-item">
+            <div class="history-top">
+              <span>${item.room}｜${resultText}</span>
+              <span>${item.score !== undefined ? item.score + "分" : ""}</span>
+            </div>
+            <div>原因：${item.reason || "-"}</div>
+            <div>风险：${item.risk || "-"}</div>
+            <div style="color:#9ca3af;font-size:12px;">${item.time}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function clearHistory() {
+      localStorage.removeItem("ranzai66660History");
+      renderHistory();
+    }
+
+    document.getElementById("roomInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        runEvaluate();
+      }
+    });
+
+    document.getElementById("roomInput").addEventListener("input", function(e) {
+      e.target.value = e.target.value.replace(/\\D/g, "").slice(0, 5);
+    });
+
+    renderHistory();
+  </script>
 </body>
 </html>
