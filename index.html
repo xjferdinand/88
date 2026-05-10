@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="然仔66660">
-  <title>然仔66660 L2.2</title>
+  <meta name="apple-mobile-web-app-title" content="然崽v0.9">
+  <title>然崽·大赢结构模型 v0.9</title>
   <style>
     :root{
       --bg:#0b0b0f;
@@ -16,6 +16,9 @@
       --text:#f5f5f7;
       --muted:rgba(255,255,255,.50);
       --red:#ff2d2d;
+      --gold:#ffb020;
+      --green:#5cff9a;
+      --blue:#8bb8ff;
     }
     *{box-sizing:border-box;margin:0;padding:0;}
 
@@ -25,8 +28,8 @@
       align-items:center;
       justify-content:center;
       background:
-        radial-gradient(800px 400px at 50% 15%,rgba(255,45,45,.20),transparent 60%),
-        radial-gradient(900px 500px at 50% 110%,rgba(176,0,0,.25),transparent 60%),
+        radial-gradient(800px 400px at 50% 15%,rgba(255,45,45,.22),transparent 60%),
+        radial-gradient(900px 500px at 50% 110%,rgba(176,0,0,.28),transparent 60%),
         var(--bg);
       color:var(--text);
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
@@ -54,13 +57,13 @@
     }
     .version{
       font-size:10px;
-      color:rgba(255,45,45,.6);
+      color:rgba(255,45,45,.65);
       margin-left:4px;
-      font-weight:400;
+      font-weight:500;
     }
 
     .panel{
-      background:linear-gradient(160deg,rgba(255,45,45,.07),transparent 55%),var(--card);
+      background:linear-gradient(160deg,rgba(255,45,45,.08),transparent 55%),var(--card);
       border:1px solid var(--line);
       border-radius:16px;
       padding:12px;
@@ -78,7 +81,7 @@
       color:var(--text);
       outline:none;
       text-align:center;
-      font-weight:700;
+      font-weight:800;
     }
     input:focus{
       border-color:rgba(255,45,45,.65);
@@ -149,41 +152,56 @@
       border:1px solid rgba(255,255,255,.07);
       background:rgba(0,0,0,.22);
     }
-    .hit.r1{border-color:rgba(255,45,45,.50);background:rgba(255,45,45,.10);}
-    .hit.r2{border-color:rgba(255,140,0,.38);background:rgba(255,140,0,.08);}
-    .hit.r3{border-color:rgba(80,255,140,.40);background:rgba(80,255,140,.08);}
-    .hit.r4{border-color:rgba(120,180,255,.40);background:rgba(80,120,255,.08);}
-    .hit.r5{border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.03);}
+    .hit.super{
+      border-color:rgba(255,45,45,.58);
+      background:rgba(255,45,45,.12);
+    }
+    .hit.strong{
+      border-color:rgba(255,176,32,.48);
+      background:rgba(255,176,32,.10);
+    }
+    .hit.struct{
+      border-color:rgba(92,255,154,.44);
+      background:rgba(92,255,154,.08);
+    }
+    .hit.info{
+      border-color:rgba(139,184,255,.35);
+      background:rgba(139,184,255,.07);
+    }
+    .hit.skip{
+      border-color:rgba(255,255,255,.09);
+      background:rgba(255,255,255,.03);
+    }
 
     .hit-lbl{
       font-size:9px;
       font-weight:900;
       padding:2px 6px;
       border-radius:999px;
-      background:rgba(255,45,45,.20);
-      color:#ff8080;
       white-space:nowrap;
       letter-spacing:.2px;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.60);
     }
-    .hit.r1 .hit-lbl{
+    .hit.super .hit-lbl{
       background:rgba(255,45,45,.38);
-      color:#ff9090;
+      color:#ff9898;
     }
-    .hit.r2 .hit-lbl{
-      background:rgba(255,140,0,.26);
-      color:#ffbd6b;
+    .hit.strong .hit-lbl{
+      background:rgba(255,176,32,.28);
+      color:#ffd18a;
     }
-    .hit.r3 .hit-lbl{
-      background:rgba(80,255,140,.20);
-      color:rgba(120,255,170,.95);
+    .hit.struct .hit-lbl{
+      background:rgba(92,255,154,.20);
+      color:rgba(140,255,185,.95);
     }
-    .hit.r4 .hit-lbl{
-      background:rgba(120,180,255,.20);
-      color:rgba(160,200,255,.95);
+    .hit.info .hit-lbl{
+      background:rgba(139,184,255,.20);
+      color:rgba(175,205,255,.95);
     }
 
     .hit-seat{
-      font-size:21px;
+      font-size:22px;
       font-weight:1000;
       color:var(--red);
       text-shadow:0 0 12px rgba(255,45,45,.35);
@@ -191,17 +209,21 @@
       text-align:center;
       white-space:nowrap;
     }
-    .hit.r2 .hit-seat{
-      color:#ff9f1c;
-      text-shadow:0 0 12px rgba(255,159,28,.25);
+    .hit.strong .hit-seat{
+      color:var(--gold);
+      text-shadow:0 0 12px rgba(255,176,32,.25);
     }
-    .hit.r3 .hit-seat{
-      color:rgba(80,255,140,.95);
-      text-shadow:0 0 12px rgba(80,255,140,.25);
+    .hit.struct .hit-seat{
+      color:var(--green);
+      text-shadow:0 0 12px rgba(92,255,154,.25);
     }
-    .hit.r4 .hit-seat{
-      color:rgba(160,200,255,.95);
-      text-shadow:0 0 12px rgba(120,180,255,.25);
+    .hit.info .hit-seat{
+      color:var(--blue);
+      text-shadow:0 0 12px rgba(139,184,255,.25);
+    }
+    .hit.skip .hit-seat{
+      color:rgba(255,255,255,.22);
+      text-shadow:none;
     }
 
     .hit-body{
@@ -224,7 +246,7 @@
     }
     .hit-body .row3{
       font-size:9px;
-      color:rgba(255,255,255,.30);
+      color:rgba(255,255,255,.34);
       margin-top:1px;
       line-height:1.25;
     }
@@ -236,15 +258,15 @@
     .hit-wr{
       font-size:11px;
       font-weight:900;
-      color:rgba(80,255,140,.85);
+      color:rgba(92,255,154,.88);
     }
     .hit-avg{
       font-size:9px;
-      color:rgba(255,255,255,.35);
+      color:rgba(255,255,255,.36);
       margin-top:1px;
     }
 
-    .skip{
+    .bigSkip{
       display:none;
       text-align:center;
       padding:18px;
@@ -303,7 +325,7 @@
     }
     .histMain{
       font-size:11px;
-      color:rgba(255,255,255,.60);
+      color:rgba(255,255,255,.62);
       line-height:1.35;
     }
     .pill{
@@ -322,12 +344,12 @@
       padding-top:10px;
       border-top:1px solid var(--line);
       font-size:10px;
-      color:rgba(255,255,255,.28);
+      color:rgba(255,255,255,.30);
       line-height:1.6;
       white-space:pre-line;
     }
 
-    @media (max-width: 430px){
+    @media (max-width:430px){
       body{padding:10px;}
       .app{width:100%;}
       .panel{padding:10px;border-radius:15px;}
@@ -345,7 +367,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="title">然仔66660<span class="version">局部三连泛化 L2.2</span></div>
+  <div class="title">然崽·5130004<span class="version">大赢结构模型 v0.9</span></div>
   <div class="panel">
 
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -357,10 +379,10 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 然仔66660 L2.2结果 —</div>
+      <div class="result-hdr" id="resultHdr">— 然崽 v0.9 结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
-    <div class="skip" id="skip">跳</div>
+    <div class="bigSkip" id="skip">跳</div>
 
     <div class="history">
       <div class="histHead">
@@ -371,21 +393,26 @@
     </div>
 
     <div class="tiny">
-【然仔66660｜局部三连泛化模型 L2.2 研究版】
-逻辑：看当前位子的 左邻-X-右邻，判断承接、平台、反冲、过热、断尾。
-新增：63330 5号+1000 的“5号低尾反爆观察”结构。
-大输口径：盈亏 ≤ -400 算大输。
+【然崽·5130004｜大赢结构模型 v0.9】
+目标：只抓 +500 以上大赢结构，不用小赢美化模型。
+当前79局反推：21进21红，净+16830；15个+500以上大赢全命中；进房率约26.6%。
 
-当前定位：研究版主模型候选，不是重注模型。
-只打主推；无主推跳。
-主推亏≤-300暂停复盘；亏≤-400模型降级重做。
+核心：
+2号看B，8/9强；B=4必须后段对子/重尾。
+3号不看普通X，只看结构救：C=D、111、B=C+尾9、00100、10011。
+4号只看D=6 + E=0 + 低和值。
+5号看E大，E最大最香；E=6要D>E带动。
+6号E=8最硬；E=0要A=B托底；E=1只吃10011。
+10011为强爆结构，但只给2/3/6号加成。
+
+实战：命中才打；不命中跳；B档/结构档一局制；出现亏损样本立即复盘降级。
     </div>
 
   </div>
 </div>
 
 <script>
-const HISTORY_KEY = 'ranzai_66660_l22_local_triplet';
+const HISTORY_KEY = 'ranzai_5130004_bigwin_v09';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -406,489 +433,372 @@ function rankDesc(x, digits){
   return digits.filter(n => n > x).length + 1;
 }
 
-function abs(n){ return Math.abs(n); }
-
-function numClass(n){
-  if([0,2,4].includes(n)) return '小偶';
-  if([1,3].includes(n)) return '小奇';
-  if([6,8].includes(n)) return '大偶';
-  return '大奇';
+function parityBit(n){
+  return n % 2 === 1 ? '1' : '0';
 }
 
-function tripletClass(a,b,c){
-  return `${numClass(a)}+${numClass(b)}+${numClass(c)}`;
+function parityPattern(digits){
+  return digits.map(parityBit).join('');
+}
+
+function hasPair(arr){
+  return new Set(arr).size < arr.length;
+}
+
+function maxOf(arr){
+  return Math.max.apply(null, arr);
+}
+
+function minOf(arr){
+  return Math.min.apply(null, arr);
+}
+
+function getXBySeat(seat, d){
+  if(seat === 1) return d.A;
+  if(seat === 2) return d.B;
+  if(seat === 3) return d.C;
+  if(seat === 4) return d.D;
+  if(seat === 5) return d.E;
+  if(seat === 6) return d.E;
+  return null;
 }
 
 function getBaseData(room5){
   const [A,B,C,D,E] = getDigits(room5);
   const digits = [A,B,C,D,E];
-
-  const RoomSum = A+B+C+D+E;
-
-  const S1 = A+B;
-  const S2 = B+C;
-  const S3 = C+D;
-  const S4 = D+E;
-  const S5 = E+A;
-
-  const P1 = A+B+C;
-  const P2 = B+C+D;
-  const P3 = C+D+E;
-  const P4 = D+E+A;
-  const P5 = E+A+B;
-
-  const MidPower = S2 + S3;
-  const TailPower = S3 + S4;
-
-  const rankA = rankDesc(A,digits);
-  const rankB = rankDesc(B,digits);
-  const rankC = rankDesc(C,digits);
-  const rankD = rankDesc(D,digits);
-  const rankE = rankDesc(E,digits);
+  const sum = A+B+C+D+E;
+  const pattern = parityPattern(digits);
 
   return {
-    A,B,C,D,E,digits,RoomSum,
-    S1,S2,S3,S4,S5,
-    P1,P2,P3,P4,P5,
-    MidPower,TailPower,
-    rankA,rankB,rankC,rankD,rankE,
-    t2: tripletClass(A,B,C),
-    t3: tripletClass(B,C,D),
-    t4: tripletClass(C,D,E),
-    t5: tripletClass(D,E,A),
-    t6: tripletClass(D,E,A)
+    A,B,C,D,E,digits,sum,pattern,
+    max:maxOf(digits),
+    min:minOf(digits),
+    rankA:rankDesc(A,digits),
+    rankB:rankDesc(B,digits),
+    rankC:rankDesc(C,digits),
+    rankD:rankDesc(D,digits),
+    rankE:rankDesc(E,digits),
+    cdeHasPair:hasPair([C,D,E]),
+    cdeTailPair:D === E,
+    abcHasPair:hasPair([A,B,C]),
+    bceHasPair:hasPair([B,C,E])
   };
 }
 
-function evaluateL22(room5){
-  const d = getBaseData(room5);
-  const {
-    A,B,C,D,E,digits,RoomSum,
-    S1,S2,S3,S4,S5,
-    P1,P2,P3,P4,P5,
-    MidPower,
-    rankB,rankC,rankD,rankE
-  } = d;
+function xSortText(seat, d){
+  const x = getXBySeat(seat, d);
+  const rank = rankDesc(x, d.digits);
+  let pos = '中位';
+  if(x === d.max) pos = '最大/并列最大';
+  else if(x === d.min) pos = '最小/并列最小';
+  else if(rank === 2) pos = '第二大';
+  else if(rank >= 4) pos = '偏低';
+  return `X=${x}｜${pos}｜排序第${rank}`;
+}
 
+function hardRiskForSeat(seat, d){
+  const risks = [];
+
+  if(seat === 2 && d.B === 7) risks.push('2号B=7硬雷');
+  if(seat === 3 && [0,4,6,8].includes(d.C) && d.pattern !== '10011') risks.push('3号C=0/4/6/8默认跳');
+  if(seat === 4 && [2,3,4].includes(d.D)) risks.push('4号D=2/3/4默认跳');
+  if(seat === 5 && [0,4].includes(d.E)) risks.push('5号E=0/4默认跳');
+  if(seat === 6 && [3,4,6,9].includes(d.E)) risks.push('6号E=3/4/6/9默认跳');
+
+  return risks;
+}
+
+function evaluateV09(room5){
+  const d = getBaseData(room5);
+  const {A,B,C,D,E,sum,pattern} = d;
   const triggers = [];
 
-  function add(seat, priority, name, reason, risk, score, mode='主推'){
-    triggers.push({seat,priority,name,reason,risk,score,mode});
+  function add(seat, level, name, reason, score){
+    const risks = hardRiskForSeat(seat, d);
+    triggers.push({
+      seat,
+      level,
+      name,
+      reason,
+      score,
+      risks,
+      xText:xSortText(seat, d)
+    });
   }
 
   // =========================
-  // 2号｜前低右抬
-  // 看 A-B-C
+  // C档：10011强爆结构
+  // A奇 B偶 C偶 D奇 E奇
+  // 只给 2/3/6 加成
   // =========================
-  if(
-    A <= 3 &&
-    B >= 4 &&
-    C > B &&
-    E <= 4 &&
-    S4 <= 6 &&
-    (S2 >= 10 || P1 >= 10)
-  ){
+  if(pattern === '10011'){
     add(
-      2, 10,
-      '2号前低右抬',
-      'A低，B不弱，C右侧抬升，D/E尾段不抢2号',
-      '2号极窄承接结构，正常小注',
-      96
+      2,
+      '超爆',
+      '10011强爆结构｜2号加成',
+      '奇偶10011，允许2号吃结构级爆发；若B=4/8/9更强',
+      99
+    );
+    add(
+      3,
+      '超爆',
+      '10011强爆结构｜3号反转',
+      '奇偶10011，允许3号覆盖部分普通X弱点',
+      98
+    );
+    add(
+      6,
+      '超爆',
+      '10011强爆结构｜6号反转',
+      '奇偶10011，允许6号E=1等弱X被结构反转',
+      97
     );
   }
 
   // =========================
-  // 3号｜中轴高点
-  // 看 B-C-D
+  // A档：强X直接爆
   // =========================
-  if(
-    C >= 6 &&
-    C >= B &&
-    C >= D &&
-    MidPower >= 24 &&
-    S3 >= 11 &&
-    S4 <= S3 + 2 &&
-    !(B > C && D > C)
-  ){
+
+  // 2号 B=8/9
+  if([8,9].includes(B)){
     add(
-      3, 30,
-      '3号中轴高点',
-      'C为中轴高点，MidPower强，S4不明显压制中轴',
-      '3号中轴结构，正常小注',
-      90
+      2,
+      '强进',
+      '2号强X B=8/9',
+      '2号看B，B=8/9为然崽强X',
+      94
     );
   }
 
-  // =========================
-  // 3号｜首尾环托
-  // 泛化87548
-  // =========================
-  if(
-    B >= 5 &&
-    C >= 5 &&
-    D <= 4 &&
-    A >= 6 &&
-    E >= 6 &&
-    !(B > C && D > C)
-  ){
+  // 5号 E=8/9 或 E为全房最大
+  if([8,9].includes(E)){
     add(
-      3, 31,
-      '3号首尾环托',
-      'B/C不弱，D低不抢，A/E首尾强托住中轴',
-      '3号首尾环托结构，正常小注',
-      88
+      5,
+      '强进',
+      '5号强尾 E=8/9',
+      '5号看E，E=8/9尾部承接强',
+      93
     );
   }
 
-  // =========================
-  // 4号｜左托承接
-  // 看 C-D-E
-  // =========================
-  if(
-    C >= 6 &&
-    D <= 4 &&
-    E <= 4 &&
-    C > D &&
-    D !== 0
-  ){
+  if(E === d.max && ![0,4].includes(E)){
     add(
-      4, 40,
-      '4号左托承接',
-      'C强托D，E低不抢，4号吃左侧承接',
-      '4号左托结构，正常小注',
-      84
-    );
-  }
-
-  // =========================
-  // 4号｜低位反冲
-  // =========================
-  if(
-    C <= 3 &&
-    D >= 3 &&
-    D <= 4 &&
-    E >= 5 &&
-    E > D &&
-    rankD !== 1
-  ){
-    add(
-      4, 41,
-      '4号低位反冲',
-      'C低，D低但不死，E高托起，4号处在反冲承接点',
-      '4号反冲结构，正常小注',
-      83
-    );
-  }
-
-  // =========================
-  // 4号｜双侧夹持
-  // =========================
-  if(
-    C >= 6 &&
-    E >= 6 &&
-    D >= 3 &&
-    D <= 5 &&
-    abs(C-D) <= 4 &&
-    abs(E-D) <= 4
-  ){
-    add(
-      4, 42,
-      '4号双侧夹持',
-      'C/E两侧强，D为中低承接点，形成双侧夹持反冲',
-      '4号夹持结构，正常小注',
-      82
-    );
-  }
-
-  // =========================
-  // 5号｜后段平台
-  // 看 D-E-A，同时看 C-D-E
-  // =========================
-  if(
-    D >= 5 &&
-    E >= 5 &&
-    A <= 4 &&
-    abs(D-E) <= 2 &&
-    C >= 5 &&
-    abs(C-E) <= 2 &&
-    E !== 9
-  ){
-    add(
-      5, 20,
-      '5号后段平台',
-      'C/D/E形成后段平台，E参与高点，A小不抢尾',
-      '5号平台结构，正常小注',
+      5,
+      '强进',
+      '5号E为全房最大',
+      '5号最吃尾部最大/并列最大结构',
       92
     );
   }
 
-  // =========================
-  // 5号｜低D落点
-  // =========================
-  if(
-    D <= 2 &&
-    E >= 4 &&
-    E <= 8 &&
-    C >= 5 &&
-    D < E &&
-    S4 <= 10 &&
-    (
-      (E === 4 && A >= 3) ||
-      (E === 8 && C >= 7 && A <= 4) ||
-      ([5,6].includes(E) && A >= 3)
-    )
-  ){
+  // 6号 E=8
+  if(E === 8){
     add(
-      5, 21,
-      '5号低D落点',
-      'D低不压E，E形成尾部落点，A端托住或不抢',
-      '5号落点结构，正常小注',
-      88
+      6,
+      '强进',
+      '6号强X E=8',
+      '6号最硬结构是E=8',
+      91
     );
   }
 
   // =========================
-  // 5号｜低D强A托尾
-  // 补91504，过滤50502
+  // B档：结构放大型
   // =========================
-  if(
-    numClass(D) === '小偶' &&
-    numClass(E) === '小偶' &&
-    numClass(A) === '大奇' &&
-    D < E &&
-    A >= 7 &&
-    E >= 4 &&
-    S5 >= 12
-  ){
-    add(
-      5, 22,
-      '5号低D强A托尾',
-      'D低不压E，A端强托尾，S5首尾托力足',
-      '5号强A托尾结构，正常小注',
-      87
-    );
-  }
 
-  // =========================
-  // 5号｜低尾反爆观察
-  // 新增63330，不能重注
-  // =========================
-  if(
-    E === 0 &&
-    numClass(D) === '小奇' &&
-    numClass(A) === '大偶' &&
-    B >= 1 && B <= 4 &&
-    C >= 1 && C <= 4 &&
-    D >= 1 && D <= 4 &&
-    abs(B-C) <= 1 &&
-    abs(C-D) <= 1 &&
-    A >= 6 &&
-    S1 <= 10
-  ){
+  // 2号 B=4 + CDE后段对子/重尾
+  if(B === 4 && hasPair([C,D,E])){
     add(
-      5, 23,
-      '5号低尾反爆观察',
-      'E=0但B/C/D低位平台，D不强压E，A大偶托尾',
-      '新增观察结构；只小注，若亏≤-400立即删除',
-      75,
-      '观察'
-    );
-  }
-
-  // =========================
-  // 6号｜稳定尾平台
-  // =========================
-  if(
-    D >= 5 &&
-    E >= 6 &&
-    abs(D-E) <= 2 &&
-    E !== 0 &&
-    !(E === 9 && S4 >= 15)
-  ){
-    add(
-      6, 50,
-      '6号稳定尾平台',
-      'D/E稳定成平台，E不为0，不是E单点过热',
-      '6号稳定尾平台，正常小注',
+      2,
+      '结构',
+      '2号B=4 + 后段对子/重尾',
+      'B=4本身一般，但C/D/E后段有对子或重尾支撑',
       86
     );
   }
 
-  // =========================
-  // 6号｜首尾闭环承接
-  // 补87636
-  // =========================
-  if(
-    numClass(D) === '小奇' &&
-    numClass(E) === '大偶' &&
-    numClass(A) === '大偶' &&
-    D < E &&
-    A >= E &&
-    E !== 0
-  ){
+  // 3号 C=D，且C不为0/4/6/8
+  if(C === D && ![0,4,6,8].includes(C)){
     add(
-      6, 51,
-      '6号首尾闭环承接',
-      'D低，E大偶，A大偶闭环承接，首尾托尾',
-      '6号闭环承接，正常小注',
+      3,
+      '结构',
+      '3号C=D中段对子',
+      '3号靠结构救，C=D形成中段对子支撑',
       85
     );
   }
 
-  // =========================
-  // 6号｜低位反爆
-  // =========================
-  if(
-    RoomSum <= 12 &&
-    E > D &&
-    E > 0 &&
-    E >= Math.max(A,B,C,D) - 1
-  ){
+  // 3号 C=1 且 C/D/E = 111
+  if(C === 1 && D === 1 && E === 1){
     add(
-      6, 52,
-      '6号低位反爆',
-      '全房低位，E为相对高点，D不压E',
-      '6号低位反爆，正常小注',
+      3,
+      '结构',
+      '3号C/D/E=111连号',
+      '3号C=1本身不强，但右侧111连号支撑',
       84
     );
   }
 
-  // =========================
-  // 6号｜低位A托尾
-  // 补51201
-  // =========================
-  if(
-    numClass(D) === '小偶' &&
-    numClass(E) === '小奇' &&
-    numClass(A) === '大奇' &&
-    RoomSum <= 12 &&
-    D < E &&
-    E > 0 &&
-    A >= 5
-  ){
+  // 3号 C=2 且 B=C 且 E=9
+  if(C === 2 && B === C && E === 9){
     add(
-      6, 53,
-      '6号低位A托尾',
-      'D低，E小但不为0，A大奇托尾，形成低位闭环',
-      '6号低位A托尾，正常小注',
+      3,
+      '结构',
+      '3号B=C对子 + 尾9',
+      '3号C=2被B=C对子和E=9高尾放大',
       83
     );
   }
 
-  // =========================
-  // 6号｜尾强反冲
-  // =========================
-  if(
-    D <= 5 &&
-    E >= 6 &&
-    A <= 4 &&
-    E > D &&
-    E !== 0 &&
-    S4 <= 14 &&
-    !(E === 9 && (P3 >= 19 || S5 >= 12))
-  ){
+  // 4号 D=6 E=0 和值≤15
+  if(D === 6 && E === 0 && sum <= 15){
     add(
-      6, 54,
-      '6号尾强反冲',
-      'D中低，E抬升，A低不抢，尾强但不过热',
-      '6号尾强反冲，正常小注',
+      4,
+      '结构',
+      '4号D=6 + E=0低和值',
+      '4号只取D=6配E=0托底，且和值≤15',
       82
     );
   }
 
-  if(!triggers.length){
-    return {
-      ok:false,
-      seat:null,
-      label:'跳',
-      mode:'跳',
-      triggerName:'无触发',
-      reason:'未命中L2.2局部三连泛化结构',
-      risk:'无主推，直接跳',
-      score:null,
-      data:d,
-      triggers:[]
-    };
+  // 5号 E=6 且 D>E
+  if(E === 6 && D > E){
+    add(
+      5,
+      '结构',
+      '5号E=6 + D>E带动',
+      '5号E=6不是主力，但D高于E形成前方带动',
+      81
+    );
   }
 
-  triggers.sort((a,b)=>{
-    if(a.priority !== b.priority) return a.priority - b.priority;
-    return b.score - a.score;
-  });
+  // 6号 E=0 且 A=B
+  if(E === 0 && A === B){
+    add(
+      6,
+      '结构',
+      '6号E=0 + A=B托底',
+      '6号E=0本身普通，但A=B前置对子托底',
+      80
+    );
+  }
 
-  const best = triggers[0];
+  // =========================
+  // D档：辅助强结构 00100 + 3号C=1
+  // A偶 B偶 C奇 D偶 E偶
+  // =========================
+  if(pattern === '00100' && C === 1){
+    add(
+      3,
+      '结构',
+      '00100辅助强结构 + 3号C=1',
+      '奇偶00100，3号低X被后方偶数高位托起',
+      79
+    );
+  }
+
+  // 去重：同座位同名称不重复
+  const seen = new Set();
+  const unique = [];
+  for(const t of triggers){
+    const key = `${t.seat}-${t.name}`;
+    if(!seen.has(key)){
+      seen.add(key);
+      unique.push(t);
+    }
+  }
+
+  unique.sort((a,b) => b.score - a.score);
+
+  const ok = unique.length > 0;
+  const best = ok ? unique[0] : null;
 
   return {
-    ok:true,
-    seat:best.seat,
-    label:best.mode === '观察' ? '观察' : '主推',
-    mode:best.mode,
-    triggerName:best.name,
-    reason:best.reason,
-    risk:best.risk,
-    score:best.score,
-    data:d,
-    triggers
+    ok,
+    best,
+    triggers:unique,
+    data:d
   };
 }
 
-function buildModelCard(result, room5){
+function hitClass(level){
+  if(level === '超爆') return 'super';
+  if(level === '强进') return 'strong';
+  if(level === '结构') return 'struct';
+  return 'info';
+}
+
+function levelLabel(level){
+  if(level === '超爆') return '超爆';
+  if(level === '强进') return '强进';
+  if(level === '结构') return '结构';
+  return level;
+}
+
+function buildTriggerCard(t, d, room5, index){
   const div = document.createElement('div');
+  div.className = `hit ${hitClass(t.level)}`;
 
-  if(!result.ok){
-    div.className = 'hit r5';
-  }else if(result.mode === '观察'){
-    div.className = 'hit r2';
-  }else if(result.seat === 6){
-    div.className = 'hit r1';
-  }else if(result.seat === 5){
-    div.className = 'hit r2';
-  }else if(result.seat === 4){
-    div.className = 'hit r4';
-  }else{
-    div.className = 'hit r3';
-  }
-
-  const d = result.data;
-  const seatText = result.ok ? `${result.seat}` : '跳';
-  const wrText = result.ok ? `${result.score}分` : '—';
-  const avgText = result.ok ? result.mode : '跳';
+  const riskText = t.risks && t.risks.length
+    ? `提醒：${t.risks.join(' / ')}`
+    : '无硬跳冲突';
 
   div.innerHTML = `
-    <div class="hit-lbl">${result.label}</div>
-    <div class="hit-seat">${seatText}</div>
+    <div class="hit-lbl">${index === 0 ? '主推' : levelLabel(t.level)}</div>
+    <div class="hit-seat">${t.seat}</div>
     <div class="hit-body">
-      <div class="row1">房号=${room5}　A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
-      <div class="row2">局部：2=${d.t2}｜3=${d.t3}｜4=${d.t4}｜5/6=${d.t5}</div>
-      <div class="row3">${result.triggerName}｜${result.reason}｜${result.risk}</div>
+      <div class="row1">${t.name}｜房号=${room5}</div>
+      <div class="row2">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}｜${t.xText}</div>
+      <div class="row3">${t.reason}｜${riskText}</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">${wrText}</div>
-      <div class="hit-avg">${avgText}</div>
+      <div class="hit-wr">${t.score}</div>
+      <div class="hit-avg">${levelLabel(t.level)}</div>
     </div>
   `;
   return div;
 }
 
-function buildDataCard(result){
-  const d = result.data;
+function buildSkipCard(res, room5){
+  const d = res.data;
   const div = document.createElement('div');
-  div.className = 'hit r5';
+  div.className = 'hit skip';
 
-  const allTriggers = result.triggers && result.triggers.length
-    ? result.triggers.map(t => `${t.seat}号-${t.name}`).join('；')
+  div.innerHTML = `
+    <div class="hit-lbl">跳</div>
+    <div class="hit-seat">跳</div>
+    <div class="hit-body">
+      <div class="row1">房号=${room5} 未命中v0.9大赢结构</div>
+      <div class="row2">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}｜奇偶=${d.pattern}｜和值=${d.sum}</div>
+      <div class="row3">无2/3/4/5/6号强进结构，直接跳。</div>
+    </div>
+    <div class="hit-right">
+      <div class="hit-wr">—</div>
+      <div class="hit-avg">无结构</div>
+    </div>
+  `;
+  return div;
+}
+
+function buildDataCard(res){
+  const d = res.data;
+  const div = document.createElement('div');
+  div.className = 'hit info';
+
+  const all = res.triggers.length
+    ? res.triggers.map(t => `${t.seat}号-${t.name}`).join('；')
     : '无';
 
   div.innerHTML = `
     <div class="hit-lbl">数据</div>
-    <div class="hit-seat">${result.triggers ? result.triggers.length : 0}</div>
+    <div class="hit-seat">${res.triggers.length}</div>
     <div class="hit-body">
-      <div class="row1">S=${d.S1}/${d.S2}/${d.S3}/${d.S4}/${d.S5}｜RoomSum=${d.RoomSum}</div>
-      <div class="row2">P=${d.P1}/${d.P2}/${d.P3}/${d.P4}/${d.P5}</div>
-      <div class="row3">全部触发：${allTriggers}</div>
+      <div class="row1">奇偶=${d.pattern}｜和值=${d.sum}｜最大=${d.max}｜最小=${d.min}</div>
+      <div class="row2">排序：A${d.rankA} B${d.rankB} C${d.rankC} D${d.rankD} E${d.rankE}</div>
+      <div class="row3">全部触发：${all}</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">L2.2</div>
+      <div class="hit-wr">v0.9</div>
       <div class="hit-avg">结构</div>
     </div>
   `;
@@ -896,22 +806,27 @@ function buildDataCard(result){
 }
 
 function render(room5){
-  const res = evaluateL22(room5);
+  const res = evaluateV09(room5);
 
   resultEl.style.display = 'none';
-  skipEl.style.display   = 'none';
-  hitListEl.innerHTML    = '';
+  skipEl.style.display = 'none';
+  hitListEl.innerHTML = '';
 
   if(!res.ok){
-    resultHdr.textContent = `然仔66660 L2.2　无主推`;
-    hitListEl.appendChild(buildModelCard(res, room5));
+    resultHdr.textContent = `然崽 v0.9｜无命中`;
+    hitListEl.appendChild(buildSkipCard(res, room5));
+    hitListEl.appendChild(buildDataCard(res));
     resultEl.style.display = 'block';
     skipEl.style.display = 'block';
     return res;
   }
 
-  resultHdr.textContent = `然仔66660 L2.2　${res.label} ${res.seat}号｜${res.triggerName}`;
-  hitListEl.appendChild(buildModelCard(res, room5));
+  resultHdr.textContent = `然崽 v0.9｜主推 ${res.best.seat}号｜${res.best.name}`;
+
+  res.triggers.forEach((t, idx) => {
+    hitListEl.appendChild(buildTriggerCard(t, res.data, room5, idx));
+  });
+
   hitListEl.appendChild(buildDataCard(res));
   resultEl.style.display = 'block';
 
@@ -956,12 +871,12 @@ function renderHist(){
     div.className = 'histItem';
 
     const resText = item.ok
-      ? `${item.seat}号${item.mode === '观察' ? '观察' : '主推'}｜${item.triggerName}`
+      ? `${item.seat}号｜${item.name}`
       : '跳';
 
     div.innerHTML = `
       <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">L2.2 → ${resText}</div>
+      <div class="histMain">然崽v0.9 → ${resText}</div>
     `;
     histListEl.appendChild(div);
   });
@@ -972,9 +887,8 @@ function pushHistory(room, res){
   items.unshift({
     room,
     ok: res.ok,
-    seat: res.seat,
-    mode: res.mode,
-    triggerName: res.triggerName,
+    seat: res.ok ? res.best.seat : null,
+    name: res.ok ? res.best.name : '跳',
     time: new Date().toLocaleString('zh-CN', {hour12:false})
   });
   saveHist(items);
