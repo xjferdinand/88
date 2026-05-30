@@ -6,8 +6,9 @@
   <meta name="theme-color" content="#b00000"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="小狗模型">
-  <title>小狗·5130004 奇偶结构 × 位子模型 v0.4</title>
+  <meta name="apple-mobile-web-app-title" content="小狗v0.9">
+  <title>小狗·5130004 v0.9 AB档模型</title>
+
   <style>
     :root{
       --bg:#0b0b0f;
@@ -22,11 +23,7 @@
       --purple:#d59bff;
     }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
+    *{box-sizing:border-box;margin:0;padding:0;}
 
     body{
       min-height:100vh;
@@ -42,9 +39,7 @@
       padding:12px;
     }
 
-    .app{
-      width:min(430px,100%);
-    }
+    .app{width:min(430px,100%);}
 
     .title{
       font-size:16px;
@@ -129,9 +124,7 @@
       transition:transform .1s,box-shadow .1s;
     }
 
-    .btn-circle:active{
-      transform:scale(.92);
-    }
+    .btn-circle:active{transform:scale(.92);}
 
     .msg{
       text-align:center;
@@ -171,19 +164,14 @@
       background:rgba(0,0,0,.22);
     }
 
-    .hit.main{
+    .hit.a{
       border-color:rgba(255,176,32,.55);
       background:rgba(255,176,32,.10);
     }
 
-    .hit.good{
+    .hit.b{
       border-color:rgba(92,255,154,.45);
       background:rgba(92,255,154,.08);
-    }
-
-    .hit.watch{
-      border-color:rgba(139,184,255,.35);
-      background:rgba(139,184,255,.07);
     }
 
     .hit.skip{
@@ -207,19 +195,14 @@
       color:rgba(255,255,255,.60);
     }
 
-    .hit.main .hit-lbl{
+    .hit.a .hit-lbl{
       background:rgba(255,176,32,.28);
       color:#ffd18a;
     }
 
-    .hit.good .hit-lbl{
+    .hit.b .hit-lbl{
       background:rgba(92,255,154,.20);
       color:rgba(140,255,185,.95);
-    }
-
-    .hit.watch .hit-lbl{
-      background:rgba(139,184,255,.20);
-      color:rgba(175,205,255,.95);
     }
 
     .hit.skip .hit-lbl{
@@ -237,19 +220,14 @@
       white-space:nowrap;
     }
 
-    .hit.main .hit-seat{
+    .hit.a .hit-seat{
       color:var(--gold);
       text-shadow:0 0 12px rgba(255,176,32,.25);
     }
 
-    .hit.good .hit-seat{
+    .hit.b .hit-seat{
       color:var(--green);
       text-shadow:0 0 12px rgba(92,255,154,.25);
-    }
-
-    .hit.watch .hit-seat{
-      color:var(--blue);
-      text-shadow:0 0 12px rgba(139,184,255,.25);
     }
 
     .hit.skip .hit-seat{
@@ -399,46 +377,25 @@
     }
 
     @media (max-width:430px){
-      body{
-        padding:10px;
-      }
-
-      .app{
-        width:100%;
-      }
-
-      .panel{
-        padding:10px;
-        border-radius:15px;
-      }
-
+      body{padding:10px;}
+      .app{width:100%;}
+      .panel{padding:10px;border-radius:15px;}
       .hit{
         grid-template-columns:auto 46px 1fr auto;
         gap:6px;
         padding:7px 8px;
       }
-
-      .hit-seat{
-        font-size:19px;
-      }
-
-      .result-hdr{
-        font-size:10px;
-      }
-
-      .histMain{
-        font-size:10px;
-      }
-
-      .tiny{
-        font-size:9px;
-      }
+      .hit-seat{font-size:19px;}
+      .result-hdr{font-size:10px;}
+      .histMain{font-size:10px;}
+      .tiny{font-size:9px;}
     }
   </style>
 </head>
+
 <body>
 <div class="app">
-  <div class="title">小狗·5130004<span class="version">奇偶结构 × 位子 v0.4</span></div>
+  <div class="title">小狗·5130004<span class="version">AB档 v0.9</span></div>
 
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
@@ -450,7 +407,7 @@
     <div class="msg" id="msg"></div>
 
     <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 小狗 v0.4 结果 —</div>
+      <div class="result-hdr" id="resultHdr">— 小狗 v0.9 结果 —</div>
       <div class="hit-list" id="hitList"></div>
     </div>
 
@@ -465,31 +422,36 @@
     </div>
 
     <div class="tiny">
-【小狗·5130004｜奇偶结构 × 位子模型 v0.4】
+【小狗·5130004｜v0.9 AB档扩容模型】
 
-当前只保留小狗模型，旧账号全部作废。
-
-回测口径：
-总样本78局；命中32局；进房率41.0%；
-命中净分 +15410；
-正分29局；胜率90.6%；
+当前回测：
+总样本100局；命中30局；进房率30.0%；
+命中净分 +16590；
+正分26局；胜率86.7%；
+大赢≥500：16局；
 大输≤-500：0局。
 
-核心口诀：
-2号吃 11111 / 10101 / 00011 / 00110；
-3号吃 10100 / 11011 / 00011 / 10001 / 01110 / 00001 / 01101；
-5号吃 11100 / 10110 / 11101 / 01100 / 11111；
-6号吃 10001 / 11100；
-4号暂时不主打。
+A档主进：
+2号：X偶；
+3号：无0 + 跨度＜7；
+4号：和值S=25~30；
+5号：X偶 + 无重号。
 
-辅助口诀：
-2看偏奇，3看宽，5看强，6看10001，4不玩。
+B档短打：
+3号：X偶 + X第5名；
+2号：X第3名；
+6号：X奇 + X第5名。
+
+执行：
+A档正常进；
+B档只短打一局，不追；
+无A/B命中直接跳。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY = 'xiaogou_5130004_parity_seat_v04';
+const HISTORY_KEY = 'xiaogou_5130004_ab_v09';
 const HISTORY_LIMIT = 30;
 
 const roomEl     = document.getElementById('room');
@@ -502,46 +464,37 @@ const skipEl     = document.getElementById('skip');
 const histListEl = document.getElementById('histList');
 const clearBtnEl = document.getElementById('clearBtn');
 
-const MODEL = {
-  2: {
-    green: ['11111','10101','00011','00110'],
-    red: ['11000'],
-    note: '2号优先偏奇/尾部带奇结构，11000硬避。'
-  },
-  3: {
-    green: ['10100','11011','00011','10001','01110','00001','01101'],
-    red: ['00000','10101','11000'],
-    note: '3号是主力宽位，但00000/10101/11000慎避。'
-  },
-  4: {
-    green: [],
-    red: [],
-    note: '4号暂时不主打，只观察，不给主推。'
-  },
-  5: {
-    green: ['11100','10110','11101','01100','11111'],
-    red: ['10010','01101','00100'],
-    note: '5号只吃强结构，10010/01101/00100硬避。'
-  },
-  6: {
-    green: ['10001','11100'],
-    red: ['11000','00000','00010'],
-    note: '6号只认10001，11100可短打；11000/00000/00010避。'
-  }
-};
-
-const SEAT_PRIORITY = [3,2,5,6,4];
+const SEAT_PRIORITY_A = [4,3,2,5];
+const SEAT_PRIORITY_B = [3,2,6];
 
 function getDigits(room){
   return room.split('').map(Number);
 }
 
-function parityBit(n){
-  return n % 2 === 1 ? '1' : '0';
-}
+function getBase(room){
+  const [A,B,C,D,E] = getDigits(room);
+  const digits = [A,B,C,D,E];
+  const sum = A+B+C+D+E;
+  const max = Math.max(...digits);
+  const min = Math.min(...digits);
+  const range = max - min;
+  const hasZero = digits.includes(0);
+  const xMap = {1:A,2:B,3:C,4:D,5:E,6:E};
+  const repeat = getRepeatInfo(digits);
+  const rankMap = getUniqueRankMap(digits);
 
-function parityPattern(digits){
-  return digits.map(parityBit).join('');
+  return {
+    A,B,C,D,E,
+    digits,
+    sum,
+    max,
+    min,
+    range,
+    hasZero,
+    xMap,
+    repeat,
+    rankMap
+  };
 }
 
 function getRepeatInfo(digits){
@@ -550,24 +503,49 @@ function getRepeatInfo(digits){
 
   const groups = Object.entries(count)
     .map(([num,c]) => ({num:Number(num), count:c}))
-    .sort((a,b) => b.count - a.count || a.num - b.num);
+    .sort((a,b)=>b.count-a.count || a.num-b.num);
 
-  const counts = groups.map(g => g.count).sort((a,b) => b-a).join('');
+  const hasRepeat = groups.some(g => g.count >= 2);
+  const repeatedNums = groups.filter(g => g.count >= 2).map(g => g.num);
 
   let type = '无重号';
-  if(counts === '2111') type = '单对子';
-  else if(counts === '221') type = '双对子';
-  else if(counts === '311') type = '三重号';
-  else if(counts === '32') type = '三带二';
-  else if(counts === '41') type = '四重号';
-  else if(counts === '5') type = '五重号';
+  const shape = groups.map(g => g.count).sort((a,b)=>b-a).join('');
+
+  if(shape === '2111') type = '单对子';
+  else if(shape === '221') type = '双对子';
+  else if(shape === '311') type = '三重号';
+  else if(shape === '32') type = '三带二';
+  else if(shape === '41') type = '四重号';
+  else if(shape === '5') type = '五重号';
 
   return {
     type,
-    groups,
-    repeatedNums: groups.filter(g => g.count >= 2).map(g => g.num),
-    maxCount: groups[0].count
+    hasRepeat,
+    repeatedNums,
+    groups
   };
+}
+
+function getUniqueRankMap(digits){
+  const pos = ['A','B','C','D','E'];
+
+  const arr = digits.map((v,i)=>({
+    pos:pos[i],
+    v,
+    i
+  }));
+
+  arr.sort((a,b)=>{
+    if(b.v !== a.v) return b.v - a.v;
+    return b.i - a.i;
+  });
+
+  const rankMap = {};
+  arr.forEach((item,index)=>{
+    rankMap[item.pos] = index + 1;
+  });
+
+  return rankMap;
 }
 
 function seatPos(seat){
@@ -580,236 +558,195 @@ function seatPos(seat){
   return '';
 }
 
-function getX(seat,d){
-  if(seat === 1) return d.A;
-  if(seat === 2) return d.B;
-  if(seat === 3) return d.C;
-  if(seat === 4) return d.D;
-  if(seat === 5) return d.E;
-  if(seat === 6) return d.E;
-  return null;
+function getSeatRank(seat,d){
+  return d.rankMap[seatPos(seat)];
 }
 
-function xParity(x){
-  return x % 2 === 1 ? '奇' : '偶';
+function isEven(n){
+  return n % 2 === 0;
 }
 
-function getBaseData(room5){
-  const [A,B,C,D,E] = getDigits(room5);
-  const digits = [A,B,C,D,E];
-  const pattern = parityPattern(digits);
-  const oddCount = pattern.split('').filter(v => v === '1').length;
-  const repeat = getRepeatInfo(digits);
-
-  return {
-    A,B,C,D,E,
-    digits,
-    pattern,
-    oddCount,
-    repeat
-  };
+function isOdd(n){
+  return n % 2 === 1;
 }
 
-function getRepeatAdvice(seat,d){
-  const x = getX(seat,d);
-  const repeatNums = d.repeat.repeatedNums;
-  const isEatRepeat = repeatNums.includes(x);
-
-  if(d.repeat.type === '无重号'){
-    return {
-      isEatRepeat:false,
-      text:'无重号，按奇偶结构×座位判断。'
-    };
-  }
-
-  if(d.repeat.type === '单对子'){
-    if(seat === 3 && isEatRepeat){
-      return {
-        isEatRepeat:true,
-        text:'单对子 + 3号吃重号，是当前最优重复号形态。'
-      };
-    }
-    if(isEatRepeat){
-      return {
-        isEatRepeat:true,
-        text:'单对子可吃重号，但优先级低于3号吃重号。'
-      };
-    }
-    return {
-      isEatRepeat:false,
-      text:'单对子但未吃重号，能进与否仍看奇偶结构。'
-    };
-  }
-
-  if(d.repeat.type === '双对子'){
-    if(seat === 3 && x !== 1){
-      return {
-        isEatRepeat,
-        text:'双对子只轻看3号，X=1跳；当前X不是1，可短看。'
-      };
-    }
-    return {
-      isEatRepeat,
-      text:'双对子吃重号不稳定，非3号慎。'
-    };
-  }
-
-  if(d.repeat.type === '三重号' || d.repeat.type === '三带二'){
-    const tripleNums = d.repeat.groups.filter(g => g.count >= 3).map(g => g.num);
-    const eatTriple = tripleNums.includes(x);
-    if(eatTriple){
-      return {
-        isEatRepeat:true,
-        text:'三重号以上不建议吃三重数字，慎/跳。'
-      };
-    }
-    return {
-      isEatRepeat:false,
-      text:'三重号避开重号本身，属于可接受形态。'
-    };
-  }
-
-  if(d.repeat.type === '四重号' || d.repeat.type === '五重号'){
-    return {
-      isEatRepeat,
-      text:'四重号以上样本太少，不强追。'
-    };
-  }
-
-  return {
-    isEatRepeat,
-    text:'重复号结构仅作辅助。'
-  };
+function xText(seat,d){
+  const x = d.xMap[seat];
+  const pos = seatPos(seat);
+  const rank = getSeatRank(seat,d);
+  const oe = isEven(x) ? '偶' : '奇';
+  return `X=${pos}${x}｜${oe}｜第${rank}名`;
 }
 
-function gradeSeat(seat,d){
-  const rule = MODEL[seat];
-  const p = d.pattern;
-  const x = getX(seat,d);
-  const repeatAdvice = getRepeatAdvice(seat,d);
-
-  if(seat === 4){
-    return {
-      seat,
-      status:'跳',
-      cls:'skip',
-      score:0,
-      reason:'4号暂时不主打',
-      detail:'当前小狗v0.4不把4号作为主推位。',
-      x,
-      repeatAdvice
-    };
-  }
-
-  if(rule.red.includes(p)){
-    return {
-      seat,
-      status:'跳',
-      cls:'skip',
-      score:10,
-      reason:`${seat}号红灯结构`,
-      detail:`奇偶${p}属于${seat}号历史雷区。${rule.note}`,
-      x,
-      repeatAdvice
-    };
-  }
-
-  if(rule.green.includes(p)){
-    let score = 80;
-
-    if(seat === 3) score = 96;
-    if(seat === 2) score = 92;
-    if(seat === 5) score = 90;
-    if(seat === 6) score = 88;
-
-    if(d.repeat.type === '单对子' && seat === 3 && repeatAdvice.isEatRepeat){
-      score += 5;
-    }
-
-    if(d.repeat.type === '双对子' && seat !== 3){
-      score -= 15;
-    }
-
-    if((d.repeat.type === '三重号' || d.repeat.type === '三带二') && repeatAdvice.isEatRepeat){
-      score -= 30;
-    }
-
-    if(d.repeat.type === '四重号' || d.repeat.type === '五重号'){
-      score -= 20;
-    }
-
-    const status = score >= 85 ? '进' : '慎';
-
-    return {
-      seat,
-      status,
-      cls: status === '进' ? 'good' : 'watch',
-      score,
-      reason:`${seat}号绿灯结构`,
-      detail:`奇偶${p}命中${seat}号绿灯。${rule.note}`,
-      x,
-      repeatAdvice
-    };
-  }
-
-  return {
+function addCandidate(list, seat, grade, name, reason, d){
+  list.push({
     seat,
-    status:'跳',
-    cls:'skip',
-    score:20,
-    reason:`${seat}号未命中绿灯`,
-    detail:`奇偶${p}不在${seat}号可进结构内。${rule.note}`,
-    x,
-    repeatAdvice
-  };
+    grade,
+    name,
+    reason,
+    xText:xText(seat,d)
+  });
 }
 
-function evaluate(room5){
-  const d = getBaseData(room5);
-  let seats = [2,3,4,5,6].map(seat => gradeSeat(seat,d));
+function evaluate(room){
+  const d = getBase(room);
+  const A = [];
+  const B = [];
 
-  const candidates = seats
-    .filter(s => s.status === '进' || s.status === '慎')
-    .sort((a,b) => {
-      if(b.score !== a.score) return b.score - a.score;
-      return SEAT_PRIORITY.indexOf(a.seat) - SEAT_PRIORITY.indexOf(b.seat);
-    });
+  // =========================
+  // A档主进
+  // =========================
 
-  const best = candidates[0] || null;
+  // A档：2号 X偶
+  if(isEven(d.xMap[2])){
+    addCandidate(
+      A,
+      2,
+      'A档',
+      '2号｜X偶',
+      'A档主进：2号只看X偶；当前100局回测该条件0大输。',
+      d
+    );
+  }
+
+  // A档：3号 无0 + 跨度<7
+  if(!d.hasZero && d.range < 7){
+    addCandidate(
+      A,
+      3,
+      'A档',
+      '3号｜无0 + 小跨度',
+      'A档主进：房号无0，且最大数字-最小数字＜7。',
+      d
+    );
+  }
+
+  // A档：4号 S=25~30
+  if(d.sum >= 25 && d.sum <= 30){
+    addCandidate(
+      A,
+      4,
+      'A档',
+      '4号｜和值25-30',
+      'A档主进：4号看总能量，和值S在25到30之间。',
+      d
+    );
+  }
+
+  // A档：5号 X偶 + 无重号
+  if(isEven(d.xMap[5]) && !d.repeat.hasRepeat){
+    addCandidate(
+      A,
+      5,
+      'A档',
+      '5号｜X偶 + 无重号',
+      'A档主进：5号必须X偶且房号无重号。',
+      d
+    );
+  }
+
+  // =========================
+  // B档短打
+  // =========================
+
+  // B档：3号 X偶 + X第5名
+  if(isEven(d.xMap[3]) && getSeatRank(3,d) === 5){
+    addCandidate(
+      B,
+      3,
+      'B档',
+      '3号｜X偶 + 第5名',
+      'B档短打：3号X偶且X唯一排名第5名，只打一局，不追。',
+      d
+    );
+  }
+
+  // B档：2号 X第3名
+  if(getSeatRank(2,d) === 3){
+    addCandidate(
+      B,
+      2,
+      'B档',
+      '2号｜X第3名',
+      'B档短打：2号X唯一排名第3名，只打一局，不追。',
+      d
+    );
+  }
+
+  // B档：6号 X奇 + X第5名
+  if(isOdd(d.xMap[6]) && getSeatRank(6,d) === 5){
+    addCandidate(
+      B,
+      6,
+      'B档',
+      '6号｜X奇 + 第5名',
+      'B档短打：6号X奇且X唯一排名第5名，只打一局，不追。',
+      d
+    );
+  }
+
+  // A档去重和排序
+  const aMap = new Map();
+  A.forEach(item => {
+    if(!aMap.has(item.seat)) aMap.set(item.seat,item);
+  });
+
+  let aList = Array.from(aMap.values()).sort((x,y)=>{
+    return SEAT_PRIORITY_A.indexOf(x.seat) - SEAT_PRIORITY_A.indexOf(y.seat);
+  });
+
+  // B档去重，且如果同座位已在A档出现，则不重复显示为B
+  const aSeats = new Set(aList.map(i => i.seat));
+  const bMap = new Map();
+
+  B.forEach(item => {
+    if(aSeats.has(item.seat)) return;
+    if(!bMap.has(item.seat)) bMap.set(item.seat,item);
+  });
+
+  let bList = Array.from(bMap.values()).sort((x,y)=>{
+    return SEAT_PRIORITY_B.indexOf(x.seat) - SEAT_PRIORITY_B.indexOf(y.seat);
+  });
+
+  const best = aList[0] || bList[0] || null;
 
   return {
+    room,
     data:d,
-    seats,
-    candidates,
+    aList,
+    bList,
     best,
     ok:!!best
   };
 }
 
-function buildMainCard(best,d,room5){
-  const div = document.createElement('div');
-  div.className = `hit ${best.status === '进' ? 'main' : 'watch'}`;
+function buildCard(item,d,index){
+  const cls = item.grade === 'A档' ? 'a' : 'b';
+  const label = index === 0
+    ? (item.grade === 'A档' ? 'A主推' : 'B短打')
+    : item.grade;
 
-  const label = best.status === '进' ? '主推' : '慎进';
-  const xText = `X=${seatPos(best.seat)}${best.x}｜${xParity(best.x)}`;
+  const div = document.createElement('div');
+  div.className = `hit ${cls}`;
 
   div.innerHTML = `
     <div class="hit-lbl">${label}</div>
-    <div class="hit-seat">${best.seat}</div>
+    <div class="hit-seat">${item.seat}</div>
     <div class="hit-body">
-      <div class="row1">${room5} → ${best.seat}号${best.status}</div>
-      <div class="row2">奇偶=${d.pattern}｜${xText}｜${d.repeat.type}</div>
-      <div class="row3">${best.detail}｜${best.repeatAdvice.text}</div>
+      <div class="row1">${item.name}</div>
+      <div class="row2">${item.xText}｜S=${d.sum}｜跨度=${d.range}</div>
+      <div class="row3">${item.reason}</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">${best.score}</div>
-      <div class="hit-avg">${best.status}</div>
+      <div class="hit-wr">${item.grade === 'A档' ? '进' : '短'}</div>
+      <div class="hit-avg">${item.grade}</div>
     </div>
   `;
+
   return div;
 }
 
-function buildSkipCard(res,room5){
+function buildSkipCard(res){
   const d = res.data;
   const div = document.createElement('div');
   div.className = 'hit skip';
@@ -818,15 +755,16 @@ function buildSkipCard(res,room5){
     <div class="hit-lbl">跳</div>
     <div class="hit-seat">跳</div>
     <div class="hit-body">
-      <div class="row1">${room5} → 未命中可进座位</div>
-      <div class="row2">奇偶=${d.pattern}｜奇数${d.oddCount}个｜${d.repeat.type}</div>
-      <div class="row3">没有命中2/3/5/6号绿灯结构；4号暂时不主打。</div>
+      <div class="row1">未命中A档/B档</div>
+      <div class="row2">S=${d.sum}｜跨度=${d.range}｜${d.hasZero ? '有0' : '无0'}｜${d.repeat.type}</div>
+      <div class="row3">无A/B进房条件，直接跳。不要硬打。</div>
     </div>
     <div class="hit-right">
       <div class="hit-wr">—</div>
       <div class="hit-avg">无</div>
     </div>
   `;
+
   return div;
 }
 
@@ -839,103 +777,90 @@ function buildInfoCard(res){
 
   div.innerHTML = `
     <div class="hit-lbl">数据</div>
-    <div class="hit-seat">${d.oddCount}</div>
+    <div class="hit-seat">数</div>
     <div class="hit-body">
-      <div class="row1">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}｜奇偶=${d.pattern}</div>
-      <div class="row2">奇数${d.oddCount}个｜重复类型=${d.repeat.type}｜重复数字=${repeatNums}</div>
-      <div class="row3">一眼口诀：2看偏奇，3看宽，5看强，6看10001，4不玩。</div>
+      <div class="row1">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
+      <div class="row2">S=${d.sum}｜最大=${d.max}｜最小=${d.min}｜跨度=${d.range}｜${d.hasZero ? '有0' : '无0'}</div>
+      <div class="row3">重号=${d.repeat.type}｜重复数字=${repeatNums}｜排名：B${d.rankMap.B}/C${d.rankMap.C}/D${d.rankMap.D}/E${d.rankMap.E}</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">v0.4</div>
-      <div class="hit-avg">小狗</div>
+      <div class="hit-wr">v0.9</div>
+      <div class="hit-avg">AB档</div>
     </div>
   `;
+
   return div;
 }
 
-function buildAllSeatCard(res){
-  const d = res.data;
+function buildSummaryCard(res){
   const div = document.createElement('div');
   div.className = 'hit info';
 
-  const text = res.seats
-    .map(s => `${s.seat}号${s.status}`)
-    .join('｜');
+  const aText = res.aList.length
+    ? res.aList.map(i => `${i.seat}号-${i.name}`).join('；')
+    : '无';
+
+  const bText = res.bList.length
+    ? res.bList.map(i => `${i.seat}号-${i.name}`).join('；')
+    : '无';
 
   div.innerHTML = `
-    <div class="hit-lbl">全位</div>
-    <div class="hit-seat">位</div>
+    <div class="hit-lbl">汇总</div>
+    <div class="hit-seat">${res.aList.length + res.bList.length}</div>
     <div class="hit-body">
-      <div class="row1">${text}</div>
-      <div class="row2">2:${MODEL[2].green.join('/')}｜3:${MODEL[3].green.join('/')}</div>
-      <div class="row3">5:${MODEL[5].green.join('/')}｜6:${MODEL[6].green.join('/')}｜4号不主打</div>
+      <div class="row1">A档：${aText}</div>
+      <div class="row2">B档：${bText}</div>
+      <div class="row3">A档优先；无A才看B；B档只短打一局，不追。</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">表</div>
-      <div class="hit-avg">参考</div>
+      <div class="hit-wr">${res.ok ? '有' : '无'}</div>
+      <div class="hit-avg">命中</div>
     </div>
   `;
+
   return div;
 }
 
-function buildCandidateCard(candidates){
-  const div = document.createElement('div');
-  div.className = 'hit watch';
-
-  const text = candidates
-    .slice(1)
-    .map(s => `${s.seat}号${s.status}(${s.score})`)
-    .join('｜');
-
-  div.innerHTML = `
-    <div class="hit-lbl">备选</div>
-    <div class="hit-seat">备</div>
-    <div class="hit-body">
-      <div class="row1">其他可看座位</div>
-      <div class="row2">${text || '无'}</div>
-      <div class="row3">实战以主推为准，不建议同局多座乱换。</div>
-    </div>
-    <div class="hit-right">
-      <div class="hit-wr">参</div>
-      <div class="hit-avg">非主</div>
-    </div>
-  `;
-  return div;
-}
-
-function render(room5){
-  const res = evaluate(room5);
+function render(room){
+  const res = evaluate(room);
 
   resultEl.style.display = 'none';
   skipEl.style.display = 'none';
   hitListEl.innerHTML = '';
 
   if(!res.ok){
-    resultHdr.textContent = `小狗 v0.4｜直接跳`;
-    hitListEl.appendChild(buildSkipCard(res,room5));
+    resultHdr.textContent = `小狗 v0.9｜直接跳`;
+    hitListEl.appendChild(buildSkipCard(res));
     hitListEl.appendChild(buildInfoCard(res));
-    hitListEl.appendChild(buildAllSeatCard(res));
     resultEl.style.display = 'block';
     skipEl.style.display = 'block';
     return res;
   }
 
-  resultHdr.textContent = `小狗 v0.4｜主推 ${res.best.seat}号｜${res.best.status}`;
-  hitListEl.appendChild(buildMainCard(res.best,res.data,room5));
+  const bestGrade = res.best.grade;
+  resultHdr.textContent = `小狗 v0.9｜${bestGrade}｜主推 ${res.best.seat}号`;
 
-  if(res.candidates.length > 1){
-    hitListEl.appendChild(buildCandidateCard(res.candidates));
-  }
+  let index = 0;
 
+  res.aList.forEach(item => {
+    hitListEl.appendChild(buildCard(item,res.data,index));
+    index++;
+  });
+
+  res.bList.forEach(item => {
+    hitListEl.appendChild(buildCard(item,res.data,index));
+    index++;
+  });
+
+  hitListEl.appendChild(buildSummaryCard(res));
   hitListEl.appendChild(buildInfoCard(res));
-  hitListEl.appendChild(buildAllSeatCard(res));
 
   resultEl.style.display = 'block';
   return res;
 }
 
 function run(){
-  const raw = roomEl.value.trim().replace(/\s+/g, '');
+  const raw = roomEl.value.trim().replace(/\s+/g,'');
 
   if(!/^\d{5}$/.test(raw)){
     msgEl.textContent = '请输入正确的5位数字';
@@ -943,6 +868,7 @@ function run(){
   }
 
   msgEl.textContent = '';
+
   const res = render(raw);
   pushHistory(raw,res);
 
@@ -977,28 +903,29 @@ function renderHist(){
     const div = document.createElement('div');
     div.className = 'histItem';
 
-    const resText = item.ok
-      ? `${item.seat}号｜${item.status}｜${item.pattern}`
-      : `跳｜${item.pattern}`;
+    const text = item.ok
+      ? `${item.grade}｜${item.seat}号｜${item.name}`
+      : '跳';
 
     div.innerHTML = `
       <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">小狗v0.4 → ${resText}</div>
+      <div class="histMain">小狗v0.9 → ${text}</div>
     `;
+
     histListEl.appendChild(div);
   });
 }
 
 function pushHistory(room,res){
   const items = loadHist();
-  const isOk = res.ok && res.best;
+  const ok = res.ok && res.best;
 
   items.unshift({
     room,
-    ok:isOk,
-    seat:isOk ? res.best.seat : null,
-    status:isOk ? res.best.status : '跳',
-    pattern:res.data.pattern,
+    ok,
+    grade:ok ? res.best.grade : '跳',
+    seat:ok ? res.best.seat : null,
+    name:ok ? res.best.name : '跳',
     time:new Date().toLocaleString('zh-CN',{hour12:false})
   });
 
