@@ -1,958 +1,1224 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#b00000"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="小狗v0.9">
-  <title>小狗·5130004 v0.9 AB档模型</title>
-
-  <style>
-    :root{
-      --bg:#0b0b0f;
-      --card:#11111a;
-      --line:rgba(255,255,255,.10);
-      --text:#f5f5f7;
-      --muted:rgba(255,255,255,.50);
-      --red:#ff2d2d;
-      --gold:#ffb020;
-      --green:#5cff9a;
-      --blue:#8bb8ff;
-      --purple:#d59bff;
-    }
-
-    *{box-sizing:border-box;margin:0;padding:0;}
-
-    body{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:
-        radial-gradient(800px 400px at 50% 15%,rgba(255,45,45,.22),transparent 60%),
-        radial-gradient(900px 500px at 50% 110%,rgba(176,0,0,.28),transparent 60%),
-        var(--bg);
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-      padding:12px;
-    }
-
-    .app{width:min(430px,100%);}
-
-    .title{
-      font-size:16px;
-      font-weight:900;
-      margin:0 0 12px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-
-    .title::before{
-      content:"";
-      flex-shrink:0;
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--red);
-      box-shadow:0 0 12px rgba(255,45,45,.9);
-    }
-
-    .version{
-      font-size:10px;
-      color:rgba(255,45,45,.65);
-      margin-left:4px;
-      font-weight:500;
-    }
-
-    .panel{
-      background:linear-gradient(160deg,rgba(255,45,45,.08),transparent 55%),var(--card);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      box-shadow:0 20px 60px rgba(0,0,0,.55);
-    }
-
-    input{
-      width:100%;
-      padding:12px 14px;
-      font-size:22px;
-      letter-spacing:5px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.40);
-      color:var(--text);
-      outline:none;
-      text-align:center;
-      font-weight:800;
-    }
-
-    input:focus{
-      border-color:rgba(255,45,45,.65);
-      box-shadow:0 0 0 3px rgba(255,45,45,.12);
-    }
-
-    input::placeholder{
-      font-size:13px;
-      letter-spacing:1px;
-      font-weight:400;
-    }
-
-    .btn-wrap{
-      display:flex;
-      justify-content:center;
-      margin:14px 0 8px;
-    }
-
-    .btn-circle{
-      width:66px;
-      height:66px;
-      border-radius:50%;
-      border:2px solid rgba(255,45,45,.55);
-      background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
-      color:#fff;
-      font-size:15px;
-      font-weight:900;
-      letter-spacing:1px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18);
-      transition:transform .1s,box-shadow .1s;
-    }
-
-    .btn-circle:active{transform:scale(.92);}
-
-    .msg{
-      text-align:center;
-      font-size:12px;
-      color:var(--muted);
-      min-height:14px;
-      margin-bottom:8px;
-    }
-
-    .result{
-      display:none;
-      margin-top:4px;
-    }
-
-    .result-hdr{
-      text-align:center;
-      font-size:10px;
-      color:var(--muted);
-      margin-bottom:8px;
-      letter-spacing:.3px;
-    }
-
-    .hit-list{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
-    .hit{
-      display:grid;
-      grid-template-columns:auto 52px 1fr auto;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.07);
-      background:rgba(0,0,0,.22);
-    }
-
-    .hit.a{
-      border-color:rgba(255,176,32,.55);
-      background:rgba(255,176,32,.10);
-    }
-
-    .hit.b{
-      border-color:rgba(92,255,154,.45);
-      background:rgba(92,255,154,.08);
-    }
-
-    .hit.skip{
-      border-color:rgba(255,45,45,.55);
-      background:rgba(255,45,45,.11);
-    }
-
-    .hit.info{
-      border-color:rgba(255,255,255,.09);
-      background:rgba(255,255,255,.03);
-    }
-
-    .hit-lbl{
-      font-size:9px;
-      font-weight:900;
-      padding:2px 6px;
-      border-radius:999px;
-      white-space:nowrap;
-      letter-spacing:.2px;
-      background:rgba(255,255,255,.08);
-      color:rgba(255,255,255,.60);
-    }
-
-    .hit.a .hit-lbl{
-      background:rgba(255,176,32,.28);
-      color:#ffd18a;
-    }
-
-    .hit.b .hit-lbl{
-      background:rgba(92,255,154,.20);
-      color:rgba(140,255,185,.95);
-    }
-
-    .hit.skip .hit-lbl{
-      background:rgba(255,45,45,.35);
-      color:#ff9898;
-    }
-
-    .hit-seat{
-      font-size:22px;
-      font-weight:1000;
-      color:var(--red);
-      text-shadow:0 0 12px rgba(255,45,45,.35);
-      line-height:1.05;
-      text-align:center;
-      white-space:nowrap;
-    }
-
-    .hit.a .hit-seat{
-      color:var(--gold);
-      text-shadow:0 0 12px rgba(255,176,32,.25);
-    }
-
-    .hit.b .hit-seat{
-      color:var(--green);
-      text-shadow:0 0 12px rgba(92,255,154,.25);
-    }
-
-    .hit.skip .hit-seat{
-      color:#ff7b7b;
-      text-shadow:0 0 12px rgba(255,45,45,.25);
-    }
-
-    .hit.info .hit-seat{
-      color:rgba(255,255,255,.25);
-      text-shadow:none;
-    }
-
-    .hit-body{
-      line-height:1.4;
-      min-width:0;
-    }
-
-    .hit-body .row1{
-      font-size:11px;
-      color:var(--text);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .hit-body .row2{
-      font-size:10px;
-      color:var(--muted);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .hit-body .row3{
-      font-size:9px;
-      color:rgba(255,255,255,.34);
-      margin-top:1px;
-      line-height:1.25;
-    }
-
-    .hit-right{
-      text-align:right;
-      min-width:42px;
-    }
-
-    .hit-wr{
-      font-size:11px;
-      font-weight:900;
-      color:rgba(92,255,154,.88);
-    }
-
-    .hit-avg{
-      font-size:9px;
-      color:rgba(255,255,255,.36);
-      margin-top:1px;
-    }
-
-    .bigSkip{
-      display:none;
-      text-align:center;
-      padding:18px;
-      font-size:30px;
-      font-weight:1000;
-      color:rgba(255,255,255,.18);
-      letter-spacing:4px;
-    }
-
-    .history{
-      margin-top:12px;
-      padding:10px 11px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
-    }
-
-    .histHead{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:7px;
-    }
-
-    .histTitle{
-      font-size:11px;
-      font-weight:800;
-      color:var(--muted);
-    }
-
-    .clearBtn{
-      font-size:10px;
-      padding:4px 8px;
-      border-radius:7px;
-      cursor:pointer;
-      border:1px solid rgba(255,45,45,.35);
-      background:rgba(255,45,45,.10);
-      color:rgba(255,100,100,.85);
-    }
-
-    .histList{
-      display:flex;
-      flex-direction:column;
-      gap:5px;
-      max-height:180px;
-      overflow:auto;
-    }
-
-    .histItem{
-      border:1px solid rgba(255,255,255,.05);
-      border-radius:9px;
-      padding:7px 9px;
-      background:rgba(0,0,0,.14);
-    }
-
-    .histTop{
-      display:flex;
-      justify-content:space-between;
-      font-size:10px;
-      color:rgba(255,255,255,.35);
-      margin-bottom:2px;
-    }
-
-    .histMain{
-      font-size:11px;
-      color:rgba(255,255,255,.62);
-      line-height:1.35;
-    }
-
-    .pill{
-      display:inline-block;
-      padding:1px 6px;
-      border-radius:999px;
-      border:1px solid rgba(255,45,45,.35);
-      background:rgba(255,45,45,.10);
-      font-weight:800;
-      color:var(--red);
-      margin-right:3px;
-    }
-
-    .tiny{
-      margin-top:12px;
-      padding-top:10px;
-      border-top:1px solid var(--line);
-      font-size:10px;
-      color:rgba(255,255,255,.30);
-      line-height:1.6;
-      white-space:pre-line;
-    }
-
-    @media (max-width:430px){
-      body{padding:10px;}
-      .app{width:100%;}
-      .panel{padding:10px;border-radius:15px;}
-      .hit{
-        grid-template-columns:auto 46px 1fr auto;
-        gap:6px;
-        padding:7px 8px;
-      }
-      .hit-seat{font-size:19px;}
-      .result-hdr{font-size:10px;}
-      .histMain{font-size:10px;}
-      .tiny{font-size:9px;}
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#b00000"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="双号同步">
+<title>橘子+八戒 双号同步模型</title>
+<style>
+:root{
+  --bg:#0b0b0f;
+  --card:#11111a;
+  --line:rgba(255,255,255,.10);
+  --text:#f5f5f7;
+  --muted:rgba(255,255,255,.50);
+  --red:#ff2d2d;
+  --gold:#ffb020;
+  --green:#5cff9a;
+  --blue:#8bb8ff;
+  --purple:#d59bff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(800px 400px at 50% 15%,rgba(255,45,45,.22),transparent 60%),
+    radial-gradient(900px 500px at 50% 110%,rgba(176,0,0,.28),transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  padding:12px;
+}
+.app{width:min(460px,100%)}
+.title{
+  font-size:16px;
+  font-weight:900;
+  margin:0 0 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.title:before{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--red);
+  box-shadow:0 0 12px rgba(255,45,45,.9)
+}
+.version{
+  font-size:10px;
+  color:rgba(255,45,45,.65);
+  margin-left:4px;
+  font-weight:500;
+}
+.panel{
+  background:linear-gradient(160deg,rgba(255,45,45,.08),transparent 55%),var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.55)
+}
+input{
+  width:100%;
+  padding:12px 14px;
+  font-size:22px;
+  letter-spacing:5px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.40);
+  color:var(--text);
+  outline:none;
+  text-align:center;
+  font-weight:800
+}
+input:focus{
+  border-color:rgba(255,45,45,.65);
+  box-shadow:0 0 0 3px rgba(255,45,45,.12)
+}
+input::placeholder{
+  font-size:13px;
+  letter-spacing:1px;
+  font-weight:400
+}
+.btn-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin:14px 0 8px;
+}
+.btn-circle{
+  width:66px;
+  height:66px;
+  border-radius:50%;
+  border:2px solid rgba(255,45,45,.55);
+  background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
+  color:#fff;
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:1px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18)
+}
+.btn-circle:active{transform:scale(.92)}
+.copyBtn{
+  height:38px;
+  padding:0 13px;
+  border-radius:999px;
+  border:1px solid rgba(255,176,32,.45);
+  background:rgba(255,176,32,.10);
+  color:#ffd18a;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.copyBtn:active{transform:scale(.96)}
+.msg{
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  min-height:14px;
+  margin-bottom:8px
+}
+.dual{
+  display:none;
+  flex-direction:column;
+  gap:10px
+}
+.acct{
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:rgba(0,0,0,.18);
+  padding:10px
+}
+.acctHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px
+}
+.acctName{font-size:13px;font-weight:1000}
+.acctSub{font-size:9px;color:var(--muted);margin-top:2px}
+.acctBadge{
+  font-size:10px;
+  font-weight:900;
+  border-radius:999px;
+  padding:3px 8px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  color:rgba(255,255,255,.7)
+}
+.hit-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px
+}
+.hit{
+  display:grid;
+  grid-template-columns:auto 52px 1fr auto;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(0,0,0,.22)
+}
+.hit.a{
+  border-color:rgba(255,176,32,.55);
+  background:rgba(255,176,32,.10)
+}
+.hit.b{
+  border-color:rgba(92,255,154,.45);
+  background:rgba(92,255,154,.08)
+}
+.hit.c{
+  border-color:rgba(139,184,255,.45);
+  background:rgba(139,184,255,.09)
+}
+.hit.obs{
+  border-color:rgba(213,155,255,.42);
+  background:rgba(213,155,255,.08)
+}
+.hit.skip{
+  border-color:rgba(255,45,45,.55);
+  background:rgba(255,45,45,.11)
+}
+.hit.info{
+  border-color:rgba(255,255,255,.09);
+  background:rgba(255,255,255,.03)
+}
+.hit-lbl{
+  font-size:9px;
+  font-weight:900;
+  padding:2px 6px;
+  border-radius:999px;
+  white-space:nowrap;
+  background:rgba(255,255,255,.08);
+  color:rgba(255,255,255,.60)
+}
+.hit.a .hit-lbl{
+  background:rgba(255,176,32,.28);
+  color:#ffd18a
+}
+.hit.b .hit-lbl{
+  background:rgba(92,255,154,.20);
+  color:rgba(140,255,185,.95)
+}
+.hit.c .hit-lbl{
+  background:rgba(139,184,255,.20);
+  color:rgba(170,205,255,.98)
+}
+.hit.obs .hit-lbl{
+  background:rgba(213,155,255,.18);
+  color:rgba(225,190,255,.95)
+}
+.hit.skip .hit-lbl{
+  background:rgba(255,45,45,.35);
+  color:#ff9898
+}
+.hit-seat{
+  font-size:22px;
+  font-weight:1000;
+  color:var(--red);
+  text-shadow:0 0 12px rgba(255,45,45,.35);
+  line-height:1.05;
+  text-align:center;
+  white-space:nowrap
+}
+.hit.a .hit-seat{
+  color:var(--gold);
+  text-shadow:0 0 12px rgba(255,176,32,.25)
+}
+.hit.b .hit-seat{
+  color:var(--green);
+  text-shadow:0 0 12px rgba(92,255,154,.25)
+}
+.hit.c .hit-seat{
+  color:var(--blue);
+  text-shadow:0 0 12px rgba(139,184,255,.25)
+}
+.hit.obs .hit-seat{
+  color:var(--purple);
+  text-shadow:0 0 12px rgba(213,155,255,.22)
+}
+.hit.skip .hit-seat{color:#ff7b7b}
+.hit.info .hit-seat{
+  color:rgba(255,255,255,.25);
+  text-shadow:none
+}
+.hit-body{
+  line-height:1.4;
+  min-width:0
+}
+.row1{
+  font-size:11px;
+  color:var(--text);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+.row2{
+  font-size:10px;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+.row3{
+  font-size:9px;
+  color:rgba(255,255,255,.34);
+  margin-top:1px;
+  line-height:1.25
+}
+.hit-right{
+  text-align:right;
+  min-width:42px
+}
+.hit-wr{
+  font-size:11px;
+  font-weight:900;
+  color:rgba(92,255,154,.88)
+}
+.hit-avg{
+  font-size:9px;
+  color:rgba(255,255,255,.36);
+  margin-top:1px
+}
+.history{
+  margin-top:12px;
+  padding:10px 11px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.02)
+}
+.histHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:7px
+}
+.histTitle{
+  font-size:11px;
+  font-weight:800;
+  color:var(--muted)
+}
+.clearBtn{
+  font-size:10px;
+  padding:4px 8px;
+  border-radius:7px;
+  cursor:pointer;
+  border:1px solid rgba(255,45,45,.35);
+  background:rgba(255,45,45,.10);
+  color:rgba(255,100,100,.85)
+}
+.histList{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  max-height:180px;
+  overflow:auto
+}
+.histItem{
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:9px;
+  padding:7px 9px;
+  background:rgba(0,0,0,.14)
+}
+.histTop{
+  display:flex;
+  justify-content:space-between;
+  font-size:10px;
+  color:rgba(255,255,255,.35);
+  margin-bottom:2px
+}
+.histMain{
+  font-size:11px;
+  color:rgba(255,255,255,.62);
+  line-height:1.35
+}
+.pill{
+  display:inline-block;
+  padding:1px 6px;
+  border-radius:999px;
+  border:1px solid rgba(255,45,45,.35);
+  background:rgba(255,45,45,.10);
+  font-weight:800;
+  color:var(--red);
+  margin-right:3px
+}
+.tiny{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+  font-size:10px;
+  color:rgba(255,255,255,.30);
+  line-height:1.6;
+  white-space:pre-line
+}
+.splitTiny{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px
+}
+.tinyBox{
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;
+  padding:8px;
+  background:rgba(0,0,0,.12)
+}
+@media(max-width:430px){
+  body{padding:10px}
+  .app{width:100%}
+  .panel{padding:10px;border-radius:15px}
+  .hit{
+    grid-template-columns:auto 46px 1fr auto;
+    gap:6px;
+    padding:7px 8px
+  }
+  .hit-seat{font-size:19px}
+  .histMain{font-size:10px}
+  .tiny{font-size:9px}
+  .splitTiny{grid-template-columns:1fr}
+}
+</style>
 </head>
-
 <body>
 <div class="app">
-  <div class="title">小狗·5130004<span class="version">AB档 v0.9</span></div>
-
+  <div class="title">双号同步<span class="version">橘子+八戒 同时输出</span></div>
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
-
     <div class="btn-wrap">
       <button class="btn-circle" id="go">开干</button>
+      <button class="copyBtn" id="copyBtn">复制结果</button>
     </div>
-
     <div class="msg" id="msg"></div>
 
-    <div class="result" id="result">
-      <div class="result-hdr" id="resultHdr">— 小狗 v0.9 结果 —</div>
-      <div class="hit-list" id="hitList"></div>
-    </div>
+    <div class="dual" id="dual">
+      <div class="acct" id="juziBox">
+        <div class="acctHead">
+          <div>
+            <div class="acctName">橘子·5136695</div>
+            <div class="acctSub">主核6 副核9 v2</div>
+          </div>
+          <div class="acctBadge" id="juziBadge">—</div>
+        </div>
+        <div class="hit-list" id="juziList"></div>
+      </div>
 
-    <div class="bigSkip" id="skip">跳</div>
+      <div class="acct" id="bajieBox">
+        <div class="acctHead">
+          <div>
+            <div class="acctName">八戒·5098636</div>
+            <div class="acctSub">8主核去重关系 v0.5</div>
+          </div>
+          <div class="acctBadge" id="bajieBadge">—</div>
+        </div>
+        <div class="hit-list" id="bajieList"></div>
+      </div>
+    </div>
 
     <div class="history">
       <div class="histHead">
-        <span class="histTitle">最近记录</span>
+        <span class="histTitle">最近记录｜双号同步</span>
         <button class="clearBtn" id="clearBtn">清空</button>
       </div>
       <div class="histList" id="histList"></div>
     </div>
 
-    <div class="tiny">
-【小狗·5130004｜v0.9 AB档扩容模型】
-
-当前回测：
-总样本100局；命中30局；进房率30.0%；
-命中净分 +16590；
-正分26局；胜率86.7%；
-大赢≥500：16局；
-大输≤-500：0局。
-
-A档主进：
-2号：X偶；
-3号：无0 + 跨度＜7；
-4号：和值S=25~30；
-5号：X偶 + 无重号。
-
-B档短打：
-3号：X偶 + X第5名；
-2号：X第3名；
-6号：X奇 + X第5名。
-
-执行：
-A档正常进；
-B档只短打一局，不追；
-无A/B命中直接跳。
+    <div class="tiny splitTiny">
+      <div class="tinyBox">【橘子·5136695｜v2】
+主核=6；副核/爆核=9；乱核=5。
+去重；重号不自相加；超过9为溢出。
+A：X裸6 / X两数组6，且X≠5。
+B：X三数组6，非E位，且X≠5。
+C：E位裸9 / E位两数组9 / ID原生9。
+口诀：6管稳，9管爆；主打6，慎追9。</div>
+      <div class="tinyBox">【八戒·5098636｜v0.5】
+主核=8；副核=9。
+去重；对子不自相加；非1号裸8不打。
+A：1号A=8+尾部两数成8；3号重复8；4号X≤6且拼8。
+B：1号A=9有保护；6号拼8且房内有8。
+口诀：先去重，再看8；2号/5号暂跳。</div>
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY = 'xiaogou_5130004_ab_v09';
-const HISTORY_LIMIT = 30;
+const HISTORY_KEY='dual_juzi_bajie_sync_v2';
+const HISTORY_LIMIT=30;
 
-const roomEl     = document.getElementById('room');
-const goEl       = document.getElementById('go');
-const msgEl      = document.getElementById('msg');
-const resultEl   = document.getElementById('result');
-const resultHdr  = document.getElementById('resultHdr');
-const hitListEl  = document.getElementById('hitList');
-const skipEl     = document.getElementById('skip');
-const histListEl = document.getElementById('histList');
-const clearBtnEl = document.getElementById('clearBtn');
+const roomEl=document.getElementById('room');
+const goEl=document.getElementById('go');
+const copyBtn=document.getElementById('copyBtn');
+const msgEl=document.getElementById('msg');
+const dualEl=document.getElementById('dual');
+const juziList=document.getElementById('juziList');
+const bajieList=document.getElementById('bajieList');
+const juziBadge=document.getElementById('juziBadge');
+const bajieBadge=document.getElementById('bajieBadge');
+const histListEl=document.getElementById('histList');
+const clearBtnEl=document.getElementById('clearBtn');
 
-const SEAT_PRIORITY_A = [4,3,2,5];
-const SEAT_PRIORITY_B = [3,2,6];
+let lastCopyText='';
+
+const SEAT_PRIORITY_A=[1,2,4,5,3,6];
+const SEAT_PRIORITY_B=[1,2,4,3,5,6];
+const SEAT_PRIORITY_C=[5,6,1,2,4,3];
+const SEAT_PRIORITY_OBS=[6,1,2,5,4,3];
 
 function getDigits(room){
   return room.split('').map(Number);
 }
-
-function getBase(room){
-  const [A,B,C,D,E] = getDigits(room);
-  const digits = [A,B,C,D,E];
-  const sum = A+B+C+D+E;
-  const max = Math.max(...digits);
-  const min = Math.min(...digits);
-  const range = max - min;
-  const hasZero = digits.includes(0);
-  const xMap = {1:A,2:B,3:C,4:D,5:E,6:E};
-  const repeat = getRepeatInfo(digits);
-  const rankMap = getUniqueRankMap(digits);
-
-  return {
-    A,B,C,D,E,
-    digits,
-    sum,
-    max,
-    min,
-    range,
-    hasZero,
-    xMap,
-    repeat,
-    rankMap
-  };
+function unique(arr){
+  return [...new Set(arr)];
 }
-
 function getRepeatInfo(digits){
-  const count = {};
-  digits.forEach(n => count[n] = (count[n] || 0) + 1);
+  const count={};
+  digits.forEach(n=>count[n]=(count[n]||0)+1);
+  const groups=Object.entries(count)
+    .map(([num,c])=>({num:Number(num),count:c}))
+    .sort((a,b)=>b.count-a.count||a.num-b.num);
 
-  const groups = Object.entries(count)
-    .map(([num,c]) => ({num:Number(num), count:c}))
-    .sort((a,b)=>b.count-a.count || a.num-b.num);
+  const repeatedNums=groups.filter(g=>g.count>=2).map(g=>g.num);
+  let type='无重号';
+  const shape=groups.map(g=>g.count).sort((a,b)=>b-a).join('');
 
-  const hasRepeat = groups.some(g => g.count >= 2);
-  const repeatedNums = groups.filter(g => g.count >= 2).map(g => g.num);
+  if(shape==='2111')type='单对子';
+  else if(shape==='221')type='双对子';
+  else if(shape==='311')type='三重号';
+  else if(shape==='32')type='三带二';
+  else if(shape==='41')type='四重号';
+  else if(shape==='5')type='五重号';
 
-  let type = '无重号';
-  const shape = groups.map(g => g.count).sort((a,b)=>b-a).join('');
-
-  if(shape === '2111') type = '单对子';
-  else if(shape === '221') type = '双对子';
-  else if(shape === '311') type = '三重号';
-  else if(shape === '32') type = '三带二';
-  else if(shape === '41') type = '四重号';
-  else if(shape === '5') type = '五重号';
-
-  return {
+  return{
     type,
-    hasRepeat,
+    hasRepeat:repeatedNums.length>0,
     repeatedNums,
-    groups
+    groups,
+    count
   };
 }
-
-function getUniqueRankMap(digits){
-  const pos = ['A','B','C','D','E'];
-
-  const arr = digits.map((v,i)=>({
-    pos:pos[i],
-    v,
-    i
-  }));
-
-  arr.sort((a,b)=>{
-    if(b.v !== a.v) return b.v - a.v;
-    return b.i - a.i;
-  });
-
-  const rankMap = {};
-  arr.forEach((item,index)=>{
-    rankMap[item.pos] = index + 1;
-  });
-
-  return rankMap;
+function getBase(room){
+  const[A,B,C,D,E]=getDigits(room);
+  const digits=[A,B,C,D,E];
+  const uniq=unique(digits);
+  const sum=A+B+C+D+E;
+  const max=Math.max(...digits);
+  const min=Math.min(...digits);
+  const range=max-min;
+  const hasZero=digits.includes(0);
+  const xMap={1:A,2:B,3:C,4:D,5:E,6:E};
+  const repeat=getRepeatInfo(digits);
+  return{A,B,C,D,E,digits,uniq,sum,max,min,range,hasZero,xMap,repeat};
 }
-
 function seatPos(seat){
-  if(seat === 1) return 'A';
-  if(seat === 2) return 'B';
-  if(seat === 3) return 'C';
-  if(seat === 4) return 'D';
-  if(seat === 5) return 'E';
-  if(seat === 6) return 'E';
-  return '';
+  if(seat===1)return'A';
+  if(seat===2)return'B';
+  if(seat===3)return'C';
+  if(seat===4)return'D';
+  return'E';
 }
-
-function getSeatRank(seat,d){
-  return d.rankMap[seatPos(seat)];
+function isESeat(seat){
+  return seat===5||seat===6;
 }
-
-function isEven(n){
-  return n % 2 === 0;
-}
-
-function isOdd(n){
-  return n % 2 === 1;
-}
-
 function xText(seat,d){
-  const x = d.xMap[seat];
-  const pos = seatPos(seat);
-  const rank = getSeatRank(seat,d);
-  const oe = isEven(x) ? '偶' : '奇';
-  return `X=${pos}${x}｜${oe}｜第${rank}名`;
+  const x=d.xMap[seat];
+  const pos=seatPos(seat);
+  const oe=x%2===0?'偶':'奇';
+  return`X=${pos}${x}｜${oe}`;
 }
-
-function addCandidate(list, seat, grade, name, reason, d){
+function addCandidate(list,seat,grade,name,reason,d,extra){
   list.push({
     seat,
     grade,
     name,
     reason,
-    xText:xText(seat,d)
+    xText:xText(seat,d),
+    extra:extra||''
+  });
+}
+function twoSumTarget(x,uniq,target){
+  const hits=[];
+  for(const n of uniq){
+    if(n===x)continue;
+    const s=x+n;
+    if(s===target&&s<=9){
+      hits.push(`${x}+${n}=${target}`);
+    }
+  }
+  return hits;
+}
+function threeSumTarget(x,uniq,target){
+  const hits=[];
+  const others=uniq.filter(n=>n!==x);
+  for(let i=0;i<others.length;i++){
+    for(let j=i+1;j<others.length;j++){
+      const s=x+others[i]+others[j];
+      if(s===target&&s<=9){
+        hits.push(`${x}+${others[i]}+${others[j]}=${target}`);
+      }
+    }
+  }
+  return hits;
+}
+function twoSumWithin(nums,target){
+  const hits=[];
+  const arr=unique(nums);
+  for(let i=0;i<arr.length;i++){
+    for(let j=i+1;j<arr.length;j++){
+      const s=arr[i]+arr[j];
+      if(s===target&&s<=9){
+        hits.push(`${arr[i]}+${arr[j]}=${target}`);
+      }
+    }
+  }
+  return hits;
+}
+function threeSumWithin(nums,target){
+  const hits=[];
+  const arr=unique(nums);
+  for(let i=0;i<arr.length;i++){
+    for(let j=i+1;j<arr.length;j++){
+      for(let k=j+1;k<arr.length;k++){
+        const s=arr[i]+arr[j]+arr[k];
+        if(s===target&&s<=9){
+          hits.push(`${arr[i]}+${arr[j]}+${arr[k]}=${target}`);
+        }
+      }
+    }
+  }
+  return hits;
+}
+function nearestTwoSums(x,uniq){
+  const sums=[];
+  for(const n of uniq){
+    if(n===x)continue;
+    sums.push({
+      n,
+      sum:x+n,
+      text:`${x}+${n}=${x+n}`
+    });
+  }
+  sums.sort((a,b)=>{
+    return Math.abs(a.sum-6)-Math.abs(b.sum-6)||a.sum-b.sum;
+  });
+  return sums;
+}
+function idNative9(x,uniq){
+  const hits=[];
+  if((x===6&&uniq.includes(3))||(x===3&&uniq.includes(6))){
+    hits.push('ID原生9：6+3=9');
+  }
+  if([1,3,5].includes(x)&&uniq.includes(1)&&uniq.includes(3)&&uniq.includes(5)){
+    hits.push('ID原生9：1+3+5=9');
+  }
+  return hits;
+}
+function helpSixWeight(x,d){
+  const arr=[];
+  const cnt=d.repeat.count;
+  if(cnt[x]>=2){
+    arr.push(`X=${x}重复，加权`);
+  }
+  const pair6=twoSumTarget(x,d.uniq,6);
+  pair6.forEach(p=>{
+    const other=Number(p.split('+')[1].split('=')[0]);
+    if(cnt[other]>=2){
+      arr.push(`配6数字${other}重复，加权`);
+    }
+  });
+  if(d.repeat.hasRepeat&&arr.length===0){
+    arr.push('有重号，但未直接帮6，不单独加分');
+  }
+  return arr.join('；')||'无特殊加权';
+}
+function uniqueSeatSort(list,priority,excludeList){
+  const exclude=new Set((excludeList||[]).map(i=>i.seat));
+  const map=new Map();
+  list.forEach(item=>{
+    if(exclude.has(item.seat))return;
+    if(!map.has(item.seat))map.set(item.seat,item);
+  });
+  return Array.from(map.values()).sort((x,y)=>{
+    const px=priority.includes(x.seat)?priority.indexOf(x.seat):999;
+    const py=priority.includes(y.seat)?priority.indexOf(y.seat):999;
+    return px-py;
   });
 }
 
-function evaluate(room){
-  const d = getBase(room);
-  const A = [];
-  const B = [];
+/* =========================
+   橘子·5136695 原逻辑
+   主核6 副核9 v2
+========================= */
+function evaluateJuzi(room){
+  const d=getBase(room);
+  const A=[],B=[],C=[],OBS=[],SKIP=[];
 
-  // =========================
-  // A档主进
-  // =========================
+  for(let seat=1;seat<=6;seat++){
+    const x=d.xMap[seat];
+    const isE=isESeat(seat);
+    const pair6=twoSumTarget(x,d.uniq,6);
+    const tri6=threeSumTarget(x,d.uniq,6);
+    const pair9=twoSumTarget(x,d.uniq,9);
+    const native9=idNative9(x,d.uniq);
+    const near=nearestTwoSums(x,d.uniq);
+    const near78=near.filter(item=>item.sum===7||item.sum===8);
+    const lowOnly=near.length&&Math.max(...near.map(i=>i.sum))<6;
+    const farHigh=near.filter(i=>i.sum>=10).length>=2;
 
-  // A档：2号 X偶
-  if(isEven(d.xMap[2])){
-    addCandidate(
-      A,
-      2,
-      'A档',
-      '2号｜X偶',
-      'A档主进：2号只看X偶；当前100局回测该条件0大输。',
-      d
-    );
+    if(x!==5&&(x===6||pair6.length)){
+      const name=x===6?'X裸6':'X两数组6';
+      const relation=x===6?'X本身就是主核6':pair6.join('，');
+      const weight=helpSixWeight(x,d);
+      addCandidate(
+        A,
+        seat,
+        'A档',
+        `${seat}号｜${name}`,
+        `A档强进：${relation}。${weight}`,
+        d,
+        relation
+      );
+      continue;
+    }
+
+    if(x!==5&&!isE&&tri6.length){
+      addCandidate(
+        B,
+        seat,
+        'B档',
+        `${seat}号｜三数组6`,
+        `B档短打：${tri6.join('，')}。三数组6弱于两数组6，只短打。`,
+        d,
+        tri6.join('，')
+      );
+      continue;
+    }
+
+    const cHits=[];
+    if(isE&&x===9)cHits.push('E位裸9');
+    if(isE&&pair9.length)cHits.push(`E位两数组9：${pair9.join('，')}`);
+    if(native9.length)cHits.push(...native9);
+
+    if(x!==5&&cHits.length){
+      addCandidate(
+        C,
+        seat,
+        'C档',
+        `${seat}号｜严格副核9`,
+        `C档追肉：${cHits.join('；')}。9是爆核，不是稳核，小注追肉。`,
+        d,
+        cHits.join('；')
+      );
+      continue;
+    }
+
+    if(near78.length){
+      addCandidate(
+        OBS,
+        seat,
+        '观察',
+        `${seat}号｜无核补位7/8`,
+        `无A/B/C时才看：${near78.map(i=>i.text).join('，')}。宁选贴7/8，不选4/5，也不碰10+。`,
+        d,
+        near78.map(i=>i.text).join('，')
+      );
+      continue;
+    }
+
+    let reason='未命中主核6/严格副核9。';
+    if(x===5)reason+=' X=5为乱核/抢核，降级或跳。';
+    if(lowOnly)reason+=' 两数多低于6，低位空转。';
+    if(farHigh)reason+=' 10+溢出偏多，乱核。';
+
+    addCandidate(SKIP,seat,'跳',`${seat}号｜硬跳`,reason,d,'');
   }
 
-  // A档：3号 无0 + 跨度<7
-  if(!d.hasZero && d.range < 7){
-    addCandidate(
-      A,
-      3,
-      'A档',
-      '3号｜无0 + 小跨度',
-      'A档主进：房号无0，且最大数字-最小数字＜7。',
-      d
-    );
-  }
+  const aList=uniqueSeatSort(A,SEAT_PRIORITY_A);
+  const bList=uniqueSeatSort(B,SEAT_PRIORITY_B,aList);
+  const cList=uniqueSeatSort(C,SEAT_PRIORITY_C,[...aList,...bList]);
+  const obsList=uniqueSeatSort(OBS,SEAT_PRIORITY_OBS,[...aList,...bList,...cList]);
+  const formal=aList[0]||bList[0]||cList[0]||null;
 
-  // A档：4号 S=25~30
-  if(d.sum >= 25 && d.sum <= 30){
-    addCandidate(
-      A,
-      4,
-      'A档',
-      '4号｜和值25-30',
-      'A档主进：4号看总能量，和值S在25到30之间。',
-      d
-    );
-  }
-
-  // A档：5号 X偶 + 无重号
-  if(isEven(d.xMap[5]) && !d.repeat.hasRepeat){
-    addCandidate(
-      A,
-      5,
-      'A档',
-      '5号｜X偶 + 无重号',
-      'A档主进：5号必须X偶且房号无重号。',
-      d
-    );
-  }
-
-  // =========================
-  // B档短打
-  // =========================
-
-  // B档：3号 X偶 + X第5名
-  if(isEven(d.xMap[3]) && getSeatRank(3,d) === 5){
-    addCandidate(
-      B,
-      3,
-      'B档',
-      '3号｜X偶 + 第5名',
-      'B档短打：3号X偶且X唯一排名第5名，只打一局，不追。',
-      d
-    );
-  }
-
-  // B档：2号 X第3名
-  if(getSeatRank(2,d) === 3){
-    addCandidate(
-      B,
-      2,
-      'B档',
-      '2号｜X第3名',
-      'B档短打：2号X唯一排名第3名，只打一局，不追。',
-      d
-    );
-  }
-
-  // B档：6号 X奇 + X第5名
-  if(isOdd(d.xMap[6]) && getSeatRank(6,d) === 5){
-    addCandidate(
-      B,
-      6,
-      'B档',
-      '6号｜X奇 + 第5名',
-      'B档短打：6号X奇且X唯一排名第5名，只打一局，不追。',
-      d
-    );
-  }
-
-  // A档去重和排序
-  const aMap = new Map();
-  A.forEach(item => {
-    if(!aMap.has(item.seat)) aMap.set(item.seat,item);
-  });
-
-  let aList = Array.from(aMap.values()).sort((x,y)=>{
-    return SEAT_PRIORITY_A.indexOf(x.seat) - SEAT_PRIORITY_A.indexOf(y.seat);
-  });
-
-  // B档去重，且如果同座位已在A档出现，则不重复显示为B
-  const aSeats = new Set(aList.map(i => i.seat));
-  const bMap = new Map();
-
-  B.forEach(item => {
-    if(aSeats.has(item.seat)) return;
-    if(!bMap.has(item.seat)) bMap.set(item.seat,item);
-  });
-
-  let bList = Array.from(bMap.values()).sort((x,y)=>{
-    return SEAT_PRIORITY_B.indexOf(x.seat) - SEAT_PRIORITY_B.indexOf(y.seat);
-  });
-
-  const best = aList[0] || bList[0] || null;
-
-  return {
+  return{
+    account:'橘子',
     room,
     data:d,
     aList,
     bList,
-    best,
-    ok:!!best
+    cList,
+    obsList,
+    formal,
+    ok:!!formal
   };
 }
 
+/* =========================
+   八戒·5098636 新逻辑
+   8主核去重关系 v0.5
+========================= */
+function tailDigits(d){
+  return[d.B,d.C,d.D,d.E];
+}
+function hasTailPair8(d){
+  return twoSumWithin(tailDigits(d),8);
+}
+function hasTailPair9(d){
+  return twoSumWithin(tailDigits(d),9);
+}
+function isBajieA1Clean(d){
+  if(d.A!==8)return false;
+  const p8=hasTailPair8(d);
+  if(!p8.length)return false;
+
+  const tail=unique(tailDigits(d));
+  const p9=hasTailPair9(d);
+
+  /*
+    过滤 82361 类：
+    表面2+6=8，但后面3+6=9，同时1/2/3/6多头抢核。
+    这里做通用过滤：尾部同时有1、2、3、6，且同一尾部既有8又有9，多头乱核。
+  */
+  const has82361Shape=tail.includes(1)&&tail.includes(2)&&tail.includes(3)&&tail.includes(6)&&p9.length;
+  if(has82361Shape)return false;
+
+  return true;
+}
+function bajieHasA9Protect(d){
+  if(d.A!==9)return false;
+
+  const cnt=d.repeat.count;
+  const hasBadDouble=(cnt[1]>=2||cnt[2]>=2||cnt[4]>=2);
+  if(hasBadDouble)return false;
+
+  const tail=tailDigits(d);
+  const tailUniq=unique(tail);
+  const hasProtect0=tailUniq.includes(0);
+  const hasTail8or9=tailUniq.includes(8)||tailUniq.includes(9);
+  const tailPair8=twoSumWithin(tail,8).length>0;
+
+  return hasProtect0||hasTail8or9||tailPair8;
+}
+function bajieSixShort(seat,d){
+  if(seat!==6)return null;
+  const x=d.xMap[seat];
+
+  const pair8=twoSumTarget(x,d.uniq,8);
+  const has8=d.uniq.includes(8);
+  const has0=d.uniq.includes(0);
+
+  if(x===8&&has0){
+    /*
+      26058类：E=8，虽然有0，但2+6也成8，结构抢核，降级。
+    */
+    const hasCompete26=d.uniq.includes(2)&&d.uniq.includes(6);
+    if(hasCompete26)return null;
+    return 'E=8，有0托8';
+  }
+
+  if(pair8.length&&has8){
+    return `${pair8.join('，')}，房内有8主核`;
+  }
+
+  return null;
+}
+function evaluateBajie(room){
+  const d=getBase(room);
+  const A=[],B=[],OBS=[],SKIP=[];
+
+  for(let seat=1;seat<=6;seat++){
+    const x=d.xMap[seat];
+
+    /* A1：1号 A=8 + 尾部两数成8，过滤多头乱核 */
+    if(seat===1&&isBajieA1Clean(d)){
+      const p8=hasTailPair8(d);
+      addCandidate(
+        A,
+        seat,
+        'A档',
+        '1号｜首位8强核',
+        `A档强进：A=8，后四位去重后 ${p8.join('，')}。1号首位8有主核优势。`,
+        d,
+        p8.join('，')
+      );
+      continue;
+    }
+
+    /* A2：3号 C=8 且房内还有8重复权重 */
+    if(seat===3&&x===8&&d.repeat.count[8]>=2){
+      addCandidate(
+        A,
+        seat,
+        'A档',
+        '3号｜重复8权重',
+        `A档强进：C=8，且房号内8重复。3号不吃裸8，只吃重复8权重。`,
+        d,
+        '重复8'
+      );
+      continue;
+    }
+
+    /* A3：4号 X≤6 且X参与成8 */
+    const pair8=twoSumTarget(x,d.uniq,8);
+    const tri8=threeSumTarget(x,d.uniq,8);
+
+    if(seat===4&&x<=6&&(pair8.length||tri8.length)){
+      const rel=pair8.length?pair8.join('，'):tri8.join('，');
+      addCandidate(
+        A,
+        seat,
+        'A档',
+        '4号｜低中位拼8',
+        `A档强进：4号吃8拼块，X=${x}≤6，${rel}。4号不吃高位裸8。`,
+        d,
+        rel
+      );
+      continue;
+    }
+
+    /* B1：1号 A=9 有保护 */
+    if(seat===1&&bajieHasA9Protect(d)){
+      addCandidate(
+        B,
+        seat,
+        'B档',
+        '1号｜A=9保护',
+        `B档短打：A=9为副核，有0/8/9/尾部8关系保护，且无双1/双2/双4乱核。`,
+        d,
+        'A=9保护'
+      );
+      continue;
+    }
+
+    /* B2：6号 成8且房内有8主核 */
+    const sixRel=bajieSixShort(seat,d);
+    if(sixRel){
+      addCandidate(
+        B,
+        seat,
+        'B档',
+        '6号｜8主核短打',
+        `B档短打：${sixRel}。6号有爆发但波动大，只短打。`,
+        d,
+        sixRel
+      );
+      continue;
+    }
+
+    /* 观察：1号A=8但尾部无清晰两数8；或者非1号有8但不够强 */
+    if((seat===1&&d.A===8)||(x===8&&seat!==1)){
+      addCandidate(
+        OBS,
+        seat,
+        '观察',
+        `${seat}号｜裸8降级`,
+        `观察：八戒主看8，但该位属于裸8/弱8，没有清晰8副核托住。非1号裸8不打。`,
+        d,
+        '裸8'
+      );
+      continue;
+    }
+
+    /* 2号、5号暂跳；只成9不进主模型 */
+    let reason='未命中八戒A/B。';
+    if(seat===2)reason+=' 2号暂不进8主核模型。';
+    if(seat===5)reason+=' 5号两数成8历史不稳，暂跳。';
+    if(twoSumTarget(x,d.uniq,9).length)reason+=' 只成9为副核，不当主进。';
+
+    addCandidate(
+      SKIP,
+      seat,
+      '跳',
+      `${seat}号｜跳`,
+      reason,
+      d,
+      ''
+    );
+  }
+
+  const aList=uniqueSeatSort(A,[1,4,3,6,2,5]);
+  const bList=uniqueSeatSort(B,[1,6,4,3,2,5],aList);
+  const obsList=uniqueSeatSort(OBS,[1,3,6,4,2,5],[...aList,...bList]);
+  const formal=aList[0]||bList[0]||null;
+
+  return{
+    account:'八戒',
+    room,
+    data:d,
+    aList,
+    bList,
+    cList:[],
+    obsList,
+    formal,
+    ok:!!formal
+  };
+}
+
+/* =========================
+   渲染
+========================= */
+function gradeCls(grade){
+  if(grade==='A档')return'a';
+  if(grade==='B档')return'b';
+  if(grade==='C档')return'c';
+  if(grade==='观察')return'obs';
+  if(grade==='跳')return'skip';
+  return'info';
+}
+function actionText(grade){
+  if(grade==='A档')return'进';
+  if(grade==='B档')return'短';
+  if(grade==='C档')return'追';
+  if(grade==='观察')return'观';
+  if(grade==='跳')return'跳';
+  return'—';
+}
 function buildCard(item,d,index){
-  const cls = item.grade === 'A档' ? 'a' : 'b';
-  const label = index === 0
-    ? (item.grade === 'A档' ? 'A主推' : 'B短打')
-    : item.grade;
+  const cls=gradeCls(item.grade);
+  const label=index===0
+    ? (item.grade==='A档'?'A主推'
+      :item.grade==='B档'?'B短打'
+      :item.grade==='C档'?'C追肉'
+      :item.grade==='观察'?'观察'
+      :'跳')
+    :item.grade;
 
-  const div = document.createElement('div');
-  div.className = `hit ${cls}`;
-
-  div.innerHTML = `
+  const div=document.createElement('div');
+  div.className=`hit ${cls}`;
+  div.innerHTML=`
     <div class="hit-lbl">${label}</div>
     <div class="hit-seat">${item.seat}</div>
     <div class="hit-body">
       <div class="row1">${item.name}</div>
-      <div class="row2">${item.xText}｜S=${d.sum}｜跨度=${d.range}</div>
+      <div class="row2">${item.xText}｜S=${d.sum}｜跨度=${d.range}｜${d.repeat.type}</div>
       <div class="row3">${item.reason}</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">${item.grade === 'A档' ? '进' : '短'}</div>
+      <div class="hit-wr">${actionText(item.grade)}</div>
       <div class="hit-avg">${item.grade}</div>
     </div>
   `;
-
   return div;
 }
-
 function buildSkipCard(res){
-  const d = res.data;
-  const div = document.createElement('div');
-  div.className = 'hit skip';
-
-  div.innerHTML = `
+  const d=res.data;
+  const div=document.createElement('div');
+  div.className='hit skip';
+  div.innerHTML=`
     <div class="hit-lbl">跳</div>
     <div class="hit-seat">跳</div>
     <div class="hit-body">
-      <div class="row1">未命中A档/B档</div>
-      <div class="row2">S=${d.sum}｜跨度=${d.range}｜${d.hasZero ? '有0' : '无0'}｜${d.repeat.type}</div>
-      <div class="row3">无A/B进房条件，直接跳。不要硬打。</div>
+      <div class="row1">未命中正式进房</div>
+      <div class="row2">S=${d.sum}｜跨度=${d.range}｜${d.hasZero?'有0':'无0'}｜${d.repeat.type}</div>
+      <div class="row3">原则：有A/B/C看对应号；无正式命中优先跳。</div>
     </div>
     <div class="hit-right">
       <div class="hit-wr">—</div>
       <div class="hit-avg">无</div>
     </div>
   `;
-
   return div;
 }
-
-function buildInfoCard(res){
-  const d = res.data;
-  const div = document.createElement('div');
-  div.className = 'hit info';
-
-  const repeatNums = d.repeat.repeatedNums.length ? d.repeat.repeatedNums.join('/') : '无';
-
-  div.innerHTML = `
+function buildInfoCard(res,label){
+  const d=res.data;
+  const div=document.createElement('div');
+  div.className='hit info';
+  const repeatNums=d.repeat.repeatedNums.length?d.repeat.repeatedNums.join('/'):'无';
+  div.innerHTML=`
     <div class="hit-lbl">数据</div>
     <div class="hit-seat">数</div>
     <div class="hit-body">
       <div class="row1">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
-      <div class="row2">S=${d.sum}｜最大=${d.max}｜最小=${d.min}｜跨度=${d.range}｜${d.hasZero ? '有0' : '无0'}</div>
-      <div class="row3">重号=${d.repeat.type}｜重复数字=${repeatNums}｜排名：B${d.rankMap.B}/C${d.rankMap.C}/D${d.rankMap.D}/E${d.rankMap.E}</div>
+      <div class="row2">去重=${d.uniq.join('')}｜S=${d.sum}｜最大=${d.max}｜最小=${d.min}｜跨度=${d.range}</div>
+      <div class="row3">${label}｜重号=${d.repeat.type}｜重复数字=${repeatNums}</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">v0.9</div>
-      <div class="hit-avg">AB档</div>
+      <div class="hit-wr">OK</div>
+      <div class="hit-avg">数据</div>
     </div>
   `;
-
   return div;
 }
+function renderAccount(res,listEl,badgeEl,label){
+  listEl.innerHTML='';
 
-function buildSummaryCard(res){
-  const div = document.createElement('div');
-  div.className = 'hit info';
+  let all=[];
+  if(res.aList)all=all.concat(res.aList);
+  if(res.bList)all=all.concat(res.bList);
+  if(res.cList)all=all.concat(res.cList);
 
-  const aText = res.aList.length
-    ? res.aList.map(i => `${i.seat}号-${i.name}`).join('；')
-    : '无';
+  if(all.length){
+    all.forEach((item,index)=>{
+      listEl.appendChild(buildCard(item,res.data,index));
+    });
+  }else{
+    listEl.appendChild(buildSkipCard(res));
+  }
 
-  const bText = res.bList.length
-    ? res.bList.map(i => `${i.seat}号-${i.name}`).join('；')
-    : '无';
+  if(res.obsList&&res.obsList.length){
+    res.obsList.slice(0,2).forEach((item,index)=>{
+      listEl.appendChild(buildCard(item,res.data,all.length+index));
+    });
+  }
 
-  div.innerHTML = `
-    <div class="hit-lbl">汇总</div>
-    <div class="hit-seat">${res.aList.length + res.bList.length}</div>
-    <div class="hit-body">
-      <div class="row1">A档：${aText}</div>
-      <div class="row2">B档：${bText}</div>
-      <div class="row3">A档优先；无A才看B；B档只短打一局，不追。</div>
-    </div>
-    <div class="hit-right">
-      <div class="hit-wr">${res.ok ? '有' : '无'}</div>
-      <div class="hit-avg">命中</div>
-    </div>
-  `;
+  listEl.appendChild(buildInfoCard(res,label));
 
-  return div;
+  if(res.ok&&res.formal){
+    badgeEl.textContent=`${res.formal.grade}｜${res.formal.seat}号`;
+  }else if(res.obsList&&res.obsList.length){
+    badgeEl.textContent=`观察｜${res.obsList[0].seat}号`;
+  }else{
+    badgeEl.textContent='跳';
+  }
 }
+function simpleSummary(res){
+  if(res.ok&&res.formal){
+    return `${res.formal.grade}｜${res.formal.seat}号｜${res.formal.name}`;
+  }
+  if(res.obsList&&res.obsList.length){
+    return `无正式命中｜观察${res.obsList[0].seat}号｜${res.obsList[0].name}`;
+  }
+  return '跳';
+}
+function buildCopyText(room,juzi,bajie){
+  const j=simpleSummary(juzi);
+  const b=simpleSummary(bajie);
+  const jReason=juzi.formal?juzi.formal.reason:(juzi.obsList[0]?.reason||'无正式命中，优先跳');
+  const bReason=bajie.formal?bajie.formal.reason:(bajie.obsList[0]?.reason||'无正式命中，优先跳');
 
+  return `房号：${room}
+橘子·5136695：${j}
+理由：${jReason}
+
+八戒·5098636：${b}
+理由：${bReason}`;
+}
 function render(room){
-  const res = evaluate(room);
+  const juzi=evaluateJuzi(room);
+  const bajie=evaluateBajie(room);
 
-  resultEl.style.display = 'none';
-  skipEl.style.display = 'none';
-  hitListEl.innerHTML = '';
+  renderAccount(juzi,juziList,juziBadge,'橘子v2｜主核6｜副核9');
+  renderAccount(bajie,bajieList,bajieBadge,'八戒v0.5｜主核8｜副核9');
 
-  if(!res.ok){
-    resultHdr.textContent = `小狗 v0.9｜直接跳`;
-    hitListEl.appendChild(buildSkipCard(res));
-    hitListEl.appendChild(buildInfoCard(res));
-    resultEl.style.display = 'block';
-    skipEl.style.display = 'block';
-    return res;
-  }
+  dualEl.style.display='flex';
 
-  const bestGrade = res.best.grade;
-  resultHdr.textContent = `小狗 v0.9｜${bestGrade}｜主推 ${res.best.seat}号`;
+  lastCopyText=buildCopyText(room,juzi,bajie);
+  pushHistory(room,juzi,bajie);
 
-  let index = 0;
-
-  res.aList.forEach(item => {
-    hitListEl.appendChild(buildCard(item,res.data,index));
-    index++;
-  });
-
-  res.bList.forEach(item => {
-    hitListEl.appendChild(buildCard(item,res.data,index));
-    index++;
-  });
-
-  hitListEl.appendChild(buildSummaryCard(res));
-  hitListEl.appendChild(buildInfoCard(res));
-
-  resultEl.style.display = 'block';
-  return res;
+  return{juzi,bajie};
 }
 
-function run(){
-  const raw = roomEl.value.trim().replace(/\s+/g,'');
-
-  if(!/^\d{5}$/.test(raw)){
-    msgEl.textContent = '请输入正确的5位数字';
-    return;
-  }
-
-  msgEl.textContent = '';
-
-  const res = render(raw);
-  pushHistory(raw,res);
-
-  setTimeout(()=>{
-    roomEl.value = '';
-    roomEl.focus();
-  },180);
-}
-
+/* =========================
+   历史与复制
+========================= */
 function loadHist(){
   try{
-    return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+    return JSON.parse(localStorage.getItem(HISTORY_KEY))||[];
   }catch{
-    return [];
+    return[];
   }
 }
-
 function saveHist(items){
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0,HISTORY_LIMIT)));
+  localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,HISTORY_LIMIT)));
 }
-
 function renderHist(){
-  const items = loadHist();
-  histListEl.innerHTML = '';
+  const items=loadHist();
+  histListEl.innerHTML='';
 
   if(!items.length){
-    histListEl.innerHTML = `<div class="histItem"><div class="histMain" style="color:rgba(255,255,255,.2)">暂无记录</div></div>`;
+    histListEl.innerHTML=`<div class="histItem"><div class="histMain" style="color:rgba(255,255,255,.2)">暂无记录</div></div>`;
     return;
   }
 
   items.forEach(item=>{
-    const div = document.createElement('div');
-    div.className = 'histItem';
-
-    const text = item.ok
-      ? `${item.grade}｜${item.seat}号｜${item.name}`
-      : '跳';
-
-    div.innerHTML = `
-      <div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div>
-      <div class="histMain">小狗v0.9 → ${text}</div>
+    const div=document.createElement('div');
+    div.className='histItem';
+    div.innerHTML=`
+      <div class="histTop">
+        <span>房号 <span class="pill">${item.room}</span></span>
+        <span>${item.time}</span>
+      </div>
+      <div class="histMain">橘子 → ${item.juzi}<br/>八戒 → ${item.bajie}</div>
     `;
-
     histListEl.appendChild(div);
   });
 }
-
-function pushHistory(room,res){
-  const items = loadHist();
-  const ok = res.ok && res.best;
-
+function pushHistory(room,juzi,bajie){
+  const items=loadHist();
   items.unshift({
     room,
-    ok,
-    grade:ok ? res.best.grade : '跳',
-    seat:ok ? res.best.seat : null,
-    name:ok ? res.best.name : '跳',
+    juzi:simpleSummary(juzi),
+    bajie:simpleSummary(bajie),
     time:new Date().toLocaleString('zh-CN',{hour12:false})
   });
-
   saveHist(items);
   renderHist();
 }
+async function copyCurrent(){
+  if(!lastCopyText){
+    msgEl.textContent='先输入房号并开干，再复制结果';
+    return;
+  }
 
-goEl.addEventListener('click', run);
+  try{
+    await navigator.clipboard.writeText(lastCopyText);
+    msgEl.textContent='已复制当前双号结果';
+  }catch(e){
+    const ta=document.createElement('textarea');
+    ta.value=lastCopyText;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    msgEl.textContent='已复制当前双号结果';
+  }
+}
 
-roomEl.addEventListener('keydown', e=>{
-  if(e.key === 'Enter') run();
+/* =========================
+   操作
+========================= */
+function run(){
+  const raw=roomEl.value.trim().replace(/\s+/g,'');
+
+  if(!/^\d{5}$/.test(raw)){
+    msgEl.textContent='请输入正确的5位数字';
+    return;
+  }
+
+  msgEl.textContent='';
+  render(raw);
+
+  setTimeout(()=>{
+    roomEl.value='';
+    roomEl.focus();
+  },180);
+}
+
+goEl.addEventListener('click',run);
+copyBtn.addEventListener('click',copyCurrent);
+
+roomEl.addEventListener('keydown',e=>{
+  if(e.key==='Enter')run();
 });
 
-roomEl.addEventListener('input', e=>{
-  e.target.value = e.target.value.replace(/\D/g,'').slice(0,5);
+roomEl.addEventListener('input',e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,5);
 });
 
-clearBtnEl.addEventListener('click', ()=>{
+clearBtnEl.addEventListener('click',()=>{
   localStorage.removeItem(HISTORY_KEY);
   renderHist();
 });
-
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  });
-}
 
 renderHist();
 roomEl.focus();
