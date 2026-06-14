@@ -18,7 +18,6 @@
   --red:#ff2d2d;
   --gold:#ffb020;
   --green:#5cff9a;
-  --purple:#d59bff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{
@@ -180,10 +179,6 @@ input::placeholder{
   border-color:rgba(92,255,154,.45);
   background:rgba(92,255,154,.08)
 }
-.hit.obs{
-  border-color:rgba(213,155,255,.42);
-  background:rgba(213,155,255,.08)
-}
 .hit.skip{
   border-color:rgba(255,45,45,.55);
   background:rgba(255,45,45,.11)
@@ -209,10 +204,6 @@ input::placeholder{
   background:rgba(92,255,154,.20);
   color:rgba(140,255,185,.95)
 }
-.hit.obs .hit-lbl{
-  background:rgba(213,155,255,.18);
-  color:rgba(225,190,255,.95)
-}
 .hit.skip .hit-lbl{
   background:rgba(255,45,45,.35);
   color:#ff9898
@@ -233,10 +224,6 @@ input::placeholder{
 .hit.b .hit-seat{
   color:var(--green);
   text-shadow:0 0 12px rgba(92,255,154,.25)
-}
-.hit.obs .hit-seat{
-  color:var(--purple);
-  text-shadow:0 0 12px rgba(213,155,255,.22)
 }
 .hit.skip .hit-seat{color:#ff7b7b}
 .hit.info .hit-seat{
@@ -363,7 +350,7 @@ input::placeholder{
 </head>
 <body>
 <div class="app">
-  <div class="title">八戒·5098636<span class="version">v0.9 A+B模型</span></div>
+  <div class="title">八戒·5098636<span class="version">v0.9 A/B/跳</span></div>
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
     <div class="btn-wrap">
@@ -377,7 +364,7 @@ input::placeholder{
         <div class="acctHead">
           <div>
             <div class="acctName">八戒别跑·5098636</div>
-            <div class="acctSub">v0.9｜A档4号中位拼核｜B档1/3/5/6短打</div>
+            <div class="acctSub">v0.9｜只输出A档 / B档 / 跳</div>
           </div>
           <div class="acctBadge" id="badge">—</div>
         </div>
@@ -393,7 +380,10 @@ input::placeholder{
       <div class="histList" id="histList"></div>
     </div>
 
-    <div class="tiny">【八戒·5098636｜v0.9 A+B模型】
+    <div class="tiny">【八戒·5098636｜v0.9 实战版】
+只输出：A档 / B档 / 跳。
+不显示观察。
+
 计算规则：
 1）房号先去重。
 2）同数不能相加、不能相减。
@@ -412,14 +402,14 @@ B3：5号，E排名第4，E是差值位，但E≠1。
 B4：6号，E排名第1，E参与差7，但E≠8。
 
 实战口诀：
-A档主打，B档短打。
+有A打A；无A有B短打；无A/B直接跳。
 4号最强；1号吃首位8；3号吃重复8；5号吃低位差值；6号吃差7但避开E=8；2号暂跳。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY='bajie_5098636_v09';
+const HISTORY_KEY='bajie_5098636_v09_no_obs';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -443,14 +433,15 @@ function unique(arr){
 function getRepeatInfo(digits){
   const count={};
   digits.forEach(n=>count[n]=(count[n]||0)+1);
+
   const groups=Object.entries(count)
     .map(([num,c])=>({num:Number(num),count:c}))
     .sort((a,b)=>b.count-a.count||a.num-b.num);
 
   const repeatedNums=groups.filter(g=>g.count>=2).map(g=>g.num);
-  let type='无重号';
   const shape=groups.map(g=>g.count).sort((a,b)=>b-a).join('');
 
+  let type='无重号';
   if(shape==='2111')type='单对子';
   else if(shape==='221')type='双对子';
   else if(shape==='311')type='三重号';
@@ -472,6 +463,7 @@ function getBase(room){
   const uniq=unique(digits);
   const sorted=[...uniq].sort((a,b)=>b-a);
   const rankMap={};
+
   sorted.forEach((n,i)=>rankMap[n]=i+1);
 
   const sum=A+B+C+D+E;
@@ -543,13 +535,14 @@ function twoSumTarget(x,uniq,target){
 }
 
 /*
-  尾部两数成8：
-  用B/C/D/E去重后扫描。
-  同数不相加，所以只取不同数字。
+  尾部不同两数成8：
+  B/C/D/E去重后扫描。
+  同数不相加。
 */
 function tailPairSum8(d){
   const arr=unique([d.B,d.C,d.D,d.E]);
   const hits=[];
+
   for(let i=0;i<arr.length;i++){
     for(let j=i+1;j<arr.length;j++){
       if(arr[i]===arr[j])continue;
@@ -559,70 +552,62 @@ function tailPairSum8(d){
       }
     }
   }
+
   return hits;
 }
 
 /*
   X是差值位：
   存在不同数字 a、b，a>b，a-b=X。
-  同数不相减，所以a不能等于b。
+  同数不相减。
 */
 function isDifferenceValue(x,uniq){
   const hits=[];
+
   for(const a of uniq){
     for(const b of uniq){
       if(a===b)continue;
-      if(a>b && a-b===x){
+      if(a>b&&a-b===x){
         hits.push(`${a}-${b}=${x}`);
       }
     }
   }
+
   return hits;
 }
 
 /*
   X参与相减差target：
-  X可以是被减数或减数，但两个操作数必须不同。
-  例如E=9，9-2=7；E=1，8-1=7。
+  X可以是被减数或减数，但两个数必须不同。
 */
 function participateDiffTarget(x,uniq,target){
   const hits=[];
+
   for(const n of uniq){
     if(n===x)continue;
-    if(x>n && x-n===target){
+
+    if(x>n&&x-n===target){
       hits.push(`${x}-${n}=${target}`);
     }
-    if(n>x && n-x===target){
+
+    if(n>x&&n-x===target){
       hits.push(`${n}-${x}=${target}`);
     }
   }
+
   return hits;
-}
-function gradeCls(grade){
-  if(grade==='A档')return'a';
-  if(grade==='B档')return'b';
-  if(grade==='观察')return'obs';
-  if(grade==='跳')return'skip';
-  return'info';
-}
-function actionText(grade){
-  if(grade==='A档')return'进';
-  if(grade==='B档')return'短';
-  if(grade==='观察')return'观';
-  if(grade==='跳')return'跳';
-  return'—';
 }
 
 function evaluateBajie(room){
   const d=getBase(room);
   const A=[];
   const B=[];
-  const OBS=[];
   const SKIP=[];
 
   for(let seat=1;seat<=6;seat++){
     const x=d.xMap[seat];
     const rank=xRank(seat,d);
+
     const pair8=twoSumTarget(x,d.uniq,8);
     const pair5=twoSumTarget(x,d.uniq,5);
     const diffVal=isDifferenceValue(x,d.uniq);
@@ -662,7 +647,7 @@ function evaluateBajie(room){
     }
 
     /*
-      B1：1号，A=8，排名1，尾部不同两数成8。
+      B1：1号，A=8，X排名第1，尾部不同两数成8。
     */
     if(seat===1){
       const tail8=tailPairSum8(d);
@@ -728,72 +713,12 @@ function evaluateBajie(room){
       continue;
     }
 
-    /*
-      观察提示，不进入A/B。
-    */
-    if(seat===1&&d.A===8){
-      addCandidate(
-        OBS,
-        seat,
-        '观察',
-        '1号｜弱首位8',
-        '观察：A=8但未满足B1的“排名1+尾部不同两数成8”。',
-        d,
-        ''
-      );
-      continue;
-    }
-
-    if(seat===4&&(pair8.length||pair5.length)){
-      addCandidate(
-        OBS,
-        seat,
-        '观察',
-        '4号｜弱拼核',
-        '观察：4号有拼核关系，但排名/真实核条件不足，未进A档。',
-        d,
-        ''
-      );
-      continue;
-    }
-
-    if(seat===5&&rank===4&&diffVal.length&&x===1){
-      addCandidate(
-        OBS,
-        seat,
-        '观察',
-        '5号｜E=1差值降级',
-        `观察：E=1虽然是差值位：${diffVal.join('，')}，但v0.9过滤E=1。`,
-        d,
-        diffVal.join('，')
-      );
-      continue;
-    }
-
-    if(seat===6&&rank===1&&diff7.length&&x===8){
-      addCandidate(
-        OBS,
-        seat,
-        '观察',
-        '6号｜E=8差7降级',
-        `观察：E=8虽然参与差7：${diff7.join('，')}，但v0.9过滤E=8。`,
-        d,
-        diff7.join('，')
-      );
-      continue;
-    }
-
-    let reason='未命中八戒v0.9 A/B。';
-    if(seat===2)reason+=' 2号暂不进模型。';
-    if(pair8.length)reason+=` 有拼8：${pair8.join('，')}，但条件不足。`;
-    if(diffVal.length)reason+=` 有差值：${diffVal.join('，')}，但条件不足。`;
-
     addCandidate(
       SKIP,
       seat,
       '跳',
       `${seat}号｜跳`,
-      reason,
+      '未命中八戒v0.9 A/B，直接跳。',
       d,
       ''
     );
@@ -801,7 +726,6 @@ function evaluateBajie(room){
 
   const aList=A.sort((x,y)=>x.seat-y.seat);
   const bList=B.sort((x,y)=>x.seat-y.seat);
-  const obsList=OBS.sort((x,y)=>x.seat-y.seat);
   const formal=aList[0]||bList[0]||null;
 
   return{
@@ -809,18 +733,28 @@ function evaluateBajie(room){
     data:d,
     aList,
     bList,
-    obsList,
     formal,
     ok:!!formal
   };
 }
 
+function gradeCls(grade){
+  if(grade==='A档')return'a';
+  if(grade==='B档')return'b';
+  if(grade==='跳')return'skip';
+  return'info';
+}
+function actionText(grade){
+  if(grade==='A档')return'进';
+  if(grade==='B档')return'短';
+  if(grade==='跳')return'跳';
+  return'—';
+}
 function buildCard(item,d,index){
   const cls=gradeCls(item.grade);
   const label=index===0
     ? (item.grade==='A档'?'A主推'
       :item.grade==='B档'?'B短打'
-      :item.grade==='观察'?'观察'
       :'跳')
     :item.grade;
 
@@ -851,10 +785,10 @@ function buildSkipCard(res){
     <div class="hit-body">
       <div class="row1">未命中A/B正式进房</div>
       <div class="row2">S=${d.sum}｜跨度=${d.range}｜${d.hasZero?'有0':'无0'}｜${d.repeat.type}</div>
-      <div class="row3">原则：A档主打，B档短打；无A/B优先跳。</div>
+      <div class="row3">有A打A；无A有B短打；无A/B直接跳。</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">—</div>
+      <div class="hit-wr">跳</div>
       <div class="hit-avg">无</div>
     </div>
   `;
@@ -865,6 +799,7 @@ function buildInfoCard(res){
   const div=document.createElement('div');
   div.className='hit info';
   const repeatNums=d.repeat.repeatedNums.length?d.repeat.repeatedNums.join('/'):'无';
+
   div.innerHTML=`
     <div class="hit-lbl">数据</div>
     <div class="hit-seat">数</div>
@@ -878,15 +813,14 @@ function buildInfoCard(res){
       <div class="hit-avg">八戒</div>
     </div>
   `;
+
   return div;
 }
 function render(room){
   const res=evaluateBajie(room);
   hitList.innerHTML='';
 
-  let all=[];
-  all=all.concat(res.aList);
-  all=all.concat(res.bList);
+  const all=[...res.aList,...res.bList];
 
   if(all.length){
     all.forEach((item,index)=>{
@@ -896,19 +830,11 @@ function render(room){
     hitList.appendChild(buildSkipCard(res));
   }
 
-  if(res.obsList.length){
-    res.obsList.slice(0,3).forEach((item,index)=>{
-      hitList.appendChild(buildCard(item,res.data,all.length+index));
-    });
-  }
-
   hitList.appendChild(buildInfoCard(res));
   resultEl.style.display='flex';
 
   if(res.ok&&res.formal){
     badge.textContent=`${res.formal.grade}｜${res.formal.seat}号`;
-  }else if(res.obsList.length){
-    badge.textContent=`观察｜${res.obsList[0].seat}号`;
   }else{
     badge.textContent='跳';
   }
@@ -921,14 +847,12 @@ function simpleSummary(res){
   if(res.ok&&res.formal){
     return `${res.formal.grade}｜${res.formal.seat}号｜${res.formal.name}`;
   }
-  if(res.obsList&&res.obsList.length){
-    return `无A/B｜观察${res.obsList[0].seat}号｜${res.obsList[0].name}`;
-  }
   return '跳';
 }
 function buildCopyText(room,res){
   const summary=simpleSummary(res);
-  const reason=res.formal?res.formal.reason:(res.obsList[0]?.reason||'无A/B命中，优先跳。');
+  const reason=res.formal?res.formal.reason:'无A/B命中，直接跳。';
+
   return `房号：${room}
 八戒·5098636：${summary}
 理由：${reason}`;
@@ -997,6 +921,7 @@ async function copyCurrent(){
 }
 function run(){
   const raw=roomEl.value.trim().replace(/\s+/g,'');
+
   if(!/^\d{5}$/.test(raw)){
     msgEl.textContent='请输入正确的5位数字';
     return;
