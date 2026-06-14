@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#b00000"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="三号同步">
-<title>橘子+八戒+小新 三号同步模型</title>
+<meta name="apple-mobile-web-app-title" content="八戒v0.9">
+<title>八戒·5098636 v0.9</title>
 <style>
 :root{
   --bg:#0b0b0f;
@@ -18,7 +18,6 @@
   --red:#ff2d2d;
   --gold:#ffb020;
   --green:#5cff9a;
-  --blue:#8bb8ff;
   --purple:#d59bff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -130,7 +129,7 @@ input::placeholder{
   min-height:14px;
   margin-bottom:8px
 }
-.dual{
+.result{
   display:none;
   flex-direction:column;
   gap:10px
@@ -181,10 +180,6 @@ input::placeholder{
   border-color:rgba(92,255,154,.45);
   background:rgba(92,255,154,.08)
 }
-.hit.c{
-  border-color:rgba(139,184,255,.45);
-  background:rgba(139,184,255,.09)
-}
 .hit.obs{
   border-color:rgba(213,155,255,.42);
   background:rgba(213,155,255,.08)
@@ -214,10 +209,6 @@ input::placeholder{
   background:rgba(92,255,154,.20);
   color:rgba(140,255,185,.95)
 }
-.hit.c .hit-lbl{
-  background:rgba(139,184,255,.20);
-  color:rgba(170,205,255,.98)
-}
 .hit.obs .hit-lbl{
   background:rgba(213,155,255,.18);
   color:rgba(225,190,255,.95)
@@ -243,10 +234,6 @@ input::placeholder{
   color:var(--green);
   text-shadow:0 0 12px rgba(92,255,154,.25)
 }
-.hit.c .hit-seat{
-  color:var(--blue);
-  text-shadow:0 0 12px rgba(139,184,255,.25)
-}
 .hit.obs .hit-seat{
   color:var(--purple);
   text-shadow:0 0 12px rgba(213,155,255,.22)
@@ -256,10 +243,7 @@ input::placeholder{
   color:rgba(255,255,255,.25);
   text-shadow:none
 }
-.hit-body{
-  line-height:1.4;
-  min-width:0
-}
+.hit-body{line-height:1.4;min-width:0}
 .row1{
   font-size:11px;
   color:var(--text);
@@ -280,10 +264,7 @@ input::placeholder{
   margin-top:1px;
   line-height:1.25
 }
-.hit-right{
-  text-align:right;
-  min-width:42px
-}
+.hit-right{text-align:right;min-width:42px}
 .hit-wr{
   font-size:11px;
   font-weight:900;
@@ -365,17 +346,6 @@ input::placeholder{
   line-height:1.6;
   white-space:pre-line
 }
-.splitTiny{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:8px
-}
-.tinyBox{
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:10px;
-  padding:8px;
-  background:rgba(0,0,0,.12)
-}
 @media(max-width:430px){
   body{padding:10px}
   .app{width:100%}
@@ -388,13 +358,12 @@ input::placeholder{
   .hit-seat{font-size:19px}
   .histMain{font-size:10px}
   .tiny{font-size:9px}
-  .splitTiny{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="title">三号同步<span class="version">橘子+八戒+小新 同时输出</span></div>
+  <div class="title">八戒·5098636<span class="version">v0.9 A+B模型</span></div>
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
     <div class="btn-wrap">
@@ -403,100 +372,67 @@ input::placeholder{
     </div>
     <div class="msg" id="msg"></div>
 
-    <div class="dual" id="dual">
-      <div class="acct" id="juziBox">
+    <div class="result" id="result">
+      <div class="acct">
         <div class="acctHead">
           <div>
-            <div class="acctName">橘子·5136695</div>
-            <div class="acctSub">主核6 副核9 v2</div>
+            <div class="acctName">八戒别跑·5098636</div>
+            <div class="acctSub">v0.9｜A档4号中位拼核｜B档1/3/5/6短打</div>
           </div>
-          <div class="acctBadge" id="juziBadge">—</div>
+          <div class="acctBadge" id="badge">—</div>
         </div>
-        <div class="hit-list" id="juziList"></div>
-      </div>
-
-      <div class="acct" id="bajieBox">
-        <div class="acctHead">
-          <div>
-            <div class="acctName">八戒·5098636</div>
-            <div class="acctSub">8主核去重关系 v0.5</div>
-          </div>
-          <div class="acctBadge" id="bajieBadge">—</div>
-        </div>
-        <div class="hit-list" id="bajieList"></div>
-      </div>
-
-      <div class="acct" id="xiaoxinBox">
-        <div class="acctHead">
-          <div>
-            <div class="acctName">蜡笔小新·5103476</div>
-            <div class="acctSub">A=8线｜B=干净5线｜只打A/B</div>
-          </div>
-          <div class="acctBadge" id="xiaoxinBadge">—</div>
-        </div>
-        <div class="hit-list" id="xiaoxinList"></div>
+        <div class="hit-list" id="hitList"></div>
       </div>
     </div>
 
     <div class="history">
       <div class="histHead">
-        <span class="histTitle">最近记录｜三号同步</span>
+        <span class="histTitle">最近记录｜八戒v0.9</span>
         <button class="clearBtn" id="clearBtn">清空</button>
       </div>
       <div class="histList" id="histList"></div>
     </div>
 
-    <div class="tiny splitTiny">
-      <div class="tinyBox">【橘子·5136695｜v2】
-主核=6；副核/爆核=9；乱核=5。
-去重；重号不自相加；超过9为溢出。
-A：X裸6 / X两数组6，且X≠5。
-B：X三数组6，非E位，且X≠5。
-C：E位裸9 / E位两数组9 / ID原生9。
-口诀：6管稳，9管爆；主打6，慎追9。</div>
-      <div class="tinyBox">【八戒·5098636｜v0.5】
-主核=8；副核=9。
-去重；对子不自相加；非1号裸8不打。
-A：1号A=8+尾部两数成8；3号重复8；4号X≤6且拼8。
-B：1号A=9有保护；6号拼8且房内有8。
-口诀：先去重，再看8；2号/5号暂跳。</div>
-      <div class="tinyBox">【蜡笔小新·5103476｜A/B版】
-只打A/B。
-A：8线＝X=8，或X通过干净双数直接成8；当前主看裸8、5推3成8。
-B：干净5线＝X通过干净双数直接成5；当前主看1推4成5、0挂5成5。
-跳：三数乱核、虚9、抢核、重复过重。
-口诀：先看8，次看干净5；不是干净双数核，不打。</div>
+    <div class="tiny">【八戒·5098636｜v0.9 A+B模型】
+计算规则：
+1）房号先去重。
+2）同数不能相加、不能相减。
+3）两个1只能算1，不能算2；两个3只能算3，不能算6。
+4）重复数字只做权重/乱核提示，不参与加减。
+5）X排名按去重后数字从大到小排序。
+
+A档强进：
+A1：4号，X排名第2/3，X+不同数字=8。
+A2：4号，X≤6，X排名第2/3/4，X+不同数字=5，且房号里真实存在5。
+
+B档短打：
+B1：1号，A=8，X排名第1，尾部不同两数成8。
+B2：3号，C=8，房号里8重复，X排名第1。
+B3：5号，E排名第4，E是差值位，但E≠1。
+B4：6号，E排名第1，E参与差7，但E≠8。
+
+实战口诀：
+A档主打，B档短打。
+4号最强；1号吃首位8；3号吃重复8；5号吃低位差值；6号吃差7但避开E=8；2号暂跳。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY='triple_juzi_bajie_xiaoxin_sync_v1';
+const HISTORY_KEY='bajie_5098636_v09';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
 const goEl=document.getElementById('go');
 const copyBtn=document.getElementById('copyBtn');
 const msgEl=document.getElementById('msg');
-const dualEl=document.getElementById('dual');
-
-const juziList=document.getElementById('juziList');
-const bajieList=document.getElementById('bajieList');
-const xiaoxinList=document.getElementById('xiaoxinList');
-
-const juziBadge=document.getElementById('juziBadge');
-const bajieBadge=document.getElementById('bajieBadge');
-const xiaoxinBadge=document.getElementById('xiaoxinBadge');
-
+const resultEl=document.getElementById('result');
+const hitList=document.getElementById('hitList');
+const badge=document.getElementById('badge');
 const histListEl=document.getElementById('histList');
 const clearBtnEl=document.getElementById('clearBtn');
 
 let lastCopyText='';
-
-const SEAT_PRIORITY_A=[1,2,4,5,3,6];
-const SEAT_PRIORITY_B=[1,2,4,3,5,6];
-const SEAT_PRIORITY_C=[5,6,1,2,4,3];
-const SEAT_PRIORITY_OBS=[6,1,2,5,4,3];
 
 function getDigits(room){
   return room.split('').map(Number);
@@ -534,6 +470,10 @@ function getBase(room){
   const[A,B,C,D,E]=getDigits(room);
   const digits=[A,B,C,D,E];
   const uniq=unique(digits);
+  const sorted=[...uniq].sort((a,b)=>b-a);
+  const rankMap={};
+  sorted.forEach((n,i)=>rankMap[n]=i+1);
+
   const sum=A+B+C+D+E;
   const max=Math.max(...digits);
   const min=Math.min(...digits);
@@ -541,7 +481,21 @@ function getBase(room){
   const hasZero=digits.includes(0);
   const xMap={1:A,2:B,3:C,4:D,5:E,6:E};
   const repeat=getRepeatInfo(digits);
-  return{A,B,C,D,E,digits,uniq,sum,max,min,range,hasZero,xMap,repeat};
+
+  return{
+    A,B,C,D,E,
+    digits,
+    uniq,
+    sorted,
+    rankMap,
+    sum,
+    max,
+    min,
+    range,
+    hasZero,
+    xMap,
+    repeat
+  };
 }
 function seatPos(seat){
   if(seat===1)return'A';
@@ -550,14 +504,15 @@ function seatPos(seat){
   if(seat===4)return'D';
   return'E';
 }
-function isESeat(seat){
-  return seat===5||seat===6;
+function xRank(seat,d){
+  return d.rankMap[d.xMap[seat]];
 }
 function xText(seat,d){
   const x=d.xMap[seat];
   const pos=seatPos(seat);
+  const rank=xRank(seat,d);
   const oe=x%2===0?'偶':'奇';
-  return`X=${pos}${x}｜${oe}`;
+  return`X=${pos}${x}｜排名${rank}｜${oe}`;
 }
 function addCandidate(list,seat,grade,name,reason,d,extra){
   list.push({
@@ -569,6 +524,12 @@ function addCandidate(list,seat,grade,name,reason,d,extra){
     extra:extra||''
   });
 }
+
+/*
+  同数不相加：
+  n === x 时，不能算 x+n。
+  例如4+4=8不允许。
+*/
 function twoSumTarget(x,uniq,target){
   const hits=[];
   for(const n of uniq){
@@ -580,589 +541,66 @@ function twoSumTarget(x,uniq,target){
   }
   return hits;
 }
-function threeSumTarget(x,uniq,target){
+
+/*
+  尾部两数成8：
+  用B/C/D/E去重后扫描。
+  同数不相加，所以只取不同数字。
+*/
+function tailPairSum8(d){
+  const arr=unique([d.B,d.C,d.D,d.E]);
   const hits=[];
-  const others=uniq.filter(n=>n!==x);
-  for(let i=0;i<others.length;i++){
-    for(let j=i+1;j<others.length;j++){
-      const s=x+others[i]+others[j];
-      if(s===target&&s<=9){
-        hits.push(`${x}+${others[i]}+${others[j]}=${target}`);
-      }
-    }
-  }
-  return hits;
-}
-function twoSumWithin(nums,target){
-  const hits=[];
-  const arr=unique(nums);
   for(let i=0;i<arr.length;i++){
     for(let j=i+1;j<arr.length;j++){
+      if(arr[i]===arr[j])continue;
       const s=arr[i]+arr[j];
-      if(s===target&&s<=9){
-        hits.push(`${arr[i]}+${arr[j]}=${target}`);
+      if(s===8&&s<=9){
+        hits.push(`${arr[i]}+${arr[j]}=8`);
       }
     }
   }
   return hits;
 }
-function threeSumWithin(nums,target){
+
+/*
+  X是差值位：
+  存在不同数字 a、b，a>b，a-b=X。
+  同数不相减，所以a不能等于b。
+*/
+function isDifferenceValue(x,uniq){
   const hits=[];
-  const arr=unique(nums);
-  for(let i=0;i<arr.length;i++){
-    for(let j=i+1;j<arr.length;j++){
-      for(let k=j+1;k<arr.length;k++){
-        const s=arr[i]+arr[j]+arr[k];
-        if(s===target&&s<=9){
-          hits.push(`${arr[i]}+${arr[j]}+${arr[k]}=${target}`);
-        }
+  for(const a of uniq){
+    for(const b of uniq){
+      if(a===b)continue;
+      if(a>b && a-b===x){
+        hits.push(`${a}-${b}=${x}`);
       }
     }
   }
   return hits;
 }
-function nearestTwoSums(x,uniq){
-  const sums=[];
+
+/*
+  X参与相减差target：
+  X可以是被减数或减数，但两个操作数必须不同。
+  例如E=9，9-2=7；E=1，8-1=7。
+*/
+function participateDiffTarget(x,uniq,target){
+  const hits=[];
   for(const n of uniq){
     if(n===x)continue;
-    sums.push({
-      n,
-      sum:x+n,
-      text:`${x}+${n}=${x+n}`
-    });
-  }
-  sums.sort((a,b)=>{
-    return Math.abs(a.sum-6)-Math.abs(b.sum-6)||a.sum-b.sum;
-  });
-  return sums;
-}
-function idNative9(x,uniq){
-  const hits=[];
-  if((x===6&&uniq.includes(3))||(x===3&&uniq.includes(6))){
-    hits.push('ID原生9：6+3=9');
-  }
-  if([1,3,5].includes(x)&&uniq.includes(1)&&uniq.includes(3)&&uniq.includes(5)){
-    hits.push('ID原生9：1+3+5=9');
+    if(x>n && x-n===target){
+      hits.push(`${x}-${n}=${target}`);
+    }
+    if(n>x && n-x===target){
+      hits.push(`${n}-${x}=${target}`);
+    }
   }
   return hits;
 }
-function helpSixWeight(x,d){
-  const arr=[];
-  const cnt=d.repeat.count;
-  if(cnt[x]>=2){
-    arr.push(`X=${x}重复，加权`);
-  }
-  const pair6=twoSumTarget(x,d.uniq,6);
-  pair6.forEach(p=>{
-    const other=Number(p.split('+')[1].split('=')[0]);
-    if(cnt[other]>=2){
-      arr.push(`配6数字${other}重复，加权`);
-    }
-  });
-  if(d.repeat.hasRepeat&&arr.length===0){
-    arr.push('有重号，但未直接帮6，不单独加分');
-  }
-  return arr.join('；')||'无特殊加权';
-}
-function uniqueSeatSort(list,priority,excludeList){
-  const exclude=new Set((excludeList||[]).map(i=>i.seat));
-  const map=new Map();
-  list.forEach(item=>{
-    if(exclude.has(item.seat))return;
-    if(!map.has(item.seat))map.set(item.seat,item);
-  });
-  return Array.from(map.values()).sort((x,y)=>{
-    const px=priority.includes(x.seat)?priority.indexOf(x.seat):999;
-    const py=priority.includes(y.seat)?priority.indexOf(y.seat):999;
-    return px-py;
-  });
-}
-
-/* =========================
-   橘子·5136695 原逻辑
-   主核6 副核9 v2
-========================= */
-function evaluateJuzi(room){
-  const d=getBase(room);
-  const A=[],B=[],C=[],OBS=[],SKIP=[];
-
-  for(let seat=1;seat<=6;seat++){
-    const x=d.xMap[seat];
-    const isE=isESeat(seat);
-    const pair6=twoSumTarget(x,d.uniq,6);
-    const tri6=threeSumTarget(x,d.uniq,6);
-    const pair9=twoSumTarget(x,d.uniq,9);
-    const native9=idNative9(x,d.uniq);
-    const near=nearestTwoSums(x,d.uniq);
-    const near78=near.filter(item=>item.sum===7||item.sum===8);
-    const lowOnly=near.length&&Math.max(...near.map(i=>i.sum))<6;
-    const farHigh=near.filter(i=>i.sum>=10).length>=2;
-
-    if(x!==5&&(x===6||pair6.length)){
-      const name=x===6?'X裸6':'X两数组6';
-      const relation=x===6?'X本身就是主核6':pair6.join('，');
-      const weight=helpSixWeight(x,d);
-      addCandidate(
-        A,
-        seat,
-        'A档',
-        `${seat}号｜${name}`,
-        `A档强进：${relation}。${weight}`,
-        d,
-        relation
-      );
-      continue;
-    }
-
-    if(x!==5&&!isE&&tri6.length){
-      addCandidate(
-        B,
-        seat,
-        'B档',
-        `${seat}号｜三数组6`,
-        `B档短打：${tri6.join('，')}。三数组6弱于两数组6，只短打。`,
-        d,
-        tri6.join('，')
-      );
-      continue;
-    }
-
-    const cHits=[];
-    if(isE&&x===9)cHits.push('E位裸9');
-    if(isE&&pair9.length)cHits.push(`E位两数组9：${pair9.join('，')}`);
-    if(native9.length)cHits.push(...native9);
-
-    if(x!==5&&cHits.length){
-      addCandidate(
-        C,
-        seat,
-        'C档',
-        `${seat}号｜严格副核9`,
-        `C档追肉：${cHits.join('；')}。9是爆核，不是稳核，小注追肉。`,
-        d,
-        cHits.join('；')
-      );
-      continue;
-    }
-
-    if(near78.length){
-      addCandidate(
-        OBS,
-        seat,
-        '观察',
-        `${seat}号｜无核补位7/8`,
-        `无A/B/C时才看：${near78.map(i=>i.text).join('，')}。宁选贴7/8，不选4/5，也不碰10+。`,
-        d,
-        near78.map(i=>i.text).join('，')
-      );
-      continue;
-    }
-
-    let reason='未命中主核6/严格副核9。';
-    if(x===5)reason+=' X=5为乱核/抢核，降级或跳。';
-    if(lowOnly)reason+=' 两数多低于6，低位空转。';
-    if(farHigh)reason+=' 10+溢出偏多，乱核。';
-
-    addCandidate(SKIP,seat,'跳',`${seat}号｜硬跳`,reason,d,'');
-  }
-
-  const aList=uniqueSeatSort(A,SEAT_PRIORITY_A);
-  const bList=uniqueSeatSort(B,SEAT_PRIORITY_B,aList);
-  const cList=uniqueSeatSort(C,SEAT_PRIORITY_C,[...aList,...bList]);
-  const obsList=uniqueSeatSort(OBS,SEAT_PRIORITY_OBS,[...aList,...bList,...cList]);
-  const formal=aList[0]||bList[0]||cList[0]||null;
-
-  return{
-    account:'橘子',
-    room,
-    data:d,
-    aList,
-    bList,
-    cList,
-    obsList,
-    formal,
-    ok:!!formal
-  };
-}
-
-/* =========================
-   八戒·5098636 新逻辑
-   8主核去重关系 v0.5
-========================= */
-function tailDigits(d){
-  return[d.B,d.C,d.D,d.E];
-}
-function hasTailPair8(d){
-  return twoSumWithin(tailDigits(d),8);
-}
-function hasTailPair9(d){
-  return twoSumWithin(tailDigits(d),9);
-}
-function isBajieA1Clean(d){
-  if(d.A!==8)return false;
-  const p8=hasTailPair8(d);
-  if(!p8.length)return false;
-
-  const tail=unique(tailDigits(d));
-  const p9=hasTailPair9(d);
-
-  const has82361Shape=tail.includes(1)&&tail.includes(2)&&tail.includes(3)&&tail.includes(6)&&p9.length;
-  if(has82361Shape)return false;
-
-  return true;
-}
-function bajieHasA9Protect(d){
-  if(d.A!==9)return false;
-
-  const cnt=d.repeat.count;
-  const hasBadDouble=(cnt[1]>=2||cnt[2]>=2||cnt[4]>=2);
-  if(hasBadDouble)return false;
-
-  const tail=tailDigits(d);
-  const tailUniq=unique(tail);
-  const hasProtect0=tailUniq.includes(0);
-  const hasTail8or9=tailUniq.includes(8)||tailUniq.includes(9);
-  const tailPair8=twoSumWithin(tail,8).length>0;
-
-  return hasProtect0||hasTail8or9||tailPair8;
-}
-function bajieSixShort(seat,d){
-  if(seat!==6)return null;
-  const x=d.xMap[seat];
-
-  const pair8=twoSumTarget(x,d.uniq,8);
-  const has8=d.uniq.includes(8);
-  const has0=d.uniq.includes(0);
-
-  if(x===8&&has0){
-    const hasCompete26=d.uniq.includes(2)&&d.uniq.includes(6);
-    if(hasCompete26)return null;
-    return 'E=8，有0托8';
-  }
-
-  if(pair8.length&&has8){
-    return `${pair8.join('，')}，房内有8主核`;
-  }
-
-  return null;
-}
-function evaluateBajie(room){
-  const d=getBase(room);
-  const A=[],B=[],OBS=[],SKIP=[];
-
-  for(let seat=1;seat<=6;seat++){
-    const x=d.xMap[seat];
-
-    if(seat===1&&isBajieA1Clean(d)){
-      const p8=hasTailPair8(d);
-      addCandidate(
-        A,
-        seat,
-        'A档',
-        '1号｜首位8强核',
-        `A档强进：A=8，后四位去重后 ${p8.join('，')}。1号首位8有主核优势。`,
-        d,
-        p8.join('，')
-      );
-      continue;
-    }
-
-    if(seat===3&&x===8&&d.repeat.count[8]>=2){
-      addCandidate(
-        A,
-        seat,
-        'A档',
-        '3号｜重复8权重',
-        `A档强进：C=8，且房号内8重复。3号不吃裸8，只吃重复8权重。`,
-        d,
-        '重复8'
-      );
-      continue;
-    }
-
-    const pair8=twoSumTarget(x,d.uniq,8);
-    const tri8=threeSumTarget(x,d.uniq,8);
-
-    if(seat===4&&x<=6&&(pair8.length||tri8.length)){
-      const rel=pair8.length?pair8.join('，'):tri8.join('，');
-      addCandidate(
-        A,
-        seat,
-        'A档',
-        '4号｜低中位拼8',
-        `A档强进：4号吃8拼块，X=${x}≤6，${rel}。4号不吃高位裸8。`,
-        d,
-        rel
-      );
-      continue;
-    }
-
-    if(seat===1&&bajieHasA9Protect(d)){
-      addCandidate(
-        B,
-        seat,
-        'B档',
-        '1号｜A=9保护',
-        `B档短打：A=9为副核，有0/8/9/尾部8关系保护，且无双1/双2/双4乱核。`,
-        d,
-        'A=9保护'
-      );
-      continue;
-    }
-
-    const sixRel=bajieSixShort(seat,d);
-    if(sixRel){
-      addCandidate(
-        B,
-        seat,
-        'B档',
-        '6号｜8主核短打',
-        `B档短打：${sixRel}。6号有爆发但波动大，只短打。`,
-        d,
-        sixRel
-      );
-      continue;
-    }
-
-    if((seat===1&&d.A===8)||(x===8&&seat!==1)){
-      addCandidate(
-        OBS,
-        seat,
-        '观察',
-        `${seat}号｜裸8降级`,
-        `观察：八戒主看8，但该位属于裸8/弱8，没有清晰8副核托住。非1号裸8不打。`,
-        d,
-        '裸8'
-      );
-      continue;
-    }
-
-    let reason='未命中八戒A/B。';
-    if(seat===2)reason+=' 2号暂不进8主核模型。';
-    if(seat===5)reason+=' 5号两数成8历史不稳，暂跳。';
-    if(twoSumTarget(x,d.uniq,9).length)reason+=' 只成9为副核，不当主进。';
-
-    addCandidate(
-      SKIP,
-      seat,
-      '跳',
-      `${seat}号｜跳`,
-      reason,
-      d,
-      ''
-    );
-  }
-
-  const aList=uniqueSeatSort(A,[1,4,3,6,2,5]);
-  const bList=uniqueSeatSort(B,[1,6,4,3,2,5],aList);
-  const obsList=uniqueSeatSort(OBS,[1,3,6,4,2,5],[...aList,...bList]);
-  const formal=aList[0]||bList[0]||null;
-
-  return{
-    account:'八戒',
-    room,
-    data:d,
-    aList,
-    bList,
-    cList:[],
-    obsList,
-    formal,
-    ok:!!formal
-  };
-}
-
-/* =========================
-   蜡笔小新·5103476
-   只打A/B：A=8线，B=干净5线
-========================= */
-function hasExactPair(uniq,a,b){
-  return uniq.includes(a)&&uniq.includes(b);
-}
-function xiaoxinBadFlags(d,seat,x){
-  const flags=[];
-  const cnt=d.repeat.count;
-
-  if(threeSumTarget(x,d.uniq,8).length || threeSumTarget(x,d.uniq,5).length){
-    flags.push('三数乱核');
-  }
-
-  const pair9=twoSumTarget(x,d.uniq,9);
-  const badVirtual9 = pair9.some(t => t.includes(`${x}+0=9`) || t.includes(`0+${x}=9`) || (x===0&&d.uniq.includes(9)) || (x===9&&d.uniq.includes(0)));
-  if(badVirtual9 || (x===0&&d.uniq.includes(9)) || (x===9&&d.uniq.includes(0))){
-    flags.push('虚9');
-  }
-
-  if(d.repeat.hasRepeat){
-    const heavyRepeated = d.repeat.groups.some(g=>g.count>=3) || d.repeat.groups.filter(g=>g.count>=2).length>=2;
-    if(heavyRepeated)flags.push('重复过重');
-  }
-
-  if((x===5 && pair9.length) || (x===8 && twoSumTarget(x,d.uniq,5).length)){
-    flags.push('抢核');
-  }
-
-  return [...new Set(flags)];
-}
-function xiaoxinAReason(seat,d){
-  const x=d.xMap[seat];
-  const reasons=[];
-
-  if(x===8){
-    reasons.push('X=8（裸8）');
-  }
-
-  const pair8=twoSumTarget(x,d.uniq,8);
-  if(pair8.length){
-    pair8.forEach(p=>reasons.push(`干净双数成8：${p}`));
-  }
-
-  if(x===5 && d.uniq.includes(3)){
-    reasons.push('5推3成8');
-  }
-
-  return [...new Set(reasons)];
-}
-function xiaoxinBReason(seat,d){
-  const x=d.xMap[seat];
-  const reasons=[];
-  const pair5=twoSumTarget(x,d.uniq,5);
-
-  if(pair5.length){
-    pair5.forEach(p=>reasons.push(`干净双数成5：${p}`));
-  }
-
-  if(x===1 && d.uniq.includes(4)){
-    reasons.push('1推4成5');
-  }
-  if(x===0 && d.uniq.includes(5)){
-    reasons.push('0挂5成5');
-  }
-
-  return [...new Set(reasons)];
-}
-function evaluateXiaoxin(room){
-  const d=getBase(room);
-  const A=[],B=[],OBS=[],SKIP=[];
-
-  for(let seat=1;seat<=6;seat++){
-    const x=d.xMap[seat];
-    const badFlags=xiaoxinBadFlags(d,seat,x);
-
-    const aReasons=xiaoxinAReason(seat,d);
-    const bReasons=xiaoxinBReason(seat,d);
-
-    const hasStrongA = aReasons.some(r=>r.includes('X=8（裸8）') || r.includes('5推3成8'));
-    const hasAnyA = aReasons.length>0;
-    const hasStrongB = bReasons.some(r=>r.includes('1推4成5') || r.includes('0挂5成5'));
-    const hasAnyB = bReasons.length>0;
-
-    const badForFormal = badFlags.includes('三数乱核') || badFlags.includes('虚9') || badFlags.includes('抢核') || badFlags.includes('重复过重');
-
-    if(hasStrongA && !badForFormal){
-      addCandidate(
-        A,
-        seat,
-        'A档',
-        `${seat}号｜8线`,
-        `A档强进：${aReasons.join('；')}。先看8，次看干净5。`,
-        d,
-        aReasons.join('；')
-      );
-      continue;
-    }
-
-    if(hasAnyA && !badForFormal){
-      addCandidate(
-        A,
-        seat,
-        'A档',
-        `${seat}号｜8线`,
-        `A档强进：${aReasons.join('；')}。当前按8线处理。`,
-        d,
-        aReasons.join('；')
-      );
-      continue;
-    }
-
-    if(hasStrongB && !badForFormal){
-      addCandidate(
-        B,
-        seat,
-        'B档',
-        `${seat}号｜干净5线`,
-        `B档短打：${bReasons.join('；')}。只收干净5，不收乱5。`,
-        d,
-        bReasons.join('；')
-      );
-      continue;
-    }
-
-    if(hasAnyB && !badForFormal){
-      addCandidate(
-        B,
-        seat,
-        'B档',
-        `${seat}号｜干净5线`,
-        `B档短打：${bReasons.join('；')}。`,
-        d,
-        bReasons.join('；')
-      );
-      continue;
-    }
-
-    if(hasAnyA || hasAnyB){
-      addCandidate(
-        OBS,
-        seat,
-        '观察',
-        `${seat}号｜有核但降级`,
-        `观察：${[...aReasons,...bReasons].join('；')||'有核'}，但存在 ${badFlags.join('、')}。`,
-        d,
-        badFlags.join('、')
-      );
-      continue;
-    }
-
-    let reason='未命中小新A/B。';
-    if(badFlags.length)reason+=` 存在${badFlags.join('、')}。`;
-    else reason+=' 不是干净双数8/5。';
-
-    addCandidate(
-      SKIP,
-      seat,
-      '跳',
-      `${seat}号｜跳`,
-      reason,
-      d,
-      ''
-    );
-  }
-
-  const aList=uniqueSeatSort(A,[6,2,4,3,5,1]);
-  const bList=uniqueSeatSort(B,[6,5,4,2,3,1],aList);
-  const obsList=uniqueSeatSort(OBS,[6,5,2,4,3,1],[...aList,...bList]);
-  const formal=aList[0]||bList[0]||null;
-
-  return{
-    account:'蜡笔小新',
-    room,
-    data:d,
-    aList,
-    bList,
-    cList:[],
-    obsList,
-    formal,
-    ok:!!formal
-  };
-}
-
-/* =========================
-   渲染
-========================= */
 function gradeCls(grade){
   if(grade==='A档')return'a';
   if(grade==='B档')return'b';
-  if(grade==='C档')return'c';
   if(grade==='观察')return'obs';
   if(grade==='跳')return'skip';
   return'info';
@@ -1170,17 +608,218 @@ function gradeCls(grade){
 function actionText(grade){
   if(grade==='A档')return'进';
   if(grade==='B档')return'短';
-  if(grade==='C档')return'追';
   if(grade==='观察')return'观';
   if(grade==='跳')return'跳';
   return'—';
 }
+
+function evaluateBajie(room){
+  const d=getBase(room);
+  const A=[];
+  const B=[];
+  const OBS=[];
+  const SKIP=[];
+
+  for(let seat=1;seat<=6;seat++){
+    const x=d.xMap[seat];
+    const rank=xRank(seat,d);
+    const pair8=twoSumTarget(x,d.uniq,8);
+    const pair5=twoSumTarget(x,d.uniq,5);
+    const diffVal=isDifferenceValue(x,d.uniq);
+    const diff7=participateDiffTarget(x,d.uniq,7);
+
+    /*
+      A档只看4号：
+      A1：4号，X排名第2/3，X+不同数字=8。
+      A2：4号，X≤6，X排名第2/3/4，X+不同数字=5，且房号真实存在5。
+    */
+    if(seat===4){
+      const reasons=[];
+      const extras=[];
+
+      if((rank===2||rank===3)&&pair8.length){
+        reasons.push(`A1：4号中位拼8，${pair8.join('，')}`);
+        extras.push(pair8.join('，'));
+      }
+
+      if(x<=6&&(rank===2||rank===3||rank===4)&&pair5.length&&d.uniq.includes(5)){
+        reasons.push(`A2：4号拼真实5，${pair5.join('，')}，房内有真实5`);
+        extras.push(pair5.join('，'));
+      }
+
+      if(reasons.length){
+        addCandidate(
+          A,
+          seat,
+          'A档',
+          reasons.length>=2?'4号｜A档双命中':'4号｜中位拼核',
+          `A档强进：${reasons.join('；')}。同数不相加，均为不同数字关系。`,
+          d,
+          extras.join('；')
+        );
+        continue;
+      }
+    }
+
+    /*
+      B1：1号，A=8，排名1，尾部不同两数成8。
+    */
+    if(seat===1){
+      const tail8=tailPairSum8(d);
+      if(d.A===8&&rank===1&&tail8.length){
+        addCandidate(
+          B,
+          seat,
+          'B档',
+          '1号｜首位8短打',
+          `B档短打：A=8，X排名第1，尾部不同两数成8：${tail8.join('，')}。`,
+          d,
+          tail8.join('，')
+        );
+        continue;
+      }
+    }
+
+    /*
+      B2：3号，C=8，房号里8重复，排名1。
+    */
+    if(seat===3&&x===8&&rank===1&&d.repeat.count[8]>=2){
+      addCandidate(
+        B,
+        seat,
+        'B档',
+        '3号｜重复8短打',
+        `B档短打：C=8，X排名第1，房号里8重复。重复8只算权重，不参与加减。`,
+        d,
+        '重复8权重'
+      );
+      continue;
+    }
+
+    /*
+      B3：5号，E排名第4，E是差值位，但E≠1。
+    */
+    if(seat===5&&rank===4&&x!==1&&diffVal.length){
+      addCandidate(
+        B,
+        seat,
+        'B档',
+        '5号｜低位差值',
+        `B档短打：E排名第4，E是差值位：${diffVal.join('，')}，且E≠1。`,
+        d,
+        diffVal.join('，')
+      );
+      continue;
+    }
+
+    /*
+      B4：6号，E排名第1，参与差7，但E≠8。
+    */
+    if(seat===6&&rank===1&&x!==8&&diff7.length){
+      addCandidate(
+        B,
+        seat,
+        'B档',
+        '6号｜高位差7',
+        `B档短打：E排名第1，E参与差7：${diff7.join('，')}，且E≠8。`,
+        d,
+        diff7.join('，')
+      );
+      continue;
+    }
+
+    /*
+      观察提示，不进入A/B。
+    */
+    if(seat===1&&d.A===8){
+      addCandidate(
+        OBS,
+        seat,
+        '观察',
+        '1号｜弱首位8',
+        '观察：A=8但未满足B1的“排名1+尾部不同两数成8”。',
+        d,
+        ''
+      );
+      continue;
+    }
+
+    if(seat===4&&(pair8.length||pair5.length)){
+      addCandidate(
+        OBS,
+        seat,
+        '观察',
+        '4号｜弱拼核',
+        '观察：4号有拼核关系，但排名/真实核条件不足，未进A档。',
+        d,
+        ''
+      );
+      continue;
+    }
+
+    if(seat===5&&rank===4&&diffVal.length&&x===1){
+      addCandidate(
+        OBS,
+        seat,
+        '观察',
+        '5号｜E=1差值降级',
+        `观察：E=1虽然是差值位：${diffVal.join('，')}，但v0.9过滤E=1。`,
+        d,
+        diffVal.join('，')
+      );
+      continue;
+    }
+
+    if(seat===6&&rank===1&&diff7.length&&x===8){
+      addCandidate(
+        OBS,
+        seat,
+        '观察',
+        '6号｜E=8差7降级',
+        `观察：E=8虽然参与差7：${diff7.join('，')}，但v0.9过滤E=8。`,
+        d,
+        diff7.join('，')
+      );
+      continue;
+    }
+
+    let reason='未命中八戒v0.9 A/B。';
+    if(seat===2)reason+=' 2号暂不进模型。';
+    if(pair8.length)reason+=` 有拼8：${pair8.join('，')}，但条件不足。`;
+    if(diffVal.length)reason+=` 有差值：${diffVal.join('，')}，但条件不足。`;
+
+    addCandidate(
+      SKIP,
+      seat,
+      '跳',
+      `${seat}号｜跳`,
+      reason,
+      d,
+      ''
+    );
+  }
+
+  const aList=A.sort((x,y)=>x.seat-y.seat);
+  const bList=B.sort((x,y)=>x.seat-y.seat);
+  const obsList=OBS.sort((x,y)=>x.seat-y.seat);
+  const formal=aList[0]||bList[0]||null;
+
+  return{
+    room,
+    data:d,
+    aList,
+    bList,
+    obsList,
+    formal,
+    ok:!!formal
+  };
+}
+
 function buildCard(item,d,index){
   const cls=gradeCls(item.grade);
   const label=index===0
     ? (item.grade==='A档'?'A主推'
       :item.grade==='B档'?'B短打'
-      :item.grade==='C档'?'C追肉'
       :item.grade==='观察'?'观察'
       :'跳')
     :item.grade;
@@ -1210,9 +849,9 @@ function buildSkipCard(res){
     <div class="hit-lbl">跳</div>
     <div class="hit-seat">跳</div>
     <div class="hit-body">
-      <div class="row1">未命中正式进房</div>
+      <div class="row1">未命中A/B正式进房</div>
       <div class="row2">S=${d.sum}｜跨度=${d.range}｜${d.hasZero?'有0':'无0'}｜${d.repeat.type}</div>
-      <div class="row3">原则：有A/B/C看对应号；无正式命中优先跳。</div>
+      <div class="row3">原则：A档主打，B档短打；无A/B优先跳。</div>
     </div>
     <div class="hit-right">
       <div class="hit-wr">—</div>
@@ -1221,7 +860,7 @@ function buildSkipCard(res){
   `;
   return div;
 }
-function buildInfoCard(res,label){
+function buildInfoCard(res){
   const d=res.data;
   const div=document.createElement('div');
   div.className='hit info';
@@ -1231,96 +870,70 @@ function buildInfoCard(res,label){
     <div class="hit-seat">数</div>
     <div class="hit-body">
       <div class="row1">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
-      <div class="row2">去重=${d.uniq.join('')}｜S=${d.sum}｜最大=${d.max}｜最小=${d.min}｜跨度=${d.range}</div>
-      <div class="row3">${label}｜重号=${d.repeat.type}｜重复数字=${repeatNums}</div>
+      <div class="row2">去重=${d.uniq.join('')}｜排序=${d.sorted.join('>')}｜S=${d.sum}｜跨度=${d.range}</div>
+      <div class="row3">重号=${d.repeat.type}｜重复数字=${repeatNums}｜同数不参与加减</div>
     </div>
     <div class="hit-right">
-      <div class="hit-wr">OK</div>
-      <div class="hit-avg">数据</div>
+      <div class="hit-wr">v0.9</div>
+      <div class="hit-avg">八戒</div>
     </div>
   `;
   return div;
 }
-function renderAccount(res,listEl,badgeEl,label){
-  listEl.innerHTML='';
+function render(room){
+  const res=evaluateBajie(room);
+  hitList.innerHTML='';
 
   let all=[];
-  if(res.aList)all=all.concat(res.aList);
-  if(res.bList)all=all.concat(res.bList);
-  if(res.cList)all=all.concat(res.cList);
+  all=all.concat(res.aList);
+  all=all.concat(res.bList);
 
   if(all.length){
     all.forEach((item,index)=>{
-      listEl.appendChild(buildCard(item,res.data,index));
+      hitList.appendChild(buildCard(item,res.data,index));
     });
   }else{
-    listEl.appendChild(buildSkipCard(res));
+    hitList.appendChild(buildSkipCard(res));
   }
 
-  if(res.obsList&&res.obsList.length){
-    res.obsList.slice(0,2).forEach((item,index)=>{
-      listEl.appendChild(buildCard(item,res.data,all.length+index));
+  if(res.obsList.length){
+    res.obsList.slice(0,3).forEach((item,index)=>{
+      hitList.appendChild(buildCard(item,res.data,all.length+index));
     });
   }
 
-  listEl.appendChild(buildInfoCard(res,label));
+  hitList.appendChild(buildInfoCard(res));
+  resultEl.style.display='flex';
 
   if(res.ok&&res.formal){
-    badgeEl.textContent=`${res.formal.grade}｜${res.formal.seat}号`;
-  }else if(res.obsList&&res.obsList.length){
-    badgeEl.textContent=`观察｜${res.obsList[0].seat}号`;
+    badge.textContent=`${res.formal.grade}｜${res.formal.seat}号`;
+  }else if(res.obsList.length){
+    badge.textContent=`观察｜${res.obsList[0].seat}号`;
   }else{
-    badgeEl.textContent='跳';
+    badge.textContent='跳';
   }
+
+  lastCopyText=buildCopyText(room,res);
+  pushHistory(room,res);
+  return res;
 }
 function simpleSummary(res){
   if(res.ok&&res.formal){
     return `${res.formal.grade}｜${res.formal.seat}号｜${res.formal.name}`;
   }
   if(res.obsList&&res.obsList.length){
-    return `无正式命中｜观察${res.obsList[0].seat}号｜${res.obsList[0].name}`;
+    return `无A/B｜观察${res.obsList[0].seat}号｜${res.obsList[0].name}`;
   }
   return '跳';
 }
-function buildCopyText(room,juzi,bajie,xiaoxin){
-  const j=simpleSummary(juzi);
-  const b=simpleSummary(bajie);
-  const x=simpleSummary(xiaoxin);
-
-  const jReason=juzi.formal?juzi.formal.reason:(juzi.obsList[0]?.reason||'无正式命中，优先跳');
-  const bReason=bajie.formal?bajie.formal.reason:(bajie.obsList[0]?.reason||'无正式命中，优先跳');
-  const xReason=xiaoxin.formal?xiaoxin.formal.reason:(xiaoxin.obsList[0]?.reason||'无正式命中，优先跳');
-
+function buildCopyText(room,res){
+  const summary=simpleSummary(res);
+  const reason=res.formal?res.formal.reason:(res.obsList[0]?.reason||'无A/B命中，优先跳。');
   return `房号：${room}
-橘子·5136695：${j}
-理由：${jReason}
-
-八戒·5098636：${b}
-理由：${bReason}
-
-蜡笔小新·5103476：${x}
-理由：${xReason}`;
-}
-function render(room){
-  const juzi=evaluateJuzi(room);
-  const bajie=evaluateBajie(room);
-  const xiaoxin=evaluateXiaoxin(room);
-
-  renderAccount(juzi,juziList,juziBadge,'橘子v2｜主核6｜副核9');
-  renderAccount(bajie,bajieList,bajieBadge,'八戒v0.5｜主核8｜副核9');
-  renderAccount(xiaoxin,xiaoxinList,xiaoxinBadge,'小新A/B版｜A=8线｜B=干净5线');
-
-  dualEl.style.display='flex';
-
-  lastCopyText=buildCopyText(room,juzi,bajie,xiaoxin);
-  pushHistory(room,juzi,bajie,xiaoxin);
-
-  return{juzi,bajie,xiaoxin};
+八戒·5098636：${summary}
+理由：${reason}`;
 }
 
-/* =========================
-   历史与复制
-========================= */
 function loadHist(){
   try{
     return JSON.parse(localStorage.getItem(HISTORY_KEY))||[];
@@ -1348,18 +961,16 @@ function renderHist(){
         <span>房号 <span class="pill">${item.room}</span></span>
         <span>${item.time}</span>
       </div>
-      <div class="histMain">橘子 → ${item.juzi}<br/>八戒 → ${item.bajie}<br/>小新 → ${item.xiaoxin}</div>
+      <div class="histMain">${item.result}</div>
     `;
     histListEl.appendChild(div);
   });
 }
-function pushHistory(room,juzi,bajie,xiaoxin){
+function pushHistory(room,res){
   const items=loadHist();
   items.unshift({
     room,
-    juzi:simpleSummary(juzi),
-    bajie:simpleSummary(bajie),
-    xiaoxin:simpleSummary(xiaoxin),
+    result:simpleSummary(res),
     time:new Date().toLocaleString('zh-CN',{hour12:false})
   });
   saveHist(items);
@@ -1373,7 +984,7 @@ async function copyCurrent(){
 
   try{
     await navigator.clipboard.writeText(lastCopyText);
-    msgEl.textContent='已复制当前三号结果';
+    msgEl.textContent='已复制当前结果';
   }catch(e){
     const ta=document.createElement('textarea');
     ta.value=lastCopyText;
@@ -1381,16 +992,11 @@ async function copyCurrent(){
     ta.select();
     document.execCommand('copy');
     document.body.removeChild(ta);
-    msgEl.textContent='已复制当前三号结果';
+    msgEl.textContent='已复制当前结果';
   }
 }
-
-/* =========================
-   操作
-========================= */
 function run(){
   const raw=roomEl.value.trim().replace(/\s+/g,'');
-
   if(!/^\d{5}$/.test(raw)){
     msgEl.textContent='请输入正确的5位数字';
     return;
@@ -1407,9 +1013,20 @@ function run(){
 
 goEl.addEventListener('click',run);
 copyBtn.addEventListener('click',copyCurrent);
-roomEl.addEventListener('keydown',e=>{ if(e.key==='Enter')run(); });
-roomEl.addEventListener('input',e=>{ e.target.value=e.target.value.replace(/\D/g,'').slice(0,5); });
-clearBtnEl.addEventListener('click',()=>{ localStorage.removeItem(HISTORY_KEY); renderHist(); });
+
+roomEl.addEventListener('keydown',e=>{
+  if(e.key==='Enter')run();
+});
+
+roomEl.addEventListener('input',e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,5);
+});
+
+clearBtnEl.addEventListener('click',()=>{
+  localStorage.removeItem(HISTORY_KEY);
+  renderHist();
+});
+
 renderHist();
 roomEl.focus();
 </script>
