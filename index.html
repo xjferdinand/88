@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#b00000"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="八戒v0.9">
-<title>八戒·5098636 v0.9</title>
+<meta name="apple-mobile-web-app-title" content="然仔核A/B">
+<title>然仔·5130004 核组合A/B</title>
 <style>
 :root{
   --bg:#0b0b0f;
@@ -50,12 +50,7 @@ body{
   background:var(--red);
   box-shadow:0 0 12px rgba(255,45,45,.9)
 }
-.version{
-  font-size:10px;
-  color:rgba(255,45,45,.65);
-  margin-left:4px;
-  font-weight:500;
-}
+.version{font-size:10px;color:rgba(255,45,45,.65);margin-left:4px;font-weight:500}
 .panel{
   background:linear-gradient(160deg,rgba(255,45,45,.08),transparent 55%),var(--card);
   border:1px solid var(--line);
@@ -76,281 +71,63 @@ input{
   text-align:center;
   font-weight:800
 }
-input:focus{
-  border-color:rgba(255,45,45,.65);
-  box-shadow:0 0 0 3px rgba(255,45,45,.12)
-}
-input::placeholder{
-  font-size:13px;
-  letter-spacing:1px;
-  font-weight:400
-}
-.btn-wrap{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:10px;
-  margin:14px 0 8px;
-}
+input:focus{border-color:rgba(255,45,45,.65);box-shadow:0 0 0 3px rgba(255,45,45,.12)}
+input::placeholder{font-size:13px;letter-spacing:1px;font-weight:400}
+.btn-wrap{display:flex;justify-content:center;align-items:center;gap:10px;margin:14px 0 8px}
 .btn-circle{
-  width:66px;
-  height:66px;
-  border-radius:50%;
-  border:2px solid rgba(255,45,45,.55);
+  width:66px;height:66px;border-radius:50%;border:2px solid rgba(255,45,45,.55);
   background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
-  color:#fff;
-  font-size:15px;
-  font-weight:900;
-  letter-spacing:1px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  color:#fff;font-size:15px;font-weight:900;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;
   box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18)
 }
 .btn-circle:active{transform:scale(.92)}
-.copyBtn{
-  height:38px;
-  padding:0 13px;
-  border-radius:999px;
-  border:1px solid rgba(255,176,32,.45);
-  background:rgba(255,176,32,.10);
-  color:#ffd18a;
-  font-size:12px;
-  font-weight:900;
-  cursor:pointer;
-}
+.copyBtn{height:38px;padding:0 13px;border-radius:999px;border:1px solid rgba(255,176,32,.45);background:rgba(255,176,32,.10);color:#ffd18a;font-size:12px;font-weight:900;cursor:pointer}
 .copyBtn:active{transform:scale(.96)}
-.msg{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  min-height:14px;
-  margin-bottom:8px
-}
-.result{
-  display:none;
-  flex-direction:column;
-  gap:10px
-}
-.acct{
-  border:1px solid var(--line);
-  border-radius:15px;
-  background:rgba(0,0,0,.18);
-  padding:10px
-}
-.acctHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px
-}
+.msg{text-align:center;font-size:12px;color:var(--muted);min-height:14px;margin-bottom:8px}
+.result{display:none;flex-direction:column;gap:10px}
+.acct{border:1px solid var(--line);border-radius:15px;background:rgba(0,0,0,.18);padding:10px}
+.acctHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .acctName{font-size:13px;font-weight:1000}
 .acctSub{font-size:9px;color:var(--muted);margin-top:2px}
-.acctBadge{
-  font-size:10px;
-  font-weight:900;
-  border-radius:999px;
-  padding:3px 8px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.05);
-  color:rgba(255,255,255,.7)
-}
-.hit-list{
-  display:flex;
-  flex-direction:column;
-  gap:6px
-}
-.hit{
-  display:grid;
-  grid-template-columns:auto 52px 1fr auto;
-  align-items:center;
-  gap:8px;
-  padding:8px 10px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.07);
-  background:rgba(0,0,0,.22)
-}
-.hit.a{
-  border-color:rgba(255,176,32,.55);
-  background:rgba(255,176,32,.10)
-}
-.hit.b{
-  border-color:rgba(92,255,154,.45);
-  background:rgba(92,255,154,.08)
-}
-.hit.skip{
-  border-color:rgba(255,45,45,.55);
-  background:rgba(255,45,45,.11)
-}
-.hit.info{
-  border-color:rgba(255,255,255,.09);
-  background:rgba(255,255,255,.03)
-}
-.hit-lbl{
-  font-size:9px;
-  font-weight:900;
-  padding:2px 6px;
-  border-radius:999px;
-  white-space:nowrap;
-  background:rgba(255,255,255,.08);
-  color:rgba(255,255,255,.60)
-}
-.hit.a .hit-lbl{
-  background:rgba(255,176,32,.28);
-  color:#ffd18a
-}
-.hit.b .hit-lbl{
-  background:rgba(92,255,154,.20);
-  color:rgba(140,255,185,.95)
-}
-.hit.skip .hit-lbl{
-  background:rgba(255,45,45,.35);
-  color:#ff9898
-}
-.hit-seat{
-  font-size:22px;
-  font-weight:1000;
-  color:var(--red);
-  text-shadow:0 0 12px rgba(255,45,45,.35);
-  line-height:1.05;
-  text-align:center;
-  white-space:nowrap
-}
-.hit.a .hit-seat{
-  color:var(--gold);
-  text-shadow:0 0 12px rgba(255,176,32,.25)
-}
-.hit.b .hit-seat{
-  color:var(--green);
-  text-shadow:0 0 12px rgba(92,255,154,.25)
-}
+.acctBadge{font-size:10px;font-weight:900;border-radius:999px;padding:3px 8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.7)}
+.hit-list{display:flex;flex-direction:column;gap:6px}
+.hit{display:grid;grid-template-columns:auto 52px 1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.22)}
+.hit.a{border-color:rgba(255,176,32,.55);background:rgba(255,176,32,.10)}
+.hit.b{border-color:rgba(92,255,154,.45);background:rgba(92,255,154,.08)}
+.hit.skip{border-color:rgba(255,45,45,.55);background:rgba(255,45,45,.11)}
+.hit.info{border-color:rgba(255,255,255,.09);background:rgba(255,255,255,.03)}
+.hit-lbl{font-size:9px;font-weight:900;padding:2px 6px;border-radius:999px;white-space:nowrap;background:rgba(255,255,255,.08);color:rgba(255,255,255,.60)}
+.hit.a .hit-lbl{background:rgba(255,176,32,.28);color:#ffd18a}
+.hit.b .hit-lbl{background:rgba(92,255,154,.20);color:rgba(140,255,185,.95)}
+.hit.skip .hit-lbl{background:rgba(255,45,45,.35);color:#ff9898}
+.hit-seat{font-size:22px;font-weight:1000;color:var(--red);text-shadow:0 0 12px rgba(255,45,45,.35);line-height:1.05;text-align:center;white-space:nowrap}
+.hit.a .hit-seat{color:var(--gold);text-shadow:0 0 12px rgba(255,176,32,.25)}
+.hit.b .hit-seat{color:var(--green);text-shadow:0 0 12px rgba(92,255,154,.25)}
 .hit.skip .hit-seat{color:#ff7b7b}
-.hit.info .hit-seat{
-  color:rgba(255,255,255,.25);
-  text-shadow:none
-}
+.hit.info .hit-seat{color:rgba(255,255,255,.25);text-shadow:none}
 .hit-body{line-height:1.4;min-width:0}
-.row1{
-  font-size:11px;
-  color:var(--text);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis
-}
-.row2{
-  font-size:10px;
-  color:var(--muted);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis
-}
-.row3{
-  font-size:9px;
-  color:rgba(255,255,255,.34);
-  margin-top:1px;
-  line-height:1.25
-}
+.row1{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row2{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row3{font-size:9px;color:rgba(255,255,255,.34);margin-top:1px;line-height:1.25}
 .hit-right{text-align:right;min-width:42px}
-.hit-wr{
-  font-size:11px;
-  font-weight:900;
-  color:rgba(92,255,154,.88)
-}
-.hit-avg{
-  font-size:9px;
-  color:rgba(255,255,255,.36);
-  margin-top:1px
-}
-.history{
-  margin-top:12px;
-  padding:10px 11px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.02)
-}
-.histHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:7px
-}
-.histTitle{
-  font-size:11px;
-  font-weight:800;
-  color:var(--muted)
-}
-.clearBtn{
-  font-size:10px;
-  padding:4px 8px;
-  border-radius:7px;
-  cursor:pointer;
-  border:1px solid rgba(255,45,45,.35);
-  background:rgba(255,45,45,.10);
-  color:rgba(255,100,100,.85)
-}
-.histList{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-  max-height:180px;
-  overflow:auto
-}
-.histItem{
-  border:1px solid rgba(255,255,255,.05);
-  border-radius:9px;
-  padding:7px 9px;
-  background:rgba(0,0,0,.14)
-}
-.histTop{
-  display:flex;
-  justify-content:space-between;
-  font-size:10px;
-  color:rgba(255,255,255,.35);
-  margin-bottom:2px
-}
-.histMain{
-  font-size:11px;
-  color:rgba(255,255,255,.62);
-  line-height:1.35
-}
-.pill{
-  display:inline-block;
-  padding:1px 6px;
-  border-radius:999px;
-  border:1px solid rgba(255,45,45,.35);
-  background:rgba(255,45,45,.10);
-  font-weight:800;
-  color:var(--red);
-  margin-right:3px
-}
-.tiny{
-  margin-top:12px;
-  padding-top:10px;
-  border-top:1px solid var(--line);
-  font-size:10px;
-  color:rgba(255,255,255,.30);
-  line-height:1.6;
-  white-space:pre-line
-}
-@media(max-width:430px){
-  body{padding:10px}
-  .app{width:100%}
-  .panel{padding:10px;border-radius:15px}
-  .hit{
-    grid-template-columns:auto 46px 1fr auto;
-    gap:6px;
-    padding:7px 8px
-  }
-  .hit-seat{font-size:19px}
-  .histMain{font-size:10px}
-  .tiny{font-size:9px}
-}
+.hit-wr{font-size:11px;font-weight:900;color:rgba(92,255,154,.88)}
+.hit-avg{font-size:9px;color:rgba(255,255,255,.36);margin-top:1px}
+.history{margin-top:12px;padding:10px 11px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.histHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.histTitle{font-size:11px;font-weight:800;color:var(--muted)}
+.clearBtn{font-size:10px;padding:4px 8px;border-radius:7px;cursor:pointer;border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);color:rgba(255,100,100,.85)}
+.histList{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow:auto}
+.histItem{border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:7px 9px;background:rgba(0,0,0,.14)}
+.histTop{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:2px}
+.histMain{font-size:11px;color:rgba(255,255,255,.62);line-height:1.35}
+.pill{display:inline-block;padding:1px 6px;border-radius:999px;border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);font-weight:800;color:var(--red);margin-right:3px}
+.tiny{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:10px;color:rgba(255,255,255,.30);line-height:1.6;white-space:pre-line}
+@media(max-width:430px){body{padding:10px}.app{width:100%}.panel{padding:10px;border-radius:15px}.hit{grid-template-columns:auto 46px 1fr auto;gap:6px;padding:7px 8px}.hit-seat{font-size:19px}.histMain{font-size:10px}.tiny{font-size:9px}}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="title">八戒·5098636<span class="version">v0.9 A/B/跳</span></div>
+  <div class="title">然仔·5130004<span class="version">核组合 A/B</span></div>
   <div class="panel">
     <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
     <div class="btn-wrap">
@@ -363,8 +140,8 @@ input::placeholder{
       <div class="acct">
         <div class="acctHead">
           <div>
-            <div class="acctName">八戒别跑·5098636</div>
-            <div class="acctSub">v0.9｜只输出A档 / B档 / 跳</div>
+            <div class="acctName">然仔·5130004</div>
+            <div class="acctSub">按房号自动扫1-6号｜输出A档 / B档 / 跳</div>
           </div>
           <div class="acctBadge" id="badge">—</div>
         </div>
@@ -374,42 +151,42 @@ input::placeholder{
 
     <div class="history">
       <div class="histHead">
-        <span class="histTitle">最近记录｜八戒v0.9</span>
+        <span class="histTitle">最近记录｜然仔核组合</span>
         <button class="clearBtn" id="clearBtn">清空</button>
       </div>
       <div class="histList" id="histList"></div>
     </div>
 
-    <div class="tiny">【八戒·5098636｜v0.9 实战版】
+    <div class="tiny">【然仔·5130004｜差值+和值核组合】
 只输出：A档 / B档 / 跳。
-不显示观察。
+
+座位取X：
+1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。
 
 计算规则：
-1）房号先去重。
-2）同数不能相加、不能相减。
-3）两个1只能算1，不能算2；两个3只能算3，不能算6。
-4）重复数字只做权重/乱核提示，不参与加减。
-5）X排名按去重后数字从大到小排序。
+1）X只和另外4位数字计算，不和自己那一位计算。
+2）差值核：|X-其他数字|，每一对都保留差值。
+3）和值核：X+其他数字，只有≤9才算和值核；>9不算和值核，只保留差值。
+4）同一座位同时出现某个差值和某个和值，就命中“差值+和值”组合。
 
-A档强进：
-A1：4号，X排名第2/3，X+不同数字=8。
-A2：4号，X≤6，X排名第2/3/4，X+不同数字=5，且房号里真实存在5。
+A档黄金核：
+A1：差值4 + 和值7｜大赢4｜大输0｜净分+3380。
+A2：差值3 + 和值5｜大赢2｜大输0｜净分+1500。
 
-B档短打：
-B1：1号，A=8，X排名第1，尾部不同两数成8。
-B2：3号，C=8，房号里8重复，X排名第1。
-B3：5号，E排名第4，E是差值位，但E≠1。
-B4：6号，E排名第1，E参与差7，但E≠8。
+B档观察核：
+B1：差值1 + 和值4｜大赢1｜大输0｜净分+1540。
+B2：差值4 + 和值5｜大赢1｜大输0｜净分+1080。
+B3：差值3 + 和值4｜大赢1｜大输0｜净分+1070。
+B4：差值6 + 和值4｜大赢1｜大输0｜净分+800。
 
 实战口诀：
-有A打A；无A有B短打；无A/B直接跳。
-4号最强；1号吃首位8；3号吃重复8；5号吃低位差值；6号吃差7但避开E=8；2号暂跳。
+主打：差4+和7；辅助：差3+和5；B档只短打；无A/B直接跳。
     </div>
   </div>
 </div>
 
 <script>
-const HISTORY_KEY='bajie_5098636_v09_no_obs';
+const HISTORY_KEY='ranzi_5130004_core_ab_v1';
 const HISTORY_LIMIT=30;
 
 const roomEl=document.getElementById('room');
@@ -421,26 +198,37 @@ const hitList=document.getElementById('hitList');
 const badge=document.getElementById('badge');
 const histListEl=document.getElementById('histList');
 const clearBtnEl=document.getElementById('clearBtn');
-
 let lastCopyText='';
 
-function getDigits(room){
-  return room.split('').map(Number);
+const COMBOS=[
+  {grade:'A档', name:'A1｜黄金主核', diff:4, sum:7, bigWin:4, bigLoss:0, net:'+3380', note:'差值4 + 和值7｜第一黄金核'},
+  {grade:'A档', name:'A2｜黄金辅核', diff:3, sum:5, bigWin:2, bigLoss:0, net:'+1500', note:'差值3 + 和值5｜第二黄金核'},
+  {grade:'B档', name:'B1｜观察短打', diff:1, sum:4, bigWin:1, bigLoss:0, net:'+1540', note:'差值1 + 和值4｜观察核'},
+  {grade:'B档', name:'B2｜观察短打', diff:4, sum:5, bigWin:1, bigLoss:0, net:'+1080', note:'差值4 + 和值5｜观察核'},
+  {grade:'B档', name:'B3｜观察短打', diff:3, sum:4, bigWin:1, bigLoss:0, net:'+1070', note:'差值3 + 和值4｜观察核'},
+  {grade:'B档', name:'B4｜观察短打', diff:6, sum:4, bigWin:1, bigLoss:0, net:'+800', note:'差值6 + 和值4｜观察核'}
+];
+
+function getDigits(room){return room.split('').map(Number);}
+function seatIndex(seat){
+  if(seat===1)return 0;
+  if(seat===2)return 1;
+  if(seat===3)return 2;
+  if(seat===4)return 3;
+  return 4;
 }
-function unique(arr){
-  return [...new Set(arr)];
+function seatPos(seat){
+  if(seat===1)return 'A';
+  if(seat===2)return 'B';
+  if(seat===3)return 'C';
+  if(seat===4)return 'D';
+  return 'E';
 }
 function getRepeatInfo(digits){
   const count={};
   digits.forEach(n=>count[n]=(count[n]||0)+1);
-
-  const groups=Object.entries(count)
-    .map(([num,c])=>({num:Number(num),count:c}))
-    .sort((a,b)=>b.count-a.count||a.num-b.num);
-
-  const repeatedNums=groups.filter(g=>g.count>=2).map(g=>g.num);
+  const groups=Object.entries(count).map(([num,c])=>({num:Number(num),count:c})).sort((a,b)=>b.count-a.count||a.num-b.num);
   const shape=groups.map(g=>g.count).sort((a,b)=>b-a).join('');
-
   let type='无重号';
   if(shape==='2111')type='单对子';
   else if(shape==='221')type='双对子';
@@ -448,331 +236,123 @@ function getRepeatInfo(digits){
   else if(shape==='32')type='三带二';
   else if(shape==='41')type='四重号';
   else if(shape==='5')type='五重号';
-
-  return{
-    type,
-    hasRepeat:repeatedNums.length>0,
-    repeatedNums,
-    groups,
-    count
-  };
+  return {type,groups,count,repeatedNums:groups.filter(g=>g.count>=2).map(g=>g.num)};
 }
 function getBase(room){
-  const[A,B,C,D,E]=getDigits(room);
-  const digits=[A,B,C,D,E];
-  const uniq=unique(digits);
-  const sorted=[...uniq].sort((a,b)=>b-a);
+  const digits=getDigits(room);
+  const [A,B,C,D,E]=digits;
+  const sorted=[...new Set(digits)].sort((a,b)=>b-a);
   const rankMap={};
-
   sorted.forEach((n,i)=>rankMap[n]=i+1);
-
-  const sum=A+B+C+D+E;
-  const max=Math.max(...digits);
-  const min=Math.min(...digits);
-  const range=max-min;
-  const hasZero=digits.includes(0);
-  const xMap={1:A,2:B,3:C,4:D,5:E,6:E};
-  const repeat=getRepeatInfo(digits);
-
-  return{
-    A,B,C,D,E,
-    digits,
-    uniq,
-    sorted,
-    rankMap,
-    sum,
-    max,
-    min,
-    range,
-    hasZero,
-    xMap,
-    repeat
+  return {
+    A,B,C,D,E,digits,sorted,rankMap,
+    sum:digits.reduce((a,b)=>a+b,0),
+    max:Math.max(...digits),
+    min:Math.min(...digits),
+    range:Math.max(...digits)-Math.min(...digits),
+    repeat:getRepeatInfo(digits)
   };
 }
-function seatPos(seat){
-  if(seat===1)return'A';
-  if(seat===2)return'B';
-  if(seat===3)return'C';
-  if(seat===4)return'D';
-  return'E';
-}
-function xRank(seat,d){
-  return d.rankMap[d.xMap[seat]];
-}
-function xText(seat,d){
-  const x=d.xMap[seat];
-  const pos=seatPos(seat);
-  const rank=xRank(seat,d);
-  const oe=x%2===0?'偶':'奇';
-  return`X=${pos}${x}｜排名${rank}｜${oe}`;
-}
-function addCandidate(list,seat,grade,name,reason,d,extra){
-  list.push({
-    seat,
-    grade,
-    name,
-    reason,
-    xText:xText(seat,d),
-    extra:extra||''
+function calcSeat(room,seat){
+  const d=getBase(room);
+  const idx=seatIndex(seat);
+  const X=d.digits[idx];
+  const diffs=[];
+  const sums=[];
+  const details=[];
+
+  d.digits.forEach((n,i)=>{
+    if(i===idx)return;
+    const diff=Math.abs(X-n);
+    diffs.push(diff);
+    const sum=X+n;
+    if(sum<=9)sums.push(sum);
+    details.push(`${X}对${n}:差${diff}${sum<=9?`/和${sum}`:'/和溢出'}`);
   });
+
+  return {
+    d,seat,X,pos:seatPos(seat),
+    rank:d.rankMap[X],
+    diffs:[...new Set(diffs)],
+    sums:[...new Set(sums)],
+    details
+  };
 }
-
-/*
-  同数不相加：
-  n === x 时，不能算 x+n。
-  例如4+4=8不允许。
-*/
-function twoSumTarget(x,uniq,target){
-  const hits=[];
-  for(const n of uniq){
-    if(n===x)continue;
-    const s=x+n;
-    if(s===target&&s<=9){
-      hits.push(`${x}+${n}=${target}`);
-    }
-  }
-  return hits;
+function hitCombo(seatData,combo){
+  return seatData.diffs.includes(combo.diff)&&seatData.sums.includes(combo.sum);
 }
-
-/*
-  尾部不同两数成8：
-  B/C/D/E去重后扫描。
-  同数不相加。
-*/
-function tailPairSum8(d){
-  const arr=unique([d.B,d.C,d.D,d.E]);
-  const hits=[];
-
-  for(let i=0;i<arr.length;i++){
-    for(let j=i+1;j<arr.length;j++){
-      if(arr[i]===arr[j])continue;
-      const s=arr[i]+arr[j];
-      if(s===8&&s<=9){
-        hits.push(`${arr[i]}+${arr[j]}=8`);
-      }
-    }
-  }
-
-  return hits;
-}
-
-/*
-  X是差值位：
-  存在不同数字 a、b，a>b，a-b=X。
-  同数不相减。
-*/
-function isDifferenceValue(x,uniq){
-  const hits=[];
-
-  for(const a of uniq){
-    for(const b of uniq){
-      if(a===b)continue;
-      if(a>b&&a-b===x){
-        hits.push(`${a}-${b}=${x}`);
-      }
-    }
-  }
-
-  return hits;
-}
-
-/*
-  X参与相减差target：
-  X可以是被减数或减数，但两个数必须不同。
-*/
-function participateDiffTarget(x,uniq,target){
-  const hits=[];
-
-  for(const n of uniq){
-    if(n===x)continue;
-
-    if(x>n&&x-n===target){
-      hits.push(`${x}-${n}=${target}`);
-    }
-
-    if(n>x&&n-x===target){
-      hits.push(`${n}-${x}=${target}`);
-    }
-  }
-
-  return hits;
-}
-
-function evaluateBajie(room){
+function evaluateRanzi(room){
   const d=getBase(room);
   const A=[];
   const B=[];
   const SKIP=[];
 
   for(let seat=1;seat<=6;seat++){
-    const x=d.xMap[seat];
-    const rank=xRank(seat,d);
+    const sd=calcSeat(room,seat);
+    const hits=COMBOS.filter(c=>hitCombo(sd,c));
+    const aHits=hits.filter(h=>h.grade==='A档');
+    const bHits=hits.filter(h=>h.grade==='B档');
 
-    const pair8=twoSumTarget(x,d.uniq,8);
-    const pair5=twoSumTarget(x,d.uniq,5);
-    const diffVal=isDifferenceValue(x,d.uniq);
-    const diff7=participateDiffTarget(x,d.uniq,7);
-
-    /*
-      A档只看4号：
-      A1：4号，X排名第2/3，X+不同数字=8。
-      A2：4号，X≤6，X排名第2/3/4，X+不同数字=5，且房号真实存在5。
-    */
-    if(seat===4){
-      const reasons=[];
-      const extras=[];
-
-      if((rank===2||rank===3)&&pair8.length){
-        reasons.push(`A1：4号中位拼8，${pair8.join('，')}`);
-        extras.push(pair8.join('，'));
-      }
-
-      if(x<=6&&(rank===2||rank===3||rank===4)&&pair5.length&&d.uniq.includes(5)){
-        reasons.push(`A2：4号拼真实5，${pair5.join('，')}，房内有真实5`);
-        extras.push(pair5.join('，'));
-      }
-
-      if(reasons.length){
-        addCandidate(
-          A,
-          seat,
-          'A档',
-          reasons.length>=2?'4号｜A档双命中':'4号｜中位拼核',
-          `A档强进：${reasons.join('；')}。同数不相加，均为不同数字关系。`,
-          d,
-          extras.join('；')
-        );
-        continue;
-      }
+    if(aHits.length){
+      const best=aHits[0];
+      A.push({seat,grade:'A档',combo:best,hits:aHits,sd});
+    }else if(bHits.length){
+      const best=bHits[0];
+      B.push({seat,grade:'B档',combo:best,hits:bHits,sd});
+    }else{
+      SKIP.push({seat,grade:'跳',sd});
     }
-
-    /*
-      B1：1号，A=8，X排名第1，尾部不同两数成8。
-    */
-    if(seat===1){
-      const tail8=tailPairSum8(d);
-      if(d.A===8&&rank===1&&tail8.length){
-        addCandidate(
-          B,
-          seat,
-          'B档',
-          '1号｜首位8短打',
-          `B档短打：A=8，X排名第1，尾部不同两数成8：${tail8.join('，')}。`,
-          d,
-          tail8.join('，')
-        );
-        continue;
-      }
-    }
-
-    /*
-      B2：3号，C=8，房号里8重复，排名1。
-    */
-    if(seat===3&&x===8&&rank===1&&d.repeat.count[8]>=2){
-      addCandidate(
-        B,
-        seat,
-        'B档',
-        '3号｜重复8短打',
-        `B档短打：C=8，X排名第1，房号里8重复。重复8只算权重，不参与加减。`,
-        d,
-        '重复8权重'
-      );
-      continue;
-    }
-
-    /*
-      B3：5号，E排名第4，E是差值位，但E≠1。
-    */
-    if(seat===5&&rank===4&&x!==1&&diffVal.length){
-      addCandidate(
-        B,
-        seat,
-        'B档',
-        '5号｜低位差值',
-        `B档短打：E排名第4，E是差值位：${diffVal.join('，')}，且E≠1。`,
-        d,
-        diffVal.join('，')
-      );
-      continue;
-    }
-
-    /*
-      B4：6号，E排名第1，参与差7，但E≠8。
-    */
-    if(seat===6&&rank===1&&x!==8&&diff7.length){
-      addCandidate(
-        B,
-        seat,
-        'B档',
-        '6号｜高位差7',
-        `B档短打：E排名第1，E参与差7：${diff7.join('，')}，且E≠8。`,
-        d,
-        diff7.join('，')
-      );
-      continue;
-    }
-
-    addCandidate(
-      SKIP,
-      seat,
-      '跳',
-      `${seat}号｜跳`,
-      '未命中八戒v0.9 A/B，直接跳。',
-      d,
-      ''
-    );
   }
 
-  const aList=A.sort((x,y)=>x.seat-y.seat);
-  const bList=B.sort((x,y)=>x.seat-y.seat);
-  const formal=aList[0]||bList[0]||null;
-
-  return{
-    room,
-    data:d,
-    aList,
-    bList,
-    formal,
-    ok:!!formal
+  const rankScore={
+    'A1｜黄金主核':1,
+    'A2｜黄金辅核':2,
+    'B1｜观察短打':3,
+    'B2｜观察短打':4,
+    'B3｜观察短打':5,
+    'B4｜观察短打':6
   };
-}
+  A.sort((x,y)=>(rankScore[x.combo.name]-rankScore[y.combo.name])||(x.seat-y.seat));
+  B.sort((x,y)=>(rankScore[x.combo.name]-rankScore[y.combo.name])||(x.seat-y.seat));
 
+  const formal=A[0]||B[0]||null;
+  return {room,data:d,A,B,SKIP,formal,ok:!!formal};
+}
 function gradeCls(grade){
-  if(grade==='A档')return'a';
-  if(grade==='B档')return'b';
-  if(grade==='跳')return'skip';
-  return'info';
+  if(grade==='A档')return 'a';
+  if(grade==='B档')return 'b';
+  if(grade==='跳')return 'skip';
+  return 'info';
 }
 function actionText(grade){
-  if(grade==='A档')return'进';
-  if(grade==='B档')return'短';
-  if(grade==='跳')return'跳';
-  return'—';
+  if(grade==='A档')return '进';
+  if(grade==='B档')return '短';
+  return '跳';
 }
-function buildCard(item,d,index){
+function comboText(combo){
+  return `差值${combo.diff} + 和值${combo.sum}`;
+}
+function buildCard(item,index){
+  const sd=item.sd;
+  const combo=item.combo;
   const cls=gradeCls(item.grade);
-  const label=index===0
-    ? (item.grade==='A档'?'A主推'
-      :item.grade==='B档'?'B短打'
-      :'跳')
-    :item.grade;
-
+  const label=index===0?(item.grade==='A档'?'A主推':'B短打'):item.grade;
+  const allHits=item.hits.map(h=>comboText(h)).join('；');
+  const detail=sd.details.join('，');
   const div=document.createElement('div');
   div.className=`hit ${cls}`;
   div.innerHTML=`
     <div class="hit-lbl">${label}</div>
     <div class="hit-seat">${item.seat}</div>
     <div class="hit-body">
-      <div class="row1">${item.name}</div>
-      <div class="row2">${item.xText}｜S=${d.sum}｜跨度=${d.range}｜${d.repeat.type}</div>
-      <div class="row3">${item.reason}</div>
+      <div class="row1">${item.combo.note}</div>
+      <div class="row2">${sd.pos}=${sd.X}｜排名${sd.rank}｜命中：${allHits}</div>
+      <div class="row3">${comboText(combo)}｜大赢${combo.bigWin}｜大输${combo.bigLoss}｜净分${combo.net}。计算：${detail}</div>
     </div>
     <div class="hit-right">
       <div class="hit-wr">${actionText(item.grade)}</div>
       <div class="hit-avg">${item.grade}</div>
-    </div>
-  `;
+    </div>`;
   return div;
 }
 function buildSkipCard(res){
@@ -783,177 +363,82 @@ function buildSkipCard(res){
     <div class="hit-lbl">跳</div>
     <div class="hit-seat">跳</div>
     <div class="hit-body">
-      <div class="row1">未命中A/B正式进房</div>
-      <div class="row2">S=${d.sum}｜跨度=${d.range}｜${d.hasZero?'有0':'无0'}｜${d.repeat.type}</div>
-      <div class="row3">有A打A；无A有B短打；无A/B直接跳。</div>
+      <div class="row1">未命中A/B组合</div>
+      <div class="row2">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}｜S=${d.sum}｜跨度=${d.range}｜${d.repeat.type}</div>
+      <div class="row3">未出现：差4+和7、差3+和5、差1+和4、差4+和5、差3+和4、差6+和4。</div>
     </div>
-    <div class="hit-right">
-      <div class="hit-wr">跳</div>
-      <div class="hit-avg">无</div>
-    </div>
-  `;
+    <div class="hit-right"><div class="hit-wr">跳</div><div class="hit-avg">无</div></div>`;
   return div;
 }
 function buildInfoCard(res){
   const d=res.data;
+  const repeated=d.repeat.repeatedNums.length?d.repeat.repeatedNums.join('/'):'无';
   const div=document.createElement('div');
   div.className='hit info';
-  const repeatNums=d.repeat.repeatedNums.length?d.repeat.repeatedNums.join('/'):'无';
-
   div.innerHTML=`
     <div class="hit-lbl">数据</div>
     <div class="hit-seat">数</div>
     <div class="hit-body">
       <div class="row1">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
-      <div class="row2">去重=${d.uniq.join('')}｜排序=${d.sorted.join('>')}｜S=${d.sum}｜跨度=${d.range}</div>
-      <div class="row3">重号=${d.repeat.type}｜重复数字=${repeatNums}｜同数不参与加减</div>
+      <div class="row2">排序=${d.sorted.join('>')}｜S=${d.sum}｜跨度=${d.range}</div>
+      <div class="row3">重号=${d.repeat.type}｜重复数字=${repeated}｜和值>9已按溢出处理，不显示和值核。</div>
     </div>
-    <div class="hit-right">
-      <div class="hit-wr">v0.9</div>
-      <div class="hit-avg">八戒</div>
-    </div>
-  `;
-
+    <div class="hit-right"><div class="hit-wr">核</div><div class="hit-avg">A/B</div></div>`;
   return div;
 }
 function render(room){
-  const res=evaluateBajie(room);
+  const res=evaluateRanzi(room);
   hitList.innerHTML='';
-
-  const all=[...res.aList,...res.bList];
-
-  if(all.length){
-    all.forEach((item,index)=>{
-      hitList.appendChild(buildCard(item,res.data,index));
-    });
-  }else{
-    hitList.appendChild(buildSkipCard(res));
-  }
-
+  const all=[...res.A,...res.B];
+  if(all.length){all.forEach((item,index)=>hitList.appendChild(buildCard(item,index)));}
+  else{hitList.appendChild(buildSkipCard(res));}
   hitList.appendChild(buildInfoCard(res));
   resultEl.style.display='flex';
-
-  if(res.ok&&res.formal){
-    badge.textContent=`${res.formal.grade}｜${res.formal.seat}号`;
-  }else{
-    badge.textContent='跳';
-  }
-
+  badge.textContent=res.formal?`${res.formal.grade}｜${res.formal.seat}号`:'跳';
   lastCopyText=buildCopyText(room,res);
   pushHistory(room,res);
   return res;
 }
 function simpleSummary(res){
-  if(res.ok&&res.formal){
-    return `${res.formal.grade}｜${res.formal.seat}号｜${res.formal.name}`;
-  }
+  if(res.formal){return `${res.formal.grade}｜${res.formal.seat}号｜${comboText(res.formal.combo)}｜${res.formal.combo.net}`;}
   return '跳';
 }
 function buildCopyText(room,res){
-  const summary=simpleSummary(res);
-  const reason=res.formal?res.formal.reason:'无A/B命中，直接跳。';
-
-  return `房号：${room}
-八戒·5098636：${summary}
-理由：${reason}`;
+  if(!res.formal){return `房号：${room}\n然仔·5130004：跳\n理由：未命中A/B组合。`;}
+  const f=res.formal;
+  return `房号：${room}\n然仔·5130004：${f.grade}｜推荐${f.seat}号｜${comboText(f.combo)}\n数据：大赢${f.combo.bigWin}｜大输${f.combo.bigLoss}｜净分${f.combo.net}\n理由：${f.sd.pos}=${f.sd.X}，同局出现${comboText(f.combo)}。`;
 }
-
-function loadHist(){
-  try{
-    return JSON.parse(localStorage.getItem(HISTORY_KEY))||[];
-  }catch{
-    return[];
-  }
-}
-function saveHist(items){
-  localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,HISTORY_LIMIT)));
-}
+function loadHist(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY))||[];}catch{return[];}}
+function saveHist(items){localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,HISTORY_LIMIT)));}
 function renderHist(){
-  const items=loadHist();
-  histListEl.innerHTML='';
-
-  if(!items.length){
-    histListEl.innerHTML=`<div class="histItem"><div class="histMain" style="color:rgba(255,255,255,.2)">暂无记录</div></div>`;
-    return;
-  }
-
+  const items=loadHist();histListEl.innerHTML='';
+  if(!items.length){histListEl.innerHTML=`<div class="histItem"><div class="histMain" style="color:rgba(255,255,255,.2)">暂无记录</div></div>`;return;}
   items.forEach(item=>{
-    const div=document.createElement('div');
-    div.className='histItem';
-    div.innerHTML=`
-      <div class="histTop">
-        <span>房号 <span class="pill">${item.room}</span></span>
-        <span>${item.time}</span>
-      </div>
-      <div class="histMain">${item.result}</div>
-    `;
+    const div=document.createElement('div');div.className='histItem';
+    div.innerHTML=`<div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div><div class="histMain">${item.result}</div>`;
     histListEl.appendChild(div);
   });
 }
 function pushHistory(room,res){
-  const items=loadHist();
-  items.unshift({
-    room,
-    result:simpleSummary(res),
-    time:new Date().toLocaleString('zh-CN',{hour12:false})
-  });
-  saveHist(items);
-  renderHist();
+  const items=loadHist();items.unshift({room,result:simpleSummary(res),time:new Date().toLocaleString('zh-CN',{hour12:false})});saveHist(items);renderHist();
 }
 async function copyCurrent(){
-  if(!lastCopyText){
-    msgEl.textContent='先输入房号并开干，再复制结果';
-    return;
-  }
-
-  try{
-    await navigator.clipboard.writeText(lastCopyText);
-    msgEl.textContent='已复制当前结果';
-  }catch(e){
-    const ta=document.createElement('textarea');
-    ta.value=lastCopyText;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    msgEl.textContent='已复制当前结果';
-  }
+  if(!lastCopyText){msgEl.textContent='先输入房号并开干，再复制结果';return;}
+  try{await navigator.clipboard.writeText(lastCopyText);msgEl.textContent='已复制当前结果';}
+  catch(e){const ta=document.createElement('textarea');ta.value=lastCopyText;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);msgEl.textContent='已复制当前结果';}
 }
 function run(){
   const raw=roomEl.value.trim().replace(/\s+/g,'');
-
-  if(!/^\d{5}$/.test(raw)){
-    msgEl.textContent='请输入正确的5位数字';
-    return;
-  }
-
-  msgEl.textContent='';
-  render(raw);
-
-  setTimeout(()=>{
-    roomEl.value='';
-    roomEl.focus();
-  },180);
+  if(!/^\d{5}$/.test(raw)){msgEl.textContent='请输入正确的5位数字';return;}
+  msgEl.textContent='';render(raw);
+  setTimeout(()=>{roomEl.value='';roomEl.focus();},180);
 }
-
 goEl.addEventListener('click',run);
 copyBtn.addEventListener('click',copyCurrent);
-
-roomEl.addEventListener('keydown',e=>{
-  if(e.key==='Enter')run();
-});
-
-roomEl.addEventListener('input',e=>{
-  e.target.value=e.target.value.replace(/\D/g,'').slice(0,5);
-});
-
-clearBtnEl.addEventListener('click',()=>{
-  localStorage.removeItem(HISTORY_KEY);
-  renderHist();
-});
-
-renderHist();
-roomEl.focus();
+roomEl.addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+roomEl.addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,5);});
+clearBtnEl.addEventListener('click',()=>{localStorage.removeItem(HISTORY_KEY);renderHist();});
+renderHist();roomEl.focus();
 </script>
 </body>
 </html>
