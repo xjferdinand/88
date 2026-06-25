@@ -2,443 +2,175 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<meta name="theme-color" content="#b00000"/>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="然仔核A/B">
-<title>然仔·5130004 核组合A/B</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>然仔 v6 PRO｜真实战绩锁位系统</title>
+
 <style>
-:root{
-  --bg:#0b0b0f;
-  --card:#11111a;
-  --line:rgba(255,255,255,.10);
-  --text:#f5f5f7;
-  --muted:rgba(255,255,255,.50);
-  --red:#ff2d2d;
-  --gold:#ffb020;
-  --green:#5cff9a;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(800px 400px at 50% 15%,rgba(255,45,45,.22),transparent 60%),
-    radial-gradient(900px 500px at 50% 110%,rgba(176,0,0,.28),transparent 60%),
-    var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-  padding:12px;
-}
-.app{width:min(460px,100%)}
-.title{
-  font-size:16px;
-  font-weight:900;
-  margin:0 0 12px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.title:before{
-  content:"";
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--red);
-  box-shadow:0 0 12px rgba(255,45,45,.9)
-}
-.version{font-size:10px;color:rgba(255,45,45,.65);margin-left:4px;font-weight:500}
-.panel{
-  background:linear-gradient(160deg,rgba(255,45,45,.08),transparent 55%),var(--card);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:12px;
-  box-shadow:0 20px 60px rgba(0,0,0,.55)
-}
-input{
-  width:100%;
-  padding:12px 14px;
-  font-size:22px;
-  letter-spacing:5px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.40);
-  color:var(--text);
-  outline:none;
-  text-align:center;
-  font-weight:800
-}
-input:focus{border-color:rgba(255,45,45,.65);box-shadow:0 0 0 3px rgba(255,45,45,.12)}
-input::placeholder{font-size:13px;letter-spacing:1px;font-weight:400}
-.btn-wrap{display:flex;justify-content:center;align-items:center;gap:10px;margin:14px 0 8px}
-.btn-circle{
-  width:66px;height:66px;border-radius:50%;border:2px solid rgba(255,45,45,.55);
-  background:radial-gradient(circle at 38% 32%,rgba(255,90,90,.95),rgba(155,0,0,.95));
-  color:#fff;font-size:15px;font-weight:900;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 18px rgba(255,45,45,.40),inset 0 1px 0 rgba(255,255,255,.18)
-}
-.btn-circle:active{transform:scale(.92)}
-.copyBtn{height:38px;padding:0 13px;border-radius:999px;border:1px solid rgba(255,176,32,.45);background:rgba(255,176,32,.10);color:#ffd18a;font-size:12px;font-weight:900;cursor:pointer}
-.copyBtn:active{transform:scale(.96)}
-.msg{text-align:center;font-size:12px;color:var(--muted);min-height:14px;margin-bottom:8px}
-.result{display:none;flex-direction:column;gap:10px}
-.acct{border:1px solid var(--line);border-radius:15px;background:rgba(0,0,0,.18);padding:10px}
-.acctHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.acctName{font-size:13px;font-weight:1000}
-.acctSub{font-size:9px;color:var(--muted);margin-top:2px}
-.acctBadge{font-size:10px;font-weight:900;border-radius:999px;padding:3px 8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.7)}
-.hit-list{display:flex;flex-direction:column;gap:6px}
-.hit{display:grid;grid-template-columns:auto 52px 1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.22)}
-.hit.a{border-color:rgba(255,176,32,.55);background:rgba(255,176,32,.10)}
-.hit.b{border-color:rgba(92,255,154,.45);background:rgba(92,255,154,.08)}
-.hit.skip{border-color:rgba(255,45,45,.55);background:rgba(255,45,45,.11)}
-.hit.info{border-color:rgba(255,255,255,.09);background:rgba(255,255,255,.03)}
-.hit-lbl{font-size:9px;font-weight:900;padding:2px 6px;border-radius:999px;white-space:nowrap;background:rgba(255,255,255,.08);color:rgba(255,255,255,.60)}
-.hit.a .hit-lbl{background:rgba(255,176,32,.28);color:#ffd18a}
-.hit.b .hit-lbl{background:rgba(92,255,154,.20);color:rgba(140,255,185,.95)}
-.hit.skip .hit-lbl{background:rgba(255,45,45,.35);color:#ff9898}
-.hit-seat{font-size:22px;font-weight:1000;color:var(--red);text-shadow:0 0 12px rgba(255,45,45,.35);line-height:1.05;text-align:center;white-space:nowrap}
-.hit.a .hit-seat{color:var(--gold);text-shadow:0 0 12px rgba(255,176,32,.25)}
-.hit.b .hit-seat{color:var(--green);text-shadow:0 0 12px rgba(92,255,154,.25)}
-.hit.skip .hit-seat{color:#ff7b7b}
-.hit.info .hit-seat{color:rgba(255,255,255,.25);text-shadow:none}
-.hit-body{line-height:1.4;min-width:0}
-.row1{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row2{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row3{font-size:9px;color:rgba(255,255,255,.34);margin-top:1px;line-height:1.25}
-.hit-right{text-align:right;min-width:42px}
-.hit-wr{font-size:11px;font-weight:900;color:rgba(92,255,154,.88)}
-.hit-avg{font-size:9px;color:rgba(255,255,255,.36);margin-top:1px}
-.history{margin-top:12px;padding:10px 11px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
-.histHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-.histTitle{font-size:11px;font-weight:800;color:var(--muted)}
-.clearBtn{font-size:10px;padding:4px 8px;border-radius:7px;cursor:pointer;border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);color:rgba(255,100,100,.85)}
-.histList{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow:auto}
-.histItem{border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:7px 9px;background:rgba(0,0,0,.14)}
-.histTop{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:2px}
-.histMain{font-size:11px;color:rgba(255,255,255,.62);line-height:1.35}
-.pill{display:inline-block;padding:1px 6px;border-radius:999px;border:1px solid rgba(255,45,45,.35);background:rgba(255,45,45,.10);font-weight:800;color:var(--red);margin-right:3px}
-.tiny{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:10px;color:rgba(255,255,255,.30);line-height:1.6;white-space:pre-line}
-@media(max-width:430px){body{padding:10px}.app{width:100%}.panel{padding:10px;border-radius:15px}.hit{grid-template-columns:auto 46px 1fr auto;gap:6px;padding:7px 8px}.hit-seat{font-size:19px}.histMain{font-size:10px}.tiny{font-size:9px}}
+body{background:#0b0b0f;color:#fff;font-family:Arial;padding:16px}
+input{width:100%;padding:12px;font-size:20px;text-align:center;margin-bottom:10px}
+button{padding:10px 16px;font-weight:bold;margin:5px}
+.card{background:#111;padding:10px;margin-top:10px;border-radius:10px}
+.ok{color:#00e0ff;font-weight:bold}
+.no{color:#ff4d4d;font-weight:bold}
+.small{color:#888;font-size:12px}
 </style>
+
 </head>
+
 <body>
-<div class="app">
-  <div class="title">然仔·5130004<span class="version">核组合 A/B</span></div>
-  <div class="panel">
-    <input id="room" inputmode="numeric" placeholder="输入5位房号" maxlength="5"/>
-    <div class="btn-wrap">
-      <button class="btn-circle" id="go">开干</button>
-      <button class="copyBtn" id="copyBtn">复制结果</button>
-    </div>
-    <div class="msg" id="msg"></div>
 
-    <div class="result" id="result">
-      <div class="acct">
-        <div class="acctHead">
-          <div>
-            <div class="acctName">然仔·5130004</div>
-            <div class="acctSub">按房号自动扫1-6号｜输出A档 / B档 / 跳</div>
-          </div>
-          <div class="acctBadge" id="badge">—</div>
-        </div>
-        <div class="hit-list" id="hitList"></div>
-      </div>
-    </div>
+<h3>然仔 v6 PRO｜真实战绩锁位系统</h3>
 
-    <div class="history">
-      <div class="histHead">
-        <span class="histTitle">最近记录｜然仔核组合</span>
-        <button class="clearBtn" id="clearBtn">清空</button>
-      </div>
-      <div class="histList" id="histList"></div>
-    </div>
+<input id="room" placeholder="输入5位房号"/>
+<button onclick="run()">检测</button>
 
-    <div class="tiny">【然仔·5130004｜差值+和值核组合】
-只输出：A档 / B档 / 跳。
-
-座位取X：
-1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。
-
-计算规则：
-1）X只和另外4位数字计算，不和自己那一位计算。
-2）差值核：|X-其他数字|，每一对都保留差值。
-3）和值核：X+其他数字，只有≤9才算和值核；>9不算和值核，只保留差值。
-4）同一座位同时出现某个差值和某个和值，就命中“差值+和值”组合。
-
-A档黄金核：
-A1：差值4 + 和值7｜大赢4｜大输0｜净分+3380。
-A2：差值3 + 和值5｜大赢2｜大输0｜净分+1500。
-
-B档观察核：
-B1：差值1 + 和值4｜大赢1｜大输0｜净分+1540。
-B2：差值4 + 和值5｜大赢1｜大输0｜净分+1080。
-B3：差值3 + 和值4｜大赢1｜大输0｜净分+1070。
-B4：差值6 + 和值4｜大赢1｜大输0｜净分+800。
-
-实战口诀：
-主打：差4+和7；辅助：差3+和5；B档只短打；无A/B直接跳。
-    </div>
-  </div>
-</div>
+<div id="out"></div>
 
 <script>
-const HISTORY_KEY='ranzi_5130004_core_ab_v1';
-const HISTORY_LIMIT=30;
 
-const roomEl=document.getElementById('room');
-const goEl=document.getElementById('go');
-const copyBtn=document.getElementById('copyBtn');
-const msgEl=document.getElementById('msg');
-const resultEl=document.getElementById('result');
-const hitList=document.getElementById('hitList');
-const badge=document.getElementById('badge');
-const histListEl=document.getElementById('histList');
-const clearBtnEl=document.getElementById('clearBtn');
-let lastCopyText='';
-
-const COMBOS=[
-  {grade:'A档', name:'A1｜黄金主核', diff:4, sum:7, bigWin:4, bigLoss:0, net:'+3380', note:'差值4 + 和值7｜第一黄金核'},
-  {grade:'A档', name:'A2｜黄金辅核', diff:3, sum:5, bigWin:2, bigLoss:0, net:'+1500', note:'差值3 + 和值5｜第二黄金核'},
-  {grade:'B档', name:'B1｜观察短打', diff:1, sum:4, bigWin:1, bigLoss:0, net:'+1540', note:'差值1 + 和值4｜观察核'},
-  {grade:'B档', name:'B2｜观察短打', diff:4, sum:5, bigWin:1, bigLoss:0, net:'+1080', note:'差值4 + 和值5｜观察核'},
-  {grade:'B档', name:'B3｜观察短打', diff:3, sum:4, bigWin:1, bigLoss:0, net:'+1070', note:'差值3 + 和值4｜观察核'},
-  {grade:'B档', name:'B4｜观察短打', diff:6, sum:4, bigWin:1, bigLoss:0, net:'+800', note:'差值6 + 和值4｜观察核'}
+/* ===================== 黄金结构 ===================== */
+const RULES=[
+  "A1","A2","A3","A4",
+  "B1","B2",
+  "C1","C2","C3","C4"
 ];
 
-function getDigits(room){return room.split('').map(Number);}
-function seatIndex(seat){
-  if(seat===1)return 0;
-  if(seat===2)return 1;
-  if(seat===3)return 2;
-  if(seat===4)return 3;
-  return 4;
-}
-function seatPos(seat){
-  if(seat===1)return 'A';
-  if(seat===2)return 'B';
-  if(seat===3)return 'C';
-  if(seat===4)return 'D';
-  return 'E';
-}
-function getRepeatInfo(digits){
-  const count={};
-  digits.forEach(n=>count[n]=(count[n]||0)+1);
-  const groups=Object.entries(count).map(([num,c])=>({num:Number(num),count:c})).sort((a,b)=>b.count-a.count||a.num-b.num);
-  const shape=groups.map(g=>g.count).sort((a,b)=>b-a).join('');
-  let type='无重号';
-  if(shape==='2111')type='单对子';
-  else if(shape==='221')type='双对子';
-  else if(shape==='311')type='三重号';
-  else if(shape==='32')type='三带二';
-  else if(shape==='41')type='四重号';
-  else if(shape==='5')type='五重号';
-  return {type,groups,count,repeatedNums:groups.filter(g=>g.count>=2).map(g=>g.num)};
-}
-function getBase(room){
-  const digits=getDigits(room);
-  const [A,B,C,D,E]=digits;
-  const sorted=[...new Set(digits)].sort((a,b)=>b-a);
-  const rankMap={};
-  sorted.forEach((n,i)=>rankMap[n]=i+1);
-  return {
-    A,B,C,D,E,digits,sorted,rankMap,
-    sum:digits.reduce((a,b)=>a+b,0),
-    max:Math.max(...digits),
-    min:Math.min(...digits),
-    range:Math.max(...digits)-Math.min(...digits),
-    repeat:getRepeatInfo(digits)
-  };
-}
-function calcSeat(room,seat){
-  const d=getBase(room);
-  const idx=seatIndex(seat);
-  const X=d.digits[idx];
-  const diffs=[];
-  const sums=[];
-  const details=[];
+/* ===================== 历史战绩数据库（自动学习） ===================== */
+const HISTORY=[
+  // 示例数据（你后面可以替换真实数据）
+  {room:"53162",seat:3,win:900,rule:"A1"},
+  {room:"53162",seat:4,win:700,rule:"A1"},
+  {room:"44245",seat:2,win:800,rule:"A2"},
+  {room:"70749",seat:4,win:1100,rule:"A3"},
+  {room:"62255",seat:3,win:950,rule:"A3"},
+  {room:"64132",seat:2,win:600,rule:"A2"},
+  {room:"78829",seat:3,win:1200,rule:"A1"},
+  {room:"51079",seat:4,win:750,rule:"A4"},
+];
 
-  d.digits.forEach((n,i)=>{
-    if(i===idx)return;
-    const diff=Math.abs(X-n);
-    diffs.push(diff);
-    const sum=X+n;
-    if(sum<=9)sums.push(sum);
-    details.push(`${X}对${n}:差${diff}${sum<=9?`/和${sum}`:'/和溢出'}`);
+/* ===================== 解析 ===================== */
+function parse(room){
+  return room.split("").map(Number);
+}
+
+/* ===================== 自动生成WIN MAP（核心） ===================== */
+function buildWinMap(){
+  let map={};
+
+  HISTORY.forEach(h=>{
+    if(!map[h.rule]) map[h.rule]={};
+    if(!map[h.rule][h.seat]) map[h.rule][h.seat]=0;
+    map[h.rule][h.seat]+=h.win;
   });
 
-  return {
-    d,seat,X,pos:seatPos(seat),
-    rank:d.rankMap[X],
-    diffs:[...new Set(diffs)],
-    sums:[...new Set(sums)],
-    details
-  };
+  return map;
 }
-function hitCombo(seatData,combo){
-  return seatData.diffs.includes(combo.diff)&&seatData.sums.includes(combo.sum);
-}
-function evaluateRanzi(room){
-  const d=getBase(room);
-  const A=[];
-  const B=[];
-  const SKIP=[];
+
+/* ===================== 黄金结构命中（简化测试） ===================== */
+function calc(room){
+  let A=parse(room);
+  let res=[];
 
   for(let seat=1;seat<=6;seat++){
-    const sd=calcSeat(room,seat);
-    const hits=COMBOS.filter(c=>hitCombo(sd,c));
-    const aHits=hits.filter(h=>h.grade==='A档');
-    const bHits=hits.filter(h=>h.grade==='B档');
+    let X=A[seat<=5?seat-1:4];
 
-    if(aHits.length){
-      const best=aHits[0];
-      A.push({seat,grade:'A档',combo:best,hits:aHits,sd});
-    }else if(bHits.length){
-      const best=bHits[0];
-      B.push({seat,grade:'B档',combo:best,hits:bHits,sd});
-    }else{
-      SKIP.push({seat,grade:'跳',sd});
+    let diffs=[],sums=[];
+
+    for(let i=0;i<A.length;i++){
+      if(i===seat-1)continue;
+
+      let d=Math.abs(X-A[i]);
+      diffs.push(d);
+
+      let s=X+A[i];
+      if(s<=9)sums.push(s);
     }
+
+    let hits=[];
+
+    if(diffs.includes(4))hits.push("A1");
+    if(diffs.includes(6))hits.push("A2");
+    if(diffs.includes(4))hits.push("A3");
+    if(sums.includes(4))hits.push("A4");
+
+    if(diffs.includes(1))hits.push("B1");
+    if(diffs.includes(5))hits.push("B2");
+
+    if(sums.includes(5))hits.push("C1");
+    if(sums.includes(4))hits.push("C2");
+    if(sums.includes(4))hits.push("C3");
+    if(diffs.includes(4))hits.push("C4");
+
+    res.push({seat,hits});
   }
 
-  const rankScore={
-    'A1｜黄金主核':1,
-    'A2｜黄金辅核':2,
-    'B1｜观察短打':3,
-    'B2｜观察短打':4,
-    'B3｜观察短打':5,
-    'B4｜观察短打':6
-  };
-  A.sort((x,y)=>(rankScore[x.combo.name]-rankScore[y.combo.name])||(x.seat-y.seat));
-  B.sort((x,y)=>(rankScore[x.combo.name]-rankScore[y.combo.name])||(x.seat-y.seat));
-
-  const formal=A[0]||B[0]||null;
-  return {room,data:d,A,B,SKIP,formal,ok:!!formal};
-}
-function gradeCls(grade){
-  if(grade==='A档')return 'a';
-  if(grade==='B档')return 'b';
-  if(grade==='跳')return 'skip';
-  return 'info';
-}
-function actionText(grade){
-  if(grade==='A档')return '进';
-  if(grade==='B档')return '短';
-  return '跳';
-}
-function comboText(combo){
-  return `差值${combo.diff} + 和值${combo.sum}`;
-}
-function buildCard(item,index){
-  const sd=item.sd;
-  const combo=item.combo;
-  const cls=gradeCls(item.grade);
-  const label=index===0?(item.grade==='A档'?'A主推':'B短打'):item.grade;
-  const allHits=item.hits.map(h=>comboText(h)).join('；');
-  const detail=sd.details.join('，');
-  const div=document.createElement('div');
-  div.className=`hit ${cls}`;
-  div.innerHTML=`
-    <div class="hit-lbl">${label}</div>
-    <div class="hit-seat">${item.seat}</div>
-    <div class="hit-body">
-      <div class="row1">${item.combo.note}</div>
-      <div class="row2">${sd.pos}=${sd.X}｜排名${sd.rank}｜命中：${allHits}</div>
-      <div class="row3">${comboText(combo)}｜大赢${combo.bigWin}｜大输${combo.bigLoss}｜净分${combo.net}。计算：${detail}</div>
-    </div>
-    <div class="hit-right">
-      <div class="hit-wr">${actionText(item.grade)}</div>
-      <div class="hit-avg">${item.grade}</div>
-    </div>`;
-  return div;
-}
-function buildSkipCard(res){
-  const d=res.data;
-  const div=document.createElement('div');
-  div.className='hit skip';
-  div.innerHTML=`
-    <div class="hit-lbl">跳</div>
-    <div class="hit-seat">跳</div>
-    <div class="hit-body">
-      <div class="row1">未命中A/B组合</div>
-      <div class="row2">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}｜S=${d.sum}｜跨度=${d.range}｜${d.repeat.type}</div>
-      <div class="row3">未出现：差4+和7、差3+和5、差1+和4、差4+和5、差3+和4、差6+和4。</div>
-    </div>
-    <div class="hit-right"><div class="hit-wr">跳</div><div class="hit-avg">无</div></div>`;
-  return div;
-}
-function buildInfoCard(res){
-  const d=res.data;
-  const repeated=d.repeat.repeatedNums.length?d.repeat.repeatedNums.join('/'):'无';
-  const div=document.createElement('div');
-  div.className='hit info';
-  div.innerHTML=`
-    <div class="hit-lbl">数据</div>
-    <div class="hit-seat">数</div>
-    <div class="hit-body">
-      <div class="row1">A${d.A} B${d.B} C${d.C} D${d.D} E${d.E}</div>
-      <div class="row2">排序=${d.sorted.join('>')}｜S=${d.sum}｜跨度=${d.range}</div>
-      <div class="row3">重号=${d.repeat.type}｜重复数字=${repeated}｜和值>9已按溢出处理，不显示和值核。</div>
-    </div>
-    <div class="hit-right"><div class="hit-wr">核</div><div class="hit-avg">A/B</div></div>`;
-  return div;
-}
-function render(room){
-  const res=evaluateRanzi(room);
-  hitList.innerHTML='';
-  const all=[...res.A,...res.B];
-  if(all.length){all.forEach((item,index)=>hitList.appendChild(buildCard(item,index)));}
-  else{hitList.appendChild(buildSkipCard(res));}
-  hitList.appendChild(buildInfoCard(res));
-  resultEl.style.display='flex';
-  badge.textContent=res.formal?`${res.formal.grade}｜${res.formal.seat}号`:'跳';
-  lastCopyText=buildCopyText(room,res);
-  pushHistory(room,res);
   return res;
 }
-function simpleSummary(res){
-  if(res.formal){return `${res.formal.grade}｜${res.formal.seat}号｜${comboText(res.formal.combo)}｜${res.formal.combo.net}`;}
-  return '跳';
-}
-function buildCopyText(room,res){
-  if(!res.formal){return `房号：${room}\n然仔·5130004：跳\n理由：未命中A/B组合。`;}
-  const f=res.formal;
-  return `房号：${room}\n然仔·5130004：${f.grade}｜推荐${f.seat}号｜${comboText(f.combo)}\n数据：大赢${f.combo.bigWin}｜大输${f.combo.bigLoss}｜净分${f.combo.net}\n理由：${f.sd.pos}=${f.sd.X}，同局出现${comboText(f.combo)}。`;
-}
-function loadHist(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY))||[];}catch{return[];}}
-function saveHist(items){localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,HISTORY_LIMIT)));}
-function renderHist(){
-  const items=loadHist();histListEl.innerHTML='';
-  if(!items.length){histListEl.innerHTML=`<div class="histItem"><div class="histMain" style="color:rgba(255,255,255,.2)">暂无记录</div></div>`;return;}
-  items.forEach(item=>{
-    const div=document.createElement('div');div.className='histItem';
-    div.innerHTML=`<div class="histTop"><span>房号 <span class="pill">${item.room}</span></span><span>${item.time}</span></div><div class="histMain">${item.result}</div>`;
-    histListEl.appendChild(div);
+
+/* ===================== 核心决策 ===================== */
+function decide(room){
+  let data=calc(room);
+  let WIN_MAP=buildWinMap();
+
+  let valid=[];
+
+  data.forEach(d=>{
+    let seat=d.seat;
+
+    d.hits.forEach(h=>{
+      if(WIN_MAP[h] && WIN_MAP[h][seat]){
+        valid.push({
+          seat,
+          rule:h,
+          score:WIN_MAP[h][seat]
+        });
+      }
+    });
   });
+
+  if(valid.length===0){
+    return {final:4,type:"跳"};
+  }
+
+  let best=null,max=-1;
+
+  valid.forEach(v=>{
+    if(v.score>max){
+      max=v.score;
+      best=v.seat;
+    }
+  });
+
+  return {
+    final:best,
+    type:"进",
+    valid
+  };
 }
-function pushHistory(room,res){
-  const items=loadHist();items.unshift({room,result:simpleSummary(res),time:new Date().toLocaleString('zh-CN',{hour12:false})});saveHist(items);renderHist();
-}
-async function copyCurrent(){
-  if(!lastCopyText){msgEl.textContent='先输入房号并开干，再复制结果';return;}
-  try{await navigator.clipboard.writeText(lastCopyText);msgEl.textContent='已复制当前结果';}
-  catch(e){const ta=document.createElement('textarea');ta.value=lastCopyText;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);msgEl.textContent='已复制当前结果';}
-}
+
+/* ===================== UI ===================== */
 function run(){
-  const raw=roomEl.value.trim().replace(/\s+/g,'');
-  if(!/^\d{5}$/.test(raw)){msgEl.textContent='请输入正确的5位数字';return;}
-  msgEl.textContent='';render(raw);
-  setTimeout(()=>{roomEl.value='';roomEl.focus();},180);
+  let room=document.getElementById("room").value.trim();
+  if(room.length!==5)return;
+
+  let r=decide(room);
+
+  let html="";
+
+  if(r.valid){
+    r.valid.forEach(v=>{
+      html+=`<div class="card">
+      命中：${v.rule}｜位子${v.seat}｜收益${v.score}
+      </div>`;
+    });
+  }
+
+  html+=`<div class="card ok">👉 最终：${r.type}｜主推位子：${r.final}</div>`;
+
+  document.getElementById("out").innerHTML=html;
 }
-goEl.addEventListener('click',run);
-copyBtn.addEventListener('click',copyCurrent);
-roomEl.addEventListener('keydown',e=>{if(e.key==='Enter')run();});
-roomEl.addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,5);});
-clearBtnEl.addEventListener('click',()=>{localStorage.removeItem(HISTORY_KEY);renderHist();});
-renderHist();roomEl.focus();
+
 </script>
+
 </body>
 </html>
