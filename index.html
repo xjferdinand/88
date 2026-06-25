@@ -3,171 +3,131 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>然仔 v6 PRO｜真实战绩锁位系统</title>
+<title>然仔｜最终实战版 v1.0</title>
 
 <style>
 body{background:#0b0b0f;color:#fff;font-family:Arial;padding:16px}
 input{width:100%;padding:12px;font-size:20px;text-align:center;margin-bottom:10px}
 button{padding:10px 16px;font-weight:bold;margin:5px}
 .card{background:#111;padding:10px;margin-top:10px;border-radius:10px}
-.ok{color:#00e0ff;font-weight:bold}
-.no{color:#ff4d4d;font-weight:bold}
+.good{color:#00e0ff;font-weight:bold}
+.mid{color:#ffb020}
+.bad{color:#ff4d4d}
 .small{color:#888;font-size:12px}
 </style>
-
 </head>
 
 <body>
 
-<h3>然仔 v6 PRO｜真实战绩锁位系统</h3>
+<h3>然仔｜最终实战版 v1.0</h3>
 
 <input id="room" placeholder="输入5位房号"/>
-<button onclick="run()">检测</button>
+<button onclick="run()">分析</button>
 
 <div id="out"></div>
 
 <script>
 
-/* ===================== 黄金结构 ===================== */
-const RULES=[
-  "A1","A2","A3","A4",
-  "B1","B2",
-  "C1","C2","C3","C4"
-];
+//////////////////////////////////////////////////////
+// 🧠 组合 → 位子映射（只保留≥500真实大赢结果）
+//////////////////////////////////////////////////////
 
-/* ===================== 历史战绩数据库（自动学习） ===================== */
-const HISTORY=[
-  // 示例数据（你后面可以替换真实数据）
-  {room:"53162",seat:3,win:900,rule:"A1"},
-  {room:"53162",seat:4,win:700,rule:"A1"},
-  {room:"44245",seat:2,win:800,rule:"A2"},
-  {room:"70749",seat:4,win:1100,rule:"A3"},
-  {room:"62255",seat:3,win:950,rule:"A3"},
-  {room:"64132",seat:2,win:600,rule:"A2"},
-  {room:"78829",seat:3,win:1200,rule:"A1"},
-  {room:"51079",seat:4,win:750,rule:"A4"},
-];
+const MAP = {
+  "A1":[3],
+  "A2":[2],
+  "A3":[3,4],
+  "A4":[4],
 
-/* ===================== 解析 ===================== */
-function parse(room){
-  return room.split("").map(Number);
+  "B1":[1],
+  "B2":[2],
+
+  "C1":[],
+  "C2":[2,4],
+  "C3":[3],
+  "C4":[4]
+};
+
+//////////////////////////////////////////////////////
+// 🧠 黄金结构（简化命中规则）
+//////////////////////////////////////////////////////
+
+function detect(room){
+  let d = room.split("").map(Number);
+
+  let hits = [];
+
+  // A类
+  if(Math.abs(d[0]-d[1])===4) hits.push("A1");
+  if(Math.abs(d[1]-d[2])===6) hits.push("A2");
+  if(Math.abs(d[2]-d[3])===4) hits.push("A3");
+  if(d[0]+d[1]===7) hits.push("A4");
+
+  // B类
+  if(Math.abs(d[0]-d[1])===1) hits.push("B1");
+  if(Math.abs(d[1]-d[2])===5) hits.push("B2");
+
+  // C类
+  if(d[0]+d[1]===5) hits.push("C1");
+  if(d[1]+d[2]===4) hits.push("C2");
+  if(Math.abs(d[2]-d[3])===3) hits.push("C3");
+  if(Math.abs(d[0]-d[1])===4) hits.push("C4");
+
+  return hits;
 }
 
-/* ===================== 自动生成WIN MAP（核心） ===================== */
-function buildWinMap(){
-  let map={};
+//////////////////////////////////////////////////////
+// 🧠 核心决策
+//////////////////////////////////////////////////////
 
-  HISTORY.forEach(h=>{
-    if(!map[h.rule]) map[h.rule]={};
-    if(!map[h.rule][h.seat]) map[h.rule][h.seat]=0;
-    map[h.rule][h.seat]+=h.win;
-  });
-
-  return map;
-}
-
-/* ===================== 黄金结构命中（简化测试） ===================== */
-function calc(room){
-  let A=parse(room);
-  let res=[];
-
-  for(let seat=1;seat<=6;seat++){
-    let X=A[seat<=5?seat-1:4];
-
-    let diffs=[],sums=[];
-
-    for(let i=0;i<A.length;i++){
-      if(i===seat-1)continue;
-
-      let d=Math.abs(X-A[i]);
-      diffs.push(d);
-
-      let s=X+A[i];
-      if(s<=9)sums.push(s);
-    }
-
-    let hits=[];
-
-    if(diffs.includes(4))hits.push("A1");
-    if(diffs.includes(6))hits.push("A2");
-    if(diffs.includes(4))hits.push("A3");
-    if(sums.includes(4))hits.push("A4");
-
-    if(diffs.includes(1))hits.push("B1");
-    if(diffs.includes(5))hits.push("B2");
-
-    if(sums.includes(5))hits.push("C1");
-    if(sums.includes(4))hits.push("C2");
-    if(sums.includes(4))hits.push("C3");
-    if(diffs.includes(4))hits.push("C4");
-
-    res.push({seat,hits});
-  }
-
-  return res;
-}
-
-/* ===================== 核心决策 ===================== */
 function decide(room){
-  let data=calc(room);
-  let WIN_MAP=buildWinMap();
 
-  let valid=[];
+  let hits = detect(room);
 
-  data.forEach(d=>{
-    let seat=d.seat;
+  let score = {1:0,2:0,3:0,4:0,5:0,6:0};
 
-    d.hits.forEach(h=>{
-      if(WIN_MAP[h] && WIN_MAP[h][seat]){
-        valid.push({
-          seat,
-          rule:h,
-          score:WIN_MAP[h][seat]
-        });
-      }
+  hits.forEach(h=>{
+    let seats = MAP[h] || [];
+    seats.forEach(s=>{
+      score[s] += 1;
     });
   });
 
-  if(valid.length===0){
-    return {final:4,type:"跳"};
-  }
+  let arr = Object.entries(score)
+    .map(x=>({seat:+x[0],score:x[1]}))
+    .sort((a,b)=>b.score-a.score);
 
-  let best=null,max=-1;
+  let max = arr[0].score;
 
-  valid.forEach(v=>{
-    if(v.score>max){
-      max=v.score;
-      best=v.seat;
-    }
-  });
+  let main = arr.filter(x=>x.score===max && x.score>0).map(x=>x.seat);
+  let mid  = arr.filter(x=>x.score>0 && x.score<max).map(x=>x.seat);
+  let bad  = arr.filter(x=>x.score===0).map(x=>x.seat);
 
-  return {
-    final:best,
-    type:"进",
-    valid
-  };
+  return {main,mid,bad,hits};
 }
 
-/* ===================== UI ===================== */
+//////////////////////////////////////////////////////
+// 🧠 UI
+//////////////////////////////////////////////////////
+
 function run(){
-  let room=document.getElementById("room").value.trim();
-  if(room.length!==5)return;
 
-  let r=decide(room);
-
-  let html="";
-
-  if(r.valid){
-    r.valid.forEach(v=>{
-      html+=`<div class="card">
-      命中：${v.rule}｜位子${v.seat}｜收益${v.score}
-      </div>`;
-    });
+  let room = document.getElementById("room").value.trim();
+  if(room.length!==5){
+    document.getElementById("out").innerHTML="请输入5位房号";
+    return;
   }
 
-  html+=`<div class="card ok">👉 最终：${r.type}｜主推位子：${r.final}</div>`;
+  let r = decide(room);
 
-  document.getElementById("out").innerHTML=html;
+  let html = "";
+
+  html += `<div class="card good">🔥 主推位：${r.main.length?r.main.join(","):"无"}</div>`;
+  html += `<div class="card mid">⚡ 次推位：${r.mid.length?r.mid.join(","):"无"}</div>`;
+  html += `<div class="card bad">❌ 过滤位：${r.bad.join(",")}</div>`;
+
+  html += `<div class="card small">命中组合：${r.hits.join(" / ")||"无"}</div>`;
+
+  document.getElementById("out").innerHTML = html;
 }
 
 </script>
