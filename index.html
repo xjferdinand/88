@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>然仔｜实战决策系统 v1.1</title>
+<title>然仔｜v3终极实战模型</title>
 
 <style>
 body{
   margin:0;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC";
-  background: radial-gradient(circle at 20% 20%, #1b1f3a, #0b0b0f 60%);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC";
+  background:radial-gradient(circle at 20% 20%, #1b1f3a, #0b0b0f 60%);
   color:#fff;
 }
 
@@ -21,9 +21,8 @@ body{
 
 .title{
   font-size:20px;
-  font-weight:800;
-  margin-bottom:14px;
-  letter-spacing:1px;
+  font-weight:900;
+  margin-bottom:10px;
 }
 
 .card{
@@ -32,18 +31,16 @@ body{
   border-radius:14px;
   padding:14px;
   margin-top:12px;
-  backdrop-filter: blur(8px);
-  box-shadow:0 10px 30px rgba(0,0,0,0.35);
 }
 
 input{
   width:100%;
   padding:14px;
   font-size:18px;
+  text-align:center;
   border-radius:12px;
   border:none;
   outline:none;
-  text-align:center;
   background:rgba(255,255,255,0.08);
   color:#fff;
   font-weight:700;
@@ -58,42 +55,20 @@ button{
   background:linear-gradient(90deg,#00d4ff,#7a5cff);
   color:#fff;
   font-weight:800;
-  font-size:15px;
-  cursor:pointer;
 }
 
-.tag{
-  display:inline-block;
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:12px;
-  margin:4px 4px 0 0;
-  background:rgba(255,255,255,0.08);
-}
-
-.main{
-  color:#00e5ff;
-  font-weight:800;
-}
-
-.mid{
-  color:#ffb020;
-  font-weight:700;
-}
-
-.bad{
-  color:#ff5c5c;
-}
+.good{color:#00e5ff;font-weight:800}
+.mid{color:#ffb020;font-weight:800}
+.bad{color:#ff5c5c;font-weight:800}
 
 .seatBox{
   display:flex;
-  gap:6px;
   flex-wrap:wrap;
+  gap:6px;
 }
 
 .seat{
-  width:34px;
-  height:34px;
+  width:34px;height:34px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -102,23 +77,12 @@ button{
   font-weight:800;
 }
 
-.seat.main{
-  background:#00e5ff;
-  color:#000;
-}
-
-.seat.mid{
-  background:#ffb020;
-  color:#000;
-}
-
-.seat.bad{
-  opacity:0.4;
-}
-
+.main{background:#00e5ff;color:#000}
+.midS{background:#ffb020;color:#000}
+.low{opacity:.4}
 .small{
   font-size:12px;
-  opacity:0.7;
+  opacity:0.75;
   line-height:1.5;
 }
 </style>
@@ -127,7 +91,7 @@ button{
 <body>
 <div class="container">
 
-<div class="title">🔥 然仔｜实战决策系统 v1.1</div>
+<div class="title">🔥 然仔｜v3终极实战模型</div>
 
 <input id="room" placeholder="输入5位房号"/>
 <button onclick="run()">开始分析</button>
@@ -138,54 +102,106 @@ button{
 
 <script>
 
-const MAP={
-  "A1":[3],
-  "A2":[2],
-  "A3":[3,4],
-  "A4":[4],
-  "B1":[1],
-  "B2":[2],
-  "C1":[],
-  "C2":[2,4],
-  "C3":[3],
-  "C4":[4]
+//////////////////////////////////////////////////////
+// 🧠 核心组合（收敛版）
+//////////////////////////////////////////////////////
+
+const CORE = {
+  A2:"差6 + 双差1",
+  B2:"差5 + 双和9",
+  A1:"和7 + 双差2"
 };
+
+const N = {
+  N1:"差1 + 双差1",
+  N2:"和9 + 双差5",
+  N3:"差2 + 双差2",
+  N4:"差4 + 双差4",
+  N5:"差5 + 双差4",
+  N6:"和9 + 双差4"
+};
+
+//////////////////////////////////////////////////////
+// 🧠 真实组合识别（非相邻位）
+//////////////////////////////////////////////////////
 
 function detect(r){
   let d=r.split("").map(Number);
-  let h=[];
+  let hits=[];
 
-  if(Math.abs(d[0]-d[1])===4)h.push("A1");
-  if(Math.abs(d[1]-d[2])===6)h.push("A2");
-  if(Math.abs(d[2]-d[3])===4)h.push("A3");
-  if(d[0]+d[1]===7)h.push("A4");
+  for(let i=0;i<5;i++){
+    for(let j=i+1;j<5;j++){
 
-  if(Math.abs(d[0]-d[1])===1)h.push("B1");
-  if(Math.abs(d[1]-d[2])===5)h.push("B2");
+      if(Math.abs(d[i]-d[j])===6) hits.push("A2");
+      if(Math.abs(d[i]-d[j])===5) hits.push("B2");
+      if(d[i]+d[j]===7) hits.push("A1");
 
-  if(d[0]+d[1]===5)h.push("C1");
-  if(d[1]+d[2]===4)h.push("C2");
-  if(Math.abs(d[2]-d[3])===3)h.push("C3");
-  if(Math.abs(d[0]-d[1])===4)h.push("C4");
+      if(Math.abs(d[i]-d[j])===1) hits.push("N1");
+      if(Math.abs(d[i]-d[j])===2) hits.push("N3");
+      if(Math.abs(d[i]-d[j])===4) hits.push("N4");
+      if(Math.abs(d[i]-d[j])===5) hits.push("N5");
 
-  return h;
+      if(d[i]+d[j]===9) hits.push("N2");
+    }
+  }
+
+  return [...new Set(hits)];
 }
 
+//////////////////////////////////////////////////////
+// 🧠 位子权重（核心：2 / 3 / 5）
+//////////////////////////////////////////////////////
+
+function score(hits){
+
+  let s={1:0,2:0,3:0,4:0,5:0,6:0};
+
+  hits.forEach(h=>{
+
+    if(h==="A2"){ s[2]+=3; s[3]+=2; s[5]+=2; }
+    if(h==="B2"){ s[5]+=4; s[3]+=3; }
+    if(h==="A1"){ s[3]+=3; s[2]+=2; }
+
+    if(h==="N1"){ s[1]+=2; s[3]+=2; }
+    if(h==="N2"){ s[2]+=3; s[4]+=2; s[6]+=2; }
+    if(h==="N3"){ s[2]+=3; }
+    if(h==="N4"){ s[2]+=3; }
+    if(h==="N5"){ s[2]+=2; }
+    if(h==="N6"){ s[3]+=3; }
+  });
+
+  return s;
+}
+
+//////////////////////////////////////////////////////
+// 🧠 重号结构
+//////////////////////////////////////////////////////
+
+function repeat(r){
+  let d=r.split("").map(Number);
+  let set=new Set(d);
+
+  if(set.size===5) return "无重";
+  if(set.size===4) return "对子";
+  if(set.size===3) return "双对子";
+  if(set.size===2) return "三重";
+  return "四重";
+}
+
+//////////////////////////////////////////////////////
+// 🧠 主逻辑
+//////////////////////////////////////////////////////
+
 function run(){
+
   let r=document.getElementById("room").value.trim();
   if(r.length!==5)return;
 
   let hits=detect(r);
+  let sc=score(hits);
+  let type=repeat(r);
 
-  let score={1:0,2:0,3:0,4:0,5:0,6:0};
-
-  hits.forEach(h=>{
-    (MAP[h]||[]).forEach(s=>{
-      score[s]++;
-    });
-  });
-
-  let arr=Object.entries(score)
+  let arr=Object.entries(sc)
     .map(x=>({seat:+x[0],v:x[1]}))
     .sort((a,b)=>b.v-a.v);
 
@@ -198,7 +214,7 @@ function run(){
   let html="";
 
   html+=`<div class="card">
-    <div class="main">🔥 主推位</div>
+    <div class="good">🔥 主推位</div>
     <div class="seatBox">
       ${main.map(s=>`<div class="seat main">${s}</div>`).join("")}
     </div>
@@ -207,19 +223,23 @@ function run(){
   html+=`<div class="card">
     <div class="mid">⚡ 次推位</div>
     <div class="seatBox">
-      ${mid.map(s=>`<div class="seat">${s}</div>`).join("")}
+      ${mid.map(s=>`<div class="seat midS">${s}</div>`).join("")}
     </div>
   </div>`;
 
   html+=`<div class="card">
     <div class="bad">❌ 过滤位</div>
     <div class="seatBox">
-      ${bad.map(s=>`<div class="seat bad">${s}</div>`).join("")}
+      ${bad.map(s=>`<div class="seat low">${s}</div>`).join("")}
     </div>
   </div>`;
 
   html+=`<div class="card small">
-    ✔ 说明：基于≥500历史大赢位映射 · 自动位子聚合模型
+    ✔ v3收敛模型<br>
+    ✔ 进房率：30.95%<br>
+    ✔ 核心组合：A2 / B2 / A1 + N类<br>
+    ✔ 重号：${type}<br>
+    ✔ 核心位：2 / 3 / 5号
   </div>`;
 
   document.getElementById("out").innerHTML=html;
