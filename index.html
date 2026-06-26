@@ -3,278 +3,174 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>然仔｜v6记录增强系统</title>
+<title>然仔｜v9终极锁死系统</title>
 
 <style>
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC";
-  background:radial-gradient(circle at 20% 20%, #1b1f3a, #0b0b0f 60%);
+  background:#000;
   color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC";
 }
 
 .container{
   max-width:520px;
   margin:0 auto;
-  padding:18px;
-}
-
-.title{
-  font-size:20px;
-  font-weight:900;
-  margin-bottom:10px;
-}
-
-.card{
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:14px;
-  padding:14px;
-  margin-top:12px;
+  padding:20px;
+  text-align:center;
 }
 
 input{
-  width:100%;
+  width:70%;
   padding:14px;
   font-size:18px;
   text-align:center;
   border-radius:12px;
-  border:none;
-  outline:none;
-  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.05);
   color:#fff;
-  font-weight:700;
 }
 
 button{
-  width:100%;
-  margin-top:10px;
-  padding:12px;
+  margin-top:18px;
+  width:100px;
+  height:100px;
+  border-radius:50%;
   border:none;
-  border-radius:12px;
-  background:linear-gradient(90deg,#00d4ff,#7a5cff);
+  background:radial-gradient(circle,#ff4d4d,#8b0000);
   color:#fff;
-  font-weight:800;
-  cursor:pointer;
-}
-
-.clearBtn{
-  background:linear-gradient(90deg,#ff5c5c,#ffb020);
-}
-
-.seatBox{
-  display:flex;
-  gap:10px;
-}
-
-.seat{
-  width:80px;
-  height:80px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:16px;
-  font-size:26px;
   font-weight:900;
+  cursor:pointer;
+  box-shadow:0 0 25px rgba(255,0,0,0.4);
 }
 
-.main{
-  background:#00e5ff;
-  color:#000;
-}
-
-.sub{
-  background:#ffb020;
-  color:#000;
-}
-
-.log{
-  font-size:12px;
-  opacity:0.85;
-  line-height:1.6;
-  max-height:220px;
-  overflow:auto;
+.card{
+  margin-top:20px;
+  padding:14px;
+  background:rgba(255,255,255,0.05);
+  border-radius:12px;
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-<div class="title">🔥 然仔｜v6记录增强系统</div>
+<h3>🔥 然仔｜v9终极锁死系统</h3>
 
-<input id="room" placeholder="输入5位房号（回车可执行）"/>
+<input id="room" placeholder="输入5位房号"/><br/>
 
-<button onclick="run()">开始分析</button>
-<button class="clearBtn" onclick="clearLog()">清空记录</button>
+<button onclick="run()">开干</button>
 
 <div id="out"></div>
-
-<div class="card">
-  <div style="font-weight:800;margin-bottom:6px;">📜 历史记录</div>
-  <div id="log" class="log"></div>
-</div>
 
 </div>
 
 <script>
 
 //////////////////////////////////////////////////////
-// 🧠 组合检测（v6）
+// 🧠 Step1：组合识别
 //////////////////////////////////////////////////////
 
 function detect(r){
 
   let d = r.split("").map(Number);
-  let hits = [];
+
+  let strong=[], mid=[], weak=[];
 
   for(let i=0;i<5;i++){
     for(let j=i+1;j<5;j++){
 
-      let diff = Math.abs(d[i]-d[j]);
-      let sum = d[i]+d[j];
+      let diff=Math.abs(d[i]-d[j]);
+      let sum=d[i]+d[j];
 
-      if(diff===6 && hasDiff1(d)) hits.push("A2");
-      if(diff===5 && sum===9 && hasRepeat(d)) hits.push("B2");
-      if(sum===7 && hasDiff2(d)) hits.push("A1");
+      if(diff===6) strong.push("A2");
+      if(diff===5 && sum===9) strong.push("B2");
 
-      if(diff===1) hits.push("N1");
-      if(diff===2) hits.push("N3");
-      if(diff===4) hits.push("N4");
-      if(diff===5) hits.push("N5");
-      if(sum===9) hits.push("N2");
+      if(sum===7) mid.push("A1");
+      if(sum===9) mid.push("N2");
+      if(diff===2) mid.push("N3");
+
+      if(diff===1) weak.push("N1");
+      if(diff===4) weak.push("N4");
+      if(diff===5) weak.push("N5");
 
     }
   }
-
-  return [...new Set(hits)];
-}
-
-function hasRepeat(d){
-  return new Set(d).size < 5;
-}
-function hasDiff1(d){
-  for(let i=0;i<5;i++){
-    for(let j=i+1;j<5;j++){
-      if(Math.abs(d[i]-d[j])===1) return true;
-    }
-  }
-  return false;
-}
-function hasDiff2(d){
-  for(let i=0;i<5;i++){
-    for(let j=i+1;j<5;j++){
-      if(Math.abs(d[i]-d[j])===2) return true;
-    }
-  }
-  return false;
-}
-
-//////////////////////////////////////////////////////
-// 🧠 锁死决策（主推 + 副推）
-//////////////////////////////////////////////////////
-
-function decide(hits){
-
-  const priority = ["B2","A2","A1","N3","N4","N5","N2","N1"];
-
-  let main = null;
-
-  for(let p of priority){
-    if(hits.includes(p)){
-      main = p;
-      break;
-    }
-  }
-
-  const map = {
-    B2:{main:"🔥主推",a:5,b:3},
-    A2:{main:"🔥主推",a:2,b:5},
-    A1:{main:"🔥主推",a:3,b:2},
-    N3:{main:"⚡主推",a:2,b:3},
-    N4:{main:"⚡主推",a:2,b:3},
-    N5:{main:"⚡主推",a:2,b:4},
-    N2:{main:"⚡主推",a:2,b:4},
-    N1:{main:"⚡主推",a:1,b:3}
-  };
 
   return {
-    combo:main,
-    res:map[main] || {main:"无",a:"-",b:"-"}
+    strong:[...new Set(strong)],
+    mid:[...new Set(mid)],
+    weak:[...new Set(weak)]
   };
 }
 
 //////////////////////////////////////////////////////
-// 🧠 本地存储记录
+// 🧠 Step2：唯一决策
 //////////////////////////////////////////////////////
 
-function saveLog(item){
-  let logs = JSON.parse(localStorage.getItem("logs") || "[]");
-  logs.unshift(item);
-  localStorage.setItem("logs", JSON.stringify(logs));
-  renderLog();
-}
+function decide(s,m,w){
 
-function renderLog(){
-  let logs = JSON.parse(localStorage.getItem("logs") || "[]");
-  document.getElementById("log").innerHTML =
-    logs.map(l =>
-      `房号：${l.room} ｜ ${l.combo} ｜ 主${l.main} 副${l.sub}`
-    ).join("<br>");
-}
+  if(s.includes("B2")) return "B2";
+  if(s.includes("A2")) return "A2";
 
-function clearLog(){
-  localStorage.removeItem("logs");
-  renderLog();
+  if(m.includes("A1")) return "A1";
+  if(m.includes("N2")) return "N2";
+  if(m.includes("N3")) return "N3";
+
+  return "WEAK";
 }
 
 //////////////////////////////////////////////////////
-// 🧠 主运行
+// 🧠 Step3：确定性位子系统（锁死）
+//////////////////////////////////////////////////////
+
+function getSeat(room, combo){
+
+  const hash = parseInt(room) % 6;
+
+  const map = {
+    B2:[5,3],
+    A2:[2,5],
+    A1:[3,2],
+    N2:[2,4],
+    N3:[3,1],
+    WEAK:[1,0]
+  };
+
+  let arr = map[combo] || [0,0];
+
+  let i = hash % arr.length;
+
+  return {
+    main:arr[i],
+    sub:arr[(i+1)%arr.length]
+  };
+}
+
+//////////////////////////////////////////////////////
+// 🧠 主函数
 //////////////////////////////////////////////////////
 
 function run(){
 
-  let r = document.getElementById("room").value.trim();
+  let r=document.getElementById("room").value.trim();
   if(r.length!==5)return;
 
-  let hits = detect(r);
-  let out = decide(hits);
+  let res=detect(r);
+  let combo=decide(res.strong,res.mid,res.weak);
+  let seat=getSeat(r,combo);
 
-  document.getElementById("out").innerHTML = `
+  document.getElementById("out").innerHTML=`
     <div class="card">
-      <div class="seatBox">
-        <div class="seat main">${out.res.a}</div>
-        <div class="seat sub">${out.res.b}</div>
-      </div>
-      <div style="margin-top:8px;font-size:12px;opacity:0.8;">
-        ✔ 主推 / 副推已锁定<br>
-        ✔ 命中组合：${out.combo || "无"}<br>
-        ✔ 输出：唯一决策
-      </div>
+      🔥 主推：${seat.main}<br/>
+      ⚡ 副推：${seat.sub}<br/>
+      📦 组合：${combo}<br/>
+      🧠 状态：v9锁死版
     </div>
   `;
-
-  saveLog({
-    room:r,
-    combo:out.combo,
-    main:out.res.a,
-    sub:out.res.b
-  });
-
-  document.getElementById("room").value="";
 }
-
-//////////////////////////////////////////////////////
-// 🧠 回车触发
-//////////////////////////////////////////////////////
-
-document.getElementById("room").addEventListener("keydown",function(e){
-  if(e.key==="Enter"){
-    run();
-  }
-});
-
-renderLog();
 
 </script>
 
