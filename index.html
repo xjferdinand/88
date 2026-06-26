@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>然仔｜v4.2闭环一致系统</title>
+<title>然仔｜v6终极封版系统</title>
 
 <style>
 body{
@@ -55,26 +55,23 @@ button{
   background:linear-gradient(90deg,#00d4ff,#7a5cff);
   color:#fff;
   font-weight:800;
+  cursor:pointer;
 }
-
-.good{color:#00e5ff;font-weight:800}
-.mid{color:#ffb020;font-weight:800}
 
 .seatBox{
   display:flex;
-  gap:8px;
+  gap:10px;
 }
 
 .seat{
-  width:60px;
-  height:60px;
+  width:80px;
+  height:80px;
   display:flex;
   align-items:center;
   justify-content:center;
-  border-radius:12px;
-  font-size:20px;
+  border-radius:16px;
+  font-size:26px;
   font-weight:900;
-  background:rgba(255,255,255,0.08);
 }
 
 .main{
@@ -87,10 +84,10 @@ button{
   color:#000;
 }
 
-.small{
+.info{
   font-size:12px;
-  opacity:0.75;
-  line-height:1.5;
+  opacity:0.8;
+  line-height:1.6;
 }
 </style>
 </head>
@@ -98,7 +95,7 @@ button{
 <body>
 <div class="container">
 
-<div class="title">🔥 然仔｜v4.2闭环一致系统</div>
+<div class="title">🔥 然仔｜v6终极封版系统</div>
 
 <input id="room" placeholder="输入5位房号"/>
 <button onclick="run()">开始分析</button>
@@ -110,77 +107,112 @@ button{
 <script>
 
 //////////////////////////////////////////////////////
-// 🧠 统一规则（唯一核心）
+// 🧠 组合检测（只负责识别，不评分）
 //////////////////////////////////////////////////////
 
 function detect(r){
 
-  let d=r.split("").map(Number);
+  let d = r.split("").map(Number);
 
-  let hitSet=new Set();
+  let hits = [];
 
   for(let i=0;i<5;i++){
     for(let j=i+1;j<5;j++){
 
-      let diff=Math.abs(d[i]-d[j]);
-      let sum=d[i]+d[j];
+      let diff = Math.abs(d[i]-d[j]);
+      let sum = d[i]+d[j];
 
-      // 核心组合（严格固定）
-      if(diff===6) hitSet.add("A2");
-      if(diff===5) hitSet.add("B2");
-      if(sum===7) hitSet.add("A1");
+      // 🔥 A2
+      if(diff===6 && hasDiff1(d)) hits.push("A2");
 
-      if(diff===1) hitSet.add("N1");
-      if(diff===2) hitSet.add("N3");
-      if(diff===4) hitSet.add("N4");
-      if(diff===5) hitSet.add("N5");
-      if(sum===9) hitSet.add("N2");
-      if(sum===9 && diff===4) hitSet.add("N6");
+      // 🔥 B2（必须重号 + 和9 + 差5）
+      if(diff===5 && sum===9 && hasRepeat(d)) hits.push("B2");
+
+      // 🔥 A1
+      if(sum===7 && hasDiff2(d)) hits.push("A1");
+
+      // 🔥 N类
+      if(diff===1) hits.push("N1");
+      if(diff===2) hits.push("N3");
+      if(diff===4) hits.push("N4");
+      if(diff===5) hits.push("N5");
+      if(sum===9) hits.push("N2");
 
     }
   }
 
-  return [...hitSet];
+  return [...new Set(hits)];
 }
 
 //////////////////////////////////////////////////////
-// 🧠 唯一决策（不叠加）
+// 🧠 结构函数
+//////////////////////////////////////////////////////
+
+function hasRepeat(d){
+  return new Set(d).size < 5;
+}
+
+function hasDiff1(d){
+  for(let i=0;i<5;i++){
+    for(let j=i+1;j<5;j++){
+      if(Math.abs(d[i]-d[j])===1) return true;
+    }
+  }
+  return false;
+}
+
+function hasDiff2(d){
+  for(let i=0;i<5;i++){
+    for(let j=i+1;j<5;j++){
+      if(Math.abs(d[i]-d[j])===2) return true;
+    }
+  }
+  return false;
+}
+
+//////////////////////////////////////////////////////
+// 🧠 终极锁死决策（唯一组合）
 //////////////////////////////////////////////////////
 
 function decide(hits){
 
-  // 🔥 优先级锁死
-  const priority=[
-    "B2","A2","A1",
-    "N3","N4","N5",
-    "N2","N1","N6"
+  // 🔥 终极优先级（锁死）
+  const priority = [
+    "B2",
+    "A2",
+    "A1",
+    "N3",
+    "N4",
+    "N5",
+    "N2",
+    "N1"
   ];
 
-  let main=null;
+  let mainCombo = null;
 
+  // ✔ 只允许一个组合生效
   for(let p of priority){
     if(hits.includes(p)){
-      main=p;
+      mainCombo = p;
       break;
     }
   }
 
-  // 🎯 主副位映射（唯一输出）
-  const map={
+  // 🔥 固定映射（唯一输出）
+  const map = {
     B2:{main:5,sub:3},
     A2:{main:2,sub:5},
     A1:{main:3,sub:2},
     N3:{main:2,sub:3},
-    N4:{main:2,sub:0},
+    N4:{main:2,sub:3},
     N5:{main:2,sub:4},
     N2:{main:2,sub:4},
-    N1:{main:1,sub:3},
-    N6:{main:3,sub:0}
+    N1:{main:1,sub:3}
   };
 
   return {
-    combo:main,
-    res:map[main]||{main:0,sub:0}
+    combo: mainCombo,
+    res: map[mainCombo] || {main:"无",sub:"无"}
   };
 }
 
@@ -190,36 +222,29 @@ function decide(hits){
 
 function run(){
 
-  let r=document.getElementById("room").value.trim();
-  if(r.length!==5)return;
+  let r = document.getElementById("room").value.trim();
+  if(r.length !== 5) return;
 
-  let hits=detect(r);
-  let out=decide(hits);
+  let hits = detect(r);
+  let out = decide(hits);
 
-  let html="";
+  document.getElementById("out").innerHTML = `
 
-  html+=`<div class="card">
-    <div class="good">🔥 主推位</div>
-    <div class="seatBox">
-      <div class="seat main">${out.res.main || "无"}</div>
+    <div class="card">
+      <div class="seatBox">
+        <div class="seat main">${out.res.main}</div>
+        <div class="seat sub">${out.res.sub}</div>
+      </div>
     </div>
-  </div>`;
 
-  html+=`<div class="card">
-    <div class="mid">⚡ 副推位</div>
-    <div class="seatBox">
-      <div class="seat sub">${out.res.sub || "无"}</div>
+    <div class="card info">
+      ✔ 命中组合：${hits.join(",") || "无"}<br>
+      ✔ 最终组合：${out.combo || "无"}<br>
+      ✔ 模型：v6终极封版<br>
+      ✔ 特性：单组合锁死 / 无漂移 / 无叠加
     </div>
-  </div>`;
 
-  html+=`<div class="card small">
-    ✔ v4.2闭环一致模型<br>
-    ✔ 命中组合：${out.combo || "无"}<br>
-    ✔ 输出固定：主推 + 副推<br>
-    ✔ 无评分 / 无叠加 / 无偏置2号
-  </div>`;
-
-  document.getElementById("out").innerHTML=html;
+  `;
 }
 
 </script>
