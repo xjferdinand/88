@@ -639,7 +639,8 @@
         return;
       }
 
-      const main = data.main;
+      const top3 = data.matches.slice(0, 3);
+const main = top3[0];
       const sameSeatHits = data.matches
         .filter(m => m.seat === main.seat)
         .map(m => m.combo.name)
