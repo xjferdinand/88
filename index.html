@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>5130004｜然仔 v10 黄金池</title>
+  <title>5130004｜然仔 v10.5 黄金池+深挖补位</title>
   <style>
     :root {
       --bg: #f7f3ec;
@@ -240,6 +240,35 @@
       line-height: 1.55;
     }
 
+    .pick-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pick {
+      background: #fff8ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .pick.main {
+      border-color: rgba(217, 75, 61, 0.42);
+      background: #fff4ee;
+    }
+
+    .pick .pick-title {
+      font-weight: 1000;
+      margin-bottom: 6px;
+    }
+
+    .pick .pick-rule {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
     .debug {
       margin-top: 12px;
       overflow-x: auto;
@@ -354,9 +383,9 @@
 <body>
   <div class="wrap">
     <div class="hero">
-      <div class="title">5130004｜然仔 v10 黄金池</div>
+      <div class="title">5130004｜然仔 v10.5 黄金池+深挖补位</div>
       <div class="sub">
-        213局去重库｜9组黄金组合｜进房率18.8%｜胜率92.5%｜净分+24740｜0大输
+        213局去重库｜v10黄金池+深挖补位｜进房率30.0%｜胜率93.8%｜净分+41190｜0大输
       </div>
     </div>
 
@@ -379,24 +408,24 @@
     </div>
 
     <div class="panel">
-      <div class="section-title">v10 总回测</div>
+      <div class="section-title">v10.5 总回测</div>
       <div class="grid">
-        <div class="stat"><div class="v">40 / 213</div><div class="k">命中进房</div></div>
-        <div class="stat"><div class="v">18.8%</div><div class="k">进房率</div></div>
-        <div class="stat"><div class="v">92.5%</div><div class="k">胜率</div></div>
-        <div class="stat"><div class="v">+24740</div><div class="k">总得分</div></div>
-        <div class="stat"><div class="v">+619</div><div class="k">单局均分</div></div>
-        <div class="stat"><div class="v">22</div><div class="k">大赢≥500</div></div>
+        <div class="stat"><div class="v">64 / 213</div><div class="k">命中进房</div></div>
+        <div class="stat"><div class="v">30.0%</div><div class="k">进房率</div></div>
+        <div class="stat"><div class="v">93.8%</div><div class="k">胜率</div></div>
+        <div class="stat"><div class="v">+41190</div><div class="k">总得分</div></div>
+        <div class="stat"><div class="v">+644</div><div class="k">单局均分</div></div>
+        <div class="stat"><div class="v">34</div><div class="k">大赢≥500</div></div>
         <div class="stat"><div class="v">0</div><div class="k">大输≤-500</div></div>
-        <div class="stat"><div class="v">3</div><div class="k">小输/中亏</div></div>
+        <div class="stat"><div class="v">3负1平</div><div class="k">噪音局</div></div>
       </div>
       <div class="desc" style="margin-top:12px;">
-        输局固定为：81998 2号 -60、87698 2号 -240、11013 1号 -490。
+        输局固定为：81998 2号 -60、87698 2号 -240、11013 1号 -490。平局：78249 6号 +0。
       </div>
     </div>
 
     <div class="panel">
-      <div class="section-title">9组黄金组合</div>
+      <div class="section-title">组合池：v10黄金池 + 深挖补位</div>
       <div class="combo-list" id="comboList"></div>
     </div>
 
@@ -409,7 +438,7 @@
     </div>
 
     <div class="footer-note">
-      规则锁死：1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。和值≤9才算，>9溢出不计。
+      规则锁死：1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。和值≤9才算，>9溢出不计。最多输出3个推荐位。
     </div>
   </div>
 
@@ -418,7 +447,7 @@
       {
         id: 1,
         name: "差5 + 双和9",
-        grade: "A档主打",
+        grade: "v10｜A档主打",
         stat: "5局｜5胜0负｜胜率100%｜净分+4080｜大输0",
         rule: "任意位子：命中差5，并且和9出现2次及以上。",
         test: f => f.hasDiff(5) && f.sumCount(9) >= 2
@@ -426,7 +455,7 @@
       {
         id: 2,
         name: "2号位 + 差主导",
-        grade: "A档主打",
+        grade: "v10｜A档主打",
         stat: "6局｜6胜0负｜胜率100%｜净分+4750｜大输0",
         rule: "2号位：有双差，并且没有双和。差主导不是差数量多，而是有双差、无双和。",
         test: f => f.seat === 2 && f.diffDominant
@@ -434,7 +463,7 @@
       {
         id: 3,
         name: "3号位 + 和9 + 差主导",
-        grade: "A档主打",
+        grade: "v10｜A档主打",
         stat: "5局｜5胜0负｜胜率100%｜净分+3640｜大输0",
         rule: "3号位：命中和9，同时有双差、无双和。",
         test: f => f.seat === 3 && f.hasSum(9) && f.diffDominant
@@ -442,7 +471,7 @@
       {
         id: 4,
         name: "和7 + 双差2 + 重号",
-        grade: "A档主打",
+        grade: "v10｜A档主打",
         stat: "5局｜5胜0负｜胜率100%｜净分+2560｜大输0",
         rule: "任意位子：命中和7，差2出现2次及以上，并且房号有重号。",
         test: f => f.hasSum(7) && f.diffCount(2) >= 2 && f.hasRepeat
@@ -450,7 +479,7 @@
       {
         id: 5,
         name: "单向差 + 双差1",
-        grade: "A档主打",
+        grade: "v10｜A档主打",
         stat: "9局｜8胜1负｜胜率88.9%｜净分+6320｜大输0",
         rule: "任意位子：没有任何有效和值，并且差1出现2次及以上。",
         test: f => f.oneWayDiff && f.diffCount(1) >= 2
@@ -458,7 +487,7 @@
       {
         id: 6,
         name: "2号位 + 和9",
-        grade: "A档大赢小输",
+        grade: "v10｜A档大赢小输",
         stat: "9局｜8胜1负｜胜率88.9%｜净分+4650｜大输0",
         rule: "2号位：X与任意其他数字形成和9。唯一小输为 -60。",
         test: f => f.seat === 2 && f.hasSum(9)
@@ -466,7 +495,7 @@
       {
         id: 7,
         name: "4号位 + 单向差 + 双差1",
-        grade: "B+补位",
+        grade: "v10｜B+补位",
         stat: "4局｜4胜0负｜胜率100%｜净分+2500｜大输0",
         rule: "4号位：没有任何有效和值，并且差1出现2次及以上。",
         test: f => f.seat === 4 && f.oneWayDiff && f.diffCount(1) >= 2
@@ -474,7 +503,7 @@
       {
         id: 8,
         name: "6号位 + 差4 + 和5 + 和9",
-        grade: "B+补位",
+        grade: "v10｜B+补位",
         stat: "3局｜3胜0负｜胜率100%｜净分+2180｜大输0",
         rule: "6号位：同时命中差4、和5、和9。",
         test: f => f.seat === 6 && f.hasDiff(4) && f.hasSum(5) && f.hasSum(9)
@@ -482,7 +511,7 @@
       {
         id: 9,
         name: "1号位 + 低X + 双差1",
-        grade: "C+观察",
+        grade: "v10｜C+观察",
         stat: "3局｜2胜1负｜胜率66.7%｜净分+2180｜大输0",
         rule: "1号位：X为1或2，并且满足低X双差1补位口径。包含11013这种重号X+差1的历史补位。",
         test: f => {
@@ -491,6 +520,62 @@
           const repeatXPlusDiff1 = f.diffAllCount(0) >= 2 && f.diffCount(1) >= 1;
           return lowX && (normalDoubleDiff1 || repeatXPlusDiff1);
         }
+      },
+      {
+        id: 10,
+        name: "5号位 + 差4 + 差5",
+        grade: "深挖补位｜A补",
+        stat: "5局｜5胜0负｜胜率100%｜净分+2670｜大输0",
+        rule: "5号位：同时命中差4、差5。",
+        test: f => f.seat === 5 && f.hasDiff(4) && f.hasDiff(5)
+      },
+      {
+        id: 11,
+        name: "任意位 + 差4 + 和5 + 和9",
+        grade: "深挖补位｜A补",
+        stat: "6局｜6胜0负｜胜率100%｜净分+3290｜大输0",
+        rule: "任意位子：同时命中差4、和5、和9。",
+        test: f => f.hasDiff(4) && f.hasSum(5) && f.hasSum(9)
+      },
+      {
+        id: 12,
+        name: "X=9 + 差2 + 单向差",
+        grade: "深挖补位｜9核补位",
+        stat: "6局｜5胜0负1平｜净分+2830｜大输0",
+        rule: "X=9，没有任何有效和值，并且命中差2。",
+        test: f => f.x === 9 && f.oneWayDiff && f.hasDiff(2)
+      },
+      {
+        id: 13,
+        name: "X=7 + 差6 + 和8",
+        grade: "深挖补位｜7核补位",
+        stat: "5局｜5胜0负｜胜率100%｜净分+2350｜大输0",
+        rule: "X=7，同时命中差6、和8。",
+        test: f => f.x === 7 && f.hasDiff(6) && f.hasSum(8)
+      },
+      {
+        id: 14,
+        name: "X=1 + 差4 + 差8",
+        grade: "深挖补位｜1核补位",
+        stat: "4局｜4胜0负｜胜率100%｜净分+3060｜大输0",
+        rule: "X=1，同时命中差4、差8。",
+        test: f => f.x === 1 && f.hasDiff(4) && f.hasDiff(8)
+      },
+      {
+        id: 15,
+        name: "X=0 + 和9 + 重号",
+        grade: "深挖补位｜0核爆发",
+        stat: "5局｜5胜0负｜胜率100%｜净分+4760｜大输0",
+        rule: "X=0，命中和9，并且房号有重号。",
+        test: f => f.x === 0 && f.hasSum(9) && f.hasRepeat
+      },
+      {
+        id: 16,
+        name: "5号位 + 差2 + 单向差",
+        grade: "深挖补位｜5号爆发",
+        stat: "4局｜4胜0负｜胜率100%｜净分+3510｜大输0",
+        rule: "5号位：单向差，并且命中差2。",
+        test: f => f.seat === 5 && f.oneWayDiff && f.hasDiff(2)
       }
     ];
 
@@ -595,7 +680,8 @@
         digits,
         allSeats,
         matches,
-        main: matches[0] || null
+        main: matches[0] || null,
+        top3: matches.slice(0, 3)
       };
     }
 
@@ -633,18 +719,27 @@
         box.innerHTML = `
           <span class="badge no">不进房</span>
           <div class="big">${data.room}</div>
-          <div class="desc">原因：未命中 5130004 v10 黄金池。</div>
+          <div class="desc">原因：未命中 5130004 v10.5 黄金池+深挖补位。</div>
           ${renderDebug(data)}
         `;
         return;
       }
 
-      const top3 = data.matches.slice(0, 3);
-const main = top3[0];
-      const sameSeatHits = data.matches
-        .filter(m => m.seat === main.seat)
-        .map(m => m.combo.name)
-        .join("、");
+      const main = data.main;
+      const top3 = data.top3 || [];
+
+      const top3Html = top3.map((m, i) => `
+        <div class="pick ${i === 0 ? "main" : ""}">
+          <div class="pick-title">
+            ${i === 0 ? "🔥主推" : "⚡备选"}｜${m.seat}号｜${m.combo.name}
+          </div>
+          <div class="pick-rule">
+            X=${m.x}<br>
+            等级：${m.combo.grade}<br>
+            历史回测：${m.combo.stat}
+          </div>
+        </div>
+      `).join("");
 
       const allHits = data.matches
         .map(m => `${m.seat}号｜${m.combo.name}`)
@@ -656,21 +751,24 @@ const main = top3[0];
         <span class="badge warn">${main.combo.grade}</span>
 
         <div class="big">
-          主推：<span class="seat">${main.seat}号</span>
+          推荐位（最多3个）
         </div>
 
-        <div class="desc">
-          房号：<b>${data.room}</b>｜X=${main.x}<br>
+        <div class="pick-list">
+          ${top3Html}
+        </div>
+
+        <div class="desc" style="margin-top:12px;">
+          房号：<b>${data.room}</b><br>
           最高优先级命中：<b>${main.combo.name}</b><br>
-          同位命中：${sameSeatHits}<br>
-          历史回测：${main.combo.stat}
+          主推：<b>${main.seat}号</b>｜X=${main.x}
         </div>
 
         <div class="grid">
-          <div class="stat"><div class="v">40/213</div><div class="k">总命中</div></div>
-          <div class="stat"><div class="v">18.8%</div><div class="k">进房率</div></div>
-          <div class="stat"><div class="v">92.5%</div><div class="k">总胜率</div></div>
-          <div class="stat"><div class="v">+24740</div><div class="k">总得分</div></div>
+          <div class="stat"><div class="v">64/213</div><div class="k">总命中</div></div>
+          <div class="stat"><div class="v">30.0%</div><div class="k">进房率</div></div>
+          <div class="stat"><div class="v">93.8%</div><div class="k">总胜率</div></div>
+          <div class="stat"><div class="v">+41190</div><div class="k">总得分</div></div>
         </div>
 
         <div class="combo" style="margin-top:12px;">
@@ -734,17 +832,18 @@ const main = top3[0];
         room: data.room,
         time: new Date().toLocaleString(),
         seat: data.main ? data.main.seat : null,
-        combo: data.main ? data.main.combo.name : "未命中"
+        combo: data.main ? data.main.combo.name : "未命中",
+        top3: data.top3 ? data.top3.map(m => `${m.seat}号-${m.combo.name}`).join("；") : ""
       };
 
-      const list = JSON.parse(localStorage.getItem("rz_v10_history") || "[]");
+      const list = JSON.parse(localStorage.getItem("rz_v105_history") || "[]");
       list.unshift(item);
-      localStorage.setItem("rz_v10_history", JSON.stringify(list.slice(0, 30)));
+      localStorage.setItem("rz_v105_history", JSON.stringify(list.slice(0, 30)));
     }
 
     function renderHistory() {
       const box = document.getElementById("historyBox");
-      const list = JSON.parse(localStorage.getItem("rz_v10_history") || "[]");
+      const list = JSON.parse(localStorage.getItem("rz_v105_history") || "[]");
 
       if (!list.length) {
         box.innerHTML = "暂无记录";
@@ -764,7 +863,7 @@ const main = top3[0];
     }
 
     function clearHistory() {
-      localStorage.removeItem("rz_v10_history");
+      localStorage.removeItem("rz_v105_history");
       renderHistory();
     }
 
