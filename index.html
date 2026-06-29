@@ -438,7 +438,7 @@
     </div>
 
     <div class="footer-note">
-      规则锁死：1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。和值≤9才算，>9溢出不计。最多输出3个推荐位。
+      规则锁死：1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。和值≤9才算，>9溢出不计。最多输出3个不同推荐位。
     </div>
   </div>
 
@@ -675,13 +675,37 @@
         return a.seat - b.seat;
       });
 
+      const seatMap = new Map();
+
+      matches.forEach(m => {
+        if (!seatMap.has(m.seat)) {
+          seatMap.set(m.seat, {
+            seat: m.seat,
+            x: m.x,
+            combo: m.combo,
+            bestCombo: m.combo,
+            combos: [m.combo]
+          });
+        } else {
+          seatMap.get(m.seat).combos.push(m.combo);
+        }
+      });
+
+      const uniqueMatches = Array.from(seatMap.values());
+
+      uniqueMatches.sort((a, b) => {
+        if (a.bestCombo.id !== b.bestCombo.id) return a.bestCombo.id - b.bestCombo.id;
+        return a.seat - b.seat;
+      });
+
       return {
         room,
         digits,
         allSeats,
         matches,
-        main: matches[0] || null,
-        top3: matches.slice(0, 3)
+        uniqueMatches,
+        main: uniqueMatches[0] || null,
+        top3: uniqueMatches.slice(0, 3)
       };
     }
 
@@ -728,30 +752,45 @@
       const main = data.main;
       const top3 = data.top3 || [];
 
-      const top3Html = top3.map((m, i) => `
-        <div class="pick ${i === 0 ? "main" : ""}">
-          <div class="pick-title">
-            ${i === 0 ? "🔥主推" : "⚡备选"}｜${m.seat}号｜${m.combo.name}
-          </div>
-          <div class="pick-rule">
-            X=${m.x}<br>
-            等级：${m.combo.grade}<br>
-            历史回测：${m.combo.stat}
-          </div>
-        </div>
-      `).join("");
+      const top3Html = top3.map((m, i) => {
+        const comboNames = m.combos
+          .sort((a, b) => a.id - b.id)
+          .map(c => c.name)
+          .join("、");
 
-      const allHits = data.matches
-        .map(m => `${m.seat}号｜${m.combo.name}`)
+        return `
+          <div class="pick ${i === 0 ? "main" : ""}">
+            <div class="pick-title">
+              ${i === 0 ? "🔥主推" : "⚡备选"}｜${m.seat}号｜${m.bestCombo.name}
+            </div>
+            <div class="pick-rule">
+              X=${m.x}<br>
+              最高优先级：${m.bestCombo.grade}<br>
+              历史回测：${m.bestCombo.stat}<br>
+              同位命中：${comboNames}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      const allHits = data.uniqueMatches
+        .map(m => {
+          const comboNames = m.combos
+            .sort((a, b) => a.id - b.id)
+            .map(c => c.name)
+            .join("、");
+
+          return `${m.seat}号｜${comboNames}`;
+        })
         .join("<br>");
 
       box.className = "result show";
       box.innerHTML = `
         <span class="badge ok">建议进房</span>
-        <span class="badge warn">${main.combo.grade}</span>
+        <span class="badge warn">${main.bestCombo.grade}</span>
 
         <div class="big">
-          推荐位（最多3个）
+          推荐位（最多3个不同位子）
         </div>
 
         <div class="pick-list">
@@ -760,7 +799,7 @@
 
         <div class="desc" style="margin-top:12px;">
           房号：<b>${data.room}</b><br>
-          最高优先级命中：<b>${main.combo.name}</b><br>
+          最高优先级命中：<b>${main.bestCombo.name}</b><br>
           主推：<b>${main.seat}号</b>｜X=${main.x}
         </div>
 
@@ -772,7 +811,7 @@
         </div>
 
         <div class="combo" style="margin-top:12px;">
-          <div class="name">全部命中位子</div>
+          <div class="name">全部命中位子（已按位子合并）</div>
           <div class="rule">${allHits}</div>
         </div>
 
@@ -832,8 +871,8 @@
         room: data.room,
         time: new Date().toLocaleString(),
         seat: data.main ? data.main.seat : null,
-        combo: data.main ? data.main.combo.name : "未命中",
-        top3: data.top3 ? data.top3.map(m => `${m.seat}号-${m.combo.name}`).join("；") : ""
+        combo: data.main ? data.main.bestCombo.name : "未命中",
+        top3: data.top3 ? data.top3.map(m => `${m.seat}号-${m.bestCombo.name}`).join("；") : ""
       };
 
       const list = JSON.parse(localStorage.getItem("rz_v105_history") || "[]");
