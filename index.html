@@ -1,172 +1,157 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>5130004｜然仔 v24 全位能量模型</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>5130004｜v25 稳定过滤模型</title>
 
-  <style>
-    :root {
-      --bg: #f7f3ec;
-      --card: #fffaf2;
-      --text: #2b2118;
-      --muted: #8a7664;
-      --red: #d94b3d;
-      --green: #1f9d67;
-      --border: #eadccc;
-      --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
-    }
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f6f2ec;
+  color:#2b2118;
+}
 
-    * { box-sizing: border-box; }
+.wrap{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei";
-      padding: 20px;
-      color: var(--text);
-    }
+.title{
+  text-align:center;
+  font-size:24px;
+  font-weight:900;
+  margin-bottom:10px;
+}
 
-    .wrap { max-width: 860px; margin: auto; }
+.panel{
+  background:#fff;
+  padding:16px;
+  border-radius:14px;
+  margin-bottom:14px;
+  border:1px solid #e5d6c8;
+}
 
-    .title {
-      text-align: center;
-      font-size: 26px;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
+input{
+  width:100%;
+  font-size:22px;
+  padding:10px;
+  text-align:center;
+  border-radius:10px;
+  border:2px solid #e7d2c0;
+}
 
-    .panel {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      margin-bottom: 14px;
-    }
+button{
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  background:#d94b3d;
+  color:white;
+  font-weight:900;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
 
-    input {
-      width: 100%;
-      font-size: 26px;
-      text-align: center;
-      padding: 10px;
-      border-radius: 12px;
-      border: 2px solid #e7d2c0;
-      font-weight: 900;
-    }
+.result{
+  margin-top:12px;
+}
 
-    button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      background: var(--red);
-      color: white;
-      font-weight: 900;
-      font-size: 16px;
-    }
+.main{
+  font-weight:900;
+  color:#d94b3d;
+  font-size:18px;
+}
 
-    .pick {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      margin-top: 10px;
-      background: #fff8ef;
-    }
+.sub{
+  margin-top:5px;
+  color:#6b5644;
+}
 
-    .main { border: 2px solid var(--red); }
+.history{
+  font-size:13px;
+  line-height:1.6;
+  border-top:1px dashed #e5d6c8;
+  padding-top:10px;
+}
 
-    .muted { color: var(--muted); font-size: 13px; }
+.item{
+  padding:6px 0;
+  border-bottom:1px dashed #eee;
+}
+</style>
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .stat {
-      background: #fff;
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .v { font-size: 18px; font-weight: 900; }
-  </style>
 </head>
 
 <body>
+
 <div class="wrap">
 
-  <div class="title">5130004｜v24 全位能量分布模型</div>
+<div class="title">5130004｜v25 稳定过滤模型</div>
 
-  <div class="panel">
-    <input id="room" placeholder="输入5位房号" maxlength="5">
-    <button onclick="run()">生成 v24 推荐</button>
+<div class="panel">
+  <input id="room" placeholder="输入5位房号" maxlength="5"/>
+  <button onclick="run()">生成推荐</button>
 
-    <div id="out"></div>
-  </div>
+  <div id="result" class="result"></div>
+</div>
+
+<div class="panel">
+  <b>预测记录</b>
+  <div id="history" class="history">暂无记录</div>
+</div>
 
 </div>
 
 <script>
 
-function count(arr){
-  const m={};
-  arr.forEach(v=>m[v]=(m[v]||0)+1);
-  return m;
+// ======================
+// v25过滤规则（简化版核心）
+// ======================
+function filterRisk(d){
+
+  const A=d[0],B=d[1],C=d[2],D=d[3],E=d[4];
+
+  // 中轴极值
+  if(C===Math.max(...d) || C===Math.min(...d)) return true;
+
+  // 镜像假稳
+  if(Math.abs(B-D)<=1 && Math.abs(A-E)<=1 && Math.abs(C-D)>3) return true;
+
+  // 尾部反转
+  if(E===Math.max(...d) && C<D) return true;
+
+  // 左右失衡过度
+  const left=A+B,right=D+E;
+  if(Math.abs(left-right)>=7) return true;
+
+  return false;
 }
 
-function seatData(d, idx){
+// ======================
+// 位子评分（v25简化版）
+// ======================
+function scoreSeat(d, idx){
+
   const x=d[idx];
-  const others=d.filter((_,i)=>i!==idx);
-
-  const diffs=others.map(v=>Math.abs(x-v));
-  const sums=others.map(v=>x+v).filter(v=>v<=9);
-
-  const diffC=count(diffs);
-  const sumC=count(sums);
-
-  const diffCount=diffs.length;
-  const sumCount=sums.length;
-
-  const hasRepeat = new Set(d).size<d.length;
-  const oneWay = sums.length===0;
-
-  return {
-    x,
-    diffCount,
-    sumCount,
-    hasRepeat,
-    oneWay,
-    diffC,
-    sumC
-  };
-}
-
-/* =========================
-   v24 核心：能量评分
-========================= */
-function energy(s){
-
   let score=0;
 
-  score += s.diffCount*2;
-  score += s.sumCount*1;
+  for(let i=0;i<5;i++){
+    if(i===idx) continue;
+    score+=Math.abs(x-d[i]);
+    if(x+d[i]<=9) score+=1;
+  }
 
-  if(s.hasRepeat) score += 2;
-  if(s.oneWay) score += 1;
-
-  // 稳定奖励
-  if(s.diffCount>=3) score += 2;
-  if(s.sumCount>=3) score += 1;
+  if(new Set(d).size<5) score+=2;
 
   return score;
 }
 
+// ======================
+// 主逻辑
+// ======================
 function run(){
 
   const r=document.getElementById("room").value.trim();
@@ -177,41 +162,72 @@ function run(){
 
   const d=r.split("").map(Number);
 
-  const seats=[];
-
-  for(let i=0;i<5;i++){
-    const s=seatData(d,i);
-    seats.push({
-      seat:i+1,
-      energy:energy(s),
-      raw:s
-    });
+  // ❌ 过滤
+  if(filterRisk(d)){
+    show("不推荐","结构风险过高");
+    save(r,"不推荐");
+    return;
   }
 
-  // 排序
-  seats.sort((a,b)=>b.energy-a.energy);
+  // 计算6位（1~6，6=E）
+  const seats=[0,1,2,3,4];
 
-  const top3=seats.slice(0,3);
+  const scored=seats.map(i=>({
+    seat:i+1,
+    score:scoreSeat(d,i)
+  }));
 
-  let html="";
+  scored.sort((a,b)=>b.score-a.score);
 
-  top3.forEach((s,i)=>{
-    html+=`
-      <div class="pick ${i===0?'main':''}">
-        <b>${i===0?'🔥主推':'⚡副推'}</b>｜${s.seat}号
-        <div class="muted">能量值：${s.energy}</div>
-      </div>
-    `;
-  });
+  const top1=scored[0];
+  const top2=scored[1];
+  const top3=scored[2];
 
-  const best = top3[0];
+  const html=`
+    <div class="main">主推：${top1.seat}号</div>
+    <div class="sub">副推：${top2.seat}号 / ${top3.seat}号</div>
+  `;
 
-  if(best.energy<=3){
-    html = `<div class="pick"><b>不命中</b></div>`;
-  }
-
-  document.getElementById("out").innerHTML=html;
+  show(html,"命中推荐");
+  save(r,`${top1.seat}/${top2.seat}/${top3.seat}`);
 }
+
+// ======================
+// UI
+// ======================
+function show(main,status){
+  document.getElementById("result").innerHTML=`
+    <div><b>${status}</b></div>
+    <div>${main}</div>
+  `;
+  renderHistory();
+}
+
+// ======================
+// 记录
+// ======================
+function save(room,res){
+  let data=JSON.parse(localStorage.getItem("v25_log")||"[]");
+  data.unshift({room,res,time:new Date().toLocaleString()});
+  localStorage.setItem("v25_log",JSON.stringify(data.slice(0,20)));
+  renderHistory();
+}
+
+// ======================
+// 历史
+// ======================
+function renderHistory(){
+  let data=JSON.parse(localStorage.getItem("v25_log")||"[]");
+  document.getElementById("history").innerHTML=
+    data.map(x=>`
+      <div class="item">
+        ${x.room} → ${x.res}<br>
+        <span style="color:#999">${x.time}</span>
+      </div>
+    `).join("");
+}
+
+renderHistory();
 
 </script>
 
