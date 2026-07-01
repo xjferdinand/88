@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>5130004｜v25 稳定过滤模型</title>
+<title>5130004｜v28 高频覆盖模型</title>
 
 <style>
 body{
   margin:0;
-  font-family:Arial;
-  background:#f6f2ec;
+  font-family: Arial;
+  background:#f5f1ea;
   color:#2b2118;
 }
 
@@ -30,8 +30,8 @@ body{
   background:#fff;
   padding:16px;
   border-radius:14px;
-  margin-bottom:14px;
   border:1px solid #e5d6c8;
+  margin-bottom:14px;
 }
 
 input{
@@ -48,11 +48,10 @@ button{
   margin-top:10px;
   padding:10px;
   background:#d94b3d;
-  color:white;
+  color:#fff;
   font-weight:900;
   border:none;
   border-radius:10px;
-  cursor:pointer;
 }
 
 .result{
@@ -60,120 +59,104 @@ button{
 }
 
 .main{
+  font-size:18px;
   font-weight:900;
   color:#d94b3d;
-  font-size:18px;
 }
 
 .sub{
-  margin-top:5px;
+  margin-top:6px;
   color:#6b5644;
 }
 
-.history{
-  font-size:13px;
-  line-height:1.6;
-  border-top:1px dashed #e5d6c8;
-  padding-top:10px;
-}
-
 .item{
-  padding:6px 0;
+  font-size:13px;
+  padding:5px 0;
   border-bottom:1px dashed #eee;
 }
-</style>
 
+.history{
+  margin-top:10px;
+  font-size:13px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="wrap">
 
-<div class="title">5130004｜v25 稳定过滤模型</div>
+<div class="title">5130004｜v28 高频覆盖模型</div>
 
-<!-- 输入区 -->
 <div class="panel">
-  <input 
-    id="room"
-    type="tel"
-    inputmode="numeric"
-    pattern="[0-9]*"
-    maxlength="5"
-    placeholder="输入5位房号"
-    autocomplete="off"
-  />
 
-  <button onclick="run()">生成推荐</button>
+<input 
+  id="room"
+  type="tel"
+  inputmode="numeric"
+  maxlength="5"
+  placeholder="输入5位房号"
+  autocomplete="off"
+/>
 
-  <div id="result" class="result"></div>
+<button onclick="run()">生成推荐</button>
+
+<div id="result" class="result"></div>
+
 </div>
 
-<!-- 记录区 -->
 <div class="panel">
-  <b>预测记录</b>
-  <div id="history" class="history">暂无记录</div>
+<b>预测记录</b>
+<div id="history" class="history">暂无记录</div>
 </div>
 
 </div>
 
 <script>
 
-// ======================
-// 输入限制（防脏数据）
-// ======================
-document.getElementById("room").addEventListener("input", function(){
-  this.value = this.value.replace(/\D/g,"").slice(0,5);
+// 输入过滤
+document.getElementById("room").addEventListener("input",function(){
+  this.value=this.value.replace(/\D/g,"").slice(0,5);
 });
 
-// ======================
-// v25 风险过滤
-// ======================
-function filterRisk(d){
-
+// 风险（v28：降权逻辑）
+function risk(d){
   const A=d[0],B=d[1],C=d[2],D=d[3],E=d[4];
 
-  // 中轴极值
-  if(C===Math.max(...d) || C===Math.min(...d)) return true;
+  let r=0;
 
-  // 镜像假稳
-  if(Math.abs(B-D)<=1 && Math.abs(A-E)<=1 && Math.abs(C-D)>3) return true;
+  if(C===Math.max(...d)||C===Math.min(...d)) r+=2;
+  if(Math.abs(A+B-(D+E))>=8) r+=2;
+  if(Math.abs(B-D)<=1 && Math.abs(A-E)<=1) r+=1;
+  if(E===Math.max(...d)||E===Math.min(...d)) r+=1;
 
-  // 尾部极值反转
-  if(E===Math.max(...d) && C<D) return true;
-
-  // 左右失衡过度
-  const left=A+B,right=D+E;
-  if(Math.abs(left-right)>=7) return true;
-
-  return false;
+  return r;
 }
 
-// ======================
-// 位子评分（简化稳定版）
-// ======================
-function scoreSeat(d, idx){
+// 位子评分（v28：放量）
+function score(d,i){
 
-  const x=d[idx];
-  let score=0;
+  const x=d[i];
+  let s=0;
 
-  for(let i=0;i<5;i++){
-    if(i===idx) continue;
-    score+=Math.abs(x-d[i]);
+  for(let j=0;j<5;j++){
+    if(i===j) continue;
 
-    if(x+d[i]<=9) score+=1;
+    s+=Math.abs(x-d[j]);
+
+    if(x+d[j]<=9) s+=1;
   }
 
-  if(new Set(d).size<5) score+=2;
+  // 放量加成（关键）
+  s+=2;
 
-  return score;
+  return s;
 }
 
-// ======================
 // 主逻辑
-// ======================
 function run(){
 
-  let r=document.getElementById("room").value.trim();
+  const r=document.getElementById("room").value.trim();
 
   if(r.length!==5){
     show("不推荐","请输入5位房号");
@@ -182,70 +165,59 @@ function run(){
 
   const d=r.split("").map(Number);
 
-  // ❌ 风险过滤
-  if(filterRisk(d)){
-    show("不推荐","结构风险过高");
-    save(r,"不推荐");
-    return;
-  }
+  const riskScore=risk(d);
 
-  // 计算推荐位
-  const list=[0,1,2,3,4].map(i=>({
+  const seats=[0,1,2,3,4].map(i=>({
     seat:i+1,
-    score:scoreSeat(d,i)
+    score:score(d,i)
   }));
 
-  list.sort((a,b)=>b.score-a.score);
+  seats.sort((a,b)=>b.score-a.score);
 
-  const top1=list[0];
-  const top2=list[1];
-  const top3=list[2];
+  const top1=seats[0];
+  const top2=seats[1];
+  const top3=seats[2];
+
+  // v28逻辑：风险不删除，只降权
+  let label="命中推荐";
+
+  if(riskScore>=4){
+    label="⚠️高风险覆盖（仍可进）";
+  }
 
   const html=`
     <div class="main">主推：${top1.seat}号</div>
     <div class="sub">副推：${top2.seat}号 / ${top3.seat}号</div>
+    <div class="sub">风险值：${riskScore}</div>
   `;
 
-  show(html,"命中推荐");
+  show(html,label);
+
   save(r,`${top1.seat}/${top2.seat}/${top3.seat}`);
 }
 
-// ======================
-// UI显示
-// ======================
-function show(main,status){
+// UI
+function show(html,label){
   document.getElementById("result").innerHTML=`
-    <div><b>${status}</b></div>
-    <div>${main}</div>
+    <div><b>${label}</b></div>
+    ${html}
   `;
-  renderHistory();
+  render();
 }
 
-// ======================
-// 保存记录
-// ======================
+// 记录
 function save(room,res){
-  let data=JSON.parse(localStorage.getItem("v25_log")||"[]");
-
-  data.unshift({
-    room,
-    res,
-    time:new Date().toLocaleString()
-  });
-
-  localStorage.setItem("v25_log",JSON.stringify(data.slice(0,20)));
-
-  renderHistory();
+  let d=JSON.parse(localStorage.getItem("v28")||"[]");
+  d.unshift({room,res,time:new Date().toLocaleString()});
+  localStorage.setItem("v28",JSON.stringify(d.slice(0,20)));
+  render();
 }
 
-// ======================
-// 渲染记录
-// ======================
-function renderHistory(){
-  let data=JSON.parse(localStorage.getItem("v25_log")||"[]");
-
+// 历史
+function render(){
+  let d=JSON.parse(localStorage.getItem("v28")||"[]");
   document.getElementById("history").innerHTML=
-    data.length?data.map(x=>`
+    d.length?d.map(x=>`
       <div class="item">
         ${x.room} → ${x.res}<br>
         <span style="color:#999">${x.time}</span>
@@ -253,7 +225,7 @@ function renderHistory(){
     `).join(""):"暂无记录";
 }
 
-renderHistory();
+render();
 
 </script>
 
