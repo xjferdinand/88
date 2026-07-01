@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>5130004｜v28 高频覆盖模型</title>
+<title>5130004｜v28-Pro Max</title>
 
 <style>
 body{
@@ -74,19 +74,15 @@ button{
   padding:5px 0;
   border-bottom:1px dashed #eee;
 }
-
-.history{
-  margin-top:10px;
-  font-size:13px;
-}
 </style>
+
 </head>
 
 <body>
 
 <div class="wrap">
 
-<div class="title">5130004｜v28 高频覆盖模型</div>
+<div class="title">5130004｜v28-Pro Max</div>
 
 <div class="panel">
 
@@ -107,7 +103,7 @@ button{
 
 <div class="panel">
 <b>预测记录</b>
-<div id="history" class="history">暂无记录</div>
+<div id="history">暂无记录</div>
 </div>
 
 </div>
@@ -119,21 +115,32 @@ document.getElementById("room").addEventListener("input",function(){
   this.value=this.value.replace(/\D/g,"").slice(0,5);
 });
 
-// 风险（v28：降权逻辑）
+// =========================
+// v28-Pro Max 风险系统
+// =========================
 function risk(d){
-  const A=d[0],B=d[1],C=d[2],D=d[3],E=d[4];
 
+  const A=d[0],B=d[1],C=d[2],D=d[3],E=d[4];
   let r=0;
 
+  // 中轴极值
   if(C===Math.max(...d)||C===Math.min(...d)) r+=2;
+
+  // 左右失衡
   if(Math.abs(A+B-(D+E))>=8) r+=2;
-  if(Math.abs(B-D)<=1 && Math.abs(A-E)<=1) r+=1;
+
+  // 镜像轻偏
+  if(Math.abs(B-D)<=1) r+=1;
+
+  // 尾部极值
   if(E===Math.max(...d)||E===Math.min(...d)) r+=1;
 
   return r;
 }
 
-// 位子评分（v28：放量）
+// =========================
+// v28-Pro Max 评分系统
+// =========================
 function score(d,i){
 
   const x=d[i];
@@ -147,13 +154,15 @@ function score(d,i){
     if(x+d[j]<=9) s+=1;
   }
 
-  // 放量加成（关键）
+  // 稳定加权（防止过激）
   s+=2;
 
   return s;
 }
 
+// =========================
 // 主逻辑
+// =========================
 function run(){
 
   const r=document.getElementById("room").value.trim();
@@ -167,22 +176,21 @@ function run(){
 
   const riskScore=risk(d);
 
-  const seats=[0,1,2,3,4].map(i=>({
+  const list=[0,1,2,3,4].map(i=>({
     seat:i+1,
     score:score(d,i)
   }));
 
-  seats.sort((a,b)=>b.score-a.score);
+  list.sort((a,b)=>b.score-a.score);
 
-  const top1=seats[0];
-  const top2=seats[1];
-  const top3=seats[2];
+  const top1=list[0];
+  const top2=list[1];
+  const top3=list[2];
 
-  // v28逻辑：风险不删除，只降权
   let label="命中推荐";
 
   if(riskScore>=4){
-    label="⚠️高风险覆盖（仍可进）";
+    label="⚠️高风险结构（仍可进房）";
   }
 
   const html=`
@@ -192,11 +200,12 @@ function run(){
   `;
 
   show(html,label);
-
   save(r,`${top1.seat}/${top2.seat}/${top3.seat}`);
 }
 
+// =========================
 // UI
+// =========================
 function show(html,label){
   document.getElementById("result").innerHTML=`
     <div><b>${label}</b></div>
@@ -205,24 +214,34 @@ function show(html,label){
   render();
 }
 
+// =========================
 // 记录
+// =========================
 function save(room,res){
-  let d=JSON.parse(localStorage.getItem("v28")||"[]");
-  d.unshift({room,res,time:new Date().toLocaleString()});
-  localStorage.setItem("v28",JSON.stringify(d.slice(0,20)));
+  let d=JSON.parse(localStorage.getItem("v28pm")||"[]");
+  d.unshift({
+    room,
+    res,
+    time:new Date().toLocaleString()
+  });
+
+  localStorage.setItem("v28pm",JSON.stringify(d.slice(0,30)));
   render();
 }
 
+// =========================
 // 历史
+// =========================
 function render(){
-  let d=JSON.parse(localStorage.getItem("v28")||"[]");
+  let d=JSON.parse(localStorage.getItem("v28pm")||"[]");
+
   document.getElementById("history").innerHTML=
-    d.length?d.map(x=>`
+    d.length ? d.map(x=>`
       <div class="item">
         ${x.room} → ${x.res}<br>
         <span style="color:#999">${x.time}</span>
       </div>
-    `).join(""):"暂无记录";
+    `).join("") : "暂无记录";
 }
 
 render();
