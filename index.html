@@ -3,929 +3,217 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>5130004｜然仔 v10.5 黄金池+深挖补位</title>
+  <title>5130004｜然仔 v24 全位能量模型</title>
+
   <style>
     :root {
       --bg: #f7f3ec;
       --card: #fffaf2;
-      --card2: #ffffff;
       --text: #2b2118;
       --muted: #8a7664;
       --red: #d94b3d;
-      --red2: #b8342b;
       --green: #1f9d67;
-      --orange: #d98c22;
       --border: #eadccc;
       --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, rgba(217, 75, 61, 0.12), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(217, 140, 34, 0.12), transparent 26%),
-        var(--bg);
+      background: var(--bg);
+      font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei";
+      padding: 20px;
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-      padding: 22px 14px 42px;
     }
 
-    .wrap {
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 18px;
-    }
+    .wrap { max-width: 860px; margin: auto; }
 
     .title {
-      font-size: 28px;
+      text-align: center;
+      font-size: 26px;
       font-weight: 900;
-      letter-spacing: 1px;
-      margin: 6px 0 8px;
-    }
-
-    .sub {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
+      margin-bottom: 10px;
     }
 
     .panel {
-      background: rgba(255, 250, 242, 0.92);
+      background: #fff;
       border: 1px solid var(--border);
-      border-radius: 24px;
+      border-radius: 18px;
+      padding: 16px;
       box-shadow: var(--shadow);
-      padding: 18px;
-      margin-bottom: 16px;
-      backdrop-filter: blur(8px);
-    }
-
-    .input-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      margin-top: 8px;
+      margin-bottom: 14px;
     }
 
     input {
-      width: min(100%, 360px);
-      height: 58px;
-      border: 2px solid #e7d2c0;
-      border-radius: 18px;
-      outline: none;
+      width: 100%;
+      font-size: 26px;
       text-align: center;
-      font-size: 28px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 2px solid #e7d2c0;
       font-weight: 900;
-      letter-spacing: 6px;
-      color: var(--text);
-      background: #fff;
-      box-shadow: inset 0 2px 6px rgba(80, 50, 30, 0.05);
-    }
-
-    input:focus {
-      border-color: var(--red);
     }
 
     button {
-      border: none;
-      cursor: pointer;
-      font-weight: 900;
-      transition: 0.18s ease;
-    }
-
-    .btn-main {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: linear-gradient(145deg, var(--red), var(--red2));
-      color: white;
-      font-size: 18px;
-      box-shadow: 0 10px 22px rgba(217, 75, 61, 0.34);
-      flex: 0 0 auto;
-    }
-
-    .btn-main:active {
-      transform: scale(0.96);
-    }
-
-    .btn-small {
-      padding: 9px 13px;
-      border-radius: 12px;
-      background: #f0e2d3;
-      color: #6b5644;
-      font-size: 13px;
-    }
-
-    .result {
-      display: none;
-      margin-top: 16px;
-      background: var(--card2);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      padding: 16px;
-    }
-
-    .result.show {
-      display: block;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 900;
-      margin: 3px;
-    }
-
-    .badge.ok {
-      background: rgba(31, 157, 103, 0.12);
-      color: var(--green);
-      border: 1px solid rgba(31, 157, 103, 0.24);
-    }
-
-    .badge.no {
-      background: rgba(217, 75, 61, 0.10);
-      color: var(--red2);
-      border: 1px solid rgba(217, 75, 61, 0.22);
-    }
-
-    .badge.warn {
-      background: rgba(217, 140, 34, 0.12);
-      color: #a6630f;
-      border: 1px solid rgba(217, 140, 34, 0.22);
-    }
-
-    .big {
-      font-size: 34px;
-      font-weight: 1000;
-      margin: 10px 0 4px;
-    }
-
-    .big .seat {
-      color: var(--red);
-      font-size: 46px;
-    }
-
-    .desc {
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 14px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .stat {
-      background: #fff8ef;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 8px;
-      text-align: center;
-    }
-
-    .stat .v {
-      font-size: 20px;
-      font-weight: 1000;
-      color: var(--text);
-    }
-
-    .stat .k {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .section-title {
-      font-weight: 1000;
-      font-size: 18px;
-      margin: 3px 0 12px;
-    }
-
-    .combo-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .combo {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      width: 100%;
+      margin-top: 10px;
       padding: 12px;
-    }
-
-    .combo .name {
-      font-weight: 1000;
-      margin-bottom: 6px;
-    }
-
-    .combo .rule {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .pick-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
+      border-radius: 12px;
+      border: none;
+      background: var(--red);
+      color: white;
+      font-weight: 900;
+      font-size: 16px;
     }
 
     .pick {
-      background: #fff8ef;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .pick.main {
-      border-color: rgba(217, 75, 61, 0.42);
-      background: #fff4ee;
-    }
-
-    .pick .pick-title {
-      font-weight: 1000;
-      margin-bottom: 6px;
-    }
-
-    .pick .pick-rule {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .debug {
-      margin-top: 12px;
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 620px;
-      background: #fff;
       border-radius: 14px;
-      overflow: hidden;
+      padding: 12px;
+      margin-top: 10px;
+      background: #fff8ef;
+    }
+
+    .main { border: 2px solid var(--red); }
+
+    .muted { color: var(--muted); font-size: 13px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat {
+      background: #fff;
       border: 1px solid var(--border);
-    }
-
-    th, td {
-      padding: 9px 8px;
-      border-bottom: 1px solid #f0e2d3;
-      font-size: 12px;
+      padding: 10px;
+      border-radius: 12px;
       text-align: center;
-      white-space: nowrap;
     }
 
-    th {
-      background: #fff1e1;
-      color: #6b5644;
-      font-weight: 900;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .history-item {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px dashed #e4d3c3;
-      font-size: 14px;
-    }
-
-    .history-item:last-child {
-      border-bottom: none;
-    }
-
-    .history-left {
-      font-weight: 900;
-    }
-
-    .history-right {
-      color: var(--muted);
-      text-align: right;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .footer-note {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-      margin-top: 16px;
-    }
-
-    @media (max-width: 620px) {
-      body {
-        padding: 16px 10px 34px;
-      }
-
-      .title {
-        font-size: 23px;
-      }
-
-      .panel {
-        padding: 14px;
-        border-radius: 20px;
-      }
-
-      .input-row {
-        gap: 8px;
-      }
-
-      input {
-        height: 56px;
-        font-size: 25px;
-        letter-spacing: 4px;
-      }
-
-      .btn-main {
-        width: 64px;
-        height: 64px;
-        font-size: 16px;
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .big {
-        font-size: 26px;
-      }
-
-      .big .seat {
-        font-size: 38px;
-      }
-    }
+    .v { font-size: 18px; font-weight: 900; }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <div class="title">5130004｜然仔 v10.5 黄金池+深挖补位</div>
-      <div class="sub">
-        213局去重库｜v10黄金池+深挖补位｜进房率30.0%｜胜率93.8%｜净分+41190｜0大输
-      </div>
-    </div>
+<div class="wrap">
 
-    <div class="panel">
-      <div class="section-title">输入5位房号</div>
-      <div class="input-row">
-        <input
-          id="roomInput"
-          type="tel"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          maxlength="5"
-          placeholder="例如 70590"
-          autocomplete="off"
-        />
-        <button class="btn-main" onclick="run()">开干</button>
-      </div>
+  <div class="title">5130004｜v24 全位能量分布模型</div>
 
-      <div id="result" class="result"></div>
-    </div>
+  <div class="panel">
+    <input id="room" placeholder="输入5位房号" maxlength="5">
+    <button onclick="run()">生成 v24 推荐</button>
 
-    <div class="panel">
-      <div class="section-title">v10.5 总回测</div>
-      <div class="grid">
-        <div class="stat"><div class="v">64 / 213</div><div class="k">命中进房</div></div>
-        <div class="stat"><div class="v">30.0%</div><div class="k">进房率</div></div>
-        <div class="stat"><div class="v">93.8%</div><div class="k">胜率</div></div>
-        <div class="stat"><div class="v">+41190</div><div class="k">总得分</div></div>
-        <div class="stat"><div class="v">+644</div><div class="k">单局均分</div></div>
-        <div class="stat"><div class="v">34</div><div class="k">大赢≥500</div></div>
-        <div class="stat"><div class="v">0</div><div class="k">大输≤-500</div></div>
-        <div class="stat"><div class="v">3负1平</div><div class="k">噪音局</div></div>
-      </div>
-      <div class="desc" style="margin-top:12px;">
-        输局固定为：81998 2号 -60、87698 2号 -240、11013 1号 -490。平局：78249 6号 +0。
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="section-title">组合池：v10黄金池 + 深挖补位</div>
-      <div class="combo-list" id="comboList"></div>
-    </div>
-
-    <div class="panel">
-      <div class="section-title">
-        历史记录
-        <button class="btn-small" onclick="clearHistory()" style="float:right;">清空</button>
-      </div>
-      <div id="historyBox" class="desc">暂无记录</div>
-    </div>
-
-    <div class="footer-note">
-      规则锁死：1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。和值≤9才算，>9溢出不计。最多输出3个不同推荐位。
-    </div>
+    <div id="out"></div>
   </div>
 
-  <script>
-    const COMBOS = [
-      {
-        id: 1,
-        name: "差5 + 双和9",
-        grade: "v10｜A档主打",
-        stat: "5局｜5胜0负｜胜率100%｜净分+4080｜大输0",
-        rule: "任意位子：命中差5，并且和9出现2次及以上。",
-        test: f => f.hasDiff(5) && f.sumCount(9) >= 2
-      },
-      {
-        id: 2,
-        name: "2号位 + 差主导",
-        grade: "v10｜A档主打",
-        stat: "6局｜6胜0负｜胜率100%｜净分+4750｜大输0",
-        rule: "2号位：有双差，并且没有双和。差主导不是差数量多，而是有双差、无双和。",
-        test: f => f.seat === 2 && f.diffDominant
-      },
-      {
-        id: 3,
-        name: "3号位 + 和9 + 差主导",
-        grade: "v10｜A档主打",
-        stat: "5局｜5胜0负｜胜率100%｜净分+3640｜大输0",
-        rule: "3号位：命中和9，同时有双差、无双和。",
-        test: f => f.seat === 3 && f.hasSum(9) && f.diffDominant
-      },
-      {
-        id: 4,
-        name: "和7 + 双差2 + 重号",
-        grade: "v10｜A档主打",
-        stat: "5局｜5胜0负｜胜率100%｜净分+2560｜大输0",
-        rule: "任意位子：命中和7，差2出现2次及以上，并且房号有重号。",
-        test: f => f.hasSum(7) && f.diffCount(2) >= 2 && f.hasRepeat
-      },
-      {
-        id: 5,
-        name: "单向差 + 双差1",
-        grade: "v10｜A档主打",
-        stat: "9局｜8胜1负｜胜率88.9%｜净分+6320｜大输0",
-        rule: "任意位子：没有任何有效和值，并且差1出现2次及以上。",
-        test: f => f.oneWayDiff && f.diffCount(1) >= 2
-      },
-      {
-        id: 6,
-        name: "2号位 + 和9",
-        grade: "v10｜A档大赢小输",
-        stat: "9局｜8胜1负｜胜率88.9%｜净分+4650｜大输0",
-        rule: "2号位：X与任意其他数字形成和9。唯一小输为 -60。",
-        test: f => f.seat === 2 && f.hasSum(9)
-      },
-      {
-        id: 7,
-        name: "4号位 + 单向差 + 双差1",
-        grade: "v10｜B+补位",
-        stat: "4局｜4胜0负｜胜率100%｜净分+2500｜大输0",
-        rule: "4号位：没有任何有效和值，并且差1出现2次及以上。",
-        test: f => f.seat === 4 && f.oneWayDiff && f.diffCount(1) >= 2
-      },
-      {
-        id: 8,
-        name: "6号位 + 差4 + 和5 + 和9",
-        grade: "v10｜B+补位",
-        stat: "3局｜3胜0负｜胜率100%｜净分+2180｜大输0",
-        rule: "6号位：同时命中差4、和5、和9。",
-        test: f => f.seat === 6 && f.hasDiff(4) && f.hasSum(5) && f.hasSum(9)
-      },
-      {
-        id: 9,
-        name: "1号位 + 低X + 双差1",
-        grade: "v10｜C+观察",
-        stat: "3局｜2胜1负｜胜率66.7%｜净分+2180｜大输0",
-        rule: "1号位：X为1或2，并且满足低X双差1补位口径。包含11013这种重号X+差1的历史补位。",
-        test: f => {
-          const lowX = f.seat === 1 && (f.x === 1 || f.x === 2);
-          const normalDoubleDiff1 = f.diffCount(1) >= 2;
-          const repeatXPlusDiff1 = f.diffAllCount(0) >= 2 && f.diffCount(1) >= 1;
-          return lowX && (normalDoubleDiff1 || repeatXPlusDiff1);
-        }
-      },
-      {
-        id: 10,
-        name: "5号位 + 差4 + 差5",
-        grade: "深挖补位｜A补",
-        stat: "5局｜5胜0负｜胜率100%｜净分+2670｜大输0",
-        rule: "5号位：同时命中差4、差5。",
-        test: f => f.seat === 5 && f.hasDiff(4) && f.hasDiff(5)
-      },
-      {
-        id: 11,
-        name: "任意位 + 差4 + 和5 + 和9",
-        grade: "深挖补位｜A补",
-        stat: "6局｜6胜0负｜胜率100%｜净分+3290｜大输0",
-        rule: "任意位子：同时命中差4、和5、和9。",
-        test: f => f.hasDiff(4) && f.hasSum(5) && f.hasSum(9)
-      },
-      {
-        id: 12,
-        name: "X=9 + 差2 + 单向差",
-        grade: "深挖补位｜9核补位",
-        stat: "6局｜5胜0负1平｜净分+2830｜大输0",
-        rule: "X=9，没有任何有效和值，并且命中差2。",
-        test: f => f.x === 9 && f.oneWayDiff && f.hasDiff(2)
-      },
-      {
-        id: 13,
-        name: "X=7 + 差6 + 和8",
-        grade: "深挖补位｜7核补位",
-        stat: "5局｜5胜0负｜胜率100%｜净分+2350｜大输0",
-        rule: "X=7，同时命中差6、和8。",
-        test: f => f.x === 7 && f.hasDiff(6) && f.hasSum(8)
-      },
-      {
-        id: 14,
-        name: "X=1 + 差4 + 差8",
-        grade: "深挖补位｜1核补位",
-        stat: "4局｜4胜0负｜胜率100%｜净分+3060｜大输0",
-        rule: "X=1，同时命中差4、差8。",
-        test: f => f.x === 1 && f.hasDiff(4) && f.hasDiff(8)
-      },
-      {
-        id: 15,
-        name: "X=0 + 和9 + 重号",
-        grade: "深挖补位｜0核爆发",
-        stat: "5局｜5胜0负｜胜率100%｜净分+4760｜大输0",
-        rule: "X=0，命中和9，并且房号有重号。",
-        test: f => f.x === 0 && f.hasSum(9) && f.hasRepeat
-      },
-      {
-        id: 16,
-        name: "5号位 + 差2 + 单向差",
-        grade: "深挖补位｜5号爆发",
-        stat: "4局｜4胜0负｜胜率100%｜净分+3510｜大输0",
-        rule: "5号位：单向差，并且命中差2。",
-        test: f => f.seat === 5 && f.oneWayDiff && f.hasDiff(2)
-      }
-    ];
+</div>
 
-    const SEAT_TO_INDEX = {
-      1: 0,
-      2: 1,
-      3: 2,
-      4: 3,
-      5: 4,
-      6: 4
-    };
+<script>
 
-    function countMap(arr) {
-      const m = {};
-      arr.forEach(v => {
-        m[v] = (m[v] || 0) + 1;
-      });
-      return m;
-    }
+function count(arr){
+  const m={};
+  arr.forEach(v=>m[v]=(m[v]||0)+1);
+  return m;
+}
 
-    function formatMap(map, prefix) {
-      const keys = Object.keys(map).map(Number).sort((a, b) => a - b);
-      if (!keys.length) return "无";
-      return keys.map(k => `${prefix}${k}×${map[k]}`).join(" / ");
-    }
+function seatData(d, idx){
+  const x=d[idx];
+  const others=d.filter((_,i)=>i!==idx);
 
-    function analyzeSeat(digits, seat) {
-      const xIndex = SEAT_TO_INDEX[seat];
-      const x = digits[xIndex];
+  const diffs=others.map(v=>Math.abs(x-v));
+  const sums=others.map(v=>x+v).filter(v=>v<=9);
 
-      const others = digits.filter((_, idx) => idx !== xIndex);
+  const diffC=count(diffs);
+  const sumC=count(sums);
 
-      const diffsAll = others.map(n => Math.abs(x - n));
-      const diffs = diffsAll.filter(v => v !== 0);
+  const diffCount=diffs.length;
+  const sumCount=sums.length;
 
-      const sums = others
-        .map(n => x + n)
-        .filter(v => v <= 9);
+  const hasRepeat = new Set(d).size<d.length;
+  const oneWay = sums.length===0;
 
-      const diffMap = countMap(diffs);
-      const diffAllMap = countMap(diffsAll);
-      const sumMap = countMap(sums);
+  return {
+    x,
+    diffCount,
+    sumCount,
+    hasRepeat,
+    oneWay,
+    diffC,
+    sumC
+  };
+}
 
-      const hasDoubleDiff = Object.values(diffMap).some(c => c >= 2);
-      const hasDoubleSum = Object.values(sumMap).some(c => c >= 2);
+/* =========================
+   v24 核心：能量评分
+========================= */
+function energy(s){
 
-      const hasRepeat = new Set(digits).size < digits.length;
-      const diffDominant = hasDoubleDiff && !hasDoubleSum;
-      const oneWayDiff = sums.length === 0;
+  let score=0;
 
-      return {
-        seat,
-        x,
-        others,
-        diffsAll,
-        diffs,
-        sums,
-        diffMap,
-        diffAllMap,
-        sumMap,
-        hasRepeat,
-        hasDoubleDiff,
-        hasDoubleSum,
-        diffDominant,
-        oneWayDiff,
-        hasDiff: n => diffs.includes(n),
-        hasSum: n => sums.includes(n),
-        diffCount: n => diffMap[n] || 0,
-        diffAllCount: n => diffAllMap[n] || 0,
-        sumCount: n => sumMap[n] || 0
-      };
-    }
+  score += s.diffCount*2;
+  score += s.sumCount*1;
 
-    function analyzeRoom(room) {
-      const digits = room.split("").map(Number);
-      const allSeats = [];
+  if(s.hasRepeat) score += 2;
+  if(s.oneWay) score += 1;
 
-      for (let seat = 1; seat <= 6; seat++) {
-        const f = analyzeSeat(digits, seat);
-        const hits = COMBOS.filter(c => c.test(f));
-        allSeats.push({ ...f, hits });
-      }
+  // 稳定奖励
+  if(s.diffCount>=3) score += 2;
+  if(s.sumCount>=3) score += 1;
 
-      const matches = [];
-      allSeats.forEach(f => {
-        f.hits.forEach(combo => {
-          matches.push({
-            seat: f.seat,
-            x: f.x,
-            combo
-          });
-        });
-      });
+  return score;
+}
 
-      matches.sort((a, b) => {
-        if (a.combo.id !== b.combo.id) return a.combo.id - b.combo.id;
-        return a.seat - b.seat;
-      });
+function run(){
 
-      const seatMap = new Map();
+  const r=document.getElementById("room").value.trim();
+  if(r.length!==5){
+    alert("请输入5位房号");
+    return;
+  }
 
-      matches.forEach(m => {
-        if (!seatMap.has(m.seat)) {
-          seatMap.set(m.seat, {
-            seat: m.seat,
-            x: m.x,
-            combo: m.combo,
-            bestCombo: m.combo,
-            combos: [m.combo]
-          });
-        } else {
-          seatMap.get(m.seat).combos.push(m.combo);
-        }
-      });
+  const d=r.split("").map(Number);
 
-      const uniqueMatches = Array.from(seatMap.values());
+  const seats=[];
 
-      uniqueMatches.sort((a, b) => {
-        if (a.bestCombo.id !== b.bestCombo.id) return a.bestCombo.id - b.bestCombo.id;
-        return a.seat - b.seat;
-      });
-
-      return {
-        room,
-        digits,
-        allSeats,
-        matches,
-        uniqueMatches,
-        main: uniqueMatches[0] || null,
-        top3: uniqueMatches.slice(0, 3)
-      };
-    }
-
-    function run() {
-      const input = document.getElementById("roomInput");
-      let room = input.value.replace(/\D/g, "").slice(0, 5);
-      input.value = room;
-
-      if (room.length !== 5) {
-        showError("请输入5位数字房号");
-        return;
-      }
-
-      const data = analyzeRoom(room);
-      renderResult(data);
-      saveHistory(data);
-      renderHistory();
-    }
-
-    function showError(msg) {
-      const box = document.getElementById("result");
-      box.className = "result show";
-      box.innerHTML = `
-        <span class="badge no">输入错误</span>
-        <div class="big">不处理</div>
-        <div class="desc">${msg}</div>
-      `;
-    }
-
-    function renderResult(data) {
-      const box = document.getElementById("result");
-
-      if (!data.main) {
-        box.className = "result show";
-        box.innerHTML = `
-          <span class="badge no">不进房</span>
-          <div class="big">${data.room}</div>
-          <div class="desc">原因：未命中 5130004 v10.5 黄金池+深挖补位。</div>
-          ${renderDebug(data)}
-        `;
-        return;
-      }
-
-      const main = data.main;
-      const top3 = data.top3 || [];
-
-      const top3Html = top3.map((m, i) => {
-        const comboNames = m.combos
-          .sort((a, b) => a.id - b.id)
-          .map(c => c.name)
-          .join("、");
-
-        return `
-          <div class="pick ${i === 0 ? "main" : ""}">
-            <div class="pick-title">
-              ${i === 0 ? "🔥主推" : "⚡备选"}｜${m.seat}号｜${m.bestCombo.name}
-            </div>
-            <div class="pick-rule">
-              X=${m.x}<br>
-              最高优先级：${m.bestCombo.grade}<br>
-              历史回测：${m.bestCombo.stat}<br>
-              同位命中：${comboNames}
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      const allHits = data.uniqueMatches
-        .map(m => {
-          const comboNames = m.combos
-            .sort((a, b) => a.id - b.id)
-            .map(c => c.name)
-            .join("、");
-
-          return `${m.seat}号｜${comboNames}`;
-        })
-        .join("<br>");
-
-      box.className = "result show";
-      box.innerHTML = `
-        <span class="badge ok">建议进房</span>
-        <span class="badge warn">${main.bestCombo.grade}</span>
-
-        <div class="big">
-          推荐位（最多3个不同位子）
-        </div>
-
-        <div class="pick-list">
-          ${top3Html}
-        </div>
-
-        <div class="desc" style="margin-top:12px;">
-          房号：<b>${data.room}</b><br>
-          最高优先级命中：<b>${main.bestCombo.name}</b><br>
-          主推：<b>${main.seat}号</b>｜X=${main.x}
-        </div>
-
-        <div class="grid">
-          <div class="stat"><div class="v">64/213</div><div class="k">总命中</div></div>
-          <div class="stat"><div class="v">30.0%</div><div class="k">进房率</div></div>
-          <div class="stat"><div class="v">93.8%</div><div class="k">总胜率</div></div>
-          <div class="stat"><div class="v">+41190</div><div class="k">总得分</div></div>
-        </div>
-
-        <div class="combo" style="margin-top:12px;">
-          <div class="name">全部命中位子（已按位子合并）</div>
-          <div class="rule">${allHits}</div>
-        </div>
-
-        ${renderDebug(data)}
-      `;
-    }
-
-    function renderDebug(data) {
-      const rows = data.allSeats.map(f => {
-        const hitNames = f.hits.length
-          ? f.hits.map(h => h.name).join("、")
-          : "无";
-
-        const tag = f.diffDominant
-          ? "差主导"
-          : f.hasDoubleSum && !f.hasDoubleDiff
-            ? "和主导"
-            : f.hasDoubleSum && f.hasDoubleDiff
-              ? "混合"
-              : f.oneWayDiff
-                ? "单向差"
-                : "散核";
-
-        return `
-          <tr>
-            <td>${f.seat}号</td>
-            <td>${f.x}</td>
-            <td>${formatMap(f.diffMap, "差")}</td>
-            <td>${formatMap(f.sumMap, "和")}</td>
-            <td>${tag}</td>
-            <td>${hitNames}</td>
-          </tr>
-        `;
-      }).join("");
-
-      return `
-        <div class="debug">
-          <table>
-            <thead>
-              <tr>
-                <th>位子</th>
-                <th>X</th>
-                <th>差值</th>
-                <th>和值</th>
-                <th>结构</th>
-                <th>命中组合</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>
-      `;
-    }
-
-    function saveHistory(data) {
-      const item = {
-        room: data.room,
-        time: new Date().toLocaleString(),
-        seat: data.main ? data.main.seat : null,
-        combo: data.main ? data.main.bestCombo.name : "未命中",
-        top3: data.top3 ? data.top3.map(m => `${m.seat}号-${m.bestCombo.name}`).join("；") : ""
-      };
-
-      const list = JSON.parse(localStorage.getItem("rz_v105_history") || "[]");
-      list.unshift(item);
-      localStorage.setItem("rz_v105_history", JSON.stringify(list.slice(0, 30)));
-    }
-
-    function renderHistory() {
-      const box = document.getElementById("historyBox");
-      const list = JSON.parse(localStorage.getItem("rz_v105_history") || "[]");
-
-      if (!list.length) {
-        box.innerHTML = "暂无记录";
-        return;
-      }
-
-      box.innerHTML = list.map(item => `
-        <div class="history-item">
-          <div class="history-left">${item.room}</div>
-          <div class="history-right">
-            ${item.seat ? `主推${item.seat}号` : "不进房"}<br>
-            ${item.combo}<br>
-            ${item.time}
-          </div>
-        </div>
-      `).join("");
-    }
-
-    function clearHistory() {
-      localStorage.removeItem("rz_v105_history");
-      renderHistory();
-    }
-
-    function renderComboList() {
-      const box = document.getElementById("comboList");
-      box.innerHTML = COMBOS.map(c => `
-        <div class="combo">
-          <div class="name">${c.id}. ${c.name}｜${c.grade}</div>
-          <div class="rule">${c.rule}<br>${c.stat}</div>
-        </div>
-      `).join("");
-    }
-
-    document.getElementById("roomInput").addEventListener("input", e => {
-      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 5);
+  for(let i=0;i<5;i++){
+    const s=seatData(d,i);
+    seats.push({
+      seat:i+1,
+      energy:energy(s),
+      raw:s
     });
+  }
 
-    document.getElementById("roomInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") run();
-    });
+  // 排序
+  seats.sort((a,b)=>b.energy-a.energy);
 
-    renderComboList();
-    renderHistory();
-  </script>
+  const top3=seats.slice(0,3);
+
+  let html="";
+
+  top3.forEach((s,i)=>{
+    html+=`
+      <div class="pick ${i===0?'main':''}">
+        <b>${i===0?'🔥主推':'⚡副推'}</b>｜${s.seat}号
+        <div class="muted">能量值：${s.energy}</div>
+      </div>
+    `;
+  });
+
+  const best = top3[0];
+
+  if(best.energy<=3){
+    html = `<div class="pick"><b>不命中</b></div>`;
+  }
+
+  document.getElementById("out").innerHTML=html;
+}
+
+</script>
+
 </body>
 </html>
