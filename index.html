@@ -91,13 +91,24 @@ button{
 
 <div class="title">5130004｜v25 稳定过滤模型</div>
 
+<!-- 输入区 -->
 <div class="panel">
-  <input id="room" placeholder="输入5位房号" maxlength="5"/>
+  <input 
+    id="room"
+    type="tel"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    maxlength="5"
+    placeholder="输入5位房号"
+    autocomplete="off"
+  />
+
   <button onclick="run()">生成推荐</button>
 
   <div id="result" class="result"></div>
 </div>
 
+<!-- 记录区 -->
 <div class="panel">
   <b>预测记录</b>
   <div id="history" class="history">暂无记录</div>
@@ -108,7 +119,14 @@ button{
 <script>
 
 // ======================
-// v25过滤规则（简化版核心）
+// 输入限制（防脏数据）
+// ======================
+document.getElementById("room").addEventListener("input", function(){
+  this.value = this.value.replace(/\D/g,"").slice(0,5);
+});
+
+// ======================
+// v25 风险过滤
 // ======================
 function filterRisk(d){
 
@@ -120,7 +138,7 @@ function filterRisk(d){
   // 镜像假稳
   if(Math.abs(B-D)<=1 && Math.abs(A-E)<=1 && Math.abs(C-D)>3) return true;
 
-  // 尾部反转
+  // 尾部极值反转
   if(E===Math.max(...d) && C<D) return true;
 
   // 左右失衡过度
@@ -131,7 +149,7 @@ function filterRisk(d){
 }
 
 // ======================
-// 位子评分（v25简化版）
+// 位子评分（简化稳定版）
 // ======================
 function scoreSeat(d, idx){
 
@@ -141,6 +159,7 @@ function scoreSeat(d, idx){
   for(let i=0;i<5;i++){
     if(i===idx) continue;
     score+=Math.abs(x-d[i]);
+
     if(x+d[i]<=9) score+=1;
   }
 
@@ -154,34 +173,33 @@ function scoreSeat(d, idx){
 // ======================
 function run(){
 
-  const r=document.getElementById("room").value.trim();
+  let r=document.getElementById("room").value.trim();
+
   if(r.length!==5){
-    alert("请输入5位房号");
+    show("不推荐","请输入5位房号");
     return;
   }
 
   const d=r.split("").map(Number);
 
-  // ❌ 过滤
+  // ❌ 风险过滤
   if(filterRisk(d)){
     show("不推荐","结构风险过高");
     save(r,"不推荐");
     return;
   }
 
-  // 计算6位（1~6，6=E）
-  const seats=[0,1,2,3,4];
-
-  const scored=seats.map(i=>({
+  // 计算推荐位
+  const list=[0,1,2,3,4].map(i=>({
     seat:i+1,
     score:scoreSeat(d,i)
   }));
 
-  scored.sort((a,b)=>b.score-a.score);
+  list.sort((a,b)=>b.score-a.score);
 
-  const top1=scored[0];
-  const top2=scored[1];
-  const top3=scored[2];
+  const top1=list[0];
+  const top2=list[1];
+  const top3=list[2];
 
   const html=`
     <div class="main">主推：${top1.seat}号</div>
@@ -193,7 +211,7 @@ function run(){
 }
 
 // ======================
-// UI
+// UI显示
 // ======================
 function show(main,status){
   document.getElementById("result").innerHTML=`
@@ -204,27 +222,35 @@ function show(main,status){
 }
 
 // ======================
-// 记录
+// 保存记录
 // ======================
 function save(room,res){
   let data=JSON.parse(localStorage.getItem("v25_log")||"[]");
-  data.unshift({room,res,time:new Date().toLocaleString()});
+
+  data.unshift({
+    room,
+    res,
+    time:new Date().toLocaleString()
+  });
+
   localStorage.setItem("v25_log",JSON.stringify(data.slice(0,20)));
+
   renderHistory();
 }
 
 // ======================
-// 历史
+// 渲染记录
 // ======================
 function renderHistory(){
   let data=JSON.parse(localStorage.getItem("v25_log")||"[]");
+
   document.getElementById("history").innerHTML=
-    data.map(x=>`
+    data.length?data.map(x=>`
       <div class="item">
         ${x.room} → ${x.res}<br>
         <span style="color:#999">${x.time}</span>
       </div>
-    `).join("");
+    `).join(""):"暂无记录";
 }
 
 renderHistory();
