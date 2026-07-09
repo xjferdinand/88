@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>5142587｜小老鼠 差值蒸馏模型 v1.0</title>
+  <title>5142587｜小老鼠 差值蒸馏模型 v1.1</title>
   <style>
     :root {
       --bg: #f7f3ec;
@@ -49,7 +49,13 @@
       backdrop-filter: blur(8px);
     }
 
-    .input-row { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 8px; }
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+    }
 
     input {
       width: min(100%, 360px);
@@ -67,7 +73,13 @@
     }
 
     input:focus { border-color: var(--red); }
-    button { border: none; cursor: pointer; font-weight: 900; transition: 0.18s ease; }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-weight: 900;
+      transition: 0.18s ease;
+    }
 
     .btn-main {
       width: 72px;
@@ -81,7 +93,14 @@
     }
 
     .btn-main:active { transform: scale(0.96); }
-    .btn-small { padding: 9px 13px; border-radius: 12px; background: #f0e2d3; color: #6b5644; font-size: 13px; }
+
+    .btn-small {
+      padding: 9px 13px;
+      border-radius: 12px;
+      background: #f0e2d3;
+      color: #6b5644;
+      font-size: 13px;
+    }
 
     .result {
       display: none;
@@ -105,13 +124,41 @@
       margin: 3px;
     }
 
-    .badge.ok { background: rgba(31, 157, 103, 0.12); color: var(--green); border: 1px solid rgba(31, 157, 103, 0.24); }
-    .badge.no { background: rgba(217, 75, 61, 0.10); color: var(--red2); border: 1px solid rgba(217, 75, 61, 0.22); }
-    .badge.warn { background: rgba(217, 140, 34, 0.12); color: #a6630f; border: 1px solid rgba(217, 140, 34, 0.22); }
-    .badge.blue { background: rgba(60, 120, 220, 0.10); color: #315eae; border: 1px solid rgba(60, 120, 220, 0.22); }
+    .badge.ok {
+      background: rgba(31, 157, 103, 0.12);
+      color: var(--green);
+      border: 1px solid rgba(31, 157, 103, 0.24);
+    }
 
-    .big { font-size: 34px; font-weight: 1000; margin: 10px 0 4px; }
-    .desc { color: var(--muted); line-height: 1.65; font-size: 14px; }
+    .badge.no {
+      background: rgba(217, 75, 61, 0.10);
+      color: var(--red2);
+      border: 1px solid rgba(217, 75, 61, 0.22);
+    }
+
+    .badge.warn {
+      background: rgba(217, 140, 34, 0.12);
+      color: #a6630f;
+      border: 1px solid rgba(217, 140, 34, 0.22);
+    }
+
+    .badge.blue {
+      background: rgba(60, 120, 220, 0.10);
+      color: #315eae;
+      border: 1px solid rgba(60, 120, 220, 0.22);
+    }
+
+    .big {
+      font-size: 34px;
+      font-weight: 1000;
+      margin: 10px 0 4px;
+    }
+
+    .desc {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
 
     .grid {
       display: grid;
@@ -120,25 +167,95 @@
       margin-top: 12px;
     }
 
-    .stat { background: #fff8ef; border: 1px solid var(--border); border-radius: 16px; padding: 12px 8px; text-align: center; }
-    .stat .v { font-size: 20px; font-weight: 1000; color: var(--text); }
-    .stat .k { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .stat {
+      background: #fff8ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 8px;
+      text-align: center;
+    }
 
-    .section-title { font-weight: 1000; font-size: 18px; margin: 3px 0 12px; }
+    .stat .v {
+      font-size: 20px;
+      font-weight: 1000;
+      color: var(--text);
+    }
+
+    .stat .k {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .section-title {
+      font-weight: 1000;
+      font-size: 18px;
+      margin: 3px 0 12px;
+    }
+
     .combo-list { display: grid; gap: 10px; }
-    .combo { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 12px; }
-    .combo .name { font-weight: 1000; margin-bottom: 6px; }
-    .combo .rule { color: var(--muted); font-size: 13px; line-height: 1.55; }
 
-    .pick-list { display: grid; gap: 10px; margin-top: 12px; }
-    .pick { background: #fff8ef; border: 1px solid var(--border); border-radius: 16px; padding: 12px; }
-    .pick.main { border-color: rgba(217, 75, 61, 0.42); background: #fff4ee; }
-    .pick.a { border-color: rgba(31, 157, 103, 0.35); background: #f3fff8; }
-    .pick.b { border-color: rgba(217, 140, 34, 0.38); background: #fff8ef; }
-    .pick .pick-title { font-weight: 1000; margin-bottom: 6px; }
-    .pick .pick-rule { color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .combo {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
 
-    .debug { margin-top: 12px; overflow-x: auto; }
+    .combo .name {
+      font-weight: 1000;
+      margin-bottom: 6px;
+    }
+
+    .combo .rule {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .pick-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pick {
+      background: #fff8ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .pick.main {
+      border-color: rgba(217, 75, 61, 0.42);
+      background: #fff4ee;
+    }
+
+    .pick.a {
+      border-color: rgba(31, 157, 103, 0.35);
+      background: #f3fff8;
+    }
+
+    .pick.b {
+      border-color: rgba(217, 140, 34, 0.38);
+      background: #fff8ef;
+    }
+
+    .pick .pick-title {
+      font-weight: 1000;
+      margin-bottom: 6px;
+    }
+
+    .pick .pick-rule {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .debug {
+      margin-top: 12px;
+      overflow-x: auto;
+    }
 
     table {
       width: 100%;
@@ -158,7 +275,12 @@
       white-space: nowrap;
     }
 
-    th { background: #fff1e1; color: #6b5644; font-weight: 900; }
+    th {
+      background: #fff1e1;
+      color: #6b5644;
+      font-weight: 900;
+    }
+
     tr:last-child td { border-bottom: none; }
 
     .history-item {
@@ -173,8 +295,21 @@
 
     .history-item:last-child { border-bottom: none; }
     .history-left { font-weight: 900; }
-    .history-right { color: var(--muted); text-align: right; font-size: 13px; line-height: 1.5; }
-    .footer-note { text-align: center; color: var(--muted); font-size: 12px; line-height: 1.6; margin-top: 16px; }
+
+    .history-right {
+      color: var(--muted);
+      text-align: right;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 16px;
+    }
 
     @media (max-width: 620px) {
       body { padding: 16px 10px 34px; }
@@ -193,9 +328,9 @@
 <body>
   <div class="wrap">
     <div class="hero">
-      <div class="title">5142587｜小老鼠 差值蒸馏模型 v1.0</div>
+      <div class="title">5142587｜小老鼠 差值蒸馏模型 v1.1</div>
       <div class="sub">
-        104局去重库｜只看座位+差值组合｜A档+B档命中34局｜30胜4小负｜胜率88.2%｜净分+22180｜0大输
+        107局去重库｜只看座位+差值组合｜A档+B档命中37局｜33胜4小负｜胜率89.2%｜净分+23950｜0大输
       </div>
     </div>
 
@@ -209,14 +344,14 @@
     </div>
 
     <div class="panel">
-      <div class="section-title">v1.0 实战回测</div>
+      <div class="section-title">v1.1 实战回测</div>
       <div class="grid">
-        <div class="stat"><div class="v">34 / 104</div><div class="k">命中进房</div></div>
-        <div class="stat"><div class="v">32.7%</div><div class="k">进房率</div></div>
-        <div class="stat"><div class="v">88.2%</div><div class="k">胜率</div></div>
-        <div class="stat"><div class="v">+22180</div><div class="k">净得分</div></div>
-        <div class="stat"><div class="v">+652</div><div class="k">命中均分</div></div>
-        <div class="stat"><div class="v">18</div><div class="k">大赢≥500</div></div>
+        <div class="stat"><div class="v">37 / 107</div><div class="k">命中进房</div></div>
+        <div class="stat"><div class="v">34.6%</div><div class="k">进房率</div></div>
+        <div class="stat"><div class="v">89.2%</div><div class="k">胜率</div></div>
+        <div class="stat"><div class="v">+23950</div><div class="k">净得分</div></div>
+        <div class="stat"><div class="v">+647</div><div class="k">命中均分</div></div>
+        <div class="stat"><div class="v">19</div><div class="k">大赢≥500</div></div>
         <div class="stat"><div class="v">0</div><div class="k">大输≤-500</div></div>
         <div class="stat"><div class="v">4小负</div><div class="k">历史误中</div></div>
       </div>
@@ -245,15 +380,15 @@
 
   <script>
     const MODEL_STAT = {
-      sample: "104局",
-      hit: "34 / 104",
-      rate: "32.7%",
-      winRate: "88.2%",
-      score: "+22180",
-      avg: "+652",
-      bigWin: "18",
+      sample: "107局",
+      hit: "37 / 107",
+      rate: "34.6%",
+      winRate: "89.2%",
+      score: "+23950",
+      avg: "+647",
+      bigWin: "19",
       bigLoss: "0",
-      version: "v1.0"
+      version: "v1.1"
     };
 
     const RULES = [
@@ -328,7 +463,7 @@
         grade: "A",
         rank: 7,
         name: "5号｜差2 + 差3",
-        stat: "历史命中：4局｜4胜0负｜净+3250｜0大输",
+        stat: "历史命中：5局｜5胜0负｜净+3710｜0大输",
         rule: "5号取X=E。5号最硬组合，必须同时有差2和差3。",
         test: (seat, r) => seat === 5 && hasDiff(r, seat, 2) && hasDiff(r, seat, 3)
       },
@@ -338,7 +473,7 @@
         grade: "A",
         rank: 8,
         name: "5号｜差3 + 差7",
-        stat: "历史命中：4局｜3胜1小负｜净+1560｜0大输",
+        stat: "历史命中：5局｜4胜1小负｜净+2020｜0大输",
         rule: "5号取X=E。差3不能裸打，配差7后可用。",
         test: (seat, r) => seat === 5 && hasDiff(r, seat, 3) && hasDiff(r, seat, 7)
       },
@@ -418,14 +553,24 @@
         rank: 27,
         name: "4号｜差1 + 差6",
         stat: "历史命中：2局｜2胜0负｜净+790｜0大输",
-        rule: "4号取X=D。4号整体不强，只留差1+差6观察。",
+        rule: "4号取X=D。4号整体不强，原观察组合之一。",
         test: (seat, r) => seat === 4 && hasDiff(r, seat, 1) && hasDiff(r, seat, 6)
       },
       {
         id: 16,
-        seat: 1,
+        seat: 4,
         grade: "B",
         rank: 28,
+        name: "4号｜差1 + 差5",
+        stat: "历史命中：2局｜2胜0负｜净+1310｜0大输",
+        rule: "4号取X=D。新增补丁组合：51401大赢+1070打出后加入B档观察。",
+        test: (seat, r) => seat === 4 && hasDiff(r, seat, 1) && hasDiff(r, seat, 5)
+      },
+      {
+        id: 17,
+        seat: 1,
+        grade: "B",
+        rank: 29,
         name: "1号｜差5",
         stat: "历史命中：3局｜2胜1小负｜净+520｜0大输",
         rule: "1号取X=A。样本少，差5只作观察；历史有-480，接近大输线，谨慎。",
@@ -451,7 +596,7 @@
       },
       {
         name: "4号危险｜差4/差8",
-        rule: "4号差4、差8方向历史出雷；除差1+差6外暂不推荐。",
+        rule: "4号差4、差8方向历史出雷；除差1+差6、差1+差5外暂不推荐。",
         testSeat: (seat, r) => seat === 4 && (hasDiff(r, seat, 4) || hasDiff(r, seat, 8)) && !hasHit(seat, r)
       },
       {
@@ -817,14 +962,14 @@
         result: picks.length ? picks.map(p => `${p.seat}号${p.level === "A" ? "A" : "B"}`).join("、") : "跳过"
       };
 
-      const list = JSON.parse(localStorage.getItem("xiaolaoshu_5142587_diff_v10_history") || "[]");
+      const list = JSON.parse(localStorage.getItem("xiaolaoshu_5142587_diff_v11_history") || "[]");
       list.unshift(item);
-      localStorage.setItem("xiaolaoshu_5142587_diff_v10_history", JSON.stringify(list.slice(0, 30)));
+      localStorage.setItem("xiaolaoshu_5142587_diff_v11_history", JSON.stringify(list.slice(0, 30)));
     }
 
     function renderHistory() {
       const box = document.getElementById("historyBox");
-      const list = JSON.parse(localStorage.getItem("xiaolaoshu_5142587_diff_v10_history") || "[]");
+      const list = JSON.parse(localStorage.getItem("xiaolaoshu_5142587_diff_v11_history") || "[]");
 
       if (!list.length) {
         box.innerHTML = "暂无记录";
@@ -840,7 +985,7 @@
     }
 
     function clearHistory() {
-      localStorage.removeItem("xiaolaoshu_5142587_diff_v10_history");
+      localStorage.removeItem("xiaolaoshu_5142587_diff_v11_history");
       renderHistory();
     }
 
@@ -853,7 +998,7 @@
       const aHtml = `
         <div class="combo">
           <div class="name">A档硬打｜回测</div>
-          <div class="rule">21局｜18胜3小负｜胜率85.7%｜净+16130｜0大输</div>
+          <div class="rule">22局｜19胜3小负｜胜率86.4%｜净+16590｜0大输</div>
         </div>
       ` + aRules.map(r => `
         <div class="combo">
@@ -865,7 +1010,7 @@
       const bHtml = `
         <div class="combo">
           <div class="name">B档观察｜A档外新增回测</div>
-          <div class="rule">新增13局｜12胜1小负｜胜率92.3%｜净+6050｜0大输</div>
+          <div class="rule">新增15局｜14胜1小负｜胜率93.3%｜净+7360｜0大输</div>
         </div>
       ` + bRules.map(r => `
         <div class="combo">
