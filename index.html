@@ -373,43 +373,43 @@
       },
       {
         id: 11,
-        seat: 2,
+        seat: 6,
         grade: "B",
         rank: 23,
-        name: "2号｜差3 + 差5",
-        stat: "历史命中：2局｜2胜0负｜净+1530｜0大输",
-        rule: "2号取X=B。差3配差5可观察，但不如差1+差3硬。",
-        test: (seat, r) => seat === 2 && hasDiff(r, seat, 3) && hasDiff(r, seat, 5)
+        name: "6号｜差1 + 差5",
+        stat: "历史命中：3局｜3胜0负｜净+2220｜0大输",
+        rule: "6号取X=E。6号整体较差，只保留差1+差5观察；排序提前，避免多位命中时被挤掉。",
+        test: (seat, r) => seat === 6 && hasDiff(r, seat, 1) && hasDiff(r, seat, 5)
       },
       {
         id: 12,
         seat: 2,
         grade: "B",
         rank: 24,
+        name: "2号｜差3 + 差5",
+        stat: "历史命中：2局｜2胜0负｜净+1530｜0大输",
+        rule: "2号取X=B。差3配差5可观察，但不如差1+差3硬。",
+        test: (seat, r) => seat === 2 && hasDiff(r, seat, 3) && hasDiff(r, seat, 5)
+      },
+      {
+        id: 13,
+        seat: 2,
+        grade: "B",
+        rank: 25,
         name: "2号｜差2 + 差5",
         stat: "历史命中：2局｜2胜0负｜净+1190｜0大输",
         rule: "2号取X=B。差2配差5可观察。",
         test: (seat, r) => seat === 2 && hasDiff(r, seat, 2) && hasDiff(r, seat, 5)
       },
       {
-        id: 13,
+        id: 14,
         seat: 5,
         grade: "B",
-        rank: 25,
+        rank: 26,
         name: "5号｜差4 + 差7",
         stat: "历史命中：2局｜2胜0负｜净+1410｜0大输",
         rule: "5号取X=E。差4整体不强，只有配差7时可观察。",
         test: (seat, r) => seat === 5 && hasDiff(r, seat, 4) && hasDiff(r, seat, 7)
-      },
-      {
-        id: 14,
-        seat: 6,
-        grade: "B",
-        rank: 26,
-        name: "6号｜差1 + 差5",
-        stat: "历史命中：3局｜3胜0负｜净+2220｜0大输",
-        rule: "6号取X=E。6号整体较差，只保留差1+差5观察。",
-        test: (seat, r) => seat === 6 && hasDiff(r, seat, 1) && hasDiff(r, seat, 5)
       },
       {
         id: 15,
@@ -481,6 +481,7 @@
     function isHigh(n) { return n >= 5 && n <= 9; }
     function oe(n) { return n % 2 === 0 ? "偶" : "奇"; }
     function hl(n) { return isLow(n) ? "低" : "高"; }
+
     function move(a, b) {
       if (a < b) return "升";
       if (a > b) return "降";
