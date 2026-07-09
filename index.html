@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>5124587｜小老鼠 v1.1 核关系模型</title>
+  <title>5142587｜小老鼠 差值蒸馏模型 v1.0</title>
   <style>
     :root {
       --bg: #f7f3ec;
@@ -15,6 +15,7 @@
       --red2: #b8342b;
       --green: #1f9d67;
       --orange: #d98c22;
+      --blue: #315eae;
       --border: #eadccc;
       --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
     }
@@ -132,6 +133,8 @@
     .pick-list { display: grid; gap: 10px; margin-top: 12px; }
     .pick { background: #fff8ef; border: 1px solid var(--border); border-radius: 16px; padding: 12px; }
     .pick.main { border-color: rgba(217, 75, 61, 0.42); background: #fff4ee; }
+    .pick.a { border-color: rgba(31, 157, 103, 0.35); background: #f3fff8; }
+    .pick.b { border-color: rgba(217, 140, 34, 0.38); background: #fff8ef; }
     .pick .pick-title { font-weight: 1000; margin-bottom: 6px; }
     .pick .pick-rule { color: var(--muted); font-size: 13px; line-height: 1.55; }
 
@@ -140,7 +143,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1120px;
+      min-width: 980px;
       background: #fff;
       border-radius: 14px;
       overflow: hidden;
@@ -182,6 +185,7 @@
       .btn-main { width: 64px; height: 64px; font-size: 16px; }
       .grid { grid-template-columns: repeat(2, 1fr); }
       .big { font-size: 26px; }
+      table { min-width: 820px; }
     }
   </style>
 </head>
@@ -189,9 +193,9 @@
 <body>
   <div class="wrap">
     <div class="hero">
-      <div class="title">5124587｜小老鼠 v1.1 核关系模型</div>
+      <div class="title">5142587｜小老鼠 差值蒸馏模型 v1.0</div>
       <div class="sub">
-        71局去重库｜真辅助 / 假辅助排雷｜25局命中｜24胜1小负｜胜率96.0%｜净分+24460｜0大输
+        104局去重库｜只看座位+差值组合｜A档+B档命中34局｜30胜4小负｜胜率88.2%｜净分+22180｜0大输
       </div>
     </div>
 
@@ -205,19 +209,19 @@
     </div>
 
     <div class="panel">
-      <div class="section-title">v1.1 实战回测</div>
+      <div class="section-title">v1.0 实战回测</div>
       <div class="grid">
-        <div class="stat"><div class="v">25 / 71</div><div class="k">命中进房</div></div>
-        <div class="stat"><div class="v">35.2%</div><div class="k">进房率</div></div>
-        <div class="stat"><div class="v">96.0%</div><div class="k">胜率</div></div>
-        <div class="stat"><div class="v">+24460</div><div class="k">净得分</div></div>
-        <div class="stat"><div class="v">+978</div><div class="k">单局均分</div></div>
-        <div class="stat"><div class="v">19</div><div class="k">大赢≥500</div></div>
+        <div class="stat"><div class="v">34 / 104</div><div class="k">命中进房</div></div>
+        <div class="stat"><div class="v">32.7%</div><div class="k">进房率</div></div>
+        <div class="stat"><div class="v">88.2%</div><div class="k">胜率</div></div>
+        <div class="stat"><div class="v">+22180</div><div class="k">净得分</div></div>
+        <div class="stat"><div class="v">+652</div><div class="k">命中均分</div></div>
+        <div class="stat"><div class="v">18</div><div class="k">大赢≥500</div></div>
         <div class="stat"><div class="v">0</div><div class="k">大输≤-500</div></div>
-        <div class="stat"><div class="v">1小负</div><div class="k">历史误中</div></div>
+        <div class="stat"><div class="v">4小负</div><div class="k">历史误中</div></div>
       </div>
       <div class="desc" style="margin-top:12px;">
-        当前版本只输出正式推荐位：2号看A/C差3或差7+差8双开；3号差4必须有真辅助；4号低D必须差3+和7；5号按差3来源分级。无命中直接跳。
+        当前版本只看差值，不看和值，不看复杂结构。房号ABCDE；1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。差0不作为触发条件。
       </div>
     </div>
 
@@ -235,116 +239,241 @@
     </div>
 
     <div class="footer-note">
-      固定规则：房号ABCDE；1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。差值=当前座位X与其余数字的绝对差；和值仅统计X+其他数字≤9。当前模型不输出1号/6号。
+      固定规则：房号ABCDE；1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。差值=当前座位X与其余数字的绝对差；差0只展示，不作为推荐触发。最多输出3个推荐位。
     </div>
   </div>
 
   <script>
     const MODEL_STAT = {
-      sample: "71局",
-      hit: "25 / 71",
-      rate: "35.2%",
-      winRate: "96.0%",
-      score: "+24460",
-      avg: "+978",
-      bigWin: "19",
+      sample: "104局",
+      hit: "34 / 104",
+      rate: "32.7%",
+      winRate: "88.2%",
+      score: "+22180",
+      avg: "+652",
+      bigWin: "18",
       bigLoss: "0",
-      version: "v1.1"
+      version: "v1.0"
     };
 
     const RULES = [
       {
         id: 1,
-        seat: 5,
+        seat: 2,
+        grade: "A",
         rank: 1,
-        name: "5号｜差3来源模型",
-        grade: "A档｜最强主线",
-        stat: "历史命中：36474、82669、76592、53136、46803、39380、59018、45552｜8胜0负｜净+7190｜0大输",
-        rule: "5号取X=E。D来源差3直接推荐；C来源差3必须带真实差7/8且X不重复；A来源差3必须同时带差7+差8且X不重复。单C、单A无强辅助不推。",
-        test: (seat, r) => seat === 5 && isSeat5V11(r)
+        name: "2号｜差1 + 差3",
+        stat: "历史命中：3局｜3胜0负｜净+2090｜0大输",
+        rule: "2号取X=B。必须同时出现差1和差3。2号主攻A档之一。",
+        test: (seat, r) => seat === 2 && hasDiff(r, seat, 1) && hasDiff(r, seat, 3)
       },
       {
         id: 2,
-        seat: 3,
+        seat: 2,
+        grade: "A",
         rank: 2,
-        name: "3号｜差4真辅助模型",
-        grade: "A档｜主攻规则",
-        stat: "历史命中：76519、83705、25260、52151、54161、92915、26670、61195、54952、42083、45027｜10胜1小负｜净+11610｜0大输",
-        rule: "3号取X=C。必须有差4，并且有真辅助：真实差7/8、差4同源和8、有效双差4、或同源差5+和7。过滤只有和7、差0给和8、B/E同值双差4。",
-        test: (seat, r) => seat === 3 && isSeat3V11(r)
+        name: "2号｜差7 + 差8",
+        stat: "历史命中：2局｜2胜0负｜净+2340｜0大输",
+        rule: "2号取X=B。必须同时出现差7和差8。样本少，但爆发强。",
+        test: (seat, r) => seat === 2 && hasDiff(r, seat, 7) && hasDiff(r, seat, 8)
       },
       {
         id: 3,
-        seat: 2,
+        seat: 3,
+        grade: "A",
         rank: 3,
-        name: "2号｜A/C差3或7/8双开",
-        grade: "A档｜爆发规则",
-        stat: "历史命中：48573、30789、49172、25697｜4胜0负｜净+4340｜0大输",
-        rule: "2号取X=B。B不重复，并且满足A/C来源差3；或者B不重复且同时有差7+差8。过滤B重复、E来源差3、差4双抢核。",
-        test: (seat, r) => seat === 2 && isSeat2V11(r)
+        name: "3号｜差4 + 差2 + 差3",
+        stat: "历史命中：2局｜2胜0负｜净+3370｜0大输",
+        rule: "3号取X=C。差4必须配差2+差3，属于3号差4第一硬组合。",
+        test: (seat, r) => seat === 3 && hasDiff(r, seat, 4) && hasDiff(r, seat, 2) && hasDiff(r, seat, 3)
       },
       {
         id: 4,
-        seat: 4,
+        seat: 3,
+        grade: "A",
         rank: 4,
-        name: "4号｜低D差3+和7承接",
-        grade: "B档｜低频补位",
-        stat: "历史命中：22526、22614｜2胜0负｜净+1320｜0大输",
-        rule: "4号取X=D。必须D≤2、有重号、有差3、且有和7。只有差4/和8是假承接，不推荐。",
-        test: (seat, r) => seat === 4 && isSeat4V11(r)
+        name: "3号｜差5 + 差3",
+        stat: "历史命中：3局｜2胜1小负｜净+940｜0大输",
+        rule: "3号取X=C。差5不能裸打，配差3后可用。",
+        test: (seat, r) => seat === 3 && hasDiff(r, seat, 5) && hasDiff(r, seat, 3)
+      },
+      {
+        id: 5,
+        seat: 3,
+        grade: "A",
+        rank: 5,
+        name: "3号｜差5 + 差7",
+        stat: "历史命中：2局｜1胜1小负｜净+2160｜0大输",
+        rule: "3号取X=C。差5配差7，样本少但爆发强。",
+        test: (seat, r) => seat === 3 && hasDiff(r, seat, 5) && hasDiff(r, seat, 7)
+      },
+      {
+        id: 6,
+        seat: 3,
+        grade: "A",
+        rank: 6,
+        name: "3号｜差5 + 差4，避开差1/差6",
+        stat: "历史命中：4局｜3胜1小负｜净+3080｜0大输",
+        rule: "3号取X=C。必须有差5+差4，但不能同时带差1或差6。带差1/差6历史容易出雷。",
+        test: (seat, r) =>
+          seat === 3 &&
+          hasDiff(r, seat, 5) &&
+          hasDiff(r, seat, 4) &&
+          !hasDiff(r, seat, 1) &&
+          !hasDiff(r, seat, 6)
+      },
+      {
+        id: 7,
+        seat: 5,
+        grade: "A",
+        rank: 7,
+        name: "5号｜差2 + 差3",
+        stat: "历史命中：4局｜4胜0负｜净+3250｜0大输",
+        rule: "5号取X=E。5号最硬组合，必须同时有差2和差3。",
+        test: (seat, r) => seat === 5 && hasDiff(r, seat, 2) && hasDiff(r, seat, 3)
+      },
+      {
+        id: 8,
+        seat: 5,
+        grade: "A",
+        rank: 8,
+        name: "5号｜差3 + 差7",
+        stat: "历史命中：4局｜3胜1小负｜净+1560｜0大输",
+        rule: "5号取X=E。差3不能裸打，配差7后可用。",
+        test: (seat, r) => seat === 5 && hasDiff(r, seat, 3) && hasDiff(r, seat, 7)
+      },
+
+      {
+        id: 9,
+        seat: 3,
+        grade: "B",
+        rank: 21,
+        name: "3号｜差4 + 差7，不带差8",
+        stat: "历史命中：3局｜2胜1小负｜净+2670｜0大输",
+        rule: "3号取X=C。差4配差7可以打，但如果同时带差8，历史出现风险，所以这里要求不带差8。",
+        test: (seat, r) =>
+          seat === 3 &&
+          hasDiff(r, seat, 4) &&
+          hasDiff(r, seat, 7) &&
+          !hasDiff(r, seat, 8)
+      },
+      {
+        id: 10,
+        seat: 3,
+        grade: "B",
+        rank: 22,
+        name: "3号｜差4 + 差6，不带差5",
+        stat: "历史命中：2局｜2胜0负｜净+1360｜0大输",
+        rule: "3号取X=C。差4配差6可观察，但不能带差5。",
+        test: (seat, r) =>
+          seat === 3 &&
+          hasDiff(r, seat, 4) &&
+          hasDiff(r, seat, 6) &&
+          !hasDiff(r, seat, 5)
+      },
+      {
+        id: 11,
+        seat: 2,
+        grade: "B",
+        rank: 23,
+        name: "2号｜差3 + 差5",
+        stat: "历史命中：2局｜2胜0负｜净+1530｜0大输",
+        rule: "2号取X=B。差3配差5可观察，但不如差1+差3硬。",
+        test: (seat, r) => seat === 2 && hasDiff(r, seat, 3) && hasDiff(r, seat, 5)
+      },
+      {
+        id: 12,
+        seat: 2,
+        grade: "B",
+        rank: 24,
+        name: "2号｜差2 + 差5",
+        stat: "历史命中：2局｜2胜0负｜净+1190｜0大输",
+        rule: "2号取X=B。差2配差5可观察。",
+        test: (seat, r) => seat === 2 && hasDiff(r, seat, 2) && hasDiff(r, seat, 5)
+      },
+      {
+        id: 13,
+        seat: 5,
+        grade: "B",
+        rank: 25,
+        name: "5号｜差4 + 差7",
+        stat: "历史命中：2局｜2胜0负｜净+1410｜0大输",
+        rule: "5号取X=E。差4整体不强，只有配差7时可观察。",
+        test: (seat, r) => seat === 5 && hasDiff(r, seat, 4) && hasDiff(r, seat, 7)
+      },
+      {
+        id: 14,
+        seat: 6,
+        grade: "B",
+        rank: 26,
+        name: "6号｜差1 + 差5",
+        stat: "历史命中：3局｜3胜0负｜净+2220｜0大输",
+        rule: "6号取X=E。6号整体较差，只保留差1+差5观察。",
+        test: (seat, r) => seat === 6 && hasDiff(r, seat, 1) && hasDiff(r, seat, 5)
+      },
+      {
+        id: 15,
+        seat: 4,
+        grade: "B",
+        rank: 27,
+        name: "4号｜差1 + 差6",
+        stat: "历史命中：2局｜2胜0负｜净+790｜0大输",
+        rule: "4号取X=D。4号整体不强，只留差1+差6观察。",
+        test: (seat, r) => seat === 4 && hasDiff(r, seat, 1) && hasDiff(r, seat, 6)
+      },
+      {
+        id: 16,
+        seat: 1,
+        grade: "B",
+        rank: 28,
+        name: "1号｜差5",
+        stat: "历史命中：3局｜2胜1小负｜净+520｜0大输",
+        rule: "1号取X=A。样本少，差5只作观察；历史有-480，接近大输线，谨慎。",
+        test: (seat, r) => seat === 1 && hasDiff(r, seat, 5)
       }
     ];
 
     const BLACK_RULES = [
       {
-        name: "1号｜样本不足",
-        rule: "1号当前没有大赢证据，v1.1不输出。",
-        testSeat: (seat, r) => seat === 1
+        name: "2号危险｜差4 + 差5",
+        rule: "2号差4+差5历史多次出雷；没有命中A/B保护时不推。",
+        testSeat: (seat, r) => seat === 2 && hasDiff(r, seat, 4) && hasDiff(r, seat, 5) && !hasHit(seat, r)
       },
       {
-        name: "6号｜样本不足",
-        rule: "6号命核曾出现大输，v1.1不输出。",
-        testSeat: (seat, r) => seat === 6
+        name: "3号危险｜裸差4",
+        rule: "3号差4爆发高，但裸打有大输；必须配差2+差3、差7保护、或差6保护。",
+        testSeat: (seat, r) => seat === 3 && hasDiff(r, seat, 4) && !hasHit(seat, r)
       },
       {
-        name: "2号黑｜B重复 / 差0",
-        rule: "2号B重复时历史多为压制结构；B重复直接不推。",
-        testSeat: (seat, r) => seat === 2 && hasDiff(r, seat, 0)
+        name: "3号危险｜裸差5",
+        rule: "3号差5不是主核；必须配差3、差7，或差4且避开差1/差6。",
+        testSeat: (seat, r) => seat === 3 && hasDiff(r, seat, 5) && !hasHit(seat, r)
       },
       {
-        name: "2号黑｜E来源差3假门",
-        rule: "2号差3若只从E来源触发，历史95132 -550打穿，不作为推荐。",
-        testSeat: (seat, r) => seat === 2 && hasDiffFrom(r, seat, "E", 3) && !isSeat2V11(r)
+        name: "4号危险｜差4/差8",
+        rule: "4号差4、差8方向历史出雷；除差1+差6外暂不推荐。",
+        testSeat: (seat, r) => seat === 4 && (hasDiff(r, seat, 4) || hasDiff(r, seat, 8)) && !hasHit(seat, r)
       },
       {
-        name: "3号黑｜B/E同值双差4锁核",
-        rule: "B和E为同一个数字且同时给C提供差4，代表56226 -1360，直接过滤。",
-        testSeat: (seat, r) => seat === 3 && isSeat3BESameValueDiff4(r)
+        name: "5号危险｜裸差3",
+        rule: "5号差3是主方向，但裸打有大输；必须配差2或差7。",
+        testSeat: (seat, r) => seat === 5 && hasDiff(r, seat, 3) && !hasHit(seat, r)
       },
       {
-        name: "3号黑｜只有和7假辅助",
-        rule: "3号有差4但只靠和7撑，没有真实差7/8或同源强辅助，代表74398、32481。",
-        testSeat: (seat, r) => seat === 3 && hasDiff(r, seat, 4) && hasSum(r, seat, 7) && !isSeat3V11(r)
+        name: "5号危险｜差1+差3 / 差3+差5",
+        rule: "5号差1+差3、差3+差5都被大输击穿；不作为推荐。",
+        testSeat: (seat, r) =>
+          seat === 5 &&
+          (
+            (hasDiff(r, seat, 1) && hasDiff(r, seat, 3)) ||
+            (hasDiff(r, seat, 3) && hasDiff(r, seat, 5))
+          ) &&
+          !hasHit(seat, r)
       },
       {
-        name: "3号黑｜差0给和8假辅助",
-        rule: "和8若来自差0位置，属于X重复假辅助，代表34402。",
-        testSeat: (seat, r) => seat === 3 && hasDiff(r, seat, 4) && hasSourceDiffAndSum(r, seat, 0, 8) && !isSeat3V11(r)
-      },
-      {
-        name: "3号黑｜差5单独作废",
-        rule: "3号只有差5、没有差4时不推；18051、37288已打穿。",
-        testSeat: (seat, r) => seat === 3 && hasDiff(r, seat, 5) && !hasDiff(r, seat, 4)
-      },
-      {
-        name: "4号黑｜假承接",
-        rule: "4号低D但缺少差3+和7时不推；48404只有差4/和8，已打穿。",
-        testSeat: (seat, r) => seat === 4 && r.D <= 2 && r.hasRepeat && !isSeat4V11(r)
-      },
-      {
-        name: "5号黑｜C/A单差3假门",
-        rule: "5号C或A单独差3但没有真辅助时不推；11255、53639、61389已验证。",
-        testSeat: (seat, r) => seat === 5 && hasDiff(r, seat, 3) && !isSeat5V11(r)
+        name: "6号危险｜非差1+差5",
+        rule: "6号整体较差，当前只保留差1+差5；其它组合暂不推荐。",
+        testSeat: (seat, r) => seat === 6 && !hasHit(seat, r)
       }
     ];
 
@@ -357,6 +486,7 @@
       if (a > b) return "降";
       return "平";
     }
+
     function countMap(arr) {
       const m = {};
       arr.forEach(v => { m[v] = (m[v] || 0) + 1; });
@@ -396,36 +526,35 @@
       return getOtherDigits(r, seat).map(item => ({
         pos: item.pos,
         value: item.v,
-        diff: Math.abs(x - item.v),
-        sum: x + item.v,
-        sumValid: x + item.v <= 9
+        diff: Math.abs(x - item.v)
       }));
     }
 
-    function getDiffs(r, seat) { return getRelations(r, seat); }
+    function getDiffSet(r, seat) {
+      const set = new Set();
+      getRelations(r, seat).forEach(d => {
+        if (d.diff > 0) set.add(d.diff);
+      });
+      return Array.from(set).sort((a, b) => a - b);
+    }
 
     function hasDiff(r, seat, diff) {
+      if (diff === 0) return false;
       return getRelations(r, seat).some(d => d.diff === diff);
     }
 
-    function hasSum(r, seat, sum) {
-      return getRelations(r, seat).some(d => d.sumValid && d.sum === sum);
+    function hasHit(seat, r) {
+      return RULES.some(rule => rule.test(seat, r));
     }
 
-    function hasDiffFrom(r, seat, pos, diff) {
-      return getRelations(r, seat).some(d => d.pos === pos && d.diff === diff);
+    function getHitRules(seat, r) {
+      return RULES.filter(rule => rule.test(seat, r));
     }
 
-    function hasSumFrom(r, seat, pos, sum) {
-      return getRelations(r, seat).some(d => d.pos === pos && d.sumValid && d.sum === sum);
-    }
-
-    function hasSourceDiffAndSum(r, seat, diff, sum) {
-      return getRelations(r, seat).some(d => d.diff === diff && d.sumValid && d.sum === sum);
-    }
-
-    function diffObjects(r, seat, diff) {
-      return getRelations(r, seat).filter(d => d.diff === diff);
+    function getSeatBlockReasons(seat, r) {
+      return BLACK_RULES
+        .filter(b => b.testSeat && b.testSeat(seat, r))
+        .map(b => b.name);
     }
 
     function pairCount(r) {
@@ -434,93 +563,6 @@
 
     function hasTriple(r) {
       return Object.values(r.digitMap).some(c => c >= 3);
-    }
-
-    function isSeat3BESameValueDiff4(r) {
-      return Math.abs(r.C - r.B) === 4 && Math.abs(r.C - r.E) === 4 && r.B === r.E;
-    }
-
-    function isSeat3V11(r) {
-      const seat = 3;
-      if (!hasDiff(r, seat, 4)) return false;
-      if (isSeat3BESameValueDiff4(r)) return false;
-
-      const trueDiffAux = hasDiff(r, seat, 7) || hasDiff(r, seat, 8);
-      const sameSourceDiff4Sum8 = hasSourceDiffAndSum(r, seat, 4, 8);
-      const dualDiff4 = diffObjects(r, seat, 4).length >= 2;
-      const sameSourceDiff5Sum7 = hasSourceDiffAndSum(r, seat, 5, 7);
-
-      return trueDiffAux || sameSourceDiff4Sum8 || dualDiff4 || sameSourceDiff5Sum7;
-    }
-
-    function isSeat2V11(r) {
-      const seat = 2;
-      const bRepeated = hasDiff(r, seat, 0);
-      if (bRepeated) return false;
-
-      const leftDiff3 = hasDiffFrom(r, seat, "A", 3) || hasDiffFrom(r, seat, "C", 3);
-      const dualTrueAux = hasDiff(r, seat, 7) && hasDiff(r, seat, 8);
-
-      return leftDiff3 || dualTrueAux;
-    }
-
-    function isSeat5V11(r) {
-      const seat = 5;
-      if (!hasDiff(r, seat, 3)) return false;
-
-      const xRepeated = hasDiff(r, seat, 0);
-      const dDiff3 = hasDiffFrom(r, seat, "D", 3);
-      const cDiff3 = hasDiffFrom(r, seat, "C", 3);
-      const aDiff3 = hasDiffFrom(r, seat, "A", 3);
-      const trueAux = hasDiff(r, seat, 7) || hasDiff(r, seat, 8);
-      const dualTrueAux = hasDiff(r, seat, 7) && hasDiff(r, seat, 8);
-
-      if (dDiff3) return true;
-      if (cDiff3 && trueAux && !xRepeated) return true;
-      if (aDiff3 && dualTrueAux && !xRepeated) return true;
-
-      return false;
-    }
-
-    function isSeat4V11(r) {
-      const seat = 4;
-      return r.D <= 2 && r.hasRepeat && hasDiff(r, seat, 3) && hasSum(r, seat, 7);
-    }
-
-    function getHitReason(seat, r) {
-      if (seat === 2) {
-        const parts = [];
-        if (hasDiffFrom(r, seat, "A", 3)) parts.push("A来源差3");
-        if (hasDiffFrom(r, seat, "C", 3)) parts.push("C来源差3");
-        if (hasDiff(r, seat, 7) && hasDiff(r, seat, 8)) parts.push("差7+差8双真辅助");
-        parts.push("B不重复");
-        return parts.join(" + ");
-      }
-
-      if (seat === 3) {
-        const parts = ["C存在差4"];
-        if (hasDiff(r, seat, 7) || hasDiff(r, seat, 8)) parts.push("真实差7/8辅助");
-        if (hasSourceDiffAndSum(r, seat, 4, 8)) parts.push("差4同源和8");
-        if (diffObjects(r, seat, 4).length >= 2 && !isSeat3BESameValueDiff4(r)) parts.push("有效双差4");
-        if (hasSourceDiffAndSum(r, seat, 5, 7)) parts.push("同源差5+和7");
-        return parts.join(" + ");
-      }
-
-      if (seat === 4) {
-        return "D≤2 + 有重号 + 差3 + 和7";
-      }
-
-      if (seat === 5) {
-        const parts = [];
-        if (hasDiffFrom(r, seat, "D", 3)) parts.push("D来源差3");
-        if (hasDiffFrom(r, seat, "C", 3)) parts.push("C来源差3");
-        if (hasDiffFrom(r, seat, "A", 3)) parts.push("A来源差3");
-        if (hasDiff(r, seat, 7)) parts.push("差7辅助");
-        if (hasDiff(r, seat, 8)) parts.push("差8辅助");
-        return parts.join(" + ");
-      }
-
-      return "";
     }
 
     function analyzeRoom(room) {
@@ -555,8 +597,6 @@
         leftSum,
         rightSum,
         lrDiff,
-        leftStrong: leftSum > rightSum,
-        rightStrong: rightSum > leftSum,
         edgeDiff,
         innerDiff,
         mirrorDiff,
@@ -566,21 +606,12 @@
         repeatDigits,
         pairNum: 0,
         triple: false,
-        sum: d.reduce((a, b) => a + b, 0),
-        tailRise: D < E,
-        tailFall: D > E,
-        tailFlat: D === E
+        sum: d.reduce((a, b) => a + b, 0)
       };
 
       features.pairNum = pairCount(features);
       features.triple = hasTriple(features);
       return features;
-    }
-
-    function getSeatBlockReasons(seat, r) {
-      return BLACK_RULES
-        .filter(b => b.testSeat && b.testSeat(seat, r))
-        .map(b => b.name);
     }
 
     function analyzeSeats(r) {
@@ -590,20 +621,23 @@
         const x = getSeatX(r, seat);
         const rel = getRelations(r, seat);
         const diffText = rel.map(d => `${d.pos}${d.value}=差${d.diff}`).join(" / ");
-        const sumText = rel.map(d => `${d.pos}${d.value}=${d.sumValid ? "和" + d.sum : "溢出"}`).join(" / ");
-        const hits = RULES.filter(rule => rule.test(seat, r));
+        const diffSet = getDiffSet(r, seat);
+        const diffSetText = diffSet.length ? diffSet.map(v => `差${v}`).join("、") : "无有效差值";
+        const hits = getHitRules(seat, r);
         const blockReasons = hits.length ? [] : getSeatBlockReasons(seat, r);
+        const level = hits.some(h => h.grade === "A") ? "A" : hits.some(h => h.grade === "B") ? "B" : "";
 
         seats.push({
           seat,
           x,
           rel,
           diffText,
-          sumText,
+          diffSet,
+          diffSetText,
           blocked: blockReasons.length > 0,
           blockReasons,
           hits,
-          hitReason: hits.length ? getHitReason(seat, r) : ""
+          level
         });
       }
 
@@ -612,6 +646,10 @@
 
     function sortPicks(picks) {
       return picks.sort((a, b) => {
+        const aLevel = a.level === "A" ? 0 : 1;
+        const bLevel = b.level === "A" ? 0 : 1;
+        if (aLevel !== bLevel) return aLevel - bLevel;
+
         const ar = Math.min(...a.hits.map(h => h.rank));
         const br = Math.min(...b.hits.map(h => h.rank));
         return ar - br;
@@ -664,10 +702,10 @@
         box.className = "result show";
         box.innerHTML = `
           <span class="badge no">跳过</span>
-          <span class="badge warn">无正式命中</span>
+          <span class="badge warn">无A/B命中</span>
           <div class="big">${r.room}</div>
           <div class="desc">
-            原因：未命中v1.1正式推荐结构，或命中但被假辅助/锁核过滤。<br>
+            原因：没有命中当前差值蒸馏模型。<br>
             ${renderRoomLine(r)}
           </div>
           ${renderDebug(r, seats)}
@@ -676,24 +714,27 @@
       }
 
       const pickNames = picks.map(p => `${p.seat}号`).join("、");
+      const hasA = picks.some(p => p.level === "A");
+      const topBadge = hasA ? "A档硬打命中" : "B档观察命中";
 
       const pickHtml = picks.map((p, i) => {
-        const comboNames = p.hits.map(h => h.name).join("、");
+        const comboNames = p.hits.map(h => `${h.name}｜${h.grade}档`).join("<br>");
         const comboStats = p.hits.map(h => h.stat).join("<br>");
         const comboRules = p.hits.map(h => h.rule).join("<br>");
+        const levelText = p.level === "A" ? "🔥A档硬打" : "⚡B档观察";
+        const css = p.level === "A" ? "a" : "b";
 
         return `
-          <div class="pick ${i === 0 ? "main" : ""}">
+          <div class="pick ${i === 0 ? "main" : ""} ${css}">
             <div class="pick-title">
-              ${i === 0 ? "🔥优先推荐" : "⚡同时命中"}｜${p.seat}号｜X=${p.x}
+              ${i === 0 ? "优先推荐" : "同时命中"}｜${levelText}｜${p.seat}号｜X=${p.x}
             </div>
             <div class="pick-rule">
-              命中结构：${comboNames}<br>
-              命中理由：${p.hitReason}<br>
+              命中结构：<br>${comboNames}<br>
+              当前有效差值：${p.diffSetText}<br>
+              当前差值拆解：${p.diffText}<br>
               ${comboStats}<br>
-              ${comboRules}<br>
-              当前差值：${p.diffText}<br>
-              当前和值：${p.sumText}
+              ${comboRules}
             </div>
           </div>
         `;
@@ -702,7 +743,7 @@
       box.className = "result show";
       box.innerHTML = `
         <span class="badge ok">建议进房</span>
-        <span class="badge warn">v1.1真辅助命中</span>
+        <span class="badge warn">${topBadge}</span>
         <span class="badge.blue">最多3位</span>
 
         <div class="big">推荐：${pickNames}</div>
@@ -729,7 +770,7 @@
       const rows = seats.map(s => {
         let status = "无命中";
         if (s.hits.length) {
-          status = "推荐：" + s.hits.map(h => h.name).join("、") + "｜" + s.hitReason;
+          status = s.hits.map(h => `${h.grade}档：${h.name}`).join("、");
         } else if (s.blocked) {
           status = "过滤：" + s.blockReasons.join("、");
         }
@@ -738,8 +779,8 @@
           <tr>
             <td>${s.seat}号</td>
             <td>${s.x}</td>
+            <td>${s.diffSetText}</td>
             <td>${s.diffText}</td>
-            <td>${s.sumText}</td>
             <td>${status}</td>
           </tr>
         `;
@@ -757,8 +798,8 @@
               <tr>
                 <th>位子</th>
                 <th>X</th>
+                <th>有效差值</th>
                 <th>差值拆解</th>
-                <th>和值拆解</th>
                 <th>推荐/过滤原因</th>
               </tr>
             </thead>
@@ -772,17 +813,17 @@
       const item = {
         room: r.room,
         time: new Date().toLocaleString(),
-        result: picks.length ? picks.map(p => `${p.seat}号`).join("、") : "跳过"
+        result: picks.length ? picks.map(p => `${p.seat}号${p.level === "A" ? "A" : "B"}`).join("、") : "跳过"
       };
 
-      const list = JSON.parse(localStorage.getItem("xiaolaoshu_v11_history") || "[]");
+      const list = JSON.parse(localStorage.getItem("xiaolaoshu_5142587_diff_v10_history") || "[]");
       list.unshift(item);
-      localStorage.setItem("xiaolaoshu_v11_history", JSON.stringify(list.slice(0, 30)));
+      localStorage.setItem("xiaolaoshu_5142587_diff_v10_history", JSON.stringify(list.slice(0, 30)));
     }
 
     function renderHistory() {
       const box = document.getElementById("historyBox");
-      const list = JSON.parse(localStorage.getItem("xiaolaoshu_v11_history") || "[]");
+      const list = JSON.parse(localStorage.getItem("xiaolaoshu_5142587_diff_v10_history") || "[]");
 
       if (!list.length) {
         box.innerHTML = "暂无记录";
@@ -798,12 +839,39 @@
     }
 
     function clearHistory() {
-      localStorage.removeItem("xiaolaoshu_v11_history");
+      localStorage.removeItem("xiaolaoshu_5142587_diff_v10_history");
       renderHistory();
     }
 
     function renderComboList() {
       const box = document.getElementById("comboList");
+
+      const aRules = RULES.filter(r => r.grade === "A");
+      const bRules = RULES.filter(r => r.grade === "B");
+
+      const aHtml = `
+        <div class="combo">
+          <div class="name">A档硬打｜回测</div>
+          <div class="rule">21局｜18胜3小负｜胜率85.7%｜净+16130｜0大输</div>
+        </div>
+      ` + aRules.map(r => `
+        <div class="combo">
+          <div class="name">${r.id}. ${r.name}｜A档硬打</div>
+          <div class="rule">${r.rule}<br>${r.stat}</div>
+        </div>
+      `).join("");
+
+      const bHtml = `
+        <div class="combo">
+          <div class="name">B档观察｜A档外新增回测</div>
+          <div class="rule">新增13局｜12胜1小负｜胜率92.3%｜净+6050｜0大输</div>
+        </div>
+      ` + bRules.map(r => `
+        <div class="combo">
+          <div class="name">${r.id}. ${r.name}｜B档观察</div>
+          <div class="rule">${r.rule}<br>${r.stat}</div>
+        </div>
+      `).join("");
 
       const blackHtml = BLACK_RULES.map((b, i) => `
         <div class="combo">
@@ -812,14 +880,7 @@
         </div>
       `).join("");
 
-      const ruleHtml = RULES.map(r => `
-        <div class="combo">
-          <div class="name">${r.id}. ${r.name}｜${r.grade}</div>
-          <div class="rule">${r.rule}<br>${r.stat}</div>
-        </div>
-      `).join("");
-
-      box.innerHTML = blackHtml + ruleHtml;
+      box.innerHTML = aHtml + bHtml + blackHtml;
     }
 
     document.getElementById("roomInput").addEventListener("input", e => {
