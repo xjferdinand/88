@@ -2,22 +2,27 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>小墨镜 5142983｜完整五位形态模型</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+
+  <title>5142983｜小墨镜 完整五位形态模型 v1.0</title>
 
   <style>
     :root {
-      --bg: #0f1220;
-      --card: #171b2e;
-      --card2: #1e2440;
-      --text: #f5f7ff;
-      --muted: #a9b1ca;
-      --line: #2a3153;
-      --green: #35d07f;
-      --yellow: #f5c451;
-      --red: #ff6b6b;
-      --blue: #6ea8fe;
-      --purple: #a78bfa;
+      --bg: #f7f3ec;
+      --card: #fffaf2;
+      --card2: #ffffff;
+      --text: #2b2118;
+      --muted: #8a7664;
+      --red: #d94b3d;
+      --red2: #b8342b;
+      --green: #1f9d67;
+      --orange: #d98c22;
+      --blue: #315eae;
+      --border: #eadccc;
+      --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
     }
 
     * {
@@ -27,271 +32,378 @@
     body {
       margin: 0;
       min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top left,
+          rgba(217, 75, 61, 0.12),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at bottom right,
+          rgba(217, 140, 34, 0.12),
+          transparent 26%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
-        "Segoe UI",
         "PingFang SC",
         "Microsoft YaHei",
+        Arial,
         sans-serif;
-      color: var(--text);
-      background:
-        linear-gradient(
-          180deg,
-          #0b0e18,
-          #11162a 45%,
-          #0b0e18
-        );
+
+      padding: 22px 14px 42px;
     }
 
     .wrap {
-      max-width: 980px;
+      max-width: 860px;
       margin: 0 auto;
-      padding: 20px 16px 48px;
     }
 
     .hero {
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background:
-        linear-gradient(
-          135deg,
-          #202748,
-          #14182b
-        );
-      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+      text-align: center;
+      margin-bottom: 18px;
     }
 
-    h1 {
-      margin: 0 0 8px;
+    .title {
       font-size: 28px;
-    }
-
-    h2,
-    h3 {
-      margin-top: 0;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin: 6px 0 8px;
     }
 
     .sub {
       color: var(--muted);
-      line-height: 1.7;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .panel {
+      background: rgba(255, 250, 242, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(8px);
     }
 
     .input-row {
       display: flex;
-      flex-wrap: wrap;
       gap: 10px;
-      margin-top: 20px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
     }
 
     input {
-      flex: 1;
-      min-width: 220px;
-      padding: 15px 16px;
-      border: 1px solid #39436c;
-      border-radius: 14px;
+      width: min(100%, 360px);
+      height: 58px;
+      border: 2px solid #e7d2c0;
+      border-radius: 18px;
       outline: none;
-      color: white;
-      background: #0f1426;
-      font-size: 22px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 900;
       letter-spacing: 6px;
+      color: var(--text);
+      background: #fff;
+      box-shadow: inset 0 2px 6px rgba(80, 50, 30, 0.05);
+    }
+
+    input:focus {
+      border-color: var(--red);
     }
 
     button {
-      min-height: 56px;
-      padding: 0 24px;
-      border: 0;
-      border-radius: 14px;
+      border: none;
       cursor: pointer;
+      font-weight: 900;
+      transition: 0.18s ease;
+    }
+
+    .btn-main {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--red), var(--red2));
       color: white;
-      background:
-        linear-gradient(
-          135deg,
-          #6ea8fe,
-          #8b5cf6
-        );
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 18px;
+      box-shadow: 0 10px 22px rgba(217, 75, 61, 0.34);
+      flex: 0 0 auto;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 16px;
+    .btn-main:active {
+      transform: scale(0.96);
     }
 
-    .card {
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(23, 27, 46, 0.96);
-    }
-
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .metric {
-      padding: 13px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      text-align: center;
-      background: #11162a;
-    }
-
-    .metric b {
-      display: block;
-      margin-top: 4px;
-      font-size: 22px;
-    }
-
-    .muted {
-      color: var(--muted);
+    .btn-small {
+      padding: 9px 13px;
+      border-radius: 12px;
+      background: #f0e2d3;
+      color: #6b5644;
+      font-size: 13px;
     }
 
     .result {
       display: none;
       margin-top: 16px;
+      background: var(--card2);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 16px;
     }
 
-    .recommend {
-      padding: 18px;
-      margin-bottom: 14px;
-      border: 1px solid rgba(53, 208, 127, 0.45);
-      border-radius: 18px;
-      background:
-        linear-gradient(
-          135deg,
-          rgba(53, 208, 127, 0.18),
-          rgba(110, 168, 254, 0.14)
-        );
+    .result.show {
+      display: block;
     }
 
-    .seat-list {
-      display: flex;
-      flex-wrap: wrap;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      margin: 3px;
+    }
+
+    .badge.ok {
+      background: rgba(31, 157, 103, 0.12);
+      color: var(--green);
+      border: 1px solid rgba(31, 157, 103, 0.24);
+    }
+
+    .badge.no {
+      background: rgba(217, 75, 61, 0.10);
+      color: var(--red2);
+      border: 1px solid rgba(217, 75, 61, 0.22);
+    }
+
+    .badge.warn {
+      background: rgba(217, 140, 34, 0.12);
+      color: #a6630f;
+      border: 1px solid rgba(217, 140, 34, 0.22);
+    }
+
+    .badge.blue {
+      background: rgba(60, 120, 220, 0.10);
+      color: var(--blue);
+      border: 1px solid rgba(60, 120, 220, 0.22);
+    }
+
+    .big {
+      font-size: 34px;
+      font-weight: 1000;
+      margin: 10px 0 4px;
+    }
+
+    .desc {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
       margin-top: 12px;
     }
 
-    .seat {
-      min-width: 110px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #11162a;
+    .stat {
+      background: #fff8ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 8px;
+      text-align: center;
     }
 
-    .seat strong {
-      font-size: 22px;
+    .stat .v {
+      font-size: 20px;
+      font-weight: 1000;
+      color: var(--text);
     }
 
-    .hit {
-      border-color: var(--green);
-      box-shadow:
-        0 0 0 1px rgba(53, 208, 127, 0.18) inset;
-    }
-
-    .nohit {
-      opacity: 0.6;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 5px 9px;
-      margin-top: 8px;
-      border-radius: 999px;
-      color: #dbe6ff;
-      background: #263158;
+    .stat .k {
+      margin-top: 4px;
+      color: var(--muted);
       font-size: 12px;
-      font-weight: 700;
     }
 
-    .tag.green {
-      color: #85f2b5;
-      background: rgba(53, 208, 127, 0.16);
+    .section-title {
+      font-weight: 1000;
+      font-size: 18px;
+      margin: 3px 0 12px;
     }
 
-    .tag.yellow {
-      color: #ffe08a;
-      background: rgba(245, 196, 81, 0.16);
+    .combo-list {
+      display: grid;
+      gap: 10px;
     }
 
-    .tag.purple {
-      color: #d5c4ff;
-      background: rgba(167, 139, 250, 0.16);
+    .combo {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
     }
 
-    .rule {
-      line-height: 1.8;
+    .combo.grade-a {
+      border-color: rgba(31, 157, 103, 0.30);
     }
 
-    .rule code {
-      padding: 3px 7px;
-      border-radius: 7px;
-      color: #a9f0c7;
-      background: #101625;
+    .combo .name {
+      font-weight: 1000;
+      margin-bottom: 6px;
     }
 
-    .warn {
-      padding: 13px 15px;
-      margin-top: 14px;
-      border: 1px solid rgba(245, 196, 81, 0.28);
-      border-radius: 14px;
-      color: #ffe6a8;
-      background: rgba(245, 196, 81, 0.1);
-      line-height: 1.7;
+    .combo .rule {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .pick-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pick {
+      background: #fff8ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .pick.main {
+      border-color: rgba(217, 75, 61, 0.42);
+      background: #fff4ee;
+    }
+
+    .pick.grade-a {
+      box-shadow: inset 4px 0 0 rgba(31, 157, 103, 0.68);
+    }
+
+    .pick .pick-title {
+      font-weight: 1000;
+      margin-bottom: 6px;
+    }
+
+    .pick .pick-rule {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .debug {
+      margin-top: 12px;
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      min-width: 760px;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
     }
 
     th,
     td {
-      padding: 10px 8px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
+      padding: 9px 8px;
+      border-bottom: 1px solid #f0e2d3;
+      font-size: 12px;
+      text-align: center;
+      white-space: nowrap;
     }
 
     th {
-      color: #c9d2ee;
+      background: #fff1e1;
+      color: #6b5644;
+      font-weight: 900;
     }
 
-    details {
-      margin-top: 14px;
+    tr:last-child td {
+      border-bottom: none;
     }
 
-    summary {
-      cursor: pointer;
-      font-weight: 700;
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed #e4d3c3;
+      font-size: 14px;
     }
 
-    .status-line {
-      margin-top: 10px;
-      color: #dbe6ff;
-      line-height: 1.7;
+    .history-item:last-child {
+      border-bottom: none;
     }
 
-    @media (max-width: 720px) {
-      .grid,
-      .metrics {
-        grid-template-columns: 1fr;
+    .history-left {
+      font-weight: 900;
+    }
+
+    .history-right {
+      color: var(--muted);
+      text-align: right;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 16px 10px 34px;
       }
 
-      h1 {
-        font-size: 24px;
+      .title {
+        font-size: 23px;
       }
 
-      button {
-        width: 100%;
+      .panel {
+        padding: 14px;
+        border-radius: 20px;
+      }
+
+      .input-row {
+        gap: 8px;
+      }
+
+      input {
+        height: 56px;
+        font-size: 25px;
+        letter-spacing: 4px;
+      }
+
+      .btn-main {
+        width: 64px;
+        height: 64px;
+        font-size: 16px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .big {
+        font-size: 26px;
       }
     }
   </style>
@@ -300,364 +412,252 @@
 <body>
   <div class="wrap">
 
-    <section class="hero">
-      <h1>小墨镜 5142983</h1>
+    <div class="hero">
+      <div class="title">5142983｜小墨镜 完整五位形态模型 v1.0</div>
 
       <div class="sub">
-        完整五位形态模型｜候选盲测版 v1.0
-        <br />
-        输入5位房号，自动计算完整序列的跳动、跨度、总和与推荐位。
+        125局去重库｜完整5位房号整体结构｜最多同时推荐3个位子｜无命中直接跳过
       </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">输入5位房号</div>
 
       <div class="input-row">
         <input
           id="roomInput"
-          maxlength="5"
+          type="tel"
           inputmode="numeric"
-          placeholder="输入5位房号"
+          pattern="[0-9]*"
+          maxlength="5"
+          placeholder="例如 46361"
+          autocomplete="off"
         />
 
-        <button id="calcBtn">
-          立即分析
+        <button class="btn-main" onclick="run()">开干</button>
+      </div>
+
+      <div id="result" class="result"></div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">v1.0 历史回测</div>
+
+      <div class="grid">
+        <div class="stat">
+          <div class="v">125局</div>
+          <div class="k">总样本</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">27局</div>
+          <div class="k">模型命中</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">21.6%</div>
+          <div class="k">进房率</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">92.6%</div>
+          <div class="k">胜率</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">25胜2负</div>
+          <div class="k">胜负结果</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">+20640</div>
+          <div class="k">总净分</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">+764</div>
+          <div class="k">命中场均</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">0局</div>
+          <div class="k">历史大输</div>
+        </div>
+      </div>
+
+      <div class="desc" style="margin-top: 12px;">
+        当前模型只使用完整五位形态候选规则。
+        历史两次亏损分别为57821的2号位-10、32381的5号位-190，
+        均属于小输，没有出现≤-500的大输。
+        同一个座位只输出一次；若同时命中多个座位，最多按优先级输出3位。
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">当前完整五位规则</div>
+      <div class="combo-list" id="comboList"></div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">
+        历史记录
+
+        <button
+          class="btn-small"
+          onclick="clearHistory()"
+          style="float: right;"
+        >
+          清空
         </button>
       </div>
 
-      <div class="warn">
-        本模型由125局历史反推，目前属于候选盲测版。
-        历史回测不代表未来必然结果。
-      </div>
-    </section>
+      <div id="historyBox" class="desc">暂无记录</div>
+    </div>
 
-    <section id="result" class="result">
-
-      <div class="recommend">
-        <h2 id="resultTitle">
-          分析结果
-        </h2>
-
-        <div
-          id="resultSummary"
-          class="muted"
-        ></div>
-
-        <div
-          id="seatList"
-          class="seat-list"
-        ></div>
-
-        <div
-          id="directAnswer"
-          class="status-line"
-        ></div>
-      </div>
-
-      <div class="metrics">
-        <div class="metric">
-          总跳动
-          <b id="mTotalJump">-</b>
-        </div>
-
-        <div class="metric">
-          整体跨度
-          <b id="mSpan">-</b>
-        </div>
-
-        <div class="metric">
-          五位总和
-          <b id="mSum">-</b>
-        </div>
-
-        <div class="metric">
-          奇数数量
-          <b id="mOdd">-</b>
-        </div>
-      </div>
-
-      <div class="grid">
-
-        <div class="card">
-          <h3>分段跳动</h3>
-
-          <div class="rule">
-            前两段：
-            <code id="mFront">-</code>
-            <br />
-
-            后两段：
-            <code id="mBack">-</code>
-            <br />
-
-            相邻差：
-            <code id="mDiffs">-</code>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>命中解释</h3>
-
-          <div
-            id="explain"
-            class="rule muted"
-          ></div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="grid">
-
-      <div class="card">
-        <h2>当前规则</h2>
-
-        <div class="rule">
-
-          <b>2号位</b>
-          <br />
-          总跳动≤11，并且五位至少有2个奇数。
-          <br /><br />
-
-          <b>4号位</b>
-          <br />
-          最大数字减最小数字≥8，并且总跳动≥13。
-          <br /><br />
-
-          <b>5号位</b>
-          <br />
-          总跳动≤19，并且后两段跳动≥8。
-          <br /><br />
-
-          <b>6号位</b>
-          <br />
-          五位数字总和≤25，并且前两段跳动≥6。
-          <br /><br />
-
-          <b>1号、3号</b>
-          <br />
-          当前暂无候选规则。
-
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>125局合并回测</h2>
-
-        <table>
-          <tr>
-            <th>指标</th>
-            <th>结果</th>
-          </tr>
-
-          <tr>
-            <td>命中</td>
-            <td>27局</td>
-          </tr>
-
-          <tr>
-            <td>进房率</td>
-            <td>21.6%</td>
-          </tr>
-
-          <tr>
-            <td>胜负</td>
-            <td>25胜2小输</td>
-          </tr>
-
-          <tr>
-            <td>胜率</td>
-            <td>92.6%</td>
-          </tr>
-
-          <tr>
-            <td>大赢</td>
-            <td>19局</td>
-          </tr>
-
-          <tr>
-            <td>大输</td>
-            <td>0局</td>
-          </tr>
-
-          <tr>
-            <td>总净分</td>
-            <td>+20640</td>
-          </tr>
-
-          <tr>
-            <td>场均</td>
-            <td>+764</td>
-          </tr>
-        </table>
-      </div>
-
-    </section>
-
-    <section
-      class="card"
-      style="margin-top: 16px;"
-    >
-      <h2>各规则历史表现</h2>
-
-      <table>
-        <thead>
-          <tr>
-            <th>座位</th>
-            <th>命中</th>
-            <th>胜负</th>
-            <th>大赢</th>
-            <th>大输</th>
-            <th>净分</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>2号</td>
-            <td>7局</td>
-            <td>6胜1小输</td>
-            <td>5</td>
-            <td>0</td>
-            <td>+4110</td>
-          </tr>
-
-          <tr>
-            <td>4号</td>
-            <td>6局</td>
-            <td>6胜0负</td>
-            <td>4</td>
-            <td>0</td>
-            <td>+4570</td>
-          </tr>
-
-          <tr>
-            <td>5号</td>
-            <td>8局</td>
-            <td>7胜1小输</td>
-            <td>7</td>
-            <td>0</td>
-            <td>+9000</td>
-          </tr>
-
-          <tr>
-            <td>6号</td>
-            <td>6局</td>
-            <td>6胜0负</td>
-            <td>3</td>
-            <td>0</td>
-            <td>+2960</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <details>
-        <summary>
-          查看历史命中明细
-        </summary>
-
-        <div class="grid">
-
-          <div>
-            <h3>2号</h3>
-            <div class="muted">
-              57821 -10｜
-              31634 +120｜
-              43411 +530｜
-              98695 +1090｜
-              32667 +610｜
-              46353 +800｜
-              76759 +970
-            </div>
-          </div>
-
-          <div>
-            <h3>4号</h3>
-            <div class="muted">
-              50082 +90｜
-              41916 +1200｜
-              17449 +430｜
-              47819 +1060｜
-              82139 +500｜
-              30390 +1290
-            </div>
-          </div>
-
-          <div>
-            <h3>5号</h3>
-            <div class="muted">
-              73702 +1320｜
-              23718 +1450｜
-              73506 +1730｜
-              97705 +2240｜
-              32381 -190｜
-              96495 +1030｜
-              41891 +740｜
-              76394 +680
-            </div>
-          </div>
-
-          <div>
-            <h3>6号</h3>
-            <div class="muted">
-              79171 +710｜
-              91125 +490｜
-              21633 +110｜
-              73149 +820｜
-              27366 +580｜
-              58280 +250
-            </div>
-          </div>
-
-        </div>
-      </details>
-    </section>
-
+    <div class="footer-note">
+      房号记作ABCDE。模型统一计算相邻差：
+      |A-B|、|B-C|、|C-D|、|D-E|。
+      总跳动为四段相邻差之和；
+      前两段为|A-B|+|B-C|；
+      后两段为|C-D|+|D-E|。
+      推荐优先级固定为5号→4号→2号→6号，最多输出3位。
+    </div>
   </div>
 
   <script>
+    const MODEL_STAT = {
+      account: "小墨镜",
+      id: "5142983",
+      version: "v1.0",
+      sample: "125局",
+      hitCount: "27局",
+      hitRate: "21.6%",
+      winRate: "92.6%",
+      net: "+20640",
+      average: "+764",
+      bigLoss: "0大输"
+    };
+
     /*
-      当前冻结规则：
+      当前冻结规则，与直接问答保持一致：
 
       2号：
-      totalJump <= 11
-      oddCount >= 2
+      总跳动 <= 11
+      五位奇数数量 >= 2
 
       4号：
-      span >= 8
-      totalJump >= 13
+      整体跨度 >= 8
+      总跳动 >= 13
 
       5号：
-      totalJump <= 19
-      backJump >= 8
+      总跳动 <= 19
+      后两段跳动 >= 8
 
       6号：
-      sum <= 25
-      frontJump >= 6
+      五位总和 <= 25
+      前两段跳动 >= 6
+
+      1号、3号：
+      暂无规则
 
       推荐优先级：
       5号 > 4号 > 2号 > 6号
 
-      最多推荐3位。
+      最多输出3个位子。
     */
 
     const PRIORITY = [5, 4, 2, 6];
 
-    const RULE_TEXT = {
-      2: "总跳动≤11，并且五位至少有2个奇数",
-      4: "整体跨度≥8，并且总跳动≥13",
-      5: "总跳动≤19，并且后两段跳动≥8",
-      6: "五位总和≤25，并且前两段跳动≥6"
-    };
+    const RULES = [
+      {
+        id: "S5-1",
+        seat: 5,
+        rank: 1,
+        name: "5号｜后半爆发型",
+        shortName: "后半爆发",
+        gradeText: "主爆发档",
+        stat: "历史8局｜7胜1小输｜7次大赢｜净+9000｜0大输",
+        examples:
+          "73702 +1320、23718 +1450、73506 +1730、97705 +2240、32381 -190、96495 +1030、41891 +740、76394 +680",
+        rule:
+          "完整五位总跳动≤19，并且后两段跳动|C-D|+|D-E|≥8。",
+        test: room => {
+          return (
+            room.totalJump <= 19 &&
+            room.backJump >= 8
+          );
+        }
+      },
 
-    function analyzeRoom(room) {
-      const digits = room
-        .split("")
-        .map(Number);
+      {
+        id: "S4-1",
+        seat: 4,
+        rank: 2,
+        name: "4号｜大跨度剧烈型",
+        shortName: "大跨度剧烈",
+        gradeText: "爆发档",
+        stat: "历史6局｜6胜0负｜4次大赢｜净+4570｜0大输",
+        examples:
+          "50082 +90、41916 +1200、17449 +430、47819 +1060、82139 +500、30390 +1290",
+        rule:
+          "完整五位最大数字减最小数字≥8，并且总跳动≥13。",
+        test: room => {
+          return (
+            room.span >= 8 &&
+            room.totalJump >= 13
+          );
+        }
+      },
 
+      {
+        id: "S2-1",
+        seat: 2,
+        rank: 3,
+        name: "2号｜平稳多奇型",
+        shortName: "平稳多奇",
+        gradeText: "爆发档",
+        stat: "历史7局｜6胜1小输｜5次大赢｜净+4110｜0大输",
+        examples:
+          "57821 -10、31634 +120、43411 +530、98695 +1090、32667 +610、46353 +800、76759 +970",
+        rule:
+          "完整五位总跳动≤11，并且五位数字中至少有2个奇数。",
+        test: room => {
+          return (
+            room.totalJump <= 11 &&
+            room.oddCount >= 2
+          );
+        }
+      },
+
+      {
+        id: "S6-1",
+        seat: 6,
+        rank: 4,
+        name: "6号｜前半跳动型",
+        shortName: "前半跳动",
+        gradeText: "稳健候选",
+        stat: "历史6局｜6胜0负｜3次大赢｜净+2960｜0大输",
+        examples:
+          "79171 +710、91125 +490、21633 +110、73149 +820、27366 +580、58280 +250",
+        rule:
+          "完整五位数字总和≤25，并且前两段跳动|A-B|+|B-C|≥6。",
+        test: room => {
+          return (
+            room.sum <= 25 &&
+            room.frontJump >= 6
+          );
+        }
+      }
+    ];
+
+    function analyzeRoom(roomNumber) {
+      const digits = roomNumber.split("").map(Number);
       const [A, B, C, D, E] = digits;
 
-      const diffAB = Math.abs(B - A);
-      const diffBC = Math.abs(C - B);
-      const diffCD = Math.abs(D - C);
-      const diffDE = Math.abs(E - D);
+      const diffAB = Math.abs(A - B);
+      const diffBC = Math.abs(B - C);
+      const diffCD = Math.abs(C - D);
+      const diffDE = Math.abs(D - E);
 
       const diffs = [
         diffAB,
@@ -688,376 +688,474 @@
         minDigit;
 
       const sum =
-        digits.reduce(
-          (total, number) =>
-            total + number,
-          0
-        );
+        digits.reduce((total, number) => {
+          return total + number;
+        }, 0);
 
       const oddCount =
-        digits.filter(
-          number =>
-            number % 2 === 1
-        ).length;
+        digits.filter(number => {
+          return number % 2 === 1;
+        }).length;
 
-      const hits = {
-        2:
-          totalJump <= 11 &&
-          oddCount >= 2,
+      const evenCount =
+        5 - oddCount;
 
-        4:
-          span >= 8 &&
-          totalJump >= 13,
-
-        5:
-          totalJump <= 19 &&
-          backJump >= 8,
-
-        6:
-          sum <= 25 &&
-          frontJump >= 6
-      };
+      const trend = [
+        moveText(A, B),
+        moveText(B, C),
+        moveText(C, D),
+        moveText(D, E)
+      ];
 
       return {
-        room,
+        room: roomNumber,
         digits,
+        A,
+        B,
+        C,
+        D,
+        E,
+        diffAB,
+        diffBC,
+        diffCD,
+        diffDE,
         diffs,
         totalJump,
         frontJump,
         backJump,
+        maxDigit,
+        minDigit,
         span,
         sum,
         oddCount,
-        hits
+        evenCount,
+        trend,
+        trendCode: trend.join("")
       };
     }
 
-    function getRecommendedSeats(hits) {
-      return PRIORITY
-        .filter(
-          seat =>
-            hits[seat]
-        )
-        .slice(0, 3);
+    function moveText(a, b) {
+      if (a < b) return "升";
+      if (a > b) return "降";
+      return "平";
     }
 
-    function buildDirectAnswer(
-      room,
-      recommendedSeats
-    ) {
-      if (
-        recommendedSeats.length === 0
-      ) {
-        return `
-          房号 <b>${room}</b>：
-          当前没有命中任何候选规则。
-          <br />
-          <b>结论：暂无推荐位，跳过。</b>
-        `;
+    function getHits(room) {
+      return RULES
+        .filter(rule => {
+          return rule.test(room);
+        })
+        .sort((a, b) => {
+          return a.rank - b.rank;
+        });
+    }
+
+    function run() {
+      const input =
+        document.getElementById("roomInput");
+
+      let roomNumber = input.value
+        .replace(/\D/g, "")
+        .slice(0, 5);
+
+      input.value = roomNumber;
+
+      if (roomNumber.length !== 5) {
+        showError("请输入完整的5位数字房号。");
+        return;
       }
 
-      if (
-        recommendedSeats.length === 1
-      ) {
-        return `
-          房号 <b>${room}</b>：
-          当前只命中
-          <b>${recommendedSeats[0]}号位</b>。
-          <br />
-          <b>推荐：${recommendedSeats[0]}号位。</b>
-        `;
-      }
+      const room =
+        analyzeRoom(roomNumber);
 
-      return `
-        房号 <b>${room}</b>：
-        当前命中
-        <b>${recommendedSeats
-          .map(
-            seat =>
-              seat + "号"
-          )
-          .join("、")}</b>。
-        <br />
-        <b>
-          推荐顺序：
-          ${recommendedSeats
-            .map(
-              seat =>
-                seat + "号"
-            )
-            .join(" → ")}
-        </b>
+      const allHits =
+        getHits(room);
+
+      const finalHits =
+        allHits.slice(0, 3);
+
+      const hiddenPickCount =
+        Math.max(0, allHits.length - 3);
+
+      renderResult(
+        room,
+        finalHits,
+        hiddenPickCount
+      );
+
+      saveHistory(
+        room,
+        finalHits,
+        hiddenPickCount
+      );
+
+      renderHistory();
+    }
+
+    function showError(message) {
+      const box =
+        document.getElementById("result");
+
+      box.className = "result show";
+
+      box.innerHTML = `
+        <span class="badge no">输入错误</span>
+
+        <div class="big">不处理</div>
+
+        <div class="desc">
+          ${message}
+        </div>
       `;
     }
 
-    function renderSeatCards(
-      recommendedSeats
+    function renderRoomLine(room) {
+      return `
+        ABCDE=${room.A}${room.B}${room.C}${room.D}${room.E}<br>
+
+        相邻差：
+        ${room.diffAB} / ${room.diffBC} / ${room.diffCD} / ${room.diffDE}<br>
+
+        总跳动=${room.totalJump}
+        ｜前两段=${room.frontJump}
+        ｜后两段=${room.backJump}<br>
+
+        跨度=${room.span}
+        ｜总和=${room.sum}
+        ｜奇${room.oddCount}偶${room.evenCount}<br>
+
+        走势：${room.trendCode}
+      `;
+    }
+
+    function renderResult(
+      room,
+      picks,
+      hiddenPickCount
     ) {
-      const seatList =
-        document.getElementById(
-          "seatList"
-        );
+      const box =
+        document.getElementById("result");
 
-      seatList.innerHTML = "";
+      if (!picks.length) {
+        box.className = "result show";
 
-      if (
-        recommendedSeats.length === 0
-      ) {
-        seatList.innerHTML = `
-          <div class="seat nohit">
-            <strong>跳过</strong>
-            <div class="tag yellow">
-              无规则命中
-            </div>
+        box.innerHTML = `
+          <span class="badge no">跳过</span>
+
+          <div class="big">${room.room}</div>
+
+          <div class="desc">
+            当前2号、4号、5号、6号均未命中完整五位形态规则，不推荐进房。<br><br>
+
+            ${renderRoomLine(room)}
           </div>
+
+          ${renderDebug(room)}
         `;
 
         return;
       }
 
-      recommendedSeats.forEach(
-        (seat, index) => {
-          const card =
-            document.createElement(
-              "div"
-            );
+      const pickNames = picks
+        .map(pick => `${pick.seat}号`)
+        .join("、");
 
-          card.className =
-            "seat hit";
+      const pickHtml = picks
+        .map((pick, index) => {
+          return `
+            <div
+              class="
+                pick
+                ${index === 0 ? "main" : ""}
+                grade-a
+              "
+            >
+              <div class="pick-title">
+                ${
+                  index === 0
+                    ? "🔥优先推荐"
+                    : "⚡同时命中"
+                }
+                ｜${pick.seat}号
+                ｜${pick.gradeText}
+              </div>
 
-          let label =
-            "同时命中";
-
-          let tagClass =
-            "purple";
-
-          if (
-            index === 0
-          ) {
-            label =
-              "优先推荐";
-
-            tagClass =
-              "green";
-          }
-
-          card.innerHTML = `
-            <strong>
-              ${seat}号位
-            </strong>
-
-            <div class="tag ${tagClass}">
-              ${label}
+              <div class="pick-rule">
+                命中结构：${pick.shortName}<br>
+                ${pick.rule}<br>
+                ${pick.stat}<br>
+                历史命中：${pick.examples}
+              </div>
             </div>
           `;
+        })
+        .join("");
 
-          seatList.appendChild(
-            card
-          );
-        }
+      const hiddenText =
+        hiddenPickCount > 0
+          ? `
+            <div class="desc" style="margin-top:10px;">
+              该房间还有${hiddenPickCount}个位子命中，
+              但模型按优先级只输出前3位。
+            </div>
+          `
+          : "";
+
+      box.className = "result show";
+
+      box.innerHTML = `
+        <span class="badge ok">建议进房</span>
+        <span class="badge warn">最多3位</span>
+        <span class="badge blue">完整五位形态</span>
+
+        <div class="big">
+          推荐：${pickNames}
+        </div>
+
+        <div class="pick-list">
+          ${pickHtml}
+        </div>
+
+        ${hiddenText}
+
+        <div class="desc" style="margin-top:14px;">
+          房号：<b>${room.room}</b><br>
+          ${renderRoomLine(room)}
+        </div>
+
+        <div class="grid">
+          <div class="stat">
+            <div class="v">${MODEL_STAT.sample}</div>
+            <div class="k">样本库</div>
+          </div>
+
+          <div class="stat">
+            <div class="v">${MODEL_STAT.hitCount}</div>
+            <div class="k">历史命中</div>
+          </div>
+
+          <div class="stat">
+            <div class="v">${MODEL_STAT.winRate}</div>
+            <div class="k">历史胜率</div>
+          </div>
+
+          <div class="stat">
+            <div class="v">${MODEL_STAT.bigLoss}</div>
+            <div class="k">安全口径</div>
+          </div>
+        </div>
+
+        ${renderDebug(room)}
+      `;
+    }
+
+    function renderDebug(room) {
+      const rows = RULES
+        .slice()
+        .sort((a, b) => {
+          return a.rank - b.rank;
+        })
+        .map(rule => {
+          const hit =
+            rule.test(room);
+
+          let detail = "";
+
+          if (rule.seat === 2) {
+            detail =
+              `总跳动${room.totalJump}≤11：${room.totalJump <= 11 ? "是" : "否"}；` +
+              `奇数${room.oddCount}个≥2：${room.oddCount >= 2 ? "是" : "否"}`;
+          }
+
+          if (rule.seat === 4) {
+            detail =
+              `跨度${room.span}≥8：${room.span >= 8 ? "是" : "否"}；` +
+              `总跳动${room.totalJump}≥13：${room.totalJump >= 13 ? "是" : "否"}`;
+          }
+
+          if (rule.seat === 5) {
+            detail =
+              `总跳动${room.totalJump}≤19：${room.totalJump <= 19 ? "是" : "否"}；` +
+              `后两段${room.backJump}≥8：${room.backJump >= 8 ? "是" : "否"}`;
+          }
+
+          if (rule.seat === 6) {
+            detail =
+              `总和${room.sum}≤25：${room.sum <= 25 ? "是" : "否"}；` +
+              `前两段${room.frontJump}≥6：${room.frontJump >= 6 ? "是" : "否"}`;
+          }
+
+          return `
+            <tr>
+              <td>${rule.seat}号</td>
+              <td>${rule.shortName}</td>
+              <td>${detail}</td>
+              <td>${hit ? "命中" : "未命中"}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      return `
+        <div class="debug">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="4">
+                  房号结构：
+                  总跳动${room.totalJump}
+                  ｜跨度${room.span}
+                  ｜总和${room.sum}
+                  ｜前两段${room.frontJump}
+                  ｜后两段${room.backJump}
+                  ｜奇${room.oddCount}偶${room.evenCount}
+                </th>
+              </tr>
+
+              <tr>
+                <th>位子</th>
+                <th>结构</th>
+                <th>条件拆解</th>
+                <th>模型结果</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function saveHistory(
+      room,
+      picks,
+      hiddenPickCount
+    ) {
+      const item = {
+        room: room.room,
+
+        time: new Date().toLocaleString(),
+
+        result: picks.length
+          ? picks
+              .map(pick => `${pick.seat}号`)
+              .join("、")
+          : "跳过",
+
+        hiddenPickCount
+      };
+
+      const key =
+        "xiaomojing_5142983_full_shape_v10_history";
+
+      const list = JSON.parse(
+        localStorage.getItem(key) || "[]"
+      );
+
+      list.unshift(item);
+
+      localStorage.setItem(
+        key,
+        JSON.stringify(list.slice(0, 30))
       );
     }
 
-    function renderExplanation(data) {
-      const explanation = [];
+    function renderHistory() {
+      const box =
+        document.getElementById("historyBox");
 
-      explanation.push(`
-        <b>2号：</b>
-        总跳动${data.totalJump}≤11为
-        <b>${data.totalJump <= 11 ? "是" : "否"}</b>；
-        奇数${data.oddCount}个≥2为
-        <b>${data.oddCount >= 2 ? "是" : "否"}</b>。
-      `);
+      const key =
+        "xiaomojing_5142983_full_shape_v10_history";
 
-      explanation.push(`
-        <b>4号：</b>
-        跨度${data.span}≥8为
-        <b>${data.span >= 8 ? "是" : "否"}</b>；
-        总跳动${data.totalJump}≥13为
-        <b>${data.totalJump >= 13 ? "是" : "否"}</b>。
-      `);
+      const list = JSON.parse(
+        localStorage.getItem(key) || "[]"
+      );
 
-      explanation.push(`
-        <b>5号：</b>
-        总跳动${data.totalJump}≤19为
-        <b>${data.totalJump <= 19 ? "是" : "否"}</b>；
-        后两段${data.backJump}≥8为
-        <b>${data.backJump >= 8 ? "是" : "否"}</b>。
-      `);
-
-      explanation.push(`
-        <b>6号：</b>
-        总和${data.sum}≤25为
-        <b>${data.sum <= 25 ? "是" : "否"}</b>；
-        前两段${data.frontJump}≥6为
-        <b>${data.frontJump >= 6 ? "是" : "否"}</b>。
-      `);
-
-      document.getElementById(
-        "explain"
-      ).innerHTML =
-        explanation.join(
-          "<br /><br />"
-        );
-    }
-
-    function render() {
-      const input =
-        document.getElementById(
-          "roomInput"
-        );
-
-      const room =
-        input.value.trim();
-
-      if (
-        !/^\d{5}$/.test(room)
-      ) {
-        alert(
-          "请输入完整5位数字房号"
-        );
-
+      if (!list.length) {
+        box.innerHTML = "暂无记录";
         return;
       }
 
-      const data =
-        analyzeRoom(room);
+      box.innerHTML = list
+        .map(item => {
+          const hiddenText =
+            item.hiddenPickCount > 0
+              ? `<br>另有${item.hiddenPickCount}位因超过上限未显示`
+              : "";
 
-      const recommendedSeats =
-        getRecommendedSeats(
-          data.hits
-        );
+          return `
+            <div class="history-item">
+              <div class="history-left">
+                ${item.room}
+              </div>
 
-      document.getElementById(
-        "result"
-      ).style.display =
-        "block";
-
-      document.getElementById(
-        "resultTitle"
-      ).textContent =
-        `${room} 分析结果`;
-
-      document.getElementById(
-        "mTotalJump"
-      ).textContent =
-        data.totalJump;
-
-      document.getElementById(
-        "mSpan"
-      ).textContent =
-        data.span;
-
-      document.getElementById(
-        "mSum"
-      ).textContent =
-        data.sum;
-
-      document.getElementById(
-        "mOdd"
-      ).textContent =
-        data.oddCount;
-
-      document.getElementById(
-        "mFront"
-      ).textContent =
-        data.frontJump;
-
-      document.getElementById(
-        "mBack"
-      ).textContent =
-        data.backJump;
-
-      document.getElementById(
-        "mDiffs"
-      ).textContent =
-        data.diffs.join(" / ");
-
-      if (
-        recommendedSeats.length === 0
-      ) {
-        document.getElementById(
-          "resultSummary"
-        ).textContent =
-          "暂无推荐位，跳过。";
-      } else {
-        document.getElementById(
-          "resultSummary"
-        ).textContent =
-          "推荐顺序：" +
-          recommendedSeats
-            .map(
-              seat =>
-                seat + "号"
-            )
-            .join(" → ") +
-          "；最多输出3位。";
-      }
-
-      renderSeatCards(
-        recommendedSeats
-      );
-
-      renderExplanation(
-        data
-      );
-
-      document.getElementById(
-        "directAnswer"
-      ).innerHTML =
-        buildDirectAnswer(
-          room,
-          recommendedSeats
-        );
-
-      window.scrollTo({
-        top:
-          document.getElementById(
-            "result"
-          ).offsetTop - 12,
-
-        behavior:
-          "smooth"
-      });
+              <div class="history-right">
+                ${item.result}
+                ${hiddenText}<br>
+                ${item.time}
+              </div>
+            </div>
+          `;
+        })
+        .join("");
     }
 
-    document.getElementById(
-      "calcBtn"
-    ).addEventListener(
-      "click",
-      render
-    );
+    function clearHistory() {
+      localStorage.removeItem(
+        "xiaomojing_5142983_full_shape_v10_history"
+      );
 
-    document.getElementById(
-      "roomInput"
-    ).addEventListener(
-      "keydown",
-      event => {
-        if (
-          event.key === "Enter"
-        ) {
-          render();
+      renderHistory();
+    }
+
+    function renderComboList() {
+      const box =
+        document.getElementById("comboList");
+
+      const orderedRules =
+        [...RULES].sort((a, b) => {
+          return a.rank - b.rank;
+        });
+
+      box.innerHTML = orderedRules
+        .map(rule => {
+          return `
+            <div class="combo grade-a">
+              <div class="name">
+                ${rule.id}｜${rule.name}｜${rule.gradeText}
+              </div>
+
+              <div class="rule">
+                ${rule.rule}<br>
+                ${rule.stat}<br>
+                历史命中：${rule.examples}
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    document
+      .getElementById("roomInput")
+      .addEventListener("input", event => {
+        event.target.value = event.target.value
+          .replace(/\D/g, "")
+          .slice(0, 5);
+      });
+
+    document
+      .getElementById("roomInput")
+      .addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          run();
         }
-      }
-    );
+      });
 
-    document.getElementById(
-      "roomInput"
-    ).addEventListener(
-      "input",
-      event => {
-        event.target.value =
-          event.target.value
-            .replace(
-              /\D/g,
-              ""
-            )
-            .slice(
-              0,
-              5
-            );
-      }
-    );
+    renderComboList();
+    renderHistory();
   </script>
 </body>
 </html>
