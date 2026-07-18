@@ -2,13 +2,12 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
 
-  <title>5142983｜小墨镜 K线爆发模型 v2.0</title>
+  <title>5142983｜小墨镜五位房号模型 v3.0</title>
 
   <style>
     :root {
@@ -22,6 +21,7 @@
       --green: #1f9d67;
       --orange: #d98c22;
       --blue: #315eae;
+      --purple: #7a4db5;
       --border: #eadccc;
       --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
     }
@@ -33,6 +33,17 @@
     body {
       margin: 0;
       min-height: 100vh;
+      color: var(--text);
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "PingFang SC",
+        "Microsoft YaHei",
+        Arial,
+        sans-serif;
+
+      padding: 22px 14px 42px;
 
       background:
         radial-gradient(
@@ -46,22 +57,10 @@
           transparent 26%
         ),
         var(--bg);
-
-      color: var(--text);
-
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "PingFang SC",
-        "Microsoft YaHei",
-        Arial,
-        sans-serif;
-
-      padding: 22px 14px 42px;
     }
 
     .wrap {
-      max-width: 860px;
+      max-width: 900px;
       margin: 0 auto;
     }
 
@@ -84,13 +83,19 @@
     }
 
     .panel {
-      background: rgba(255, 250, 242, 0.92);
+      background: rgba(255, 250, 242, 0.93);
       border: 1px solid var(--border);
       border-radius: 24px;
       box-shadow: var(--shadow);
       padding: 18px;
       margin-bottom: 16px;
       backdrop-filter: blur(8px);
+    }
+
+    .section-title {
+      font-weight: 1000;
+      font-size: 18px;
+      margin: 3px 0 12px;
     }
 
     .input-row {
@@ -112,7 +117,7 @@
       font-weight: 900;
       letter-spacing: 6px;
       color: var(--text);
-      background: #fff;
+      background: #ffffff;
       box-shadow: inset 0 2px 6px rgba(80, 50, 30, 0.05);
     }
 
@@ -132,7 +137,7 @@
       height: 72px;
       border-radius: 50%;
       background: linear-gradient(145deg, var(--red), var(--red2));
-      color: white;
+      color: #ffffff;
       font-size: 18px;
       box-shadow: 0 10px 22px rgba(217, 75, 61, 0.34);
       flex: 0 0 auto;
@@ -193,13 +198,19 @@
     }
 
     .badge.blue {
-      background: rgba(60, 120, 220, 0.1);
+      background: rgba(49, 94, 174, 0.1);
       color: var(--blue);
-      border: 1px solid rgba(60, 120, 220, 0.22);
+      border: 1px solid rgba(49, 94, 174, 0.22);
+    }
+
+    .badge.purple {
+      background: rgba(122, 77, 181, 0.1);
+      color: var(--purple);
+      border: 1px solid rgba(122, 77, 181, 0.22);
     }
 
     .big {
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 1000;
       margin: 10px 0 4px;
     }
@@ -228,7 +239,6 @@
     .stat .v {
       font-size: 20px;
       font-weight: 1000;
-      color: var(--text);
     }
 
     .stat .k {
@@ -237,10 +247,77 @@
       font-size: 12px;
     }
 
-    .section-title {
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .result-col {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    .result-col.good {
+      border-color: rgba(31, 157, 103, 0.28);
+    }
+
+    .result-col.bad {
+      border-color: rgba(217, 75, 61, 0.3);
+    }
+
+    .pick-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .pick {
+      background: #fff8ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .pick.main {
+      background: #fff4ee;
+      border-color: rgba(217, 75, 61, 0.4);
+    }
+
+    .pick.grade-s {
+      box-shadow: inset 4px 0 0 rgba(122, 77, 181, 0.75);
+    }
+
+    .pick.grade-a {
+      box-shadow: inset 4px 0 0 rgba(31, 157, 103, 0.7);
+    }
+
+    .pick.grade-b {
+      box-shadow: inset 4px 0 0 rgba(217, 140, 34, 0.7);
+    }
+
+    .pick.black {
+      box-shadow: inset 4px 0 0 rgba(217, 75, 61, 0.8);
+      background: #fff3f1;
+    }
+
+    .pick.conflict {
+      box-shadow: inset 4px 0 0 rgba(49, 94, 174, 0.8);
+      background: #f4f7ff;
+    }
+
+    .pick-title {
       font-weight: 1000;
-      font-size: 18px;
-      margin: 3px 0 12px;
+      margin-bottom: 6px;
+    }
+
+    .pick-rule {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
     }
 
     .combo-list {
@@ -249,18 +326,10 @@
     }
 
     .combo {
-      background: #fff;
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 12px;
-    }
-
-    .combo.grade-a {
-      border-color: rgba(31, 157, 103, 0.3);
-    }
-
-    .combo.grade-b {
-      border-color: rgba(217, 140, 34, 0.34);
     }
 
     .combo .name {
@@ -274,43 +343,6 @@
       line-height: 1.6;
     }
 
-    .pick-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .pick {
-      background: #fff8ef;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .pick.main {
-      border-color: rgba(217, 75, 61, 0.42);
-      background: #fff4ee;
-    }
-
-    .pick.grade-a {
-      box-shadow: inset 4px 0 0 rgba(31, 157, 103, 0.68);
-    }
-
-    .pick.grade-b {
-      box-shadow: inset 4px 0 0 rgba(217, 140, 34, 0.68);
-    }
-
-    .pick .pick-title {
-      font-weight: 1000;
-      margin-bottom: 6px;
-    }
-
-    .pick .pick-rule {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
     .debug {
       margin-top: 12px;
       overflow-x: auto;
@@ -319,8 +351,8 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
-      background: #fff;
+      min-width: 980px;
+      background: #ffffff;
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--border);
@@ -341,10 +373,6 @@
       font-weight: 900;
     }
 
-    tr:last-child td {
-      border-bottom: none;
-    }
-
     .history-item {
       display: flex;
       justify-content: space-between;
@@ -353,10 +381,6 @@
       padding: 10px 0;
       border-bottom: 1px dashed #e4d3c3;
       font-size: 14px;
-    }
-
-    .history-item:last-child {
-      border-bottom: none;
     }
 
     .history-left {
@@ -378,7 +402,7 @@
       margin-top: 16px;
     }
 
-    @media (max-width: 620px) {
+    @media (max-width: 700px) {
       body {
         padding: 16px 10px 34px;
       }
@@ -390,10 +414,6 @@
       .panel {
         padding: 14px;
         border-radius: 20px;
-      }
-
-      .input-row {
-        gap: 8px;
       }
 
       input {
@@ -412,6 +432,10 @@
         grid-template-columns: repeat(2, 1fr);
       }
 
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
       .big {
         font-size: 26px;
       }
@@ -424,11 +448,11 @@
 
     <div class="hero">
       <div class="title">
-        5142983｜小墨镜 K线爆发模型 v2.0
+        5142983｜小墨镜五位房号模型 v3.0
       </div>
 
       <div class="sub">
-        129局去重库｜六个位子独立爆发规则｜最多同时推荐3个位子｜无命中直接跳过
+        244局去重库｜13条赢规则＋高危黑名单｜同步输出推荐位、冲突位、禁坐位
       </div>
     </div>
 
@@ -464,42 +488,43 @@
 
     <div class="panel">
       <div class="section-title">
-        v2.0 历史回测
+        v3.0 历史反推回测
       </div>
 
       <div class="grid">
+
         <div class="stat">
-          <div class="v">129局</div>
+          <div class="v">244局</div>
           <div class="k">总样本</div>
         </div>
 
         <div class="stat">
-          <div class="v">32局</div>
+          <div class="v">88局</div>
           <div class="k">模型命中</div>
         </div>
 
         <div class="stat">
-          <div class="v">24.8%</div>
+          <div class="v">36.07%</div>
           <div class="k">进房率</div>
         </div>
 
         <div class="stat">
-          <div class="v">96.9%</div>
+          <div class="v">88.64%</div>
           <div class="k">历史胜率</div>
         </div>
 
         <div class="stat">
-          <div class="v">31胜1负</div>
+          <div class="v">78胜10负</div>
           <div class="k">胜负结果</div>
         </div>
 
         <div class="stat">
-          <div class="v">+24150</div>
+          <div class="v">+49640</div>
           <div class="k">总净分</div>
         </div>
 
         <div class="stat">
-          <div class="v">+755</div>
+          <div class="v">+564</div>
           <div class="k">命中场均</div>
         </div>
 
@@ -507,27 +532,28 @@
           <div class="v">0局</div>
           <div class="k">历史大输</div>
         </div>
+
       </div>
 
       <div
         class="desc"
         style="margin-top: 12px;"
       >
-        当前模型使用1至6号位独立K线波动候选规则。
-        历史合并命中32局，31胜1小输，唯一亏损为31409的3号位-250。
-        历史没有出现≤-500的大输。
-        同一个座位只输出一次；同时命中多个座位时，最多按优先级输出3位。
+        以上为同一批244局内挖掘并反推的样本内成绩。
+        网页已加入黑名单冲突机制：
+        S/A档撞黑会显示“赢黑冲突并降级”；
+        B档撞一级黑名单会取消推荐并列入禁坐。
       </div>
     </div>
 
     <div class="panel">
       <div class="section-title">
-        当前六个位子爆发规则
+        当前赢规则与黑名单
       </div>
 
       <div
-        class="combo-list"
         id="comboList"
+        class="combo-list"
       ></div>
     </div>
 
@@ -553,397 +579,35 @@
     </div>
 
     <div class="footer-note">
-      房号记作ABCDE。总跳动＝|A-B|＋|B-C|＋|C-D|＋|D-E|；
-      前半跳动＝|A-B|＋|B-C|。
-      折返指走势从升转降或从降转升。
-      推荐优先级固定为5号→4号→2号→6号→1号→3号，最多输出3位。
-      当前属于历史反推候选模型，新增结果应继续独立盲测。
+      房号记作ABCDE。
+      1号取A，2号取B，3号取C，4号取D，5号和6号取E。
+      “差N”表示X与其余四位中至少一个数字的绝对差为N；
+      “和N”表示X与其余四位中至少一个数字相加为N。
+      无赢规则命中时默认跳过；
+      黑名单用于避开历史大输密集结构。
     </div>
+
   </div>
 
   <script>
     const MODEL_STAT = {
-      account: "小墨镜",
-      id: "5142983",
-      version: "v2.0",
-      sample: "129局",
-      hitCount: "32局",
-      hitRate: "24.8%",
-      winRate: "96.9%",
-      net: "+24150",
-      average: "+755",
+      sample: "244局",
+      hitCount: "88局",
+      hitRate: "36.07%",
+      winRate: "88.64%",
+      net: "+49640",
+      average: "+564",
       bigLoss: "0大输"
     };
 
-    /*
-      当前规则，与直接问答保持一致：
-
-      1号：
-      |D-E| <= 2
-      totalJump <= 13
-
-      2号：
-      frontJump <= 5
-      directionChanges >= 2
-
-      3号：
-      uniqueCount === 5
-      |C-D| >= 3
-
-      4号：
-      |A-B| <= 4
-      |C-D| >= 3
-
-      5号：
-      |B-C| <= 3
-      D <= 4
-
-      6号：
-      C <= 3
-      E >= 4
-
-      推荐优先级：
-      5号 > 4号 > 2号 > 6号 > 1号 > 3号
-
-      最多输出3个位子。
-    */
-
     const PRIORITY = [
-      5,
       4,
       2,
       6,
-      1,
-      3
+      5,
+      3,
+      1
     ];
-
-    const RULES = [
-      {
-        id: "K5-1",
-        seat: 5,
-        rank: 1,
-
-        name:
-          "5号｜BC平缓＋D低位",
-
-        shortName:
-          "BC平缓＋D低位",
-
-        grade:
-          "A",
-
-        gradeText:
-          "A档｜主爆发",
-
-        stat:
-          "历史6局｜6胜0负｜5局≥300｜净+6480｜0大输",
-
-        examples:
-          "73506 +1730、97705 +2240、28746 +900、41302 +250、12140 +1030、37623 +330",
-
-        rule:
-          "完整房号同时满足|B-C|≤3，并且D≤4。",
-
-        test: room => {
-          return (
-            room.diffBC <= 3 &&
-            room.D <= 4
-          );
-        },
-
-        detail: room => {
-          return (
-            `|B-C|=${room.diffBC}≤3：` +
-            `${room.diffBC <= 3 ? "是" : "否"}；` +
-            `D=${room.D}≤4：` +
-            `${room.D <= 4 ? "是" : "否"}`
-          );
-        }
-      },
-
-      {
-        id: "K4-1",
-        seat: 4,
-        rank: 2,
-
-        name:
-          "4号｜AB不过大＋CD启动",
-
-        shortName:
-          "AB收敛＋CD启动",
-
-        grade:
-          "A",
-
-        gradeText:
-          "A档｜强爆发",
-
-        stat:
-          "历史6局｜6胜0负｜6局全部≥300｜净+4760｜0大输",
-
-        examples:
-          "21834 +370、41916 +1200、97479 +380、51157 +460、47819 +1060、30390 +1290",
-
-        rule:
-          "完整房号同时满足|A-B|≤4，并且|C-D|≥3。",
-
-        test: room => {
-          return (
-            room.diffAB <= 4 &&
-            room.diffCD >= 3
-          );
-        },
-
-        detail: room => {
-          return (
-            `|A-B|=${room.diffAB}≤4：` +
-            `${room.diffAB <= 4 ? "是" : "否"}；` +
-            `|C-D|=${room.diffCD}≥3：` +
-            `${room.diffCD >= 3 ? "是" : "否"}`
-          );
-        }
-      },
-
-      {
-        id: "K2-1",
-        seat: 2,
-        rank: 3,
-
-        name:
-          "2号｜前半平顺＋连续折返",
-
-        shortName:
-          "前半平顺＋折返",
-
-        grade:
-          "A",
-
-        gradeText:
-          "A档｜后段强势",
-
-        stat:
-          "历史6局｜6胜0负｜6局全部≥300｜净+4140｜0大输",
-
-        examples:
-          "43411 +530、98695 +1090、65866 +350、46353 +800、76759 +970、75726 +400",
-
-        rule:
-          "前半跳动|A-B|+|B-C|≤5，并且整条走势至少出现2次折返。",
-
-        test: room => {
-          return (
-            room.frontJump <= 5 &&
-            room.directionChanges >= 2
-          );
-        },
-
-        detail: room => {
-          return (
-            `前半跳动=${room.frontJump}≤5：` +
-            `${room.frontJump <= 5 ? "是" : "否"}；` +
-            `折返=${room.directionChanges}次≥2：` +
-            `${room.directionChanges >= 2 ? "是" : "否"}`
-          );
-        }
-      },
-
-      {
-        id: "K6-1",
-        seat: 6,
-        rank: 4,
-
-        name:
-          "6号｜C低位＋E中高位",
-
-        shortName:
-          "C低＋E高",
-
-        grade:
-          "B",
-
-        gradeText:
-          "B档｜爆发候选",
-
-        stat:
-          "历史4局｜4胜0负｜4局全部≥300｜净+3180｜0大输",
-
-        examples:
-          "10064 +1290、91125 +490、73149 +820、27366 +580",
-
-        rule:
-          "完整房号同时满足C≤3，并且E≥4。",
-
-        test: room => {
-          return (
-            room.C <= 3 &&
-            room.E >= 4
-          );
-        },
-
-        detail: room => {
-          return (
-            `C=${room.C}≤3：` +
-            `${room.C <= 3 ? "是" : "否"}；` +
-            `E=${room.E}≥4：` +
-            `${room.E >= 4 ? "是" : "否"}`
-          );
-        }
-      },
-
-      {
-        id: "K1-1",
-        seat: 1,
-        rank: 5,
-
-        name:
-          "1号｜尾段收口＋整体平顺",
-
-        shortName:
-          "尾段收口＋平顺",
-
-        grade:
-          "B",
-
-        gradeText:
-          "B档｜爆发候选",
-
-        stat:
-          "历史5局｜5胜0负｜5局全部≥300｜净+4170｜0大输",
-
-        examples:
-          "37655 +400、85987 +1160、66134 +520、55068 +1510、78632 +580",
-
-        rule:
-          "完整房号同时满足|D-E|≤2，并且总跳动≤13。",
-
-        test: room => {
-          return (
-            room.diffDE <= 2 &&
-            room.totalJump <= 13
-          );
-        },
-
-        detail: room => {
-          return (
-            `|D-E|=${room.diffDE}≤2：` +
-            `${room.diffDE <= 2 ? "是" : "否"}；` +
-            `总跳动=${room.totalJump}≤13：` +
-            `${room.totalJump <= 13 ? "是" : "否"}`
-          );
-        }
-      },
-
-      {
-        id: "K3-1",
-        seat: 3,
-        rank: 6,
-
-        name:
-          "3号｜无重号＋CD明显跳动",
-
-        shortName:
-          "无重号＋CD跳动",
-
-        grade:
-          "B",
-
-        gradeText:
-          "B档｜大赢小输",
-
-        stat:
-          "历史5局｜4胜1小输｜3局≥300｜净+1420｜0大输",
-
-        examples:
-          "20478 +610、31409 -250、54260 +150、56308 +360、24150 +550",
-
-        rule:
-          "完整房号5个数字必须全部不同，并且|C-D|≥3。",
-
-        test: room => {
-          return (
-            room.uniqueCount === 5 &&
-            room.diffCD >= 3
-          );
-        },
-
-        detail: room => {
-          return (
-            `唯一数字=${room.uniqueCount}个＝5：` +
-            `${room.uniqueCount === 5 ? "是" : "否"}；` +
-            `|C-D|=${room.diffCD}≥3：` +
-            `${room.diffCD >= 3 ? "是" : "否"}`
-          );
-        }
-      }
-    ];
-
-    function moveNumber(a, b) {
-      if (b > a) {
-        return 1;
-      }
-
-      if (b < a) {
-        return -1;
-      }
-
-      return 0;
-    }
-
-    function moveText(a, b) {
-      if (b > a) {
-        return "升";
-      }
-
-      if (b < a) {
-        return "降";
-      }
-
-      return "平";
-    }
-
-    function countDirectionChanges(digits) {
-      const moves = [];
-
-      for (
-        let index = 0;
-        index < digits.length - 1;
-        index++
-      ) {
-        const move =
-          moveNumber(
-            digits[index],
-            digits[index + 1]
-          );
-
-        /*
-          平局不作为升或降，
-          也不单独制造折返。
-        */
-
-        if (move !== 0) {
-          moves.push(move);
-        }
-      }
-
-      let changes = 0;
-
-      for (
-        let index = 1;
-        index < moves.length;
-        index++
-      ) {
-        if (
-          moves[index] !== moves[index - 1]
-        ) {
-          changes++;
-        }
-      }
-
-      return {
-        moves,
-        changes
-      };
-    }
 
     function analyzeRoom(roomNumber) {
       const digits =
@@ -959,41 +623,9 @@
         E
       ] = digits;
 
-      const diffAB =
-        Math.abs(A - B);
-
-      const diffBC =
-        Math.abs(B - C);
-
-      const diffCD =
-        Math.abs(C - D);
-
-      const diffDE =
-        Math.abs(D - E);
-
-      const totalJump =
-        diffAB +
-        diffBC +
-        diffCD +
-        diffDE;
-
-      const frontJump =
-        diffAB +
-        diffBC;
-
-      const backJump =
-        diffCD +
-        diffDE;
-
-      const maxDigit =
-        Math.max(...digits);
-
-      const minDigit =
-        Math.min(...digits);
-
       const span =
-        maxDigit -
-        minDigit;
+        Math.max(...digits) -
+        Math.min(...digits);
 
       const sum =
         digits.reduce(
@@ -1003,77 +635,946 @@
           0
         );
 
-      const uniqueCount =
-        new Set(digits).size;
+      const counts = {};
 
-      const oddCount =
-        digits.filter(number => {
-          return number % 2 === 1;
-        }).length;
+      digits.forEach(number => {
+        counts[number] =
+          (counts[number] || 0) + 1;
+      });
 
-      const evenCount =
-        5 - oddCount;
-
-      const directionInfo =
-        countDirectionChanges(digits);
-
-      const trend = [
-        moveText(A, B),
-        moveText(B, C),
-        moveText(C, D),
-        moveText(D, E)
-      ];
+      const hasPair =
+        Object
+          .values(counts)
+          .some(count => {
+            return count >= 2;
+          });
 
       return {
         room: roomNumber,
-
         digits,
-
         A,
         B,
         C,
         D,
         E,
-
-        diffAB,
-        diffBC,
-        diffCD,
-        diffDE,
-
-        totalJump,
-        frontJump,
-        backJump,
-
-        maxDigit,
-        minDigit,
         span,
         sum,
-
-        uniqueCount,
-        oddCount,
-        evenCount,
-
-        directionChanges:
-          directionInfo.changes,
-
-        directionMoves:
-          directionInfo.moves,
-
-        trend,
-
-        trendCode:
-          trend.join("→")
+        counts,
+        hasPair,
+        uniqueCount:
+          new Set(digits).size
       };
     }
 
-    function getHits(room) {
-      return RULES
-        .filter(rule => {
-          return rule.test(room);
+    function xForSeat(room, seat) {
+      if (seat === 1) {
+        return room.A;
+      }
+
+      if (seat === 2) {
+        return room.B;
+      }
+
+      if (seat === 3) {
+        return room.C;
+      }
+
+      if (seat === 4) {
+        return room.D;
+      }
+
+      return room.E;
+    }
+
+    function othersForSeat(room, seat) {
+      const index =
+        seat === 1
+          ? 0
+          : seat === 2
+            ? 1
+            : seat === 3
+              ? 2
+              : seat === 4
+                ? 3
+                : 4;
+
+      return room.digits.filter(
+        (
+          number,
+          digitIndex
+        ) => {
+          return digitIndex !== index;
+        }
+      );
+    }
+
+    function diffs(room, seat) {
+      const x =
+        xForSeat(room, seat);
+
+      return othersForSeat(
+        room,
+        seat
+      ).map(number => {
+        return Math.abs(x - number);
+      });
+    }
+
+    function sums(room, seat) {
+      const x =
+        xForSeat(room, seat);
+
+      return othersForSeat(
+        room,
+        seat
+      ).map(number => {
+        return x + number;
+      });
+    }
+
+    function hasDiff(
+      room,
+      seat,
+      target
+    ) {
+      return diffs(
+        room,
+        seat
+      ).includes(target);
+    }
+
+    function diffCount(
+      room,
+      seat,
+      target
+    ) {
+      return diffs(
+        room,
+        seat
+      ).filter(value => {
+        return value === target;
+      }).length;
+    }
+
+    function hasSum(
+      room,
+      seat,
+      target
+    ) {
+      return sums(
+        room,
+        seat
+      ).includes(target);
+    }
+
+    function rValue(room, seat) {
+      return othersForSeat(
+        room,
+        seat
+      ).reduce(
+        (
+          total,
+          number
+        ) => {
+          return total + number;
+        },
+        0
+      );
+    }
+
+    function xRepeated(room, seat) {
+      const x =
+        xForSeat(room, seat);
+
+      return othersForSeat(
+        room,
+        seat
+      ).includes(x);
+    }
+
+    function parityText(number) {
+      return number % 2 === 0
+        ? "偶"
+        : "奇";
+    }
+
+    const WIN_RULES = [
+
+      {
+        id: "W1",
+        seat: 1,
+        grade: "B",
+        rank: 15,
+
+        name:
+          "1号｜差1＋差2",
+
+        stat:
+          "6局5胜1小输｜净+3340｜0大输",
+
+        test: room => {
+          return (
+            hasDiff(room, 1, 1) &&
+            hasDiff(room, 1, 2)
+          );
+        },
+
+        detail: room => {
+          return (
+            `差1=${hasDiff(room, 1, 1) ? "有" : "无"}；` +
+            `差2=${hasDiff(room, 1, 2) ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "W2A",
+        seat: 2,
+        grade: "A",
+        rank: 6,
+
+        name:
+          "2号｜差1＋差2＋对子",
+
+        stat:
+          "8局全胜｜7大赢｜净+6580｜0大输",
+
+        test: room => {
+          return (
+            hasDiff(room, 2, 1) &&
+            hasDiff(room, 2, 2) &&
+            room.hasPair
+          );
+        },
+
+        detail: room => {
+          return (
+            `差1=${hasDiff(room, 2, 1) ? "有" : "无"}；` +
+            `差2=${hasDiff(room, 2, 2) ? "有" : "无"}；` +
+            `对子=${room.hasPair ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "W2B1",
+        seat: 2,
+        grade: "B",
+        rank: 14,
+
+        name:
+          "2号｜差1＋R奇",
+
+        stat:
+          "11局8胜3小输｜净+5850｜0大输",
+
+        test: room => {
+          return (
+            hasDiff(room, 2, 1) &&
+            rValue(room, 2) % 2 === 1
+          );
+        },
+
+        detail: room => {
+          return (
+            `差1=${hasDiff(room, 2, 1) ? "有" : "无"}；` +
+            `R=${rValue(room, 2)}(${parityText(rValue(room, 2))})`
+          );
+        }
+      },
+
+      {
+        id: "W2B2",
+        seat: 2,
+        grade: "B",
+        rank: 13,
+
+        name:
+          "2号｜至少两个差1",
+
+        stat:
+          "8局7胜1小输｜净+5040｜0大输",
+
+        test: room => {
+          return (
+            diffCount(room, 2, 1) >= 2
+          );
+        },
+
+        detail: room => {
+          return (
+            `差1数量=${diffCount(room, 2, 1)}`
+          );
+        }
+      },
+
+      {
+        id: "W3A",
+        seat: 3,
+        grade: "B",
+        rank: 10,
+
+        name:
+          "3号｜差4＋和6",
+
+        stat:
+          "8局7胜1小输｜净+4780｜0大输",
+
+        test: room => {
+          return (
+            hasDiff(room, 3, 4) &&
+            hasSum(room, 3, 6)
+          );
+        },
+
+        detail: room => {
+          return (
+            `差4=${hasDiff(room, 3, 4) ? "有" : "无"}；` +
+            `和6=${hasSum(room, 3, 6) ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "W3B",
+        seat: 3,
+        grade: "B",
+        rank: 11,
+
+        name:
+          "3号｜和9＋R偶",
+
+        stat:
+          "6局5胜1小输｜净+4790｜0大输",
+
+        test: room => {
+          return (
+            hasSum(room, 3, 9) &&
+            rValue(room, 3) % 2 === 0
+          );
+        },
+
+        detail: room => {
+          return (
+            `和9=${hasSum(room, 3, 9) ? "有" : "无"}；` +
+            `R=${rValue(room, 3)}(${parityText(rValue(room, 3))})`
+          );
+        }
+      },
+
+      {
+        id: "W4A",
+        seat: 4,
+        grade: "A",
+        rank: 4,
+
+        name:
+          "4号｜差2＋极差4—6",
+
+        stat:
+          "12局11胜1小输｜净+6300｜0大输",
+
+        test: room => {
+          return (
+            hasDiff(room, 4, 2) &&
+            room.span >= 4 &&
+            room.span <= 6
+          );
+        },
+
+        detail: room => {
+          return (
+            `差2=${hasDiff(room, 4, 2) ? "有" : "无"}；` +
+            `极差=${room.span}`
+          );
+        }
+      },
+
+      {
+        id: "W4B",
+        seat: 4,
+        grade: "B",
+        rank: 9,
+
+        name:
+          "4号｜差5＋对子",
+
+        stat:
+          "8局7胜1小输｜净+5290｜0大输",
+
+        test: room => {
+          return (
+            hasDiff(room, 4, 5) &&
+            room.hasPair
+          );
+        },
+
+        detail: room => {
+          return (
+            `差5=${hasDiff(room, 4, 5) ? "有" : "无"}；` +
+            `对子=${room.hasPair ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "W4C",
+        seat: 4,
+        grade: "B",
+        rank: 12,
+
+        name:
+          "4号｜差6＋极差7—9",
+
+        stat:
+          "6局全胜｜净+3330｜0大输",
+
+        test: room => {
+          return (
+            hasDiff(room, 4, 6) &&
+            room.span >= 7 &&
+            room.span <= 9
+          );
+        },
+
+        detail: room => {
+          return (
+            `差6=${hasDiff(room, 4, 6) ? "有" : "无"}；` +
+            `极差=${room.span}`
+          );
+        }
+      },
+
+      {
+        id: "W5A",
+        seat: 5,
+        grade: "A",
+        rank: 5,
+
+        name:
+          "5号｜X偶＋和10",
+
+        stat:
+          "9局8胜1小输｜净+5550｜0大输",
+
+        test: room => {
+          return (
+            room.E % 2 === 0 &&
+            hasSum(room, 5, 10)
+          );
+        },
+
+        detail: room => {
+          return (
+            `E=${room.E}(${parityText(room.E)})；` +
+            `和10=${hasSum(room, 5, 10) ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "W5B",
+        seat: 5,
+        grade: "B",
+        rank: 8,
+
+        name:
+          "5号｜差5＋对子＋R奇",
+
+        stat:
+          "7局全胜｜净+6410｜0大输",
+
+        test: room => {
+          return (
+            hasDiff(room, 5, 5) &&
+            room.hasPair &&
+            rValue(room, 5) % 2 === 1
+          );
+        },
+
+        detail: room => {
+          return (
+            `差5=${hasDiff(room, 5, 5) ? "有" : "无"}；` +
+            `对子=${room.hasPair ? "有" : "无"}；` +
+            `R=${rValue(room, 5)}(${parityText(rValue(room, 5))})`
+          );
+        }
+      },
+
+      {
+        id: "W6A",
+        seat: 6,
+        grade: "A",
+        rank: 7,
+
+        name:
+          "6号｜X≤3＋对子＋极差7—9",
+
+        stat:
+          "7局全胜｜净+3270｜0大输",
+
+        test: room => {
+          return (
+            room.E <= 3 &&
+            room.hasPair &&
+            room.span >= 7 &&
+            room.span <= 9
+          );
+        },
+
+        detail: room => {
+          return (
+            `E=${room.E}≤3；` +
+            `对子=${room.hasPair ? "有" : "无"}；` +
+            `极差=${room.span}`
+          );
+        }
+      },
+
+      {
+        id: "W6B",
+        seat: 6,
+        grade: "B",
+        rank: 12.5,
+
+        name:
+          "6号｜X重复＋R偶",
+
+        stat:
+          "7局全胜｜净+2370｜0大输",
+
+        test: room => {
+          return (
+            xRepeated(room, 6) &&
+            rValue(room, 6) % 2 === 0
+          );
+        },
+
+        detail: room => {
+          return (
+            `X重复=${xRepeated(room, 6) ? "是" : "否"}；` +
+            `R=${rValue(room, 6)}(${parityText(rValue(room, 6))})`
+          );
+        }
+      }
+
+    ];
+
+    const BLACK_RULES = [
+
+      {
+        id: "B1",
+        seat: 1,
+        level: 1,
+
+        name:
+          "1号黑｜和8＋对子",
+
+        stat:
+          "8局2胜6负｜4大输｜净-3510",
+
+        test: room => {
+          return (
+            hasSum(room, 1, 8) &&
+            room.hasPair
+          );
+        },
+
+        detail: room => {
+          return (
+            `和8=${hasSum(room, 1, 8) ? "有" : "无"}；` +
+            `对子=${room.hasPair ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "B2",
+        seat: 2,
+        level: 1,
+
+        name:
+          "2号黑｜有差6",
+
+        stat:
+          "12局1胜11负｜5大输｜净-3720",
+
+        test: room => {
+          return hasDiff(room, 2, 6);
+        },
+
+        detail: room => {
+          return (
+            `差6=${hasDiff(room, 2, 6) ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "B2X",
+        seat: 2,
+        level: 2,
+
+        name:
+          "2号强化黑｜差6＋极差7—9",
+
+        stat:
+          "8局全负｜3大输｜净-3430",
+
+        test: room => {
+          return (
+            hasDiff(room, 2, 6) &&
+            room.span >= 7 &&
+            room.span <= 9
+          );
+        },
+
+        detail: room => {
+          return (
+            `差6=${hasDiff(room, 2, 6) ? "有" : "无"}；` +
+            `极差=${room.span}`
+          );
+        }
+      },
+
+      {
+        id: "B3",
+        seat: 3,
+        level: 2,
+
+        name:
+          "3号黑｜X重复＋差3",
+
+        stat:
+          "8局全负｜4大输｜净-3910",
+
+        test: room => {
+          return (
+            xRepeated(room, 3) &&
+            hasDiff(room, 3, 3)
+          );
+        },
+
+        detail: room => {
+          return (
+            `X重复=${xRepeated(room, 3) ? "是" : "否"}；` +
+            `差3=${hasDiff(room, 3, 3) ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "B3X",
+        seat: 3,
+        level: 2,
+
+        name:
+          "3号加强黑｜X重复＋和7",
+
+        stat:
+          "5局全负｜3大输｜净-3290",
+
+        test: room => {
+          return (
+            xRepeated(room, 3) &&
+            hasSum(room, 3, 7)
+          );
+        },
+
+        detail: room => {
+          return (
+            `X重复=${xRepeated(room, 3) ? "是" : "否"}；` +
+            `和7=${hasSum(room, 3, 7) ? "有" : "无"}`
+          );
+        }
+      },
+
+      {
+        id: "B4",
+        seat: 4,
+        level: 2,
+
+        name:
+          "4号黑｜差4＋极差7—9",
+
+        stat:
+          "6局全负｜4大输｜净-4350",
+
+        test: room => {
+          return (
+            hasDiff(room, 4, 4) &&
+            room.span >= 7 &&
+            room.span <= 9
+          );
+        },
+
+        detail: room => {
+          return (
+            `差4=${hasDiff(room, 4, 4) ? "有" : "无"}；` +
+            `极差=${room.span}`
+          );
+        }
+      },
+
+      {
+        id: "B5",
+        seat: 5,
+        level: 1,
+
+        name:
+          "5号黑｜R偶＋极差7—9",
+
+        stat:
+          "14局3胜11负｜8大输｜净-6630",
+
+        test: room => {
+          return (
+            rValue(room, 5) % 2 === 0 &&
+            room.span >= 7 &&
+            room.span <= 9
+          );
+        },
+
+        detail: room => {
+          return (
+            `R=${rValue(room, 5)}(${parityText(rValue(room, 5))})；` +
+            `极差=${room.span}`
+          );
+        }
+      },
+
+      {
+        id: "B5X",
+        seat: 5,
+        level: 2,
+
+        name:
+          "5号强化黑｜对子＋R偶＋极差7—9",
+
+        stat:
+          "9局1胜8负｜6大输｜净-6410",
+
+        test: room => {
+          return (
+            room.hasPair &&
+            rValue(room, 5) % 2 === 0 &&
+            room.span >= 7 &&
+            room.span <= 9
+          );
+        },
+
+        detail: room => {
+          return (
+            `对子=${room.hasPair ? "有" : "无"}；` +
+            `R=${rValue(room, 5)}(${parityText(rValue(room, 5))})；` +
+            `极差=${room.span}`
+          );
+        }
+      }
+
+    ];
+
+    function getSeatGrade(
+      room,
+      seat,
+      hits
+    ) {
+      if (
+        seat === 4 &&
+        hits.some(rule => {
+          return rule.id === "W4A";
+        }) &&
+        hits.some(rule => {
+          return rule.id === "W4B";
         })
-        .sort((ruleA, ruleB) => {
-          return ruleA.rank - ruleB.rank;
+      ) {
+        return "S";
+      }
+
+      if (
+        seat === 2 &&
+        hits.some(rule => {
+          return rule.id === "W2A";
+        }) &&
+        (
+          hits.some(rule => {
+            return rule.id === "W2B1";
+          }) ||
+          hits.some(rule => {
+            return rule.id === "W2B2";
+          })
+        )
+      ) {
+        return "S";
+      }
+
+      if (
+        seat === 6 &&
+        hits.some(rule => {
+          return rule.id === "W6A";
+        }) &&
+        hits.some(rule => {
+          return rule.id === "W6B";
+        })
+      ) {
+        return "S";
+      }
+
+      return hits.some(rule => {
+        return rule.grade === "A";
+      })
+        ? "A"
+        : "B";
+    }
+
+    function gradeWeight(grade) {
+      if (grade === "S") {
+        return 3;
+      }
+
+      if (grade === "A") {
+        return 2;
+      }
+
+      return 1;
+    }
+
+    function evaluate(room) {
+      const seats = [];
+
+      for (
+        let seat = 1;
+        seat <= 6;
+        seat++
+      ) {
+        const wins =
+          WIN_RULES.filter(rule => {
+            return (
+              rule.seat === seat &&
+              rule.test(room)
+            );
+          });
+
+        const blacks =
+          BLACK_RULES.filter(rule => {
+            return (
+              rule.seat === seat &&
+              rule.test(room)
+            );
+          });
+
+        const grade =
+          wins.length > 0
+            ? getSeatGrade(
+                room,
+                seat,
+                wins
+              )
+            : null;
+
+        let status =
+          "neutral";
+
+        if (
+          wins.length > 0 &&
+          blacks.length > 0
+        ) {
+          status =
+            grade === "B"
+              ? "blocked"
+              : "conflict";
+        } else if (
+          wins.length > 0
+        ) {
+          status =
+            "recommend";
+        } else if (
+          blacks.length > 0
+        ) {
+          status =
+            "black";
+        }
+
+        const rank =
+          wins.length > 0
+            ? Math.min(
+                ...wins.map(rule => {
+                  return rule.rank;
+                })
+              )
+            : 999;
+
+        seats.push({
+          seat,
+          wins,
+          blacks,
+          grade,
+          status,
+          rank
         });
+      }
+
+      const recommended =
+        seats
+          .filter(item => {
+            return (
+              item.status === "recommend" ||
+              item.status === "conflict"
+            );
+          })
+          .sort(
+            (
+              itemA,
+              itemB
+            ) => {
+              return (
+                gradeWeight(itemB.grade) -
+                  gradeWeight(itemA.grade) ||
+                itemA.rank -
+                  itemB.rank ||
+                PRIORITY.indexOf(itemA.seat) -
+                  PRIORITY.indexOf(itemB.seat)
+              );
+            }
+          )
+          .slice(0, 3);
+
+      const forbidden =
+        seats
+          .filter(item => {
+            return (
+              item.status === "black" ||
+              item.status === "blocked"
+            );
+          })
+          .sort(
+            (
+              itemA,
+              itemB
+            ) => {
+              const levelA =
+                Math.max(
+                  ...itemA.blacks.map(rule => {
+                    return rule.level;
+                  })
+                );
+
+              const levelB =
+                Math.max(
+                  ...itemB.blacks.map(rule => {
+                    return rule.level;
+                  })
+                );
+
+              return levelB - levelA;
+            }
+          );
+
+      return {
+        seats,
+        recommended,
+        forbidden
+      };
     }
 
     function run() {
@@ -1082,7 +1583,7 @@
           "roomInput"
         );
 
-      let roomNumber =
+      const roomNumber =
         input.value
           .replace(/\D/g, "")
           .slice(0, 5);
@@ -1103,28 +1604,17 @@
       const room =
         analyzeRoom(roomNumber);
 
-      const allHits =
-        getHits(room);
-
-      const finalHits =
-        allHits.slice(0, 3);
-
-      const hiddenPickCount =
-        Math.max(
-          0,
-          allHits.length - 3
-        );
+      const result =
+        evaluate(room);
 
       renderResult(
         room,
-        finalHits,
-        hiddenPickCount
+        result
       );
 
       saveHistory(
         room,
-        finalHits,
-        hiddenPickCount
+        result
       );
 
       renderHistory();
@@ -1158,165 +1648,324 @@
       return `
         ABCDE=${room.A}${room.B}${room.C}${room.D}${room.E}<br>
 
-        相邻差：
-        ${room.diffAB} /
-        ${room.diffBC} /
-        ${room.diffCD} /
-        ${room.diffDE}<br>
-
-        总跳动=${room.totalJump}
-        ｜前半跳动=${room.frontJump}
-        ｜后半跳动=${room.backJump}<br>
-
-        跨度=${room.span}
+        极差=${room.span}
         ｜总和=${room.sum}
+        ｜对子=${room.hasPair ? "有" : "无"}
         ｜唯一数字=${room.uniqueCount}个<br>
 
-        奇${room.oddCount}偶${room.evenCount}
-        ｜折返=${room.directionChanges}次<br>
+        各位X：
+        1号=${room.A}，
+        2号=${room.B}，
+        3号=${room.C}，
+        4号=${room.D}，
+        5/6号=${room.E}
+      `;
+    }
 
-        走势：${room.trendCode}
+    let currentRoom =
+      null;
+
+    function renderSeatCard(
+      item,
+      index,
+      type
+    ) {
+      if (
+        type === "good"
+      ) {
+        const conflict =
+          item.status === "conflict";
+
+        const className =
+          conflict
+            ? "conflict"
+            : `grade-${item.grade.toLowerCase()}`;
+
+        const title =
+          conflict
+            ? "⚠️赢黑冲突"
+            : index === 0
+              ? "🔥优先推荐"
+              : "⚡同时命中";
+
+        return `
+          <div
+            class="
+              pick
+              ${
+                index === 0 &&
+                !conflict
+                  ? "main"
+                  : ""
+              }
+              ${className}
+            "
+          >
+            <div class="pick-title">
+              ${title}
+              ｜${item.seat}号
+              ｜${item.grade}档
+            </div>
+
+            <div class="pick-rule">
+              赢规则：
+              ${item.wins
+                .map(rule => {
+                  return rule.name;
+                })
+                .join("；")}
+              <br>
+
+              ${item.wins
+                .map(rule => {
+                  return (
+                    `${rule.detail(currentRoom)}` +
+                    `｜${rule.stat}`
+                  );
+                })
+                .join("<br>")}
+
+              ${
+                item.blacks.length > 0
+                  ? `
+                    <br>
+
+                    <b style="color: #b8342b;">
+                      冲突黑名单：
+                      ${item.blacks
+                        .map(rule => {
+                          return rule.name;
+                        })
+                        .join("；")}
+                    </b>
+
+                    <br>
+
+                    ${item.blacks
+                      .map(rule => {
+                        return rule.stat;
+                      })
+                      .join("；")}
+                  `
+                  : ""
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="pick black">
+          <div class="pick-title">
+            ⛔禁坐｜${item.seat}号
+          </div>
+
+          <div class="pick-rule">
+            黑名单：
+            ${item.blacks
+              .map(rule => {
+                return rule.name;
+              })
+              .join("；")}
+            <br>
+
+            ${item.blacks
+              .map(rule => {
+                return (
+                  `${rule.detail(currentRoom)}` +
+                  `｜${rule.stat}`
+                );
+              })
+              .join("<br>")}
+
+            ${
+              item.wins.length > 0
+                ? `
+                  <br>
+                  原本命中B档赢规则，
+                  但黑名单优先取消推荐。
+                `
+                : ""
+            }
+          </div>
+        </div>
       `;
     }
 
     function renderResult(
       room,
-      picks,
-      hiddenPickCount
+      result
     ) {
+      currentRoom =
+        room;
+
       const box =
         document.getElementById(
           "result"
         );
 
-      if (
-        picks.length === 0
-      ) {
-        box.className =
-          "result show";
-
-        box.innerHTML = `
-          <span class="badge no">
-            跳过
-          </span>
-
-          <div class="big">
-            ${room.room}
-          </div>
-
-          <div class="desc">
-            当前1至6号位均未命中爆发大赢小输候选规则，不推荐进房。
-            <br><br>
-
-            ${renderRoomLine(room)}
-          </div>
-
-          ${renderDebug(room)}
-        `;
-
-        return;
-      }
-
-      const pickNames =
-        picks
-          .map(pick => {
-            return `${pick.seat}号`;
-          })
-          .join("、");
-
-      const pickHtml =
-        picks
-          .map(
-            (
-              pick,
-              index
-            ) => {
-              const gradeClass =
-                pick.grade === "A"
-                  ? "grade-a"
-                  : "grade-b";
-
-              return `
-                <div
-                  class="
-                    pick
-                    ${index === 0 ? "main" : ""}
-                    ${gradeClass}
-                  "
-                >
-                  <div class="pick-title">
-                    ${
-                      index === 0
-                        ? "🔥优先推荐"
-                        : "⚡同时命中"
-                    }
-                    ｜${pick.seat}号
-                    ｜${pick.gradeText}
-                  </div>
-
-                  <div class="pick-rule">
-                    命中结构：${pick.shortName}<br>
-                    条件判断：${pick.detail(room)}<br>
-                    完整规则：${pick.rule}<br>
-                    ${pick.stat}<br>
-                    历史命中：${pick.examples}
-                  </div>
-                </div>
-              `;
-            }
-          )
-          .join("");
-
-      const hiddenText =
-        hiddenPickCount > 0
-          ? `
-            <div
-              class="desc"
-              style="margin-top: 10px;"
-            >
-              该房间还有${hiddenPickCount}个位子命中，
-              但模型按优先级只输出前3位。
-            </div>
-          `
-          : "";
-
       box.className =
         "result show";
 
+      const good =
+        result.recommended;
+
+      const bad =
+        result.forbidden;
+
+      const goodNames =
+        good.length > 0
+          ? good
+              .map(item => {
+                return (
+                  `${item.seat}号` +
+                  `${
+                    item.status === "conflict"
+                      ? "(冲突)"
+                      : ""
+                  }`
+                );
+              })
+              .join("、")
+          : "无";
+
+      const badNames =
+        bad.length > 0
+          ? bad
+              .map(item => {
+                return `${item.seat}号`;
+              })
+              .join("、")
+          : "无";
+
+      const headline =
+        good.length > 0
+          ? `推荐：${goodNames}`
+          : "无安全推荐";
+
+      const goodHtml =
+        good.length > 0
+          ? good
+              .map(
+                (
+                  item,
+                  index
+                ) => {
+                  return renderSeatCard(
+                    item,
+                    index,
+                    "good"
+                  );
+                }
+              )
+              .join("")
+          : `
+            <div class="desc">
+              没有座位命中可执行赢规则，
+              本局建议跳过。
+            </div>
+          `;
+
+      const badHtml =
+        bad.length > 0
+          ? bad
+              .map(
+                (
+                  item,
+                  index
+                ) => {
+                  return renderSeatCard(
+                    item,
+                    index,
+                    "bad"
+                  );
+                }
+              )
+              .join("")
+          : `
+            <div class="desc">
+              本房号没有命中明确黑名单。
+            </div>
+          `;
+
       box.innerHTML = `
-        <span class="badge ok">
-          建议进房
-        </span>
+        ${
+          good.length > 0
+            ? `
+              <span class="badge ok">
+                有推荐位
+              </span>
+            `
+            : `
+              <span class="badge no">
+                建议跳过
+              </span>
+            `
+        }
 
-        <span class="badge warn">
-          最多3位
-        </span>
+        ${
+          bad.length > 0
+            ? `
+              <span class="badge no">
+                有禁坐位
+              </span>
+            `
+            : `
+              <span class="badge blue">
+                无明确黑名单
+              </span>
+            `
+        }
 
-        <span class="badge blue">
-          K线爆发模型
-        </span>
+        ${
+          good.some(item => {
+            return item.status === "conflict";
+          })
+            ? `
+              <span class="badge warn">
+                存在赢黑冲突
+              </span>
+            `
+            : ""
+        }
 
         <div class="big">
-          推荐：${pickNames}
+          ${room.room}｜${headline}
         </div>
 
-        <div class="pick-list">
-          ${pickHtml}
-        </div>
-
-        ${hiddenText}
-
-        <div
-          class="desc"
-          style="margin-top: 14px;"
-        >
-          房号：
-          <b>${room.room}</b><br>
+        <div class="desc">
+          禁坐：${badNames}
+          <br><br>
 
           ${renderRoomLine(room)}
         </div>
 
+        <div class="result-grid">
+
+          <div class="result-col good">
+            <div class="section-title">
+              推荐位 / 冲突位
+            </div>
+
+            <div class="pick-list">
+              ${goodHtml}
+            </div>
+          </div>
+
+          <div class="result-col bad">
+            <div class="section-title">
+              黑名单位 / 禁坐位
+            </div>
+
+            <div class="pick-list">
+              ${badHtml}
+            </div>
+          </div>
+
+        </div>
+
         <div class="grid">
+
           <div class="stat">
             <div class="v">
               ${MODEL_STAT.sample}
@@ -1343,7 +1992,7 @@
             </div>
 
             <div class="k">
-              历史胜率
+              样本内胜率
             </div>
           </div>
 
@@ -1353,58 +2002,92 @@
             </div>
 
             <div class="k">
-              历史安全口径
+              命中大输
             </div>
           </div>
+
         </div>
 
-        ${renderDebug(room)}
+        ${renderDebug(
+          room,
+          result
+        )}
       `;
     }
 
-    function renderDebug(room) {
+    function renderDebug(
+      room,
+      result
+    ) {
       const rows =
-        RULES
-          .slice()
-          .sort(
-            (
-              ruleA,
-              ruleB
-            ) => {
-              return (
-                ruleA.rank -
-                ruleB.rank
+        result.seats
+          .map(item => {
+            const x =
+              xForSeat(
+                room,
+                item.seat
               );
-            }
-          )
-          .map(rule => {
-            const hit =
-              rule.test(room);
+
+            const r =
+              rValue(
+                room,
+                item.seat
+              );
 
             return `
               <tr>
                 <td>
-                  ${rule.seat}号
+                  ${item.seat}号
                 </td>
 
                 <td>
-                  ${rule.grade}档
+                  ${x}
                 </td>
 
                 <td>
-                  ${rule.shortName}
+                  ${diffs(
+                    room,
+                    item.seat
+                  ).join("/")}
                 </td>
 
                 <td>
-                  ${rule.detail(room)}
+                  ${sums(
+                    room,
+                    item.seat
+                  ).join("/")}
+                </td>
+
+                <td>
+                  ${r}(${parityText(r)})
                 </td>
 
                 <td>
                   ${
-                    hit
-                      ? "命中"
-                      : "未命中"
+                    item.wins.length > 0
+                      ? item.wins
+                          .map(rule => {
+                            return rule.id;
+                          })
+                          .join(",")
+                      : "—"
                   }
+                </td>
+
+                <td>
+                  ${
+                    item.blacks.length > 0
+                      ? item.blacks
+                          .map(rule => {
+                            return rule.id;
+                          })
+                          .join(",")
+                      : "—"
+                  }
+                </td>
+
+                <td>
+                  ${item.status}
                 </td>
               </tr>
             `;
@@ -1416,24 +2099,14 @@
           <table>
             <thead>
               <tr>
-                <th colspan="5">
-                  房号结构：
-                  总跳动${room.totalJump}
-                  ｜前半${room.frontJump}
-                  ｜后半${room.backJump}
-                  ｜跨度${room.span}
-                  ｜总和${room.sum}
-                  ｜折返${room.directionChanges}次
-                  ｜唯一数字${room.uniqueCount}个
-                </th>
-              </tr>
-
-              <tr>
                 <th>位子</th>
-                <th>档位</th>
-                <th>结构</th>
-                <th>条件拆解</th>
-                <th>模型结果</th>
+                <th>X</th>
+                <th>四个差值</th>
+                <th>四个和值</th>
+                <th>R</th>
+                <th>赢规则</th>
+                <th>黑名单</th>
+                <th>结论</th>
               </tr>
             </thead>
 
@@ -1445,10 +2118,81 @@
       `;
     }
 
+    function renderComboList() {
+      const box =
+        document.getElementById(
+          "comboList"
+        );
+
+      const wins =
+        WIN_RULES
+          .map(rule => {
+            return `
+              <div class="combo">
+                <div class="name">
+                  ${rule.id}
+                  ｜${rule.name}
+                  ｜${rule.grade}档
+                </div>
+
+                <div class="rule">
+                  ${rule.stat}
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+
+      const blacks =
+        BLACK_RULES
+          .map(rule => {
+            return `
+              <div
+                class="combo"
+                style="
+                  border-color:
+                  rgba(217, 75, 61, 0.3);
+                "
+              >
+                <div class="name">
+                  ${rule.id}
+                  ｜${rule.name}
+                  ｜${
+                    rule.level === 2
+                      ? "一级禁坐"
+                      : "黑名单"
+                  }
+                </div>
+
+                <div class="rule">
+                  ${rule.stat}
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+
+      box.innerHTML = `
+        <div class="section-title">
+          赢规则
+        </div>
+
+        ${wins}
+
+        <div
+          class="section-title"
+          style="margin-top: 16px;"
+        >
+          黑名单
+        </div>
+
+        ${blacks}
+      `;
+    }
+
     function saveHistory(
       room,
-      picks,
-      hiddenPickCount
+      result
     ) {
       const item = {
         room:
@@ -1458,20 +2202,34 @@
           new Date()
             .toLocaleString(),
 
-        result:
-          picks.length
-            ? picks
-                .map(pick => {
-                  return `${pick.seat}号`;
+        recommend:
+          result.recommended.length > 0
+            ? result.recommended
+                .map(recommend => {
+                  return (
+                    `${recommend.seat}号` +
+                    `${
+                      recommend.status === "conflict"
+                        ? "(冲突)"
+                        : ""
+                    }`
+                  );
                 })
                 .join("、")
             : "跳过",
 
-        hiddenPickCount
+        forbidden:
+          result.forbidden.length > 0
+            ? result.forbidden
+                .map(forbidden => {
+                  return `${forbidden.seat}号`;
+                })
+                .join("、")
+            : "无"
       };
 
       const key =
-        "xiaomojing_5142983_kline_burst_v20_history";
+        "xiaomojing_5142983_model_v30_history";
 
       const list =
         JSON.parse(
@@ -1484,7 +2242,7 @@
       localStorage.setItem(
         key,
         JSON.stringify(
-          list.slice(0, 30)
+          list.slice(0, 50)
         )
       );
     }
@@ -1496,7 +2254,7 @@
         );
 
       const key =
-        "xiaomojing_5142983_kline_burst_v20_history";
+        "xiaomojing_5142983_model_v30_history";
 
       const list =
         JSON.parse(
@@ -1516,14 +2274,6 @@
       box.innerHTML =
         list
           .map(item => {
-            const hiddenText =
-              item.hiddenPickCount > 0
-                ? `
-                  <br>
-                  另有${item.hiddenPickCount}位因超过上限未显示
-                `
-                : "";
-
             return `
               <div class="history-item">
                 <div class="history-left">
@@ -1531,8 +2281,14 @@
                 </div>
 
                 <div class="history-right">
-                  ${item.result}
-                  ${hiddenText}<br>
+                  推荐：
+                  ${item.recommend}
+                  <br>
+
+                  禁坐：
+                  ${item.forbidden}
+                  <br>
+
                   ${item.time}
                 </div>
               </div>
@@ -1543,58 +2299,10 @@
 
     function clearHistory() {
       localStorage.removeItem(
-        "xiaomojing_5142983_kline_burst_v20_history"
+        "xiaomojing_5142983_model_v30_history"
       );
 
       renderHistory();
-    }
-
-    function renderComboList() {
-      const box =
-        document.getElementById(
-          "comboList"
-        );
-
-      const orderedRules =
-        [...RULES].sort(
-          (
-            ruleA,
-            ruleB
-          ) => {
-            return (
-              ruleA.rank -
-              ruleB.rank
-            );
-          }
-        );
-
-      box.innerHTML =
-        orderedRules
-          .map(rule => {
-            const gradeClass =
-              rule.grade === "A"
-                ? "grade-a"
-                : "grade-b";
-
-            return `
-              <div
-                class="combo ${gradeClass}"
-              >
-                <div class="name">
-                  ${rule.id}
-                  ｜${rule.name}
-                  ｜${rule.gradeText}
-                </div>
-
-                <div class="rule">
-                  ${rule.rule}<br>
-                  ${rule.stat}<br>
-                  历史命中：${rule.examples}
-                </div>
-              </div>
-            `;
-          })
-          .join("");
     }
 
     document
