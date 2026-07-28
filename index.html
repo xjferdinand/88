@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
 
-  <title>5142983｜小墨镜和值差值模型 v4.0</title>
+  <title>5142983｜小墨镜三连奇偶排名模型 v5.0</title>
 
   <style>
     :root {
@@ -448,11 +448,11 @@
 
     <div class="hero">
       <div class="title">
-        5142983｜小墨镜和值差值模型 v4.0
+        5142983｜小墨镜三连奇偶排名模型 v5.0
       </div>
 
       <div class="sub">
-        352局去重库｜12条正式规则＋1条备用规则＋4条观察规则｜输入房号直接推荐座位
+        399局去重库｜16条稳定成熟规则｜完整三连奇偶＋X排名｜输入房号直接推荐座位
       </div>
     </div>
 
@@ -488,43 +488,43 @@
 
     <div class="panel">
       <div class="section-title">
-        v4.0 历史反推回测
+        v5.0 历史反推回测
       </div>
 
       <div class="grid">
 
         <div class="stat">
-          <div class="v">352局</div>
+          <div class="v">399局</div>
           <div class="k">总样本</div>
         </div>
 
         <div class="stat">
-          <div class="v">66局</div>
+          <div class="v">76局</div>
           <div class="k">模型命中</div>
         </div>
 
         <div class="stat">
-          <div class="v">65.91%</div>
+          <div class="v">19.05%</div>
           <div class="k">进房率</div>
         </div>
 
         <div class="stat">
-          <div class="v">89.39%</div>
+          <div class="v">89.47%</div>
           <div class="k">历史胜率</div>
         </div>
 
         <div class="stat">
-          <div class="v">59胜7负</div>
+          <div class="v">68胜8负</div>
           <div class="k">胜负结果</div>
         </div>
 
         <div class="stat">
-          <div class="v">+38600</div>
+          <div class="v">+48220</div>
           <div class="k">总净分</div>
         </div>
 
         <div class="stat">
-          <div class="v">+585</div>
+          <div class="v">+634.5</div>
           <div class="k">命中场均</div>
         </div>
 
@@ -539,15 +539,15 @@
         class="desc"
         style="margin-top: 12px;"
       >
-        以上为352局完整去重库内挖掘并反推的样本内成绩。
-        “66局命中”按历史实际座位统计；“65.91%进房率”按只看房号、任意座位命中正式规则统计。
-        正式规则参与推荐；备用与观察规则只提供提示，不计入正式回测。
+        以上为399局完整去重库内按历史实际座位反推的样本内成绩。
+        16条规则共命中76局，68胜8负，胜率89.47%，净分+48220，命中场均+634.5，0大输。
+        进房率为76÷399＝19.05%；模型仅使用完整三连奇偶结构＋对应X在三位数中的排名。
       </div>
     </div>
 
     <div class="panel">
       <div class="section-title">
-        当前正式规则与观察规则
+        当前16条稳定成熟规则
       </div>
 
       <div
@@ -578,36 +578,27 @@
     </div>
 
     <div class="footer-note">
-      房号记作ABCDE。
-      1号取A，2号取B，3号取C，4号取D，5号和6号取E。
-      “差N”表示X与其余四位中至少一个数字的绝对差为N，差0不计算；
-      “和N”表示X与其余四位中至少一个数字相加为N，正式模型只使用不超过9的和值。
-      多个条件可以由不同数字产生；无正式规则命中时默认跳过。
-      备用与观察规则只用于盲测和座位替补，不计入正式成绩。
+      房号记作ABCDE。1、2、3号看ABC，对应X分别为A、B、C；4、5、6号看CDE，对应X分别为D、E、E。<br>
+      奇偶结构必须完整三连，例如“奇偶偶”；0按偶数处理。X排名分为独大、独中、独小、并大、并小、三同。<br>
+      网页只执行16条稳定成熟规则；未命中成熟规则时直接跳过。历史回测为样本内筛选成绩，后续新增战绩应锁定规则盲测。
     </div>
 
   </div>
 
   <script>
     const MODEL_STAT = {
-      sample: "352局",
-      hitCount: "66局",
-      hitRate: "65.91%",
-      winRate: "89.39%",
-      result: "59胜7负",
-      net: "+38600",
-      average: "+585",
+      sample: "399局",
+      hitCount: "76局",
+      hitRate: "19.05%",
+      winRate: "89.47%",
+      result: "68胜8负",
+      net: "+48220",
+      average: "+634.5",
       bigLoss: "0大输"
     };
 
-    const PRIORITY = [
-      5,
-      4,
-      6,
-      3,
-      1,
-      2
-    ];
+    // 实战综合优先级：5号＞2号＞4号＞6号＞3号；1号暂无成熟规则。
+    const PRIORITY = [5, 2, 4, 6, 3, 1];
 
     function analyzeRoom(roomNumber) {
       const digits = roomNumber.split("").map(Number);
@@ -627,281 +618,171 @@
       };
     }
 
-    function xForSeat(room, seat) {
-      if (seat === 1) return room.A;
-      if (seat === 2) return room.B;
-      if (seat === 3) return room.C;
-      if (seat === 4) return room.D;
-      return room.E;
+    function parityOf(number) {
+      return number % 2 === 0 ? "偶" : "奇";
     }
 
-    function othersForSeat(room, seat) {
-      const index =
+    function rankOfX(values, xIndex) {
+      const x = values[xIndex];
+      const others = values.filter((_, index) => index !== xIndex);
+
+      if (values.every(number => number === x)) return "三同";
+      if (x > others[0] && x > others[1]) return "独大";
+      if (x < others[0] && x < others[1]) return "独小";
+      if ((x > others[0] && x < others[1]) || (x < others[0] && x > others[1])) return "独中";
+      if ((x === others[0] && x > others[1]) || (x === others[1] && x > others[0])) return "并大";
+      if ((x === others[0] && x < others[1]) || (x === others[1] && x < others[0])) return "并小";
+
+      return "未知";
+    }
+
+    function tripleInfoForSeat(room, seat) {
+      const useABC = seat <= 3;
+      const values = useABC ? [room.A, room.B, room.C] : [room.C, room.D, room.E];
+      const xIndex =
         seat === 1 ? 0 :
         seat === 2 ? 1 :
         seat === 3 ? 2 :
-        seat === 4 ? 3 : 4;
+        seat === 4 ? 1 : 2;
 
-      return room.digits.filter((number, digitIndex) => digitIndex !== index);
-    }
-
-    function diffs(room, seat) {
-      const x = xForSeat(room, seat);
-      return othersForSeat(room, seat).map(number => Math.abs(x - number));
-    }
-
-    function sums(room, seat) {
-      const x = xForSeat(room, seat);
-      return othersForSeat(room, seat).map(number => x + number);
-    }
-
-    function hasDiff(room, seat, target) {
-      if (target === 0) return false;
-      return diffs(room, seat).includes(target);
-    }
-
-    function hasSum(room, seat, target) {
-      if (target > 9) return false;
-      return sums(room, seat).includes(target);
+      return {
+        key: useABC ? "ABC" : "CDE",
+        values,
+        triple: values.join(""),
+        parity: values.map(parityOf).join(""),
+        x: values[xIndex],
+        xIndex,
+        rank: rankOfX(values, xIndex)
+      };
     }
 
     const WIN_RULES = [
+      // 2号：看ABC，X=B
       {
-        id: "W1A",
-        seat: 1,
-        grade: "B",
-        rank: 20,
-        name: "1号｜差1＋差2",
-        stat: "6局5胜1小输｜胜率83.33%｜净+3340｜0大输",
-        test: room => hasDiff(room, 1, 1) && hasDiff(room, 1, 2),
-        detail: room => `差1=${hasDiff(room, 1, 1) ? "有" : "无"}；差2=${hasDiff(room, 1, 2) ? "有" : "无"}`
+        id: "S2A", seat: 2, grade: "A", order: 1,
+        pattern: "奇偶偶", ranks: ["独小", "并大"],
+        name: "2号｜ABC奇偶偶＋B独小/并大",
+        stat: "7局7胜0负｜胜率100%｜净+5150｜0大输"
       },
       {
-        id: "W2A",
-        seat: 2,
-        grade: "B",
-        rank: 21,
-        name: "2号｜差5＋差7",
-        stat: "6局5胜1小输｜胜率83.33%｜净+2780｜0大输",
-        test: room => hasDiff(room, 2, 5) && hasDiff(room, 2, 7),
-        detail: room => `差5=${hasDiff(room, 2, 5) ? "有" : "无"}；差7=${hasDiff(room, 2, 7) ? "有" : "无"}`
+        id: "S2B", seat: 2, grade: "A", order: 2,
+        pattern: "偶偶偶", ranks: ["并小", "独大"],
+        name: "2号｜ABC偶偶偶＋B并小/独大",
+        stat: "3局3胜0负｜胜率100%｜净+2420｜0大输"
       },
       {
-        id: "W2B",
-        seat: 2,
-        grade: "B",
-        rank: 22,
-        name: "2号｜差1＋差3＋和9",
-        stat: "5局4胜1小输｜胜率80.00%｜净+2410｜3大赢｜0大输",
-        test: room => hasDiff(room, 2, 1) && hasDiff(room, 2, 3) && hasSum(room, 2, 9),
-        detail: room => `差1=${hasDiff(room, 2, 1) ? "有" : "无"}；差3=${hasDiff(room, 2, 3) ? "有" : "无"}；和9=${hasSum(room, 2, 9) ? "有" : "无"}`
+        id: "S2C", seat: 2, grade: "A", order: 3,
+        pattern: "奇偶奇", ranks: ["独大", "独小"],
+        name: "2号｜ABC奇偶奇＋B独大/独小",
+        stat: "6局5胜1小输｜胜率83.33%｜净+2360｜0大输"
       },
       {
-        id: "W2C",
-        seat: 2,
-        grade: "B",
-        rank: 23,
-        name: "2号｜差1＋差5＋和9",
-        stat: "6局5胜1小输｜胜率83.33%｜净+2920｜3大赢｜0大输",
-        test: room => hasDiff(room, 2, 1) && hasDiff(room, 2, 5) && hasSum(room, 2, 9),
-        detail: room => `差1=${hasDiff(room, 2, 1) ? "有" : "无"}；差5=${hasDiff(room, 2, 5) ? "有" : "无"}；和9=${hasSum(room, 2, 9) ? "有" : "无"}`
+        id: "S2D", seat: 2, grade: "A", order: 4,
+        pattern: "奇奇偶", ranks: ["并大"],
+        name: "2号｜ABC奇奇偶＋B并大",
+        stat: "4局3胜1小输｜胜率75%｜净+1440｜0大输"
+      },
+
+      // 3号：看ABC，X=C
+      {
+        id: "S3A", seat: 3, grade: "A", order: 1,
+        pattern: "奇偶偶", ranks: ["独中", "并大"],
+        name: "3号｜ABC奇偶偶＋C独中/并大",
+        stat: "4局4胜0负｜胜率100%｜净+4450｜0大输"
+      },
+
+      // 4号：看CDE，X=D
+      {
+        id: "S4A", seat: 4, grade: "A", order: 1,
+        pattern: "偶奇奇", ranks: ["独中", "并大"],
+        name: "4号｜CDE偶奇奇＋D独中/并大",
+        stat: "4局4胜0负｜胜率100%｜净+3930｜0大输"
       },
       {
-        id: "W3A",
-        seat: 3,
-        grade: "B",
-        rank: 15,
-        name: "3号｜差4＋和6",
-        stat: "10局8胜2小输｜胜率80.00%｜净+5390｜6大赢｜0大输",
-        test: room => hasDiff(room, 3, 4) && hasSum(room, 3, 6),
-        detail: room => {
-          const strong = hasDiff(room, 3, 3) && hasDiff(room, 3, 4) && hasSum(room, 3, 6);
-          return `差4=${hasDiff(room, 3, 4) ? "有" : "无"}；和6=${hasSum(room, 3, 6) ? "有" : "无"}${strong ? "；同时有差3＝强信号" : ""}`;
-        }
+        id: "S4B", seat: 4, grade: "A", order: 2,
+        pattern: "偶偶偶", ranks: ["并大", "独小"],
+        name: "4号｜CDE偶偶偶＋D并大/独小",
+        stat: "4局4胜0负｜胜率100%｜净+2020｜0大输"
       },
       {
-        id: "W4A",
-        seat: 4,
-        grade: "A",
-        rank: 3,
-        name: "4号｜和8＋和9",
-        stat: "7局7胜0负｜净+3870｜3大赢｜0大输",
-        test: room => hasSum(room, 4, 8) && hasSum(room, 4, 9),
-        detail: room => `和8=${hasSum(room, 4, 8) ? "有" : "无"}；和9=${hasSum(room, 4, 9) ? "有" : "无"}`
+        id: "S4C", seat: 4, grade: "A", order: 3,
+        pattern: "奇偶奇", ranks: ["独大", "独中", "独小"],
+        name: "4号｜CDE奇偶奇＋D独大/独中/独小",
+        stat: "9局7胜2小输｜胜率77.78%｜净+2550｜0大输"
       },
       {
-        id: "W4B",
-        seat: 4,
-        grade: "A",
-        rank: 4,
-        name: "4号｜差3＋和5＋和8",
-        stat: "6局6胜0负｜净+4560｜4大赢｜0大输",
-        test: room => hasDiff(room, 4, 3) && hasSum(room, 4, 5) && hasSum(room, 4, 8),
-        detail: room => `差3=${hasDiff(room, 4, 3) ? "有" : "无"}；和5=${hasSum(room, 4, 5) ? "有" : "无"}；和8=${hasSum(room, 4, 8) ? "有" : "无"}`
+        id: "S4D", seat: 4, grade: "A", order: 4,
+        pattern: "奇奇奇", ranks: ["三同", "独大"],
+        name: "4号｜CDE奇奇奇＋D三同/独大",
+        stat: "4局3胜1小输｜胜率75%｜净+1880｜0大输"
+      },
+
+      // 5号：看CDE，X=E
+      {
+        id: "S5A", seat: 5, grade: "A", order: 1,
+        pattern: "奇偶偶", ranks: ["独中"],
+        name: "5号｜CDE奇偶偶＋E独中",
+        stat: "6局5胜1小输｜胜率83.33%｜净+4230｜0大输"
       },
       {
-        id: "W5A",
-        seat: 5,
-        grade: "A",
-        rank: 1,
-        name: "5号｜差2＋和5",
-        stat: "6局6胜0负｜净+5250｜3大赢｜0大输",
-        test: room => hasDiff(room, 5, 2) && hasSum(room, 5, 5),
-        detail: room => `差2=${hasDiff(room, 5, 2) ? "有" : "无"}；和5=${hasSum(room, 5, 5) ? "有" : "无"}`
+        id: "S5B", seat: 5, grade: "A", order: 2,
+        pattern: "偶偶偶", ranks: ["并大", "并小", "独小"],
+        name: "5号｜CDE偶偶偶＋E并大/并小/独小",
+        stat: "5局4胜1小输｜胜率80%｜净+4160｜0大输"
       },
       {
-        id: "W5B",
-        seat: 5,
-        grade: "A",
-        rank: 2,
-        name: "5号｜和6＋和8",
-        stat: "6局6胜0负｜净+4790｜4大赢｜0大输",
-        test: room => hasSum(room, 5, 6) && hasSum(room, 5, 8),
-        detail: room => `和6=${hasSum(room, 5, 6) ? "有" : "无"}；和8=${hasSum(room, 5, 8) ? "有" : "无"}`
+        id: "S5C", seat: 5, grade: "A", order: 3,
+        pattern: "奇偶奇", ranks: ["并大", "独中"],
+        name: "5号｜CDE奇偶奇＋E并大/独中",
+        stat: "3局3胜0负｜胜率100%｜净+3520｜0大输"
       },
       {
-        id: "W5C",
-        seat: 5,
-        grade: "B",
-        rank: 16,
-        name: "5号｜差5＋差6",
-        stat: "6局5胜1小输｜胜率83.33%｜净+3210｜4大赢｜0大输",
-        test: room => hasDiff(room, 5, 5) && hasDiff(room, 5, 6),
-        detail: room => `差5=${hasDiff(room, 5, 5) ? "有" : "无"}；差6=${hasDiff(room, 5, 6) ? "有" : "无"}`
+        id: "S5D", seat: 5, grade: "A", order: 4,
+        pattern: "奇奇偶", ranks: ["独大"],
+        name: "5号｜CDE奇奇偶＋E独大",
+        stat: "3局3胜0负｜胜率100%｜净+2970｜0大输"
       },
       {
-        id: "W6A",
-        seat: 6,
-        grade: "A",
-        rank: 5,
-        name: "6号｜和2",
-        stat: "6局6胜0负｜净+1890｜2大赢｜0大输",
-        test: room => hasSum(room, 6, 2),
-        detail: room => `和2=${hasSum(room, 6, 2) ? "有" : "无"}`
+        id: "S5E", seat: 5, grade: "A", order: 5,
+        pattern: "奇奇奇", ranks: ["三同", "独小"],
+        name: "5号｜CDE奇奇奇＋E三同/独小",
+        stat: "4局4胜0负｜胜率100%｜净+2950｜0大输"
+      },
+
+      // 6号：看CDE，X=E
+      {
+        id: "S6A", seat: 6, grade: "A", order: 1,
+        pattern: "偶偶偶", ranks: ["并小", "独中", "独小"],
+        name: "6号｜CDE偶偶偶＋E并小/独中/独小",
+        stat: "7局6胜1小输｜胜率85.71%｜净+2850｜0大输"
       },
       {
-        id: "W6B",
-        seat: 6,
-        grade: "A",
-        rank: 6,
-        name: "6号｜和6＋和7",
-        stat: "5局5胜0负｜净+2430｜1大赢｜0大输",
-        test: room => hasSum(room, 6, 6) && hasSum(room, 6, 7),
-        detail: room => `和6=${hasSum(room, 6, 6) ? "有" : "无"}；和7=${hasSum(room, 6, 7) ? "有" : "无"}`
+        id: "S6B", seat: 6, grade: "A", order: 2,
+        pattern: "奇奇偶", ranks: ["独小"],
+        name: "6号｜CDE奇奇偶＋E独小",
+        stat: "3局3胜0负｜胜率100%｜净+1340｜0大输"
       }
     ];
 
-    const BACKUP_RULES = [
-      {
-        id: "R6A",
-        seat: 6,
-        kind: "备用",
-        name: "6号备用｜差2＋和5",
-        stat: "6局5胜1小输｜胜率83.33%｜净+3480｜0大输｜不增加进房率",
-        test: room => hasDiff(room, 6, 2) && hasSum(room, 6, 5),
-        detail: room => `差2=${hasDiff(room, 6, 2) ? "有" : "无"}；和5=${hasSum(room, 6, 5) ? "有" : "无"}`
-      }
-    ];
-
-    const OBSERVATION_RULES = [
-      {
-        id: "O5A",
-        seat: 5,
-        kind: "观察",
-        name: "5号观察｜差6＋和9",
-        stat: "4局4胜0负｜净+3910｜3大赢｜0大输",
-        test: room => hasDiff(room, 5, 6) && hasSum(room, 5, 9),
-        detail: room => `差6=${hasDiff(room, 5, 6) ? "有" : "无"}；和9=${hasSum(room, 5, 9) ? "有" : "无"}`
-      },
-      {
-        id: "O4A",
-        seat: 4,
-        kind: "观察",
-        name: "4号观察｜差6＋和5",
-        stat: "4局4胜0负｜净+3690｜4大赢｜0大输",
-        test: room => hasDiff(room, 4, 6) && hasSum(room, 4, 5),
-        detail: room => `差6=${hasDiff(room, 4, 6) ? "有" : "无"}；和5=${hasSum(room, 4, 5) ? "有" : "无"}`
-      },
-      {
-        id: "O4B",
-        seat: 4,
-        kind: "观察",
-        name: "4号观察｜差5＋和6",
-        stat: "4局4胜0负｜净+2500｜3大赢｜0大输",
-        test: room => hasDiff(room, 4, 5) && hasSum(room, 4, 6),
-        detail: room => `差5=${hasDiff(room, 4, 5) ? "有" : "无"}；和6=${hasSum(room, 4, 6) ? "有" : "无"}`
-      },
-      {
-        id: "O3A",
-        seat: 3,
-        kind: "观察",
-        name: "3号观察｜和3＋和8",
-        stat: "4局4胜0负｜净+1960｜1大赢｜0大输",
-        test: room => hasSum(room, 3, 3) && hasSum(room, 3, 8),
-        detail: room => `和3=${hasSum(room, 3, 3) ? "有" : "无"}；和8=${hasSum(room, 3, 8) ? "有" : "无"}`
-      }
-    ];
-
-    const AUX_RULES = [...BACKUP_RULES, ...OBSERVATION_RULES];
-
-    function getSeatGrade(room, seat, hits) {
-      if (
-        seat === 3 &&
-        hits.some(rule => rule.id === "W3A") &&
-        hasDiff(room, 3, 3)
-      ) {
-        return "S";
-      }
-
-      if (
-        seat === 5 &&
-        hits.some(rule => rule.id === "W5A") &&
-        hits.some(rule => rule.id === "W5B")
-      ) {
-        return "S";
-      }
-
-      if (
-        seat === 4 &&
-        hits.some(rule => rule.id === "W4A") &&
-        hits.some(rule => rule.id === "W4B")
-      ) {
-        return "S";
-      }
-
-      if (
-        seat === 6 &&
-        hits.some(rule => rule.id === "W6A") &&
-        hits.some(rule => rule.id === "W6B")
-      ) {
-        return "S";
-      }
-
-      return hits.some(rule => rule.grade === "A") ? "A" : "B";
-    }
-
-    function gradeWeight(grade) {
-      if (grade === "S") return 3;
-      if (grade === "A") return 2;
-      return 1;
+    function ruleMatches(room, rule) {
+      const info = tripleInfoForSeat(room, rule.seat);
+      return info.parity === rule.pattern && rule.ranks.includes(info.rank);
     }
 
     function evaluate(room) {
       const seats = [];
 
       for (let seat = 1; seat <= 6; seat++) {
-        const wins = WIN_RULES.filter(rule => rule.seat === seat && rule.test(room));
-        const auxiliary = AUX_RULES.filter(rule => rule.seat === seat && rule.test(room));
-        const grade = wins.length > 0 ? getSeatGrade(room, seat, wins) : null;
-        const rank = wins.length > 0 ? Math.min(...wins.map(rule => rule.rank)) : 999;
+        const info = tripleInfoForSeat(room, seat);
+        const wins = WIN_RULES.filter(rule => rule.seat === seat && ruleMatches(room, rule));
 
         seats.push({
           seat,
+          info,
           wins,
-          auxiliary,
-          grade,
-          status: wins.length > 0 ? "recommend" : auxiliary.length > 0 ? "observe" : "neutral",
-          rank
+          grade: wins.length > 0 ? "A" : null,
+          status: wins.length > 0 ? "recommend" : "neutral",
+          ruleOrder: wins.length > 0 ? Math.min(...wins.map(rule => rule.order)) : 999
         });
       }
 
@@ -909,21 +790,13 @@
         .filter(item => item.status === "recommend")
         .sort((itemA, itemB) => {
           return (
-            gradeWeight(itemB.grade) - gradeWeight(itemA.grade) ||
-            itemA.rank - itemB.rank ||
-            PRIORITY.indexOf(itemA.seat) - PRIORITY.indexOf(itemB.seat)
+            PRIORITY.indexOf(itemA.seat) - PRIORITY.indexOf(itemB.seat) ||
+            itemA.ruleOrder - itemB.ruleOrder
           );
-        })
-        .slice(0, 3);
-
-      const auxiliary = seats
-        .filter(item => item.auxiliary.length > 0)
-        .sort((itemA, itemB) => {
-          const kindWeight = item => item.auxiliary.some(rule => rule.kind === "备用") ? 0 : 1;
-          return kindWeight(itemA) - kindWeight(itemB) || PRIORITY.indexOf(itemA.seat) - PRIORITY.indexOf(itemB.seat);
         });
 
-      return { seats, recommended, auxiliary };
+      const neutral = seats.filter(item => item.status === "neutral");
+      return { seats, recommended, neutral };
     }
 
     function run() {
@@ -954,71 +827,67 @@
     }
 
     function renderRoomLine(room) {
+      const abc = tripleInfoForSeat(room, 1);
+      const cde = tripleInfoForSeat(room, 4);
+
       return `
         ABCDE=${room.A}${room.B}${room.C}${room.D}${room.E}<br>
-        极差=${room.span}｜总和=${room.sum}｜唯一数字=${room.uniqueCount}个<br>
-        各位X：1号=${room.A}，2号=${room.B}，3号=${room.C}，4号=${room.D}，5/6号=${room.E}
+        ABC=${abc.triple}（${abc.parity}）｜CDE=${cde.triple}（${cde.parity}）<br>
+        各位X：1号=A=${room.A}，2号=B=${room.B}，3号=C=${room.C}，4号=D=${room.D}，5/6号=E=${room.E}
       `;
     }
 
-    let currentRoom = null;
+    function renderSeatCard(item, index) {
+      const title = index === 0 ? "🔥优先推荐" : "⚡同时命中";
+      const info = item.info;
 
-    function renderSeatCard(item, index, type) {
-      if (type === "good") {
-        const className = `grade-${item.grade.toLowerCase()}`;
-        const title = index === 0 ? "🔥优先推荐" : "⚡同时命中";
-
-        return `
-          <div class="pick ${index === 0 ? "main" : ""} ${className}">
-            <div class="pick-title">${title}｜${item.seat}号｜${item.grade}档</div>
-            <div class="pick-rule">
-              正式规则：${item.wins.map(rule => rule.name).join("；")}<br>
-              ${item.wins.map(rule => `${rule.detail(currentRoom)}｜${rule.stat}`).join("<br>")}
-            </div>
-          </div>
-        `;
-      }
-
-      const backup = item.auxiliary.some(rule => rule.kind === "备用");
       return `
-        <div class="pick ${backup ? "conflict" : "grade-b"}">
-          <div class="pick-title">${backup ? "🛟备用命中" : "🧪观察命中"}｜${item.seat}号</div>
+        <div class="pick ${index === 0 ? "main" : ""} grade-a">
+          <div class="pick-title">${title}｜${item.seat}号｜A档</div>
           <div class="pick-rule">
-            ${item.auxiliary.map(rule => rule.name).join("；")}<br>
-            ${item.auxiliary.map(rule => `${rule.detail(currentRoom)}｜${rule.stat}`).join("<br>")}
-            <br>${backup ? "仅在正式推荐位不可坐时作为替补。" : "只记录盲测，不作为正式推荐。"}
+            ${info.key}=${info.triple}｜三连=${info.parity}｜X=${info.x}｜排名=${info.rank}<br>
+            命中：${item.wins.map(rule => `${rule.id}｜${rule.name}`).join("；")}<br>
+            ${item.wins.map(rule => rule.stat).join("<br>")}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNeutralCard(item) {
+      const info = item.info;
+      return `
+        <div class="pick">
+          <div class="pick-title">${item.seat}号｜未命中</div>
+          <div class="pick-rule">
+            ${info.key}=${info.triple}｜三连=${info.parity}｜X=${info.x}｜排名=${info.rank}
           </div>
         </div>
       `;
     }
 
     function renderResult(room, result) {
-      currentRoom = room;
       const box = document.getElementById("result");
       box.className = "result show";
 
       const good = result.recommended;
-      const auxiliary = result.auxiliary;
       const goodNames = good.length > 0 ? good.map(item => `${item.seat}号`).join("、") : "无";
-      const auxiliaryNames = auxiliary.length > 0 ? auxiliary.map(item => `${item.seat}号`).join("、") : "无";
-      const headline = good.length > 0 ? `推荐：${goodNames}` : "无正式推荐";
+      const headline = good.length > 0 ? `推荐：${goodNames}` : "全部跳过";
 
       const goodHtml = good.length > 0
-        ? good.map((item, index) => renderSeatCard(item, index, "good")).join("")
-        : `<div class="desc">没有座位命中正式规则，本局建议跳过。观察规则即使命中，也不直接下注。</div>`;
+        ? good.map((item, index) => renderSeatCard(item, index)).join("")
+        : `<div class="desc">1—6号均未命中稳定成熟规则，本局建议跳过。</div>`;
 
-      const auxiliaryHtml = auxiliary.length > 0
-        ? auxiliary.map((item, index) => renderSeatCard(item, index, "aux")).join("")
-        : `<div class="desc">本房号没有命中备用或观察规则。</div>`;
+      const neutralHtml = result.neutral.length > 0
+        ? result.neutral.map(renderNeutralCard).join("")
+        : `<div class="desc">所有座位均有成熟规则命中。</div>`;
 
       box.innerHTML = `
-        ${good.length > 0 ? `<span class="badge ok">有正式推荐位</span>` : `<span class="badge no">建议跳过</span>`}
-        ${auxiliary.length > 0 ? `<span class="badge warn">有辅助信号</span>` : `<span class="badge blue">无辅助信号</span>`}
+        ${good.length > 0 ? `<span class="badge ok">有成熟规则推荐</span>` : `<span class="badge no">建议跳过</span>`}
+        <span class="badge blue">完整三连＋X排名</span>
 
         <div class="big">${room.room}｜${headline}</div>
 
         <div class="desc">
-          备用/观察：${auxiliaryNames}<br><br>
           ${renderRoomLine(room)}
         </div>
 
@@ -1029,8 +898,8 @@
           </div>
 
           <div class="result-col bad">
-            <div class="section-title">备用位 / 观察位</div>
-            <div class="pick-list">${auxiliaryHtml}</div>
+            <div class="section-title">未命中位</div>
+            <div class="pick-list">${neutralHtml}</div>
           </div>
         </div>
 
@@ -1041,22 +910,23 @@
           <div class="stat"><div class="v">${MODEL_STAT.bigLoss}</div><div class="k">命中大输</div></div>
         </div>
 
-        ${renderDebug(room, result)}
+        ${renderDebug(result)}
       `;
     }
 
-    function renderDebug(room, result) {
+    function renderDebug(result) {
       const rows = result.seats.map(item => {
-        const x = xForSeat(room, item.seat);
+        const info = item.info;
         return `
           <tr>
             <td>${item.seat}号</td>
-            <td>${x}</td>
-            <td>${diffs(room, item.seat).join("/")}</td>
-            <td>${sums(room, item.seat).join("/")}</td>
+            <td>${info.key}</td>
+            <td>${info.triple}</td>
+            <td>${info.parity}</td>
+            <td>${info.x}</td>
+            <td>${info.rank}</td>
             <td>${item.wins.length > 0 ? item.wins.map(rule => rule.id).join(",") : "—"}</td>
-            <td>${item.auxiliary.length > 0 ? item.auxiliary.map(rule => rule.id).join(",") : "—"}</td>
-            <td>${item.status}</td>
+            <td>${item.status === "recommend" ? "推荐" : "跳过"}</td>
           </tr>
         `;
       }).join("");
@@ -1067,11 +937,12 @@
             <thead>
               <tr>
                 <th>位子</th>
+                <th>三连区间</th>
+                <th>三位数字</th>
+                <th>奇偶结构</th>
                 <th>X</th>
-                <th>四个差值</th>
-                <th>四个和值</th>
-                <th>正式规则</th>
-                <th>备用/观察</th>
+                <th>X排名</th>
+                <th>命中规则</th>
                 <th>结论</th>
               </tr>
             </thead>
@@ -1083,36 +954,29 @@
 
     function renderComboList() {
       const box = document.getElementById("comboList");
+      const groups = [1, 2, 3, 4, 5, 6].map(seat => {
+        const rules = WIN_RULES.filter(rule => rule.seat === seat);
+        const ruleHtml = rules.length > 0
+          ? rules.map(rule => `
+              <div class="combo">
+                <div class="name">${rule.id}｜${rule.name}｜A档</div>
+                <div class="rule">${rule.stat}</div>
+              </div>
+            `).join("")
+          : `
+              <div class="combo" style="border-color: rgba(217, 75, 61, 0.25);">
+                <div class="name">1号｜暂无稳定成熟规则</div>
+                <div class="rule">未命中时直接跳过，不为凑位子强行增加规则。</div>
+              </div>
+            `;
 
-      const wins = WIN_RULES.map(rule => `
-        <div class="combo">
-          <div class="name">${rule.id}｜${rule.name}｜${rule.grade}档</div>
-          <div class="rule">${rule.stat}</div>
-        </div>
-      `).join("");
+        return `
+          <div class="section-title" style="margin-top: ${seat === 1 ? 0 : 16}px;">${seat}号位</div>
+          ${ruleHtml}
+        `;
+      }).join("");
 
-      const backup = BACKUP_RULES.map(rule => `
-        <div class="combo" style="border-color: rgba(49, 94, 174, 0.3);">
-          <div class="name">${rule.id}｜${rule.name}｜备用</div>
-          <div class="rule">${rule.stat}</div>
-        </div>
-      `).join("");
-
-      const observations = OBSERVATION_RULES.map(rule => `
-        <div class="combo" style="border-color: rgba(217, 140, 34, 0.3);">
-          <div class="name">${rule.id}｜${rule.name}｜盲测观察</div>
-          <div class="rule">${rule.stat}</div>
-        </div>
-      `).join("");
-
-      box.innerHTML = `
-        <div class="section-title">12条正式规则</div>
-        ${wins}
-        <div class="section-title" style="margin-top: 16px;">备用规则</div>
-        ${backup}
-        <div class="section-title" style="margin-top: 16px;">观察规则</div>
-        ${observations}
-      `;
+      box.innerHTML = groups;
     }
 
     function saveHistory(room, result) {
@@ -1122,12 +986,12 @@
         recommend: result.recommended.length > 0
           ? result.recommended.map(recommend => `${recommend.seat}号`).join("、")
           : "跳过",
-        auxiliary: result.auxiliary.length > 0
-          ? result.auxiliary.map(aux => `${aux.seat}号`).join("、")
+        rules: result.recommended.length > 0
+          ? result.recommended.flatMap(recommend => recommend.wins.map(rule => rule.id)).join("、")
           : "无"
       };
 
-      const key = "xiaomojing_5142983_sum_diff_model_v40_history";
+      const key = "xiaomojing_5142983_triple_parity_rank_v50_history";
       const list = JSON.parse(localStorage.getItem(key) || "[]");
       list.unshift(item);
       localStorage.setItem(key, JSON.stringify(list.slice(0, 50)));
@@ -1135,7 +999,7 @@
 
     function renderHistory() {
       const box = document.getElementById("historyBox");
-      const key = "xiaomojing_5142983_sum_diff_model_v40_history";
+      const key = "xiaomojing_5142983_triple_parity_rank_v50_history";
       const list = JSON.parse(localStorage.getItem(key) || "[]");
 
       if (list.length === 0) {
@@ -1148,7 +1012,7 @@
           <div class="history-left">${item.room}</div>
           <div class="history-right">
             正式推荐：${item.recommend}<br>
-            备用/观察：${item.auxiliary}<br>
+            命中规则：${item.rules}<br>
             ${item.time}
           </div>
         </div>
@@ -1156,7 +1020,7 @@
     }
 
     function clearHistory() {
-      localStorage.removeItem("xiaomojing_5142983_sum_diff_model_v40_history");
+      localStorage.removeItem("xiaomojing_5142983_triple_parity_rank_v50_history");
       renderHistory();
     }
 
