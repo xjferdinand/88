@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
 
-  <title>5142983｜小墨镜三连奇偶排名模型 v5.0</title>
+  <title>5142983｜小墨镜多方向黄金组合模型 v6.0</title>
 
   <style>
     :root {
@@ -448,11 +448,11 @@
 
     <div class="hero">
       <div class="title">
-        5142983｜小墨镜三连奇偶排名模型 v5.0
+        5142983｜小墨镜多方向黄金组合模型 v6.0
       </div>
 
       <div class="sub">
-        399局去重库｜16条稳定成熟规则｜完整三连奇偶＋X排名｜输入房号直接推荐座位
+        422局去重库｜33条稳定黄金规则｜X具体数字＋多方向数字对奇偶｜最多推荐3个位子
       </div>
     </div>
 
@@ -488,43 +488,43 @@
 
     <div class="panel">
       <div class="section-title">
-        v5.0 历史反推回测
+        v6.0 历史反推回测
       </div>
 
       <div class="grid">
 
         <div class="stat">
-          <div class="v">399局</div>
+          <div class="v">422局</div>
           <div class="k">总样本</div>
         </div>
 
         <div class="stat">
-          <div class="v">76局</div>
+          <div class="v">91局</div>
           <div class="k">模型命中</div>
         </div>
 
         <div class="stat">
-          <div class="v">19.05%</div>
+          <div class="v">21.56%</div>
           <div class="k">进房率</div>
         </div>
 
         <div class="stat">
-          <div class="v">89.47%</div>
+          <div class="v">87.91%</div>
           <div class="k">历史胜率</div>
         </div>
 
         <div class="stat">
-          <div class="v">68胜8负</div>
+          <div class="v">80胜11负</div>
           <div class="k">胜负结果</div>
         </div>
 
         <div class="stat">
-          <div class="v">+48220</div>
+          <div class="v">+49070</div>
           <div class="k">总净分</div>
         </div>
 
         <div class="stat">
-          <div class="v">+634.5</div>
+          <div class="v">+539.2</div>
           <div class="k">命中场均</div>
         </div>
 
@@ -539,15 +539,15 @@
         class="desc"
         style="margin-top: 12px;"
       >
-        以上为399局完整去重库内按历史实际座位反推的样本内成绩。
-        16条规则共命中76局，68胜8负，胜率89.47%，净分+48220，命中场均+634.5，0大输。
-        进房率为76÷399＝19.05%；模型仅使用完整三连奇偶结构＋对应X在三位数中的排名。
+        以上为422局完整去重库内按历史实际座位反推的样本内成绩。
+        33条稳定黄金规则去重后命中91局，80胜11负，胜率87.91%，净分+49070，命中场均+539.2，0大输。
+        进房率为91÷422＝21.56%；模型使用对应位子的X具体数字，并穷举其余数字中的多方向奇偶组合。
       </div>
     </div>
 
     <div class="panel">
       <div class="section-title">
-        当前16条稳定成熟规则
+        当前33条稳定黄金规则
       </div>
 
       <div
@@ -578,225 +578,330 @@
     </div>
 
     <div class="footer-note">
-      房号记作ABCDE。1、2、3号看ABC，对应X分别为A、B、C；4、5、6号看CDE，对应X分别为D、E、E。<br>
-      奇偶结构必须完整三连，例如“奇偶偶”；0按偶数处理。X排名分为独大、独中、独小、并大、并小、三同。<br>
-      网页只执行16条稳定成熟规则；未命中成熟规则时直接跳过。历史回测为样本内筛选成绩，后续新增战绩应锁定规则盲测。
+      房号记作ABCDE。1号X=A，2号X=B，3号X=C，4号X=D，5/6号X=E；0按偶数处理。<br>
+      每条规则由“位子＋X具体数字＋任意两位数字的奇偶结构”组成；同一位命中2条以上规则时视为多方向共振。<br>
+      网页最多推荐3个位子：多规则共振优先，其次单条全胜黄金，再其次单条高胜黄金。历史回测属于样本内筛选，新增战绩应锁定规则盲测。
     </div>
 
   </div>
 
   <script>
     const MODEL_STAT = {
-      sample: "399局",
-      hitCount: "76局",
-      hitRate: "19.05%",
-      winRate: "89.47%",
-      result: "68胜8负",
-      net: "+48220",
-      average: "+634.5",
+      sample: "422局",
+      hitCount: "91局",
+      hitRate: "21.56%",
+      winRate: "87.91%",
+      result: "80胜11负",
+      net: "+49070",
+      average: "+539.2",
       bigLoss: "0大输"
     };
 
-    // 实战综合优先级：5号＞2号＞4号＞6号＞3号；1号暂无成熟规则。
+    // 同级时用于稳定排序；真正优先级先看多规则共振，再看全胜/高胜规则。
     const PRIORITY = [5, 2, 4, 6, 3, 1];
+    const MAX_RECOMMENDATIONS = 3;
 
     function analyzeRoom(roomNumber) {
       const digits = roomNumber.split("").map(Number);
       const [A, B, C, D, E] = digits;
-
-      return {
-        room: roomNumber,
-        digits,
-        A,
-        B,
-        C,
-        D,
-        E,
-        span: Math.max(...digits) - Math.min(...digits),
-        sum: digits.reduce((total, number) => total + number, 0),
-        uniqueCount: new Set(digits).size
-      };
+      return { room: roomNumber, digits, A, B, C, D, E };
     }
 
     function parityOf(number) {
       return number % 2 === 0 ? "偶" : "奇";
     }
 
-    function rankOfX(values, xIndex) {
-      const x = values[xIndex];
-      const others = values.filter((_, index) => index !== xIndex);
-
-      if (values.every(number => number === x)) return "三同";
-      if (x > others[0] && x > others[1]) return "独大";
-      if (x < others[0] && x < others[1]) return "独小";
-      if ((x > others[0] && x < others[1]) || (x < others[0] && x > others[1])) return "独中";
-      if ((x === others[0] && x > others[1]) || (x === others[1] && x > others[0])) return "并大";
-      if ((x === others[0] && x < others[1]) || (x === others[1] && x < others[0])) return "并小";
-
-      return "未知";
-    }
-
-    function tripleInfoForSeat(room, seat) {
-      const useABC = seat <= 3;
-      const values = useABC ? [room.A, room.B, room.C] : [room.C, room.D, room.E];
-      const xIndex =
-        seat === 1 ? 0 :
-        seat === 2 ? 1 :
-        seat === 3 ? 2 :
-        seat === 4 ? 1 : 2;
-
-      return {
-        key: useABC ? "ABC" : "CDE",
-        values,
-        triple: values.join(""),
-        parity: values.map(parityOf).join(""),
-        x: values[xIndex],
-        xIndex,
-        rank: rankOfX(values, xIndex)
-      };
-    }
-
     const WIN_RULES = [
-      // 2号：看ABC，X=B
       {
-        id: "S2A", seat: 2, grade: "A", order: 1,
-        pattern: "奇偶偶", ranks: ["独小", "并大"],
-        name: "2号｜ABC奇偶偶＋B独小/并大",
-        stat: "7局7胜0负｜胜率100%｜净+5150｜0大输"
+        id: "S2A", seat: 2, order: 1, xKey: "B", xValues: [2],
+        pair: ["A", "E"], parity: ["奇", "奇"],
+        sample: 6, wins: 6, losses: 0, winRate: 100.000000, net: 4370, bigWins: 5, worst: 130,
+        name: "2号｜B=2；A奇、E奇", condition: "B=2；A奇、E奇",
+        stat: "6局6胜0负｜胜率100.00%｜净+4370｜大赢5｜0大输｜最差+130"
       },
       {
-        id: "S2B", seat: 2, grade: "A", order: 2,
-        pattern: "偶偶偶", ranks: ["并小", "独大"],
-        name: "2号｜ABC偶偶偶＋B并小/独大",
-        stat: "3局3胜0负｜胜率100%｜净+2420｜0大输"
+        id: "S2B", seat: 2, order: 2, xKey: "B", xValues: [8],
+        pair: ["C", "E"], parity: ["偶", "奇"],
+        sample: 4, wins: 4, losses: 0, winRate: 100.000000, net: 3320, bigWins: 3, worst: 150,
+        name: "2号｜B=8；C偶、E奇", condition: "B=8；C偶、E奇",
+        stat: "4局4胜0负｜胜率100.00%｜净+3320｜大赢3｜0大输｜最差+150"
       },
       {
-        id: "S2C", seat: 2, grade: "A", order: 3,
-        pattern: "奇偶奇", ranks: ["独大", "独小"],
-        name: "2号｜ABC奇偶奇＋B独大/独小",
-        stat: "6局5胜1小输｜胜率83.33%｜净+2360｜0大输"
+        id: "S2C", seat: 2, order: 3, xKey: "B", xValues: [2,7],
+        pair: ["A", "D"], parity: ["奇", "偶"],
+        sample: 10, wins: 9, losses: 1, winRate: 90.000000, net: 6760, bigWins: 7, worst: -10,
+        name: "2号｜B=2/7；A奇、D偶", condition: "B=2/7；A奇、D偶",
+        stat: "10局9胜1负｜胜率90.00%｜净+6760｜大赢7｜0大输｜最差-10"
       },
       {
-        id: "S2D", seat: 2, grade: "A", order: 4,
-        pattern: "奇奇偶", ranks: ["并大"],
-        name: "2号｜ABC奇奇偶＋B并大",
-        stat: "4局3胜1小输｜胜率75%｜净+1440｜0大输"
-      },
-
-      // 3号：看ABC，X=C
-      {
-        id: "S3A", seat: 3, grade: "A", order: 1,
-        pattern: "奇偶偶", ranks: ["独中", "并大"],
-        name: "3号｜ABC奇偶偶＋C独中/并大",
-        stat: "4局4胜0负｜胜率100%｜净+4450｜0大输"
-      },
-
-      // 4号：看CDE，X=D
-      {
-        id: "S4A", seat: 4, grade: "A", order: 1,
-        pattern: "偶奇奇", ranks: ["独中", "并大"],
-        name: "4号｜CDE偶奇奇＋D独中/并大",
-        stat: "4局4胜0负｜胜率100%｜净+3930｜0大输"
+        id: "S2D", seat: 2, order: 4, xKey: "B", xValues: [2,7],
+        pair: ["A", "C"], parity: ["奇", "偶"],
+        sample: 10, wins: 8, losses: 2, winRate: 80.000000, net: 5640, bigWins: 6, worst: -50,
+        name: "2号｜B=2/7；A奇、C偶", condition: "B=2/7；A奇、C偶",
+        stat: "10局8胜2负｜胜率80.00%｜净+5640｜大赢6｜0大输｜最差-50"
       },
       {
-        id: "S4B", seat: 4, grade: "A", order: 2,
-        pattern: "偶偶偶", ranks: ["并大", "独小"],
-        name: "4号｜CDE偶偶偶＋D并大/独小",
-        stat: "4局4胜0负｜胜率100%｜净+2020｜0大输"
+        id: "S2E", seat: 2, order: 5, xKey: "B", xValues: [1,7],
+        pair: ["A", "E"], parity: ["奇", "偶"],
+        sample: 7, wins: 6, losses: 1, winRate: 85.714286, net: 3700, bigWins: 4, worst: -220,
+        name: "2号｜B=1/7；A奇、E偶", condition: "B=1/7；A奇、E偶",
+        stat: "7局6胜1负｜胜率85.71%｜净+3700｜大赢4｜0大输｜最差-220"
       },
       {
-        id: "S4C", seat: 4, grade: "A", order: 3,
-        pattern: "奇偶奇", ranks: ["独大", "独中", "独小"],
-        name: "4号｜CDE奇偶奇＋D独大/独中/独小",
-        stat: "9局7胜2小输｜胜率77.78%｜净+2550｜0大输"
+        id: "S2F", seat: 2, order: 6, xKey: "B", xValues: [7],
+        pair: ["C", "D"], parity: ["偶", "偶"],
+        sample: 5, wins: 4, losses: 1, winRate: 80.000000, net: 3390, bigWins: 3, worst: -10,
+        name: "2号｜B=7；C偶、D偶", condition: "B=7；C偶、D偶",
+        stat: "5局4胜1负｜胜率80.00%｜净+3390｜大赢3｜0大输｜最差-10"
       },
       {
-        id: "S4D", seat: 4, grade: "A", order: 4,
-        pattern: "奇奇奇", ranks: ["三同", "独大"],
-        name: "4号｜CDE奇奇奇＋D三同/独大",
-        stat: "4局3胜1小输｜胜率75%｜净+1880｜0大输"
-      },
-
-      // 5号：看CDE，X=E
-      {
-        id: "S5A", seat: 5, grade: "A", order: 1,
-        pattern: "奇偶偶", ranks: ["独中"],
-        name: "5号｜CDE奇偶偶＋E独中",
-        stat: "6局5胜1小输｜胜率83.33%｜净+4230｜0大输"
+        id: "S2G", seat: 2, order: 7, xKey: "B", xValues: [8],
+        pair: ["A", "E"], parity: ["偶", "奇"],
+        sample: 3, wins: 3, losses: 0, winRate: 100.000000, net: 3080, bigWins: 3, worst: 620,
+        name: "2号｜B=8；A偶、E奇", condition: "B=8；A偶、E奇",
+        stat: "3局3胜0负｜胜率100.00%｜净+3080｜大赢3｜0大输｜最差+620"
       },
       {
-        id: "S5B", seat: 5, grade: "A", order: 2,
-        pattern: "偶偶偶", ranks: ["并大", "并小", "独小"],
-        name: "5号｜CDE偶偶偶＋E并大/并小/独小",
-        stat: "5局4胜1小输｜胜率80%｜净+4160｜0大输"
+        id: "S3A", seat: 3, order: 8, xKey: "C", xValues: [1,4],
+        pair: ["A", "B"], parity: ["偶", "偶"],
+        sample: 7, wins: 7, losses: 0, winRate: 100.000000, net: 4910, bigWins: 5, worst: 160,
+        name: "3号｜C=1/4；A偶、B偶", condition: "C=1/4；A偶、B偶",
+        stat: "7局7胜0负｜胜率100.00%｜净+4910｜大赢5｜0大输｜最差+160"
       },
       {
-        id: "S5C", seat: 5, grade: "A", order: 3,
-        pattern: "奇偶奇", ranks: ["并大", "独中"],
-        name: "5号｜CDE奇偶奇＋E并大/独中",
-        stat: "3局3胜0负｜胜率100%｜净+3520｜0大输"
+        id: "S3B", seat: 3, order: 9, xKey: "C", xValues: [1,4],
+        pair: ["B", "D"], parity: ["偶", "奇"],
+        sample: 7, wins: 6, losses: 1, winRate: 85.714286, net: 3870, bigWins: 4, worst: -340,
+        name: "3号｜C=1/4；B偶、D奇", condition: "C=1/4；B偶、D奇",
+        stat: "7局6胜1负｜胜率85.71%｜净+3870｜大赢4｜0大输｜最差-340"
       },
       {
-        id: "S5D", seat: 5, grade: "A", order: 4,
-        pattern: "奇奇偶", ranks: ["独大"],
-        name: "5号｜CDE奇奇偶＋E独大",
-        stat: "3局3胜0负｜胜率100%｜净+2970｜0大输"
+        id: "S4A", seat: 4, order: 10, xKey: "D", xValues: [8],
+        pair: ["B", "E"], parity: ["偶", "偶"],
+        sample: 4, wins: 4, losses: 0, winRate: 100.000000, net: 1930, bigWins: 2, worst: 90,
+        name: "4号｜D=8；B偶、E偶", condition: "D=8；B偶、E偶",
+        stat: "4局4胜0负｜胜率100.00%｜净+1930｜大赢2｜0大输｜最差+90"
       },
       {
-        id: "S5E", seat: 5, grade: "A", order: 5,
-        pattern: "奇奇奇", ranks: ["三同", "独小"],
-        name: "5号｜CDE奇奇奇＋E三同/独小",
-        stat: "4局4胜0负｜胜率100%｜净+2950｜0大输"
-      },
-
-      // 6号：看CDE，X=E
-      {
-        id: "S6A", seat: 6, grade: "A", order: 1,
-        pattern: "偶偶偶", ranks: ["并小", "独中", "独小"],
-        name: "6号｜CDE偶偶偶＋E并小/独中/独小",
-        stat: "7局6胜1小输｜胜率85.71%｜净+2850｜0大输"
+        id: "S4B", seat: 4, order: 11, xKey: "D", xValues: [3,6,9],
+        pair: ["C", "E"], parity: ["奇", "奇"],
+        sample: 10, wins: 9, losses: 1, winRate: 90.000000, net: 5600, bigWins: 6, worst: -30,
+        name: "4号｜D=3/6/9；C奇、E奇", condition: "D=3/6/9；C奇、E奇",
+        stat: "10局9胜1负｜胜率90.00%｜净+5600｜大赢6｜0大输｜最差-30"
       },
       {
-        id: "S6B", seat: 6, grade: "A", order: 2,
-        pattern: "奇奇偶", ranks: ["独小"],
-        name: "6号｜CDE奇奇偶＋E独小",
-        stat: "3局3胜0负｜胜率100%｜净+1340｜0大输"
+        id: "S4C", seat: 4, order: 12, xKey: "D", xValues: [6,7],
+        pair: ["A", "E"], parity: ["奇", "奇"],
+        sample: 8, wins: 7, losses: 1, winRate: 87.500000, net: 4630, bigWins: 5, worst: -160,
+        name: "4号｜D=6/7；A奇、E奇", condition: "D=6/7；A奇、E奇",
+        stat: "8局7胜1负｜胜率87.50%｜净+4630｜大赢5｜0大输｜最差-160"
+      },
+      {
+        id: "S4D", seat: 4, order: 13, xKey: "D", xValues: [3,6],
+        pair: ["B", "C"], parity: ["偶", "奇"],
+        sample: 7, wins: 6, losses: 1, winRate: 85.714286, net: 3790, bigWins: 5, worst: -30,
+        name: "4号｜D=3/6；B偶、C奇", condition: "D=3/6；B偶、C奇",
+        stat: "7局6胜1负｜胜率85.71%｜净+3790｜大赢5｜0大输｜最差-30"
+      },
+      {
+        id: "S4E", seat: 4, order: 14, xKey: "D", xValues: [7],
+        pair: ["B", "E"], parity: ["奇", "奇"],
+        sample: 5, wins: 4, losses: 1, winRate: 80.000000, net: 2590, bigWins: 2, worst: -270,
+        name: "4号｜D=7；B奇、E奇", condition: "D=7；B奇、E奇",
+        stat: "5局4胜1负｜胜率80.00%｜净+2590｜大赢2｜0大输｜最差-270"
+      },
+      {
+        id: "S4F", seat: 4, order: 15, xKey: "D", xValues: [6],
+        pair: ["B", "E"], parity: ["偶", "奇"],
+        sample: 3, wins: 3, losses: 0, winRate: 100.000000, net: 1930, bigWins: 3, worst: 540,
+        name: "4号｜D=6；B偶、E奇", condition: "D=6；B偶、E奇",
+        stat: "3局3胜0负｜胜率100.00%｜净+1930｜大赢3｜0大输｜最差+540"
+      },
+      {
+        id: "S4G", seat: 4, order: 16, xKey: "D", xValues: [3],
+        pair: ["A", "C"], parity: ["偶", "奇"],
+        sample: 3, wins: 3, losses: 0, winRate: 100.000000, net: 1890, bigWins: 2, worst: 350,
+        name: "4号｜D=3；A偶、C奇", condition: "D=3；A偶、C奇",
+        stat: "3局3胜0负｜胜率100.00%｜净+1890｜大赢2｜0大输｜最差+350"
+      },
+      {
+        id: "S5A", seat: 5, order: 17, xKey: "E", xValues: [1,4],
+        pair: ["C", "D"], parity: ["奇", "奇"],
+        sample: 6, wins: 6, losses: 0, winRate: 100.000000, net: 4290, bigWins: 4, worst: 80,
+        name: "5号｜E=1/4；C奇、D奇", condition: "E=1/4；C奇、D奇",
+        stat: "6局6胜0负｜胜率100.00%｜净+4290｜大赢4｜0大输｜最差+80"
+      },
+      {
+        id: "S5B", seat: 5, order: 18, xKey: "E", xValues: [0,1],
+        pair: ["A", "D"], parity: ["偶", "偶"],
+        sample: 6, wins: 6, losses: 0, winRate: 100.000000, net: 3420, bigWins: 2, worst: 10,
+        name: "5号｜E=0/1；A偶、D偶", condition: "E=0/1；A偶、D偶",
+        stat: "6局6胜0负｜胜率100.00%｜净+3420｜大赢2｜0大输｜最差+10"
+      },
+      {
+        id: "S5C", seat: 5, order: 19, xKey: "E", xValues: [2],
+        pair: ["A", "B"], parity: ["奇", "偶"],
+        sample: 4, wins: 4, losses: 0, winRate: 100.000000, net: 2220, bigWins: 2, worst: 210,
+        name: "5号｜E=2；A奇、B偶", condition: "E=2；A奇、B偶",
+        stat: "4局4胜0负｜胜率100.00%｜净+2220｜大赢2｜0大输｜最差+210"
+      },
+      {
+        id: "S5D", seat: 5, order: 20, xKey: "E", xValues: [1],
+        pair: ["A", "C"], parity: ["偶", "奇"],
+        sample: 4, wins: 4, losses: 0, winRate: 100.000000, net: 1570, bigWins: 1, worst: 10,
+        name: "5号｜E=1；A偶、C奇", condition: "E=1；A偶、C奇",
+        stat: "4局4胜0负｜胜率100.00%｜净+1570｜大赢1｜0大输｜最差+10"
+      },
+      {
+        id: "S5E", seat: 5, order: 21, xKey: "E", xValues: [1],
+        pair: ["B", "C"], parity: ["奇", "奇"],
+        sample: 3, wins: 3, losses: 0, winRate: 100.000000, net: 1490, bigWins: 1, worst: 10,
+        name: "5号｜E=1；B奇、C奇", condition: "E=1；B奇、C奇",
+        stat: "3局3胜0负｜胜率100.00%｜净+1490｜大赢1｜0大输｜最差+10"
+      },
+      {
+        id: "S5F", seat: 5, order: 22, xKey: "E", xValues: [2],
+        pair: ["A", "D"], parity: ["奇", "奇"],
+        sample: 3, wins: 3, losses: 0, winRate: 100.000000, net: 920, bigWins: 0, worst: 210,
+        name: "5号｜E=2；A奇、D奇", condition: "E=2；A奇、D奇",
+        stat: "3局3胜0负｜胜率100.00%｜净+920｜大赢0｜0大输｜最差+210"
+      },
+      {
+        id: "S6A", seat: 6, order: 23, xKey: "E", xValues: [0,9],
+        pair: ["A", "D"], parity: ["奇", "奇"],
+        sample: 6, wins: 6, losses: 0, winRate: 100.000000, net: 3340, bigWins: 2, worst: 30,
+        name: "6号｜E=0/9；A奇、D奇", condition: "E=0/9；A奇、D奇",
+        stat: "6局6胜0负｜胜率100.00%｜净+3340｜大赢2｜0大输｜最差+30"
+      },
+      {
+        id: "S6B", seat: 6, order: 24, xKey: "E", xValues: [5],
+        pair: ["C", "D"], parity: ["奇", "偶"],
+        sample: 5, wins: 5, losses: 0, winRate: 100.000000, net: 3590, bigWins: 1, worst: 230,
+        name: "6号｜E=5；C奇、D偶", condition: "E=5；C奇、D偶",
+        stat: "5局5胜0负｜胜率100.00%｜净+3590｜大赢1｜0大输｜最差+230"
+      },
+      {
+        id: "S6C", seat: 6, order: 25, xKey: "E", xValues: [5],
+        pair: ["A", "C"], parity: ["奇", "奇"],
+        sample: 5, wins: 5, losses: 0, winRate: 100.000000, net: 3290, bigWins: 1, worst: 80,
+        name: "6号｜E=5；A奇、C奇", condition: "E=5；A奇、C奇",
+        stat: "5局5胜0负｜胜率100.00%｜净+3290｜大赢1｜0大输｜最差+80"
+      },
+      {
+        id: "S6D", seat: 6, order: 26, xKey: "E", xValues: [0],
+        pair: ["A", "C"], parity: ["奇", "偶"],
+        sample: 5, wins: 5, losses: 0, winRate: 100.000000, net: 1830, bigWins: 1, worst: 20,
+        name: "6号｜E=0；A奇、C偶", condition: "E=0；A奇、C偶",
+        stat: "5局5胜0负｜胜率100.00%｜净+1830｜大赢1｜0大输｜最差+20"
+      },
+      {
+        id: "S6E", seat: 6, order: 27, xKey: "E", xValues: [0],
+        pair: ["C", "D"], parity: ["偶", "偶"],
+        sample: 4, wins: 4, losses: 0, winRate: 100.000000, net: 430, bigWins: 0, worst: 20,
+        name: "6号｜E=0；C偶、D偶", condition: "E=0；C偶、D偶",
+        stat: "4局4胜0负｜胜率100.00%｜净+430｜大赢0｜0大输｜最差+20"
+      },
+      {
+        id: "S6F", seat: 6, order: 28, xKey: "E", xValues: [0,5],
+        pair: ["A", "B"], parity: ["奇", "奇"],
+        sample: 8, wins: 7, losses: 1, winRate: 87.500000, net: 2560, bigWins: 1, worst: -210,
+        name: "6号｜E=0/5；A奇、B奇", condition: "E=0/5；A奇、B奇",
+        stat: "8局7胜1负｜胜率87.50%｜净+2560｜大赢1｜0大输｜最差-210"
+      },
+      {
+        id: "S6G", seat: 6, order: 29, xKey: "E", xValues: [2,5],
+        pair: ["B", "C"], parity: ["偶", "奇"],
+        sample: 7, wins: 6, losses: 1, winRate: 85.714286, net: 4080, bigWins: 4, worst: -420,
+        name: "6号｜E=2/5；B偶、C奇", condition: "E=2/5；B偶、C奇",
+        stat: "7局6胜1负｜胜率85.71%｜净+4080｜大赢4｜0大输｜最差-420"
+      },
+      {
+        id: "S6H", seat: 6, order: 30, xKey: "E", xValues: [5],
+        pair: ["A", "D"], parity: ["奇", "偶"],
+        sample: 5, wins: 4, losses: 1, winRate: 80.000000, net: 2760, bigWins: 1, worst: -450,
+        name: "6号｜E=5；A奇、D偶", condition: "E=5；A奇、D偶",
+        stat: "5局4胜1负｜胜率80.00%｜净+2760｜大赢1｜0大输｜最差-450"
+      },
+      {
+        id: "S6I", seat: 6, order: 31, xKey: "E", xValues: [2],
+        pair: ["A", "B"], parity: ["偶", "偶"],
+        sample: 3, wins: 3, losses: 0, winRate: 100.000000, net: 2640, bigWins: 3, worst: 530,
+        name: "6号｜E=2；A偶、B偶", condition: "E=2；A偶、B偶",
+        stat: "3局3胜0负｜胜率100.00%｜净+2640｜大赢3｜0大输｜最差+530"
+      },
+      {
+        id: "S6J", seat: 6, order: 32, xKey: "E", xValues: [0],
+        pair: ["B", "C"], parity: ["奇", "偶"],
+        sample: 3, wins: 3, losses: 0, winRate: 100.000000, net: 1560, bigWins: 1, worst: 30,
+        name: "6号｜E=0；B奇、C偶", condition: "E=0；B奇、C偶",
+        stat: "3局3胜0负｜胜率100.00%｜净+1560｜大赢1｜0大输｜最差+30"
+      },
+      {
+        id: "S6K", seat: 6, order: 33, xKey: "E", xValues: [5],
+        pair: ["B", "C"], parity: ["奇", "奇"],
+        sample: 3, wins: 3, losses: 0, winRate: 100.000000, net: 980, bigWins: 0, worst: 80,
+        name: "6号｜E=5；B奇、C奇", condition: "E=5；B奇、C奇",
+        stat: "3局3胜0负｜胜率100.00%｜净+980｜大赢0｜0大输｜最差+80"
       }
     ];
 
     function ruleMatches(room, rule) {
-      const info = tripleInfoForSeat(room, rule.seat);
-      return info.parity === rule.pattern && rule.ranks.includes(info.rank);
+      const xMatches = rule.xValues.includes(room[rule.xKey]);
+      const pairMatches = rule.pair.every((key, index) => parityOf(room[key]) === rule.parity[index]);
+      return xMatches && pairMatches;
+    }
+
+    function seatXKey(seat) {
+      return seat === 1 ? "A" : seat === 2 ? "B" : seat === 3 ? "C" : seat === 4 ? "D" : "E";
+    }
+
+    function gradeFor(wins) {
+      if (wins.length >= 2) return "S";
+      if (wins.length === 1 && wins[0].losses === 0) return "A";
+      if (wins.length === 1) return "B";
+      return null;
     }
 
     function evaluate(room) {
       const seats = [];
 
       for (let seat = 1; seat <= 6; seat++) {
-        const info = tripleInfoForSeat(room, seat);
         const wins = WIN_RULES.filter(rule => rule.seat === seat && ruleMatches(room, rule));
+        const xKey = seatXKey(seat);
+        const bestWinRate = wins.length > 0 ? Math.max(...wins.map(rule => rule.winRate)) : 0;
+        const bestNet = wins.length > 0 ? Math.max(...wins.map(rule => rule.net)) : 0;
+        const totalSample = wins.reduce((sum, rule) => sum + rule.sample, 0);
+        const grade = gradeFor(wins);
 
         seats.push({
           seat,
-          info,
+          xKey,
+          x: room[xKey],
           wins,
-          grade: wins.length > 0 ? "A" : null,
+          grade,
           status: wins.length > 0 ? "recommend" : "neutral",
-          ruleOrder: wins.length > 0 ? Math.min(...wins.map(rule => rule.order)) : 999
+          bestWinRate,
+          bestNet,
+          totalSample
         });
       }
 
-      const recommended = seats
+      const gradeRank = { S: 0, A: 1, B: 2 };
+      const allMatched = seats
         .filter(item => item.status === "recommend")
-        .sort((itemA, itemB) => {
-          return (
-            PRIORITY.indexOf(itemA.seat) - PRIORITY.indexOf(itemB.seat) ||
-            itemA.ruleOrder - itemB.ruleOrder
-          );
-        });
+        .sort((a, b) =>
+          gradeRank[a.grade] - gradeRank[b.grade] ||
+          b.wins.length - a.wins.length ||
+          b.bestWinRate - a.bestWinRate ||
+          b.bestNet - a.bestNet ||
+          PRIORITY.indexOf(a.seat) - PRIORITY.indexOf(b.seat)
+        );
 
+      const recommended = allMatched.slice(0, MAX_RECOMMENDATIONS);
+      const selectedSeats = new Set(recommended.map(item => item.seat));
+      const deferred = allMatched.filter(item => !selectedSeats.has(item.seat));
       const neutral = seats.filter(item => item.status === "neutral");
-      return { seats, recommended, neutral };
+      return { seats, allMatched, recommended, deferred, neutral };
     }
 
     function run() {
@@ -827,40 +932,50 @@
     }
 
     function renderRoomLine(room) {
-      const abc = tripleInfoForSeat(room, 1);
-      const cde = tripleInfoForSeat(room, 4);
-
       return `
         ABCDE=${room.A}${room.B}${room.C}${room.D}${room.E}<br>
-        ABC=${abc.triple}（${abc.parity}）｜CDE=${cde.triple}（${cde.parity}）<br>
+        奇偶=${[room.A, room.B, room.C, room.D, room.E].map(parityOf).join("")}<br>
         各位X：1号=A=${room.A}，2号=B=${room.B}，3号=C=${room.C}，4号=D=${room.D}，5/6号=E=${room.E}
       `;
     }
 
-    function renderSeatCard(item, index) {
-      const title = index === 0 ? "🔥优先推荐" : "⚡同时命中";
-      const info = item.info;
+    function gradeText(item) {
+      if (item.grade === "S") return `S档｜${item.wins.length}条规则共振`;
+      if (item.grade === "A") return "A档｜单条全胜黄金";
+      return "B档｜单条高胜黄金";
+    }
 
+    function renderSeatCard(item, index) {
+      const title = index === 0 ? "🔥优先推荐" : "⚡推荐";
+      const cssGrade = item.grade === "S" ? "grade-s" : item.grade === "A" ? "grade-a" : "grade-b";
       return `
-        <div class="pick ${index === 0 ? "main" : ""} grade-a">
-          <div class="pick-title">${title}｜${item.seat}号｜A档</div>
+        <div class="pick ${index === 0 ? "main" : ""} ${cssGrade}">
+          <div class="pick-title">${title}｜${item.seat}号｜${gradeText(item)}</div>
           <div class="pick-rule">
-            ${info.key}=${info.triple}｜三连=${info.parity}｜X=${info.x}｜排名=${info.rank}<br>
-            命中：${item.wins.map(rule => `${rule.id}｜${rule.name}`).join("；")}<br>
-            ${item.wins.map(rule => rule.stat).join("<br>")}
+            X=${item.xKey}=${item.x}｜命中${item.wins.length}条黄金规则<br>
+            ${item.wins.map(rule => `${rule.id}｜${rule.condition}<br>${rule.stat}`).join("<br>")}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDeferredCard(item) {
+      return `
+        <div class="pick conflict">
+          <div class="pick-title">${item.seat}号｜命中但未进前三</div>
+          <div class="pick-rule">
+            ${gradeText(item)}｜X=${item.xKey}=${item.x}<br>
+            命中：${item.wins.map(rule => rule.id).join("、")}
           </div>
         </div>
       `;
     }
 
     function renderNeutralCard(item) {
-      const info = item.info;
       return `
         <div class="pick">
           <div class="pick-title">${item.seat}号｜未命中</div>
-          <div class="pick-rule">
-            ${info.key}=${info.triple}｜三连=${info.parity}｜X=${info.x}｜排名=${info.rank}
-          </div>
+          <div class="pick-rule">X=${item.xKey}=${item.x}｜未命中33条稳定黄金规则</div>
         </div>
       `;
     }
@@ -875,31 +990,30 @@
 
       const goodHtml = good.length > 0
         ? good.map((item, index) => renderSeatCard(item, index)).join("")
-        : `<div class="desc">1—6号均未命中稳定成熟规则，本局建议跳过。</div>`;
+        : `<div class="desc">1—6号均未命中稳定黄金规则，本局建议跳过。</div>`;
 
-      const neutralHtml = result.neutral.length > 0
-        ? result.neutral.map(renderNeutralCard).join("")
-        : `<div class="desc">所有座位均有成熟规则命中。</div>`;
+      const otherItems = [...result.deferred, ...result.neutral];
+      const otherHtml = otherItems.length > 0
+        ? otherItems.map(item => item.status === "recommend" ? renderDeferredCard(item) : renderNeutralCard(item)).join("")
+        : `<div class="desc">没有其他位子。</div>`;
 
       box.innerHTML = `
-        ${good.length > 0 ? `<span class="badge ok">有成熟规则推荐</span>` : `<span class="badge no">建议跳过</span>`}
-        <span class="badge blue">完整三连＋X排名</span>
+        ${good.length > 0 ? `<span class="badge ok">黄金模型推荐</span>` : `<span class="badge no">建议跳过</span>`}
+        <span class="badge blue">X具体数字＋多方向奇偶</span>
+        ${result.deferred.length > 0 ? `<span class="badge warn">另有${result.deferred.length}位命中，已限制前三</span>` : ""}
 
         <div class="big">${room.room}｜${headline}</div>
-
-        <div class="desc">
-          ${renderRoomLine(room)}
-        </div>
+        <div class="desc">${renderRoomLine(room)}</div>
 
         <div class="result-grid">
           <div class="result-col good">
-            <div class="section-title">正式推荐位</div>
+            <div class="section-title">正式推荐位（最多3个）</div>
             <div class="pick-list">${goodHtml}</div>
           </div>
 
           <div class="result-col bad">
-            <div class="section-title">未命中位</div>
-            <div class="pick-list">${neutralHtml}</div>
+            <div class="section-title">其他位子</div>
+            <div class="pick-list">${otherHtml}</div>
           </div>
         </div>
 
@@ -915,18 +1029,23 @@
     }
 
     function renderDebug(result) {
+      const selected = new Set(result.recommended.map(item => item.seat));
       const rows = result.seats.map(item => {
-        const info = item.info;
+        const conclusion = selected.has(item.seat)
+          ? `推荐｜${item.grade}档`
+          : item.wins.length > 0
+            ? "命中但未进前三"
+            : "跳过";
         return `
           <tr>
             <td>${item.seat}号</td>
-            <td>${info.key}</td>
-            <td>${info.triple}</td>
-            <td>${info.parity}</td>
-            <td>${info.x}</td>
-            <td>${info.rank}</td>
+            <td>${item.xKey}</td>
+            <td>${item.x}</td>
+            <td>${parityOf(item.x)}</td>
+            <td>${item.wins.length}</td>
             <td>${item.wins.length > 0 ? item.wins.map(rule => rule.id).join(",") : "—"}</td>
-            <td>${item.status === "recommend" ? "推荐" : "跳过"}</td>
+            <td>${item.grade || "—"}</td>
+            <td>${conclusion}</td>
           </tr>
         `;
       }).join("");
@@ -937,12 +1056,12 @@
             <thead>
               <tr>
                 <th>位子</th>
-                <th>三连区间</th>
-                <th>三位数字</th>
-                <th>奇偶结构</th>
-                <th>X</th>
-                <th>X排名</th>
+                <th>X映射</th>
+                <th>X数字</th>
+                <th>X奇偶</th>
+                <th>命中数</th>
                 <th>命中规则</th>
+                <th>档位</th>
                 <th>结论</th>
               </tr>
             </thead>
@@ -959,13 +1078,13 @@
         const ruleHtml = rules.length > 0
           ? rules.map(rule => `
               <div class="combo">
-                <div class="name">${rule.id}｜${rule.name}｜A档</div>
+                <div class="name">${rule.id}｜${rule.name}｜${rule.losses === 0 ? "全胜黄金" : "高胜黄金"}</div>
                 <div class="rule">${rule.stat}</div>
               </div>
             `).join("")
           : `
               <div class="combo" style="border-color: rgba(217, 75, 61, 0.25);">
-                <div class="name">1号｜暂无稳定成熟规则</div>
+                <div class="name">1号｜暂无稳定黄金规则</div>
                 <div class="rule">未命中时直接跳过，不为凑位子强行增加规则。</div>
               </div>
             `;
@@ -984,14 +1103,14 @@
         room: room.room,
         time: new Date().toLocaleString(),
         recommend: result.recommended.length > 0
-          ? result.recommended.map(recommend => `${recommend.seat}号`).join("、")
+          ? result.recommended.map(recommend => `${recommend.seat}号(${recommend.grade}档)`).join("、")
           : "跳过",
         rules: result.recommended.length > 0
           ? result.recommended.flatMap(recommend => recommend.wins.map(rule => rule.id)).join("、")
           : "无"
       };
 
-      const key = "xiaomojing_5142983_triple_parity_rank_v50_history";
+      const key = "xiaomojing_5142983_multi_pair_gold_v60_history";
       const list = JSON.parse(localStorage.getItem(key) || "[]");
       list.unshift(item);
       localStorage.setItem(key, JSON.stringify(list.slice(0, 50)));
@@ -999,7 +1118,7 @@
 
     function renderHistory() {
       const box = document.getElementById("historyBox");
-      const key = "xiaomojing_5142983_triple_parity_rank_v50_history";
+      const key = "xiaomojing_5142983_multi_pair_gold_v60_history";
       const list = JSON.parse(localStorage.getItem(key) || "[]");
 
       if (list.length === 0) {
@@ -1020,7 +1139,7 @@
     }
 
     function clearHistory() {
-      localStorage.removeItem("xiaomojing_5142983_triple_parity_rank_v50_history");
+      localStorage.removeItem("xiaomojing_5142983_multi_pair_gold_v60_history");
       renderHistory();
     }
 
