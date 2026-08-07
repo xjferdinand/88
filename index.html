@@ -1,778 +1,355 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>5142983｜小墨镜双差值模型 v7.2｜纠正版</title>
-  <style>
-    :root {
-      --bg: #f7f3ec;
-      --card: #fffaf2;
-      --card2: #ffffff;
-      --text: #2b2118;
-      --muted: #8a7664;
-      --red: #d94b3d;
-      --red2: #b8342b;
-      --green: #1f9d67;
-      --orange: #d98c22;
-      --blue: #315eae;
-      --purple: #7a4db5;
-      --gold: #b77a0b;
-      --border: #eadccc;
-      --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    * { box-sizing: border-box; }
+<title>抓环机｜房卡规则</title>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-      padding: 22px 14px 42px;
-      background:
-        radial-gradient(circle at top left, rgba(217, 75, 61, 0.12), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(122, 77, 181, 0.11), transparent 28%),
-        var(--bg);
-    }
+<style>
+*{
+    box-sizing:border-box;
+}
 
-    .wrap { max-width: 980px; margin: 0 auto; }
-    .hero { text-align: center; margin-bottom: 18px; }
-    .title { font-size: 28px; font-weight: 1000; letter-spacing: 1px; margin: 6px 0 8px; }
-    .sub { color: var(--muted); font-size: 14px; line-height: 1.7; }
+body{
+    margin:0;
+    padding:20px;
+    background:#f5f1ea;
+    font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "PingFang SC",
+    "Microsoft YaHei",
+    Arial;
+    color:#33261d;
+}
 
-    .panel {
-      background: rgba(255, 250, 242, 0.94);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 18px;
-      margin-bottom: 16px;
-      backdrop-filter: blur(8px);
-    }
+.container{
+    max-width:500px;
+    margin:auto;
+}
 
-    .section-title { font-weight: 1000; font-size: 18px; margin: 3px 0 12px; }
-    .input-row { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 8px; }
+.card{
+    background:#fffaf3;
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    margin-bottom:20px;
+}
 
-    input {
-      width: min(100%, 360px);
-      height: 58px;
-      border: 2px solid #e7d2c0;
-      border-radius: 18px;
-      outline: none;
-      text-align: center;
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 6px;
-      color: var(--text);
-      background: #ffffff;
-      box-shadow: inset 0 2px 6px rgba(80, 50, 30, 0.05);
-    }
-    input:focus { border-color: var(--red); }
+.title{
+    text-align:center;
+    font-size:28px;
+    font-weight:900;
+    margin-bottom:10px;
+}
 
-    button { border: none; cursor: pointer; font-weight: 900; transition: 0.18s ease; }
-    .btn-main {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: linear-gradient(145deg, var(--red), var(--red2));
-      color: #ffffff; font-size: 18px;
-      box-shadow: 0 10px 22px rgba(217, 75, 61, 0.34);
-      flex: 0 0 auto;
-    }
-    .btn-main:active { transform: scale(0.96); }
-    .btn-small { padding: 9px 13px; border-radius: 12px; background: #f0e2d3; color: #6b5644; font-size: 13px; }
+.sub{
+    text-align:center;
+    color:#8a7664;
+    margin-bottom:25px;
+}
 
-    .model-row,
-    .mode-row {
-      display: flex; justify-content: center; align-items: center; gap: 8px;
-      margin-top: 13px; flex-wrap: wrap;
-    }
-    .model-btn,
-    .mode-btn {
-      padding: 9px 14px; border-radius: 999px; background: #efe3d5; color: #6b5644;
-      border: 1px solid #dfcbb7; font-size: 13px;
-    }
-    .model-btn.active-total { background: rgba(217,75,61,.11); color: var(--red2); border-color: rgba(217,75,61,.30); }
-    .model-btn.active-distance { background: rgba(183,122,11,.12); color: var(--gold); border-color: rgba(183,122,11,.30); }
-    .mode-btn.active-balanced { background: rgba(49,94,174,.11); color: var(--blue); border-color: rgba(49,94,174,.28); }
-    .mode-btn.active-strict { background: rgba(122,77,181,.11); color: var(--purple); border-color: rgba(122,77,181,.28); }
 
-    .result { display: none; margin-top: 16px; background: var(--card2); border-radius: 20px; border: 1px solid var(--border); padding: 16px; }
-    .result.show { display: block; }
+.input-box{
+    display:flex;
+    gap:10px;
+}
 
-    .badge {
-      display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px;
-      border-radius: 999px; font-size: 13px; font-weight: 900; margin: 3px;
-    }
-    .badge.ok { background: rgba(31,157,103,.12); color: var(--green); border: 1px solid rgba(31,157,103,.24); }
-    .badge.no { background: rgba(217,75,61,.10); color: var(--red2); border: 1px solid rgba(217,75,61,.22); }
-    .badge.warn { background: rgba(217,140,34,.12); color: #a6630f; border: 1px solid rgba(217,140,34,.22); }
-    .badge.blue { background: rgba(49,94,174,.10); color: var(--blue); border: 1px solid rgba(49,94,174,.22); }
-    .badge.purple { background: rgba(122,77,181,.10); color: var(--purple); border: 1px solid rgba(122,77,181,.22); }
-    .badge.gold { background: rgba(183,122,11,.12); color: var(--gold); border: 1px solid rgba(183,122,11,.28); }
+input{
+    flex:1;
+    height:60px;
+    border-radius:18px;
+    border:2px solid #e5d2bd;
+    font-size:28px;
+    font-weight:bold;
+    text-align:center;
+    letter-spacing:5px;
+}
 
-    .big { font-size: 32px; font-weight: 1000; margin: 10px 0 4px; }
-    .desc { color: var(--muted); line-height: 1.7; font-size: 14px; }
 
-    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
-    .stat { background: #fff8ef; border: 1px solid var(--border); border-radius: 16px; padding: 12px 8px; text-align: center; }
-    .stat .v { font-size: 20px; font-weight: 1000; }
-    .stat .k { margin-top: 4px; color: var(--muted); font-size: 12px; }
+button{
+    width:70px;
+    height:60px;
+    border:none;
+    border-radius:18px;
+    background:#c94b3c;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+}
 
-    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-    .result-col { background: #ffffff; border: 1px solid var(--border); border-radius: 18px; padding: 12px; }
-    .result-col.good { border-color: rgba(31,157,103,.28); }
-    .result-col.bad { border-color: rgba(217,75,61,.30); }
 
-    .pick-list { display: grid; gap: 10px; margin-top: 10px; }
-    .pick { background: #fff8ef; border: 1px solid var(--border); border-radius: 16px; padding: 12px; }
-    .pick.main { background: #fff4ee; border-color: rgba(217,75,61,.40); }
-    .pick.grade-o { box-shadow: inset 5px 0 0 rgba(49,94,174,.90); }
-    .pick.grade-sp { box-shadow: inset 5px 0 0 rgba(183,122,11,.90); }
-    .pick.grade-s { box-shadow: inset 5px 0 0 rgba(122,77,181,.80); }
-    .pick.grade-a { box-shadow: inset 5px 0 0 rgba(31,157,103,.75); }
-    .pick.black { box-shadow: inset 5px 0 0 rgba(217,75,61,.85); background: #fff3f1; }
-    .pick.neutral { box-shadow: inset 5px 0 0 rgba(138,118,100,.45); }
-    .pick-title { font-weight: 1000; margin-bottom: 6px; }
-    .pick-rule { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.result{
+    margin-top:25px;
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    text-align:center;
+}
 
-    .rule-group { margin-top: 14px; }
-    .rule-group:first-child { margin-top: 0; }
-    .rule-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-    .rule-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 12px; }
-    .rule-card.sp { border-color: rgba(183,122,11,.36); background: #fffaf0; }
-    .rule-card.s { border-color: rgba(122,77,181,.30); }
-    .rule-card.a { border-color: rgba(31,157,103,.28); }
-    .rule-card.black { border-color: rgba(217,75,61,.28); background: #fff7f5; }
-    .rule-card.strict { border-color: rgba(49,94,174,.26); background: #f7f9ff; }
-    .rule-name { font-weight: 1000; margin-bottom: 6px; }
-    .rule-stat { color: var(--muted); font-size: 13px; line-height: 1.65; }
 
-    .debug { margin-top: 12px; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 1100px; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
-    th, td { padding: 9px 8px; border-bottom: 1px solid #f0e2d3; font-size: 12px; text-align: center; white-space: nowrap; }
-    th { background: #fff1e1; color: #6b5644; font-weight: 900; }
+.result-title{
+    color:#888;
+    font-size:14px;
+}
 
-    .history-item { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 10px 0; border-bottom: 1px dashed #e4d3c3; font-size: 14px; }
-    .history-left { font-weight: 900; }
-    .history-right { color: var(--muted); text-align: right; font-size: 13px; line-height: 1.5; }
-    .footer-note { text-align: center; color: var(--muted); font-size: 12px; line-height: 1.7; margin-top: 16px; }
 
-    @media (max-width: 760px) {
-      body { padding: 16px 10px 34px; }
-      .title { font-size: 23px; }
-      .panel { padding: 14px; border-radius: 20px; }
-      input { height: 56px; font-size: 25px; letter-spacing: 4px; }
-      .btn-main { width: 64px; height: 64px; font-size: 16px; }
-      .grid { grid-template-columns: repeat(2, 1fr); }
-      .result-grid, .rule-grid { grid-template-columns: 1fr; }
-      .big { font-size: 26px; }
-    }
-  </style>
+.number{
+    font-size:42px;
+    font-weight:1000;
+    margin-top:10px;
+}
+
+
+.rule{
+    margin-top:15px;
+    color:#777;
+}
+
+
+.history-item{
+    padding:12px 0;
+    border-bottom:1px dashed #ddd;
+    display:flex;
+    justify-content:space-between;
+}
+
+
+.history-result{
+    font-weight:bold;
+    color:#c94b3c;
+}
+
+
+.clear{
+    width:100%;
+    margin-top:15px;
+    background:#eee;
+    color:#555;
+}
+
+</style>
+
 </head>
+
+
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <div class="title">5142983｜小墨镜双差值模型 v7.2｜纠正版</div>
-      <div class="sub">差值总模型按401场原版执行：排除座位黑名单后全部放行｜白名单仅作优先级｜另保留差值距离模型</div>
+
+
+<div class="container">
+
+
+<div class="card">
+
+<div class="title">
+抓环机
+</div>
+
+<div class="sub">
+房卡规则｜房间号 - 49835
+</div>
+
+
+<div class="input-box">
+
+<input 
+id="room"
+maxlength="5"
+inputmode="numeric"
+placeholder="输入5位房号">
+
+<button onclick="calc()">
+计算
+</button>
+
+</div>
+
+
+
+<div id="result"></div>
+
+
+</div>
+
+
+
+<div class="card">
+
+<h3>
+历史记录
+</h3>
+
+<div id="history">
+暂无记录
+</div>
+
+
+<button class="clear" onclick="clearHistory()">
+清空记录
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<script>
+
+
+const KEY="grab_ring_history";
+
+
+function calc(){
+
+    let room=document.getElementById("room").value;
+
+
+    if(room.length!==5 || isNaN(room)){
+        alert("请输入5位数字房间号");
+        return;
+    }
+
+
+    let num=parseInt(room);
+
+
+    let result=num-49835;
+
+
+    document.getElementById("result").innerHTML=`
+
+    <div class="result">
+
+    <div class="result-title">
+    ${room} - 49835
     </div>
 
-    <div class="panel">
-      <div class="section-title">输入5位房号</div>
-      <div class="input-row">
-        <input id="roomInput" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="例如 40038" autocomplete="off" />
-        <button class="btn-main" onclick="run()">开干</button>
-      </div>
-      <div class="model-row">
-        <button id="totalModelBtn" class="model-btn active-total" onclick="setModel('total')">差值总模型</button>
-        <button id="distanceModelBtn" class="model-btn" onclick="setModel('distance')">差值距离模型</button>
-      </div>
-      <div id="distanceModeRow" class="mode-row" style="display:none;">
-        <button id="balancedBtn" class="mode-btn active-balanced" onclick="setMode('balanced')">平衡模式｜仅硬黑</button>
-        <button id="strictBtn" class="mode-btn" onclick="setMode('strict')">极严模式｜硬黑＋严格黑</button>
-      </div>
-      <div id="result" class="result"></div>
+    <div class="number">
+    ${result}
     </div>
 
-    <div class="panel">
-      <div class="section-title">小墨镜差值总模型｜原版提升效果</div>
-      <div class="grid">
-        <div class="stat"><div class="v">401场</div><div class="k">原始全部打</div></div>
-        <div class="stat"><div class="v">50.87%</div><div class="k">原始胜率</div></div>
-        <div class="stat"><div class="v">+26410</div><div class="k">原始净分</div></div>
-        <div class="stat"><div class="v">93场</div><div class="k">原始大输</div></div>
-        <div class="stat"><div class="v">189场</div><div class="k">排除全部座位黑名单</div></div>
-        <div class="stat"><div class="v">72.49%</div><div class="k">排黑后胜率</div></div>
-        <div class="stat"><div class="v">+72200</div><div class="k">排黑后净分</div></div>
-        <div class="stat"><div class="v">19场</div><div class="k">排黑后大输</div></div>
-      </div>
-      <div class="desc" style="margin-top:12px;">
-        原始全部打：401场，约204胜197负，胜率50.87%，净分+26410，场均+65.9，大输93场，大输率23.19%。<br>
-        排除全部座位专属黑名单后：189场，137胜52负，胜率72.49%，净分+72200，场均+382.0，大输19场，大输率10.05%。<br>
-        因此本网页中的“差值总模型”按原版逻辑执行：<b>命中座位黑名单直接排除；未命中黑名单即为可打；白名单只负责提高推荐顺序，不是放行门槛。</b>
-      </div>
+    <div class="rule">
+    抓环机｜房卡规则
     </div>
 
-    <div class="panel">
-      <div id="rulePanelTitle" class="section-title">当前小墨镜差值总模型规则</div>
-      <div id="totalRuleList"></div>
-      <div id="distanceRuleList" style="display:none;"></div>
     </div>
 
-    <div class="panel">
-      <div class="section-title">历史记录 <button class="btn-small" onclick="clearHistory()" style="float:right;">清空</button></div>
-      <div id="historyBox" class="desc">暂无记录</div>
+    `;
+
+
+    save(room,result);
+
+}
+
+
+
+function save(room,result){
+
+    let data=
+    JSON.parse(
+        localStorage.getItem(KEY)||"[]"
+    );
+
+
+    data.unshift({
+
+        room:room,
+        result:result,
+        time:new Date()
+        .toLocaleString()
+
+    });
+
+
+    localStorage.setItem(
+        KEY,
+        JSON.stringify(data.slice(0,50))
+    );
+
+
+    showHistory();
+
+}
+
+
+
+
+function showHistory(){
+
+    let data=
+    JSON.parse(
+        localStorage.getItem(KEY)||"[]"
+    );
+
+
+    let box=document.getElementById("history");
+
+
+    if(data.length===0){
+
+        box.innerHTML="暂无记录";
+        return;
+
+    }
+
+
+
+    box.innerHTML=data.map(item=>`
+
+    <div class="history-item">
+
+    <div>
+    ${item.room}
     </div>
 
-    <div class="footer-note">
-      房号记作ABCDE。1号X=A，2号X=B，3号X=C，4号X=D，5/6号X=E。<br>
-      差值总模型使用按座位固定顺序的四位差值d1—d4；差值距离模型使用“差值@离X位置距离”。<br>
-      两套模型完全独立。差值总模型：座位黑名单命中即排除，其余全部可打，白名单只排序；差值距离模型：先排黑，再只推荐命中距离白名单的座位。
+
+    <div class="history-result">
+    ${item.result}
     </div>
-  </div>
 
-  <script>
-    const MODEL_STAT = {
-      balanced: { sample: "442局", hit: "49局", rate: "81.63%", result: "40胜9负", net: "+19130", bigLoss: "0大输" },
-      strict: { sample: "442局", hit: "42局", rate: "83.33%", result: "35胜7负", net: "+18400", bigLoss: "0大输" }
-    };
 
-    const MAX_RECOMMENDATIONS = 3;
-    let currentModel = "total";
-    let currentMode = "balanced";
+    </div>
 
-    const TOTAL_MODEL_STAT = {
-      original: "401场｜约204胜197负｜胜率50.87%｜净+26410｜场均+65.9｜大输93｜大输率23.19%",
-      filtered: "189场｜137胜52负｜胜率72.49%｜净+72200｜场均+382.0｜大输19｜大输率10.05%"
-    };
 
-    const HARD_BLACK_RULES = [
-      { id:"HB1", atoms:[[9,3]], sample:10, wins:2, losses:8, net:-3960, bigLosses:4, name:"差9@距3", stat:"10局2胜8负｜胜率20.00%｜净-3960｜大输4" },
-      { id:"HB2", atoms:[[1,3],[1,4]], sample:6, wins:1, losses:5, net:-2000, bigLosses:2, name:"差1@距3＋差1@距4", stat:"6局1胜5负｜胜率16.67%｜净-2000｜大输2" },
-      { id:"HB3", atoms:[[3,3],[4,2]], sample:6, wins:1, losses:5, net:-1840, bigLosses:2, name:"差3@距3＋差4@距2", stat:"6局1胜5负｜胜率16.67%｜净-1840｜大输2" },
-      { id:"HB4", atoms:[[0,1],[6,3]], sample:7, wins:2, losses:5, net:-1620, bigLosses:1, name:"差0@距1＋差6@距3", stat:"7局2胜5负｜胜率28.57%｜净-1620｜大输1" },
-      { id:"HB5", atoms:[[3,2],[4,1]], sample:16, wins:6, losses:10, net:-5980, bigLosses:6, name:"差3@距2＋差4@距1", stat:"16局6胜10负｜胜率37.50%｜净-5980｜大输6" },
-      { id:"HB6", atoms:[[0,1],[1,2]], sample:20, wins:8, losses:12, net:-3420, bigLosses:7, name:"差0@距1＋差1@距2", stat:"20局8胜12负｜胜率40.00%｜净-3420｜大输7" }
-    ];
+    `).join("");
 
-    const STRICT_BLACK_RULES = [
-      { id:"SB1", atoms:[[0,4]], name:"差0@距4", stat:"严格模式附加｜历史总体17局4胜13负，净-6010；分段波动较大" },
-      { id:"SB2", atoms:[[3,3],[4,1]], name:"差3@距3＋差4@距1", stat:"严格模式附加｜10局3胜7负，净-5590，大输6" },
-      { id:"SB3", atoms:[[0,1],[3,2]], name:"差0@距1＋差3@距2", stat:"严格模式附加｜旧库偏差，外部段波动较大" },
-      { id:"SB4", atoms:[[1,2],[3,1]], name:"差1@距2＋差3@距1", stat:"严格模式附加｜旧库偏差，外部段波动较大" }
-    ];
+}
 
-    const PLUS_RULES = [
-      { id:"SP1", grade:"SP", atoms:[[1,2],[2,3],[3,4]], sample:5, wins:5, losses:0, winRate:100, net:3980, bigWins:3, bigLosses:0, name:"差1@距2＋差2@距3＋差3@距4", stat:"5局5胜0负｜胜率100%｜净+3980｜大赢3｜0大输" }
-    ];
 
-    const WHITE_RULES = [
-      { id:"S1", grade:"S", atoms:[[1,3],[4,2]], sample:6, wins:6, losses:0, winRate:100, net:2850, bigWins:0, bigLosses:0, name:"差1@距3＋差4@距2", stat:"6局6胜0负｜胜率100%｜净+2850｜0大输" },
-      { id:"S2", grade:"S", atoms:[[1,2],[3,4]], sample:6, wins:5, losses:1, winRate:83.33, net:3800, bigWins:0, bigLosses:0, name:"差1@距2＋差3@距4", stat:"6局5胜1负｜胜率83.33%｜净+3800｜0大输" },
-      { id:"A1", grade:"A", atoms:[[1,3],[3,1]], sample:11, wins:8, losses:3, winRate:72.73, net:2820, bigWins:0, bigLosses:0, name:"差1@距3＋差3@距1", stat:"11局8胜3负｜胜率72.73%｜净+2820｜0大输" },
-      { id:"A2", grade:"A", atoms:[[1,3],[2,2]], sample:10, wins:7, losses:3, winRate:70, net:1900, bigWins:0, bigLosses:0, name:"差1@距3＋差2@距2", stat:"10局7胜3负｜胜率70.00%｜净+1900｜0大输" },
-      { id:"A3", grade:"A", atoms:[[0,2],[5,3]], sample:5, wins:4, losses:1, winRate:80, net:2810, bigWins:0, bigLosses:0, name:"差0@距2＋差5@距3", stat:"5局4胜1负｜胜率80.00%｜净+2810｜0大输" },
-      { id:"A4", grade:"A", atoms:[[0,3],[1,1]], sample:5, wins:4, losses:1, winRate:80, net:2220, bigWins:0, bigLosses:0, name:"差0@距3＋差1@距1", stat:"5局4胜1负｜胜率80.00%｜净+2220｜0大输" },
-      { id:"A5", grade:"A", atoms:[[1,3],[5,4]], sample:5, wins:4, losses:1, winRate:80, net:2020, bigWins:0, bigLosses:0, name:"差1@距3＋差5@距4", stat:"5局4胜1负｜胜率80.00%｜净+2020｜0大输" },
-      { id:"A6", grade:"A", atoms:[[1,3],[4,4]], sample:5, wins:4, losses:1, winRate:80, net:1820, bigWins:0, bigLosses:0, name:"差1@距3＋差4@距4", stat:"5局4胜1负｜胜率80.00%｜净+1820｜0大输" },
-      { id:"A7", grade:"A", atoms:[[2,2],[4,3]], sample:5, wins:4, losses:1, winRate:80, net:1010, bigWins:0, bigLosses:0, name:"差2@距2＋差4@距3", stat:"5局4胜1负｜胜率80.00%｜净+1010｜0大输" },
-      { id:"A8", grade:"A", atoms:[[1,3],[7,1]], sample:5, wins:4, losses:1, winRate:80, net:900, bigWins:0, bigLosses:0, name:"差1@距3＋差7@距1", stat:"5局4胜1负｜胜率80.00%｜净+900｜0大输" }
-    ];
 
-    function analyzeRoom(roomNumber) {
-      const digits = roomNumber.split("").map(Number);
-      const [A,B,C,D,E] = digits;
-      return { room:roomNumber, digits, A,B,C,D,E };
+function clearHistory(){
+
+    localStorage.removeItem(KEY);
+
+    showHistory();
+
+}
+
+
+
+
+document
+.getElementById("room")
+.addEventListener("keydown",
+function(e){
+
+    if(e.key==="Enter"){
+        calc();
     }
 
-    function seatCoreIndex(seat) {
-      return seat === 1 ? 0 : seat === 2 ? 1 : seat === 3 ? 2 : seat === 4 ? 3 : 4;
-    }
+});
 
-    function seatXKey(seat) {
-      return seat === 1 ? "A" : seat === 2 ? "B" : seat === 3 ? "C" : seat === 4 ? "D" : "E";
-    }
 
-    function buildAtoms(room, seat) {
-      const coreIndex = seatCoreIndex(seat);
-      const x = room.digits[coreIndex];
-      const keys = ["A","B","C","D","E"];
-      return room.digits
-        .map((value, index) => ({
-          key: keys[index],
-          value,
-          diff: Math.abs(value - x),
-          distance: Math.abs(index - coreIndex)
-        }))
-        .filter((_, index) => index !== coreIndex);
-    }
+showHistory();
 
-    function hasAtom(atoms, target) {
-      const [diff, distance] = target;
-      return atoms.some(atom => atom.diff === diff && atom.distance === distance);
-    }
 
-    function ruleMatches(atoms, rule) {
-      return rule.atoms.every(target => hasAtom(atoms, target));
-    }
+</script>
 
-    function atomText(atoms) {
-      return atoms.map(atom => `${atom.key}:差${atom.diff}@距${atom.distance}`).join(" ｜ ");
-    }
 
-    function evaluateDistance(room) {
-      const seats = [];
-      const blackPool = currentMode === "strict" ? [...HARD_BLACK_RULES, ...STRICT_BLACK_RULES] : HARD_BLACK_RULES;
-
-      for (let seat=1; seat<=6; seat++) {
-        const atoms = buildAtoms(room, seat);
-        const hardHits = HARD_BLACK_RULES.filter(rule => ruleMatches(atoms, rule));
-        const strictHits = STRICT_BLACK_RULES.filter(rule => ruleMatches(atoms, rule));
-        const activeBlackHits = blackPool.filter(rule => ruleMatches(atoms, rule));
-        const plusHits = PLUS_RULES.filter(rule => ruleMatches(atoms, rule));
-        const whiteHits = WHITE_RULES.filter(rule => ruleMatches(atoms, rule));
-        const xKey = seatXKey(seat);
-
-        let grade = null;
-        if (activeBlackHits.length === 0) {
-          if (plusHits.length > 0) grade = "SP";
-          else if (whiteHits.some(rule => rule.grade === "S")) grade = "S";
-          else if (whiteHits.length > 0) grade = "A";
-        }
-
-        const allWhiteHits = [...plusHits, ...whiteHits];
-        seats.push({
-          seat, xKey, x:room[xKey], atoms,
-          hardHits, strictHits, activeBlackHits,
-          plusHits, whiteHits, allWhiteHits,
-          grade,
-          status: activeBlackHits.length > 0 ? "black" : allWhiteHits.length > 0 ? "recommend" : "neutral",
-          bestWinRate: allWhiteHits.length ? Math.max(...allWhiteHits.map(rule => rule.winRate)) : 0,
-          bestNet: allWhiteHits.length ? Math.max(...allWhiteHits.map(rule => rule.net)) : 0,
-          totalSample: allWhiteHits.reduce((sum, rule) => sum + rule.sample, 0)
-        });
-      }
-
-      const gradeRank = { SP:0, S:1, A:2 };
-      const matched = seats.filter(item => item.status === "recommend").sort((a,b) =>
-        gradeRank[a.grade] - gradeRank[b.grade] ||
-        b.allWhiteHits.length - a.allWhiteHits.length ||
-        b.bestWinRate - a.bestWinRate ||
-        b.bestNet - a.bestNet ||
-        b.totalSample - a.totalSample ||
-        a.seat - b.seat
-      );
-
-      const recommended = matched.slice(0, MAX_RECOMMENDATIONS);
-      const selected = new Set(recommended.map(item => item.seat));
-      const deferred = matched.filter(item => !selected.has(item.seat));
-      const black = seats.filter(item => item.status === "black");
-      const neutral = seats.filter(item => item.status === "neutral");
-      return { seats, recommended, deferred, black, neutral };
-    }
-
-    function buildOrderedDiffs(room, seat) {
-      const coreIndex = seatCoreIndex(seat);
-      const x = room.digits[coreIndex];
-      return room.digits.filter((_, index) => index !== coreIndex).map(value => Math.abs(value - x));
-    }
-
-    function hasDiff(diffs, value) {
-      return diffs.includes(value);
-    }
-
-    function hasBoth(diffs, a, b) {
-      return diffs.includes(a) && diffs.includes(b);
-    }
-
-    function totalSeatBlackHits(seat, d) {
-      const [d1,d2,d3,d4] = d;
-      const hits = [];
-      if (seat === 1) {
-        if (hasDiff(d,3)) hits.push("1号黑｜任意出现差3");
-        if (hasDiff(d,6)) hits.push("1号黑｜任意出现差6");
-        if (d1 === 1 && d3 === 1) hits.push("1号黑｜AB=1且AD=1");
-      } else if (seat === 2) {
-        if (hasDiff(d,6)) hits.push("2号黑｜任意出现差6");
-        if (d3 === 1 && d4 === 2) hits.push("2号黑｜BD=1且BE=2");
-        if (d2 === 1 && d4 === 1) hits.push("2号黑｜BC=1且BE=1");
-      } else if (seat === 3) {
-        if (hasDiff(d,0)) hits.push("3号黑｜任意出现差0");
-        if (hasDiff(d,8)) hits.push("3号黑｜任意出现差8");
-        if (d3 === 3) hits.push("3号黑｜CD=3");
-        if (d1 === 5) hits.push("3号黑｜CA=5");
-      } else if (seat === 4) {
-        if (hasBoth(d,4,6)) hits.push("4号黑｜同时出现差4和差6");
-        if (d2 === 3) hits.push("4号黑｜DB=3");
-        if (d2 === 0 && d3 === 4) hits.push("4号黑｜DB=0且DC=4");
-        if (d1 === 5 && d3 === 1) hits.push("4号黑｜DA=5且DC=1");
-        if (d1 === 2 && d3 === 2) hits.push("4号黑｜DA=2且DC=2");
-      } else if (seat === 5) {
-        if (hasDiff(d,0)) hits.push("5号黑｜任意出现差0");
-        if (hasDiff(d,7)) hits.push("5号黑｜任意出现差7");
-        if (hasDiff(d,9)) hits.push("5号黑｜任意出现差9");
-        if (hasBoth(d,3,4)) hits.push("5号黑｜同时出现差3和差4");
-        if (d2 === 5 && d4 === 2) hits.push("5号黑｜EB=5且ED=2");
-      } else if (seat === 6) {
-        if (hasDiff(d,1)) hits.push("6号黑｜任意出现差1");
-        if (hasBoth(d,2,7)) hits.push("6号黑｜同时出现差2和差7");
-        if (hasBoth(d,3,5)) hits.push("6号黑｜同时出现差3和差5");
-      }
-      return hits;
-    }
-
-    function totalGlobalBlackHits(d) {
-      // 原版189场模型不启用后续增加的两条通用二级黑名单。
-      // 启用它们会变成184场、74.46%的增强测试版，不属于本模型。
-      return [];
-    }
-
-    function totalWhiteHits(seat, d) {
-      const [d1,d2,d3,d4] = d;
-      const original = [];
-      const gradeA = [];
-      const gradeB = [];
-      if (d1 === 3 && d2 === 2) original.push("原始白｜d1=3且d2=2");
-      if (d1 + d2 + d3 + d4 === 15) original.push("原始白｜四差和=15");
-      if (d1 === 6 && d4 === 6) original.push("原始白｜d1=6且d4=6");
-      if (d2 === 0 && d4 === 4) original.push("原始白｜d2=0且d4=4");
-      if (d3 === 2 && d4 === 6) original.push("原始白｜d3=2且d4=6");
-      if (d2 === 1 && d4 === 2) gradeA.push("A白｜d2=1且d4=2");
-      if (hasBoth(d,0,4)) gradeA.push("A白｜四差同时含0和4");
-      if (hasBoth(d,4,5)) gradeB.push("B白｜四差同时含4和5");
-      if (d4 === 5) gradeB.push("B白｜d4=5");
-      if (seat === 4 && d3 === 3) gradeB.push("B白｜4号且d3=3");
-      return { original, gradeA, gradeB, all:[...original, ...gradeA, ...gradeB] };
-    }
-
-    function evaluateTotal(room) {
-      const seats = [];
-      for (let seat=1; seat<=6; seat++) {
-        const diffs = buildOrderedDiffs(room, seat);
-        const seatBlack = totalSeatBlackHits(seat, diffs);
-        const globalBlack = totalGlobalBlackHits(diffs);
-        const blackHits = [...seatBlack, ...globalBlack];
-        const white = totalWhiteHits(seat, diffs);
-        let grade = null;
-        if (!blackHits.length) {
-          if (white.original.length) grade = "O";
-          else if (white.gradeA.length) grade = "A";
-          else if (white.gradeB.length) grade = "B";
-          else grade = "P";
-        }
-        seats.push({
-          seat,
-          xKey: seatXKey(seat),
-          x: room[seatXKey(seat)],
-          diffs,
-          blackHits,
-          white,
-          grade,
-          status: blackHits.length ? "black" : "recommend"
-        });
-      }
-      const gradeRank = { O:0, A:1, B:2, P:3 };
-      const matched = seats.filter(item => item.status === "recommend").sort((a,b) =>
-        gradeRank[a.grade] - gradeRank[b.grade] ||
-        b.white.all.length - a.white.all.length ||
-        a.seat - b.seat
-      );
-      return {
-        seats,
-        recommended: matched,
-        deferred: [],
-        black: seats.filter(item => item.status === "black"),
-        neutral: []
-      };
-    }
-
-    function setModel(model) {
-      currentModel = model;
-      document.getElementById("totalModelBtn").className = `model-btn ${model === "total" ? "active-total" : ""}`;
-      document.getElementById("distanceModelBtn").className = `model-btn ${model === "distance" ? "active-distance" : ""}`;
-      document.getElementById("distanceModeRow").style.display = model === "distance" ? "flex" : "none";
-      document.getElementById("totalRuleList").style.display = model === "total" ? "block" : "none";
-      document.getElementById("distanceRuleList").style.display = model === "distance" ? "block" : "none";
-      document.getElementById("rulePanelTitle").textContent = model === "total" ? "当前小墨镜差值总模型规则" : "当前差值距离规则";
-      const input = document.getElementById("roomInput");
-      if (input.value.length === 5) run(false);
-    }
-
-    function setMode(mode) {
-      currentMode = mode;
-      document.getElementById("balancedBtn").className = `mode-btn ${mode === "balanced" ? "active-balanced" : ""}`;
-      document.getElementById("strictBtn").className = `mode-btn ${mode === "strict" ? "active-strict" : ""}`;
-      const input = document.getElementById("roomInput");
-      if (input.value.length === 5) run(false);
-    }
-
-    function gradeText(item) {
-      if (item.grade === "SP") return "S+强化白名单";
-      if (item.grade === "S") return "S级白名单";
-      return "A级白名单";
-    }
-
-    function renderSeatCard(item, index) {
-      const css = item.grade === "SP" ? "grade-sp" : item.grade === "S" ? "grade-s" : "grade-a";
-      const title = index === 0 ? "🔥优先推荐" : index === 99 ? "命中但未进前三" : "⚡推荐";
-      const whiteText = item.allWhiteHits.map(rule => `${rule.id}｜${rule.name}<br>${rule.stat}`).join("<br><br>");
-      const ignoredStrict = currentMode === "balanced" && item.strictHits.length > 0
-        ? `<br><span style="color:#315eae;">提示：平衡模式忽略严格黑 ${item.strictHits.map(r=>r.id).join("、")}</span>`
-        : "";
-      return `
-        <div class="pick ${index === 0 ? "main" : ""} ${css}">
-          <div class="pick-title">${title}｜${item.seat}号｜${gradeText(item)}${item.allWhiteHits.length > 1 ? `｜${item.allWhiteHits.length}条共振` : ""}</div>
-          <div class="pick-rule">
-            X=${item.xKey}=${item.x}<br>${atomText(item.atoms)}<br><br>${whiteText}${ignoredStrict}
-          </div>
-        </div>`;
-    }
-
-    function renderBlackCard(item) {
-      const hits = item.activeBlackHits.map(rule => `${rule.id}｜${rule.name}<br>${rule.stat}`).join("<br><br>");
-      return `
-        <div class="pick black">
-          <div class="pick-title">${item.seat}号｜黑名单排除</div>
-          <div class="pick-rule">X=${item.xKey}=${item.x}<br>${atomText(item.atoms)}<br><br>${hits}</div>
-        </div>`;
-    }
-
-    function renderNeutralCard(item) {
-      return `
-        <div class="pick neutral">
-          <div class="pick-title">${item.seat}号｜普通跳过</div>
-          <div class="pick-rule">X=${item.xKey}=${item.x}<br>${atomText(item.atoms)}<br>未命中黑名单，也未命中白名单。</div>
-        </div>`;
-    }
-
-    function run(save=true) {
-      const input = document.getElementById("roomInput");
-      const roomNumber = input.value.replace(/\D/g, "").slice(0,5);
-      input.value = roomNumber;
-      if (roomNumber.length !== 5) { showError("请输入完整的5位数字房号。"); return; }
-      const room = analyzeRoom(roomNumber);
-      const result = currentModel === "total" ? evaluateTotal(room) : evaluateDistance(room);
-      if (currentModel === "total") renderTotalResult(room, result);
-      else renderDistanceResult(room, result);
-      if (save) { saveHistory(room, result); renderHistory(); }
-    }
-
-    function showError(message) {
-      const box = document.getElementById("result");
-      box.className = "result show";
-      box.innerHTML = `<span class="badge no">输入错误</span><div class="big">不处理</div><div class="desc">${message}</div>`;
-    }
-
-    function totalGradeText(item) {
-      if (item.grade === "O") return "原始白名单优先";
-      if (item.grade === "A") return "A级白名单优先";
-      if (item.grade === "B") return "B级白名单优先";
-      return "普通放行";
-    }
-
-    function renderTotalRecommendCard(item, index) {
-      const css = item.grade === "O" ? "grade-o" : item.grade === "A" ? "grade-a" : item.grade === "B" ? "grade-sp" : "grade-b";
-      const title = item.grade === "P" ? "普通可打" : index === 0 ? "🔥优先可打" : "⚡白名单可打";
-      const reason = item.white.all.length
-        ? item.white.all.join("<br>")
-        : "未命中白名单，但已通过该座位全部黑名单；按原版差值总模型属于普通可打。";
-      return `<div class="pick ${index === 0 ? "main" : ""} ${css}">
-        <div class="pick-title">${title}｜${item.seat}号｜${totalGradeText(item)}${item.white.all.length > 1 ? `｜${item.white.all.length}条共振` : ""}</div>
-        <div class="pick-rule">X=${item.xKey}=${item.x}<br>四位差值=${item.diffs.join("")}<br><br>${reason}</div>
-      </div>`;
-    }
-
-    function renderTotalBlackCard(item) {
-      const ignored = item.white.all.length ? `<br><br><span style="color:#b8342b;">虽命中白名单：${item.white.all.join("；")}，但黑名单优先，白名单作废。</span>` : "";
-      return `<div class="pick black">
-        <div class="pick-title">${item.seat}号｜黑名单排除</div>
-        <div class="pick-rule">X=${item.xKey}=${item.x}<br>四位差值=${item.diffs.join("")}<br><br>${item.blackHits.join("<br>")}${ignored}</div>
-      </div>`;
-    }
-
-    function renderTotalNeutralCard(item) {
-      return `<div class="pick neutral"><div class="pick-title">${item.seat}号｜普通放行，不推荐</div><div class="pick-rule">X=${item.xKey}=${item.x}<br>四位差值=${item.diffs.join("")}<br>未命中黑名单，也未命中白名单。</div></div>`;
-    }
-
-    function renderTotalResult(room, result) {
-      const box = document.getElementById("result");
-      box.className = "result show";
-      const good = result.recommended;
-      const goodNames = good.length ? good.map(item => `${item.seat}号`).join("、") : "无";
-      const goodHtml = good.length ? good.map(renderTotalRecommendCard).join("") : `<div class="desc">1—6号全部命中座位黑名单，本房全跳。</div>`;
-      const otherHtml = result.black.map(renderTotalBlackCard).join("") || `<div class="desc">本房没有黑名单座位。</div>`;
-      box.innerHTML = `
-        ${good.length ? `<span class="badge ok">排黑后可打</span>` : `<span class="badge no">全部黑名单</span>`}
-        <span class="badge blue">原版189场模型</span>
-        <span class="badge purple">白名单仅排序</span>
-        <div class="big">${room.room}｜${good.length ? `可打：${goodNames}` : "全部跳过"}</div>
-        <div class="desc">ABCDE=${room.room}｜按座位固定顺序计算四位差值d1—d4｜未命中座位黑名单即放行</div>
-        <div class="result-grid">
-          <div class="result-col good"><div class="section-title">可打位（白名单优先排序）</div><div class="pick-list">${goodHtml}</div></div>
-          <div class="result-col bad"><div class="section-title">黑名单排除位</div><div class="pick-list">${otherHtml}</div></div>
-        </div>
-        <div class="grid">
-          <div class="stat"><div class="v">189场</div><div class="k">历史排黑后场数</div></div>
-          <div class="stat"><div class="v">72.49%</div><div class="k">排黑后胜率</div></div>
-          <div class="stat"><div class="v">+72200</div><div class="k">排黑后净分</div></div>
-          <div class="stat"><div class="v">19场</div><div class="k">排黑后大输</div></div>
-        </div>
-        ${renderTotalDebug(result)}
-      `;
-    }
-
-    function renderTotalDebug(result) {
-      const selected = new Set(result.recommended.map(item => item.seat));
-      const rows = result.seats.map(item => {
-        const conclusion = item.status === "black" ? "黑名单排除" : item.grade === "P" ? "普通可打" : `白名单优先｜${item.grade}`;
-        return `<tr><td>${item.seat}号</td><td>${item.xKey}</td><td>${item.x}</td><td>${item.diffs.join("")}</td><td>${item.blackHits.length ? item.blackHits.join("；") : "—"}</td><td>${item.white.original.length ? item.white.original.join("；") : "—"}</td><td>${item.white.gradeA.length ? item.white.gradeA.join("；") : "—"}</td><td>${item.white.gradeB.length ? item.white.gradeB.join("；") : "—"}</td><td>${conclusion}</td></tr>`;
-      }).join("");
-      return `<div class="debug"><table><thead><tr><th>位子</th><th>X映射</th><th>X</th><th>四位差值</th><th>黑名单</th><th>原始白</th><th>A白</th><th>B白</th><th>结论</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-    }
-
-    function renderDistanceResult(room, result) {
-      const box = document.getElementById("result");
-      box.className = "result show";
-      const good = result.recommended;
-      const goodNames = good.length ? good.map(item => `${item.seat}号`).join("、") : "无";
-      const headline = good.length ? `推荐：${goodNames}` : "本房无白名单位";
-      const goodHtml = good.length ? good.map(renderSeatCard).join("") : `<div class="desc">1—6号均未通过黑名单后命中白名单，本局不主动推荐。</div>`;
-      const otherItems = [...result.deferred, ...result.black, ...result.neutral];
-      const otherHtml = otherItems.map(item => item.status === "recommend" ? renderSeatCard(item, 99) : item.status === "black" ? renderBlackCard(item) : renderNeutralCard(item)).join("");
-      const stat = MODEL_STAT[currentMode];
-
-      box.innerHTML = `
-        ${good.length ? `<span class="badge ok">差值距离白名单推荐</span>` : `<span class="badge no">无白名单推荐</span>`}
-        <span class="badge ${currentMode === "balanced" ? "blue" : "purple"}">${currentMode === "balanced" ? "平衡模式" : "极严模式"}</span>
-        ${good.some(item=>item.grade === "SP") ? `<span class="badge gold">命中S+强化</span>` : ""}
-        ${result.deferred.length ? `<span class="badge warn">另有${result.deferred.length}位命中，已限制前三</span>` : ""}
-        <div class="big">${room.room}｜${headline}</div>
-        <div class="desc">ABCDE=${room.room}｜5/6号共用E作为X</div>
-        <div class="result-grid">
-          <div class="result-col good"><div class="section-title">正式推荐位（最多3个）</div><div class="pick-list">${goodHtml}</div></div>
-          <div class="result-col bad"><div class="section-title">其他位子</div><div class="pick-list">${otherHtml || '<div class="desc">没有其他位子。</div>'}</div></div>
-        </div>
-        <div class="grid">
-          <div class="stat"><div class="v">${stat.sample}</div><div class="k">开发样本</div></div>
-          <div class="stat"><div class="v">${stat.hit}</div><div class="k">模式命中</div></div>
-          <div class="stat"><div class="v">${stat.rate}</div><div class="k">开发胜率</div></div>
-          <div class="stat"><div class="v">${stat.bigLoss}</div><div class="k">命中大输</div></div>
-        </div>
-        ${renderDebug(result)}
-      `;
-    }
-
-    function renderDebug(result) {
-      const selected = new Set(result.recommended.map(item => item.seat));
-      const rows = result.seats.map(item => {
-        const conclusion = selected.has(item.seat) ? `推荐｜${item.grade}` : item.status === "recommend" ? "命中但未进前三" : item.status === "black" ? "黑名单排除" : "普通跳过";
-        return `<tr>
-          <td>${item.seat}号</td><td>${item.xKey}</td><td>${item.x}</td>
-          <td>${atomText(item.atoms)}</td>
-          <td>${item.hardHits.length ? item.hardHits.map(r=>r.id).join(",") : "—"}</td>
-          <td>${item.strictHits.length ? item.strictHits.map(r=>r.id).join(",") : "—"}</td>
-          <td>${item.allWhiteHits.length ? item.allWhiteHits.map(r=>r.id).join(",") : "—"}</td>
-          <td>${item.grade || "—"}</td><td>${conclusion}</td>
-        </tr>`;
-      }).join("");
-      return `<div class="debug"><table><thead><tr><th>位子</th><th>X映射</th><th>X</th><th>4个差值@距离</th><th>硬黑</th><th>严格黑</th><th>白名单</th><th>等级</th><th>结论</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-    }
-
-    function renderDistanceRuleList() {
-      const box = document.getElementById("distanceRuleList");
-      const cards = (rules, cls) => rules.map(rule => `<div class="rule-card ${cls}"><div class="rule-name">${rule.id}｜${rule.name}</div><div class="rule-stat">${rule.stat}</div></div>`).join("");
-      box.innerHTML = `
-        <div class="rule-group"><div class="section-title">S+强化白名单</div><div class="rule-grid">${cards(PLUS_RULES,"sp")}</div></div>
-        <div class="rule-group"><div class="section-title">S级白名单</div><div class="rule-grid">${cards(WHITE_RULES.filter(r=>r.grade === "S"),"s")}</div></div>
-        <div class="rule-group"><div class="section-title">A级白名单</div><div class="rule-grid">${cards(WHITE_RULES.filter(r=>r.grade === "A"),"a")}</div></div>
-        <div class="rule-group"><div class="section-title">6条硬黑名单</div><div class="rule-grid">${cards(HARD_BLACK_RULES,"black")}</div></div>
-        <div class="rule-group"><div class="section-title">4条极严模式附加黑名单</div><div class="rule-grid">${cards(STRICT_BLACK_RULES,"strict")}</div></div>
-      `;
-    }
-
-    function renderTotalRuleList() {
-      const box = document.getElementById("totalRuleList");
-      const seatRules = [
-        ["1号黑", "任意差3；任意差6；AB=1且AD=1"],
-        ["2号黑", "任意差6；BD=1且BE=2；BC=1且BE=1"],
-        ["3号黑", "任意差0；任意差8；CD=3；CA=5"],
-        ["4号黑", "同时差4+6；DB=3；DB=0且DC=4；DA=5且DC=1；DA=2且DC=2"],
-        ["5号黑", "任意差0/7/9；同时差3+4；EB=5且ED=2"],
-        ["6号黑", "任意差1；同时差2+7；同时差3+5"]
-      ];
-      const seatHtml = seatRules.map(([name, rule]) => `<div class="rule-card black"><div class="rule-name">${name}</div><div class="rule-stat">${rule}</div></div>`).join("");
-      box.innerHTML = `
-        <div class="rule-group"><div class="section-title">座位专属黑名单</div><div class="rule-grid">${seatHtml}</div></div>
-        <div class="desc" style="margin:12px 0;color:#315eae;">原版总模型只执行上面的座位专属黑名单。后续增加的“d1=6且d2=4”和“d2=3且d4=4”会形成184场、74.46%的增强测试版，本页不启用，避免再次混淆。</div>
-        <div class="rule-group"><div class="section-title">原始白名单</div><div class="rule-grid">
-          ${["d1=3且d2=2","四差和=15","d1=6且d4=6","d2=0且d4=4","d3=2且d4=6"].map((x,i)=>`<div class="rule-card s"><div class="rule-name">O${i+1}｜${x}</div><div class="rule-stat">必须先通过全部黑名单。</div></div>`).join("")}
-        </div></div>
-        <div class="rule-group"><div class="section-title">A级白名单</div><div class="rule-grid">
-          <div class="rule-card a"><div class="rule-name">A1｜d2=1且d4=2</div><div class="rule-stat">黑名单优先。</div></div>
-          <div class="rule-card a"><div class="rule-name">A2｜四差同时含0和4</div><div class="rule-stat">黑名单优先。</div></div>
-        </div></div>
-        <div class="rule-group"><div class="section-title">B级白名单</div><div class="rule-grid">
-          <div class="rule-card sp"><div class="rule-name">B1｜四差同时含4和5</div><div class="rule-stat">黑名单优先。</div></div>
-          <div class="rule-card sp"><div class="rule-name">B2｜d4=5</div><div class="rule-stat">黑名单优先。</div></div>
-          <div class="rule-card sp"><div class="rule-name">B3｜4号位且d3=3</div><div class="rule-stat">黑名单优先。</div></div>
-        </div></div>
-        <div class="desc" style="margin-top:12px;color:#1f6f4a;">执行口径：座位黑名单是放行门槛；未命中黑名单全部可打。原始白、A白、B白只负责优先排序，不能把普通放行位误判为跳过。</div>
-      `;
-    }
-
-    function getStorage() {
-      try {
-        const testKey = "__xmj_storage_test__";
-        window.localStorage.setItem(testKey, "1");
-        window.localStorage.removeItem(testKey);
-        return window.localStorage;
-      } catch (error) {
-        return null;
-      }
-    }
-
-    function saveHistory(room, result) {
-      const storage = getStorage();
-      if (!storage) return;
-      const item = {
-        room:room.room,
-        model:currentModel === "total" ? "差值总模型" : "差值距离模型",
-        mode:currentModel === "total" ? "原版189场排黑模型" : (currentMode === "balanced" ? "平衡" : "极严"),
-        time:new Date().toLocaleString(),
-        recommend:result.recommended.length ? result.recommended.map(item=>`${item.seat}号(${item.grade === "P" ? "普通可打" : item.grade + "白"})`).join("、") : "跳过",
-        rules:result.recommended.length
-          ? (currentModel === "total"
-              ? result.recommended.flatMap(item=>item.white.all.length ? item.white.all : [`${item.seat}号普通放行`]).join("、")
-              : result.recommended.flatMap(item=>item.allWhiteHits.map(rule=>rule.id)).join("、"))
-          : "无"
-      };
-      const key = "xiaomojing_5142983_dual_diff_v72_history";
-      const list = JSON.parse(storage.getItem(key) || "[]");
-      list.unshift(item);
-      storage.setItem(key, JSON.stringify(list.slice(0,50)));
-    }
-
-    function renderHistory() {
-      const box = document.getElementById("historyBox");
-      const key = "xiaomojing_5142983_dual_diff_v72_history";
-      const storage = getStorage();
-      if (!storage) { box.innerHTML = "当前浏览器环境不支持本地历史记录"; return; }
-      const list = JSON.parse(storage.getItem(key) || "[]");
-      if (!list.length) { box.innerHTML = "暂无记录"; return; }
-      box.innerHTML = list.map(item => `<div class="history-item"><div class="history-left">${item.room}</div><div class="history-right">${item.model}｜${item.mode}｜推荐：${item.recommend}<br>命中：${item.rules}<br>${item.time}</div></div>`).join("");
-    }
-
-    function clearHistory() {
-      const storage = getStorage();
-      if (storage) storage.removeItem("xiaomojing_5142983_dual_diff_v72_history");
-      renderHistory();
-    }
-
-    document.getElementById("roomInput").addEventListener("input", event => { event.target.value = event.target.value.replace(/\D/g, "").slice(0,5); });
-    document.getElementById("roomInput").addEventListener("keydown", event => { if (event.key === "Enter") run(); });
-    renderTotalRuleList();
-    renderDistanceRuleList();
-    setModel("total");
-    renderHistory();
-  </script>
 </body>
 </html>
