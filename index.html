@@ -2,132 +2,381 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>抓环机｜房卡规则</title>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
 
+html,body{
+    width:100%;
+    overflow-x:hidden;
+}
+
 body{
     margin:0;
-    padding:20px;
-    background:#f5f1ea;
+    min-height:100vh;
+    padding:22px 14px 42px;
+    background:#f7f3ec;
+    color:#2b2118;
     font-family:
     -apple-system,
     BlinkMacSystemFont,
     "PingFang SC",
     "Microsoft YaHei",
-    Arial;
-    color:#33261d;
+    Arial,
+    sans-serif;
 }
 
-.container{
-    max-width:500px;
-    margin:auto;
+
+.wrap{
+    max-width:980px;
+    margin:0 auto;
 }
 
-.card{
-    background:#fffaf3;
-    border-radius:25px;
-    padding:25px;
-    box-shadow:0 10px 30px rgba(0,0,0,.12);
-    margin-bottom:20px;
+
+.hero{
+    text-align:center;
+    margin-bottom:18px;
 }
+
 
 .title{
-    text-align:center;
     font-size:28px;
-    font-weight:900;
-    margin-bottom:10px;
+    font-weight:1000;
+    letter-spacing:1px;
+    margin:6px 0 8px;
 }
+
 
 .sub{
-    text-align:center;
     color:#8a7664;
-    margin-bottom:25px;
+    font-size:14px;
+    line-height:1.7;
 }
 
 
-.input-box{
+
+.panel{
+
+    background:
+    rgba(255,250,242,.94);
+
+    border:1px solid #eadccc;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 14px 36px rgba(70,48,28,.12);
+
+    padding:18px;
+
+    margin-bottom:16px;
+
+}
+
+
+
+.section-title{
+
+    font-weight:1000;
+
+    font-size:18px;
+
+    margin:3px 0 12px;
+
+}
+
+
+
+
+/* 输入区域 */
+
+.input-row{
+
     display:flex;
-    gap:10px;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin-top:8px;
+
 }
+
+
 
 input{
-    flex:1;
-    height:60px;
+
+    width:min(100%,360px);
+
+    height:58px;
+
+    border:
+
+    2px solid #e7d2c0;
+
     border-radius:18px;
-    border:2px solid #e5d2bd;
-    font-size:28px;
-    font-weight:bold;
+
+    outline:none;
+
     text-align:center;
-    letter-spacing:5px;
+
+    font-size:28px;
+
+    font-weight:900;
+
+    letter-spacing:6px;
+
+    color:#2b2118;
+
+    background:white;
+
 }
+
+
+
+input:focus{
+
+    border-color:#d94b3d;
+
+}
+
 
 
 button{
-    width:70px;
-    height:60px;
+
     border:none;
-    border-radius:18px;
-    background:#c94b3c;
-    color:white;
-    font-size:18px;
-    font-weight:bold;
+
+    cursor:pointer;
+
+    font-weight:900;
+
 }
 
+
+
+.btn-main{
+
+    width:72px;
+
+    height:72px;
+
+    border-radius:50%;
+
+    background:
+
+    linear-gradient(145deg,#d94b3d,#b8342b);
+
+    color:white;
+
+    font-size:18px;
+
+    box-shadow:
+
+    0 10px 22px rgba(217,75,61,.34);
+
+}
+
+
+
+.btn-main:active{
+
+    transform:scale(.96);
+
+}
+
+
+
+/* 结果 */
 
 .result{
-    margin-top:25px;
+
+    display:none;
+
+    margin-top:16px;
+
     background:white;
+
     border-radius:20px;
-    padding:20px;
+
+    border:
+
+    1px solid #eadccc;
+
+    padding:16px;
+
     text-align:center;
+
 }
 
 
-.result-title{
-    color:#888;
-    font-size:14px;
+.result.show{
+
+    display:block;
+
 }
 
 
-.number{
-    font-size:42px;
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:7px 10px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+    font-weight:900;
+
+    background:
+
+    rgba(31,157,103,.12);
+
+    color:#1f9d67;
+
+    border:
+
+    1px solid rgba(31,157,103,.24);
+
+}
+
+
+
+.big{
+
+    font-size:32px;
+
     font-weight:1000;
-    margin-top:10px;
+
+    margin:15px 0;
+
 }
 
 
-.rule{
-    margin-top:15px;
-    color:#777;
+
+.desc{
+
+    color:#8a7664;
+
+    line-height:1.7;
+
+    font-size:14px;
+
 }
 
+
+
+/* 历史 */
 
 .history-item{
-    padding:12px 0;
-    border-bottom:1px dashed #ddd;
+
     display:flex;
+
     justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 0;
+
+    border-bottom:
+
+    1px dashed #eadccc;
+
 }
+
 
 
 .history-result{
-    font-weight:bold;
-    color:#c94b3c;
+
+    color:#d94b3d;
+
+    font-weight:900;
+
 }
 
 
-.clear{
+
+.btn-clear{
+
     width:100%;
+
+    height:42px;
+
+    border-radius:12px;
+
     margin-top:15px;
-    background:#eee;
-    color:#555;
+
+    background:#efe3d5;
+
+    color:#6b5644;
+
 }
+
+
+
+@media(max-width:760px){
+
+    body{
+
+        padding:16px 10px 34px;
+
+    }
+
+
+    .title{
+
+        font-size:23px;
+
+    }
+
+
+    .panel{
+
+        padding:14px;
+
+        border-radius:20px;
+
+    }
+
+
+    input{
+
+        height:56px;
+
+        font-size:25px;
+
+    }
+
+
+    .btn-main{
+
+        width:64px;
+
+        height:64px;
+
+    }
+
+
+    .big{
+
+        font-size:26px;
+
+    }
+
+}
+
 
 </style>
 
@@ -137,58 +386,83 @@ button{
 <body>
 
 
-<div class="container">
+<div class="wrap">
 
 
-<div class="card">
+<div class="hero">
 
 <div class="title">
-抓环机
+抓环机｜房卡规则
 </div>
+
 
 <div class="sub">
-房卡规则｜房间号 - 49835
+房间号 - 49835 ｜ 输出差值结果
 </div>
 
 
-<div class="input-box">
+</div>
 
-<input 
-id="room"
-maxlength="5"
+
+<div class="panel">
+
+
+<div class="section-title">
+输入5位房间号
+</div>
+
+
+
+<div class="input-row">
+
+
+<input
+id="roomInput"
+type="tel"
 inputmode="numeric"
-placeholder="输入5位房号">
+maxlength="5"
+placeholder="例如 74019"
+/>
 
-<button onclick="calc()">
+
+<button
+class="btn-main"
+onclick="run()"
+>
 计算
 </button>
 
-</div>
-
-
-
-<div id="result"></div>
-
 
 </div>
 
 
 
-<div class="card">
+<div id="result" class="result"></div>
 
-<h3>
+
+</div>
+
+
+<div class="panel">
+
+
+<div class="section-title">
+
 历史记录
-</h3>
 
-<div id="history">
-暂无记录
-</div>
-
-
-<button class="clear" onclick="clearHistory()">
+<button
+class="btn-clear"
+onclick="clearHistory()"
+>
 清空记录
 </button>
 
+</div>
+
+
+<div id="history">
+
+暂无记录
 
 </div>
 
@@ -196,121 +470,212 @@ placeholder="输入5位房号">
 </div>
 
 
+</div>
 
 
 <script>
 
-
-const KEY="grab_ring_history";
-
-
-function calc(){
-
-    let room=document.getElementById("room").value;
+const KEY = "grab_machine_history";
 
 
-    if(room.length!==5 || isNaN(room)){
-        alert("请输入5位数字房间号");
+function run(){
+
+    const input = document.getElementById("roomInput");
+
+    const room = input.value
+        .replace(/\D/g,"")
+        .slice(0,5);
+
+
+    if(room.length !== 5){
+
+        showError("请输入完整的5位数字房间号");
+
         return;
+
     }
 
 
-    let num=parseInt(room);
+
+    // 核心规则
+    // 房间号 - 49835
+
+    const result = Number(room) - 49835;
 
 
-    let result=num-49835;
+
+    renderResult(room,result);
 
 
-    document.getElementById("result").innerHTML=`
 
-    <div class="result">
+    saveHistory(room,result);
 
-    <div class="result-title">
-    ${room} - 49835
-    </div>
-
-    <div class="number">
-    ${result}
-    </div>
-
-    <div class="rule">
-    抓环机｜房卡规则
-    </div>
-
-    </div>
-
-    `;
-
-
-    save(room,result);
 
 }
 
 
 
-function save(room,result){
 
-    let data=
+function renderResult(room,result){
+
+    const box = document.getElementById("result");
+
+
+    box.className="result show";
+
+
+    box.innerHTML = `
+
+
+    <span class="badge">
+    抓环机｜房卡规则
+    </span>
+
+
+    <div class="big">
+
+    ${room} - 49835 = ${result}
+
+    </div>
+
+
+    <div class="desc">
+
+    房间号：${room}
+
+    <br>
+
+    基准值：49835
+
+    <br>
+
+    差值结果：
+
+    ${result}
+
+    </div>
+
+
+    `;
+
+
+}
+
+
+
+
+function showError(text){
+
+    const box=document.getElementById("result");
+
+
+    box.className="result show";
+
+
+    box.innerHTML=`
+
+    <div class="big">
+    输入错误
+    </div>
+
+    <div class="desc">
+    ${text}
+    </div>
+
+    `;
+
+}
+
+
+
+
+function saveHistory(room,result){
+
+
+    let list =
     JSON.parse(
-        localStorage.getItem(KEY)||"[]"
+        localStorage.getItem(KEY) || "[]"
     );
 
 
-    data.unshift({
+    list.unshift({
 
         room:room,
+
         result:result,
-        time:new Date()
+
+        time:
+        new Date()
         .toLocaleString()
 
     });
 
 
+
     localStorage.setItem(
+
         KEY,
-        JSON.stringify(data.slice(0,50))
+
+        JSON.stringify(
+            list.slice(0,50)
+        )
+
     );
 
 
-    showHistory();
+    renderHistory();
+
 
 }
 
 
 
 
-function showHistory(){
 
-    let data=
+function renderHistory(){
+
+
+    const box =
+    document.getElementById("history");
+
+
+    let list =
     JSON.parse(
         localStorage.getItem(KEY)||"[]"
     );
 
 
-    let box=document.getElementById("history");
 
-
-    if(data.length===0){
+    if(list.length===0){
 
         box.innerHTML="暂无记录";
+
         return;
 
     }
 
 
 
-    box.innerHTML=data.map(item=>`
+    box.innerHTML = list.map(item=>`
+
 
     <div class="history-item">
 
+
     <div>
+
     ${item.room}
+
     </div>
+
 
 
     <div class="history-result">
+
     ${item.result}
+
     </div>
+
 
 
     </div>
@@ -318,15 +683,21 @@ function showHistory(){
 
     `).join("");
 
+
+
 }
+
 
 
 
 function clearHistory(){
 
+
     localStorage.removeItem(KEY);
 
-    showHistory();
+
+    renderHistory();
+
 
 }
 
@@ -334,22 +705,37 @@ function clearHistory(){
 
 
 document
-.getElementById("room")
-.addEventListener("keydown",
-function(e){
+.getElementById("roomInput")
+.addEventListener("input",function(e){
+
+    e.target.value =
+    e.target.value
+    .replace(/\D/g,"")
+    .slice(0,5);
+
+});
+
+
+
+document
+.getElementById("roomInput")
+.addEventListener("keydown",function(e){
 
     if(e.key==="Enter"){
-        calc();
+
+        run();
+
     }
 
 });
 
 
-showHistory();
+
+renderHistory();
 
 
 </script>
 
-
 </body>
+
 </html>
