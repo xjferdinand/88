@@ -1,59 +1,1577 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>抓环机｜房卡规则</title>
-<style>
-body{margin:0;padding:20px;background:#f7f3ec;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial;color:#2b2118;overflow-x:hidden}
-.wrap{max-width:500px;margin:auto}
-.panel{background:#fffaf2;border:1px solid #eadccc;border-radius:24px;box-shadow:0 14px 36px rgba(70,48,28,.12);padding:18px;margin-bottom:16px}
-.title{text-align:center;font-size:28px;font-weight:900}
-.sub{text-align:center;color:#8a7664;margin:15px}
-.input-row{display:flex;flex-direction:column;align-items:center;gap:15px}
-input{width:100%;max-width:360px;height:58px;border:2px solid #e7d2c0;border-radius:18px;text-align:center;font-size:28px;font-weight:900;letter-spacing:5px}
-button{width:72px;height:72px;border:0;border-radius:50%;background:#d94b3d;color:white;font-weight:900}
-.result{display:none;margin-top:18px;background:white;border-radius:20px;padding:18px;text-align:center}
-.result.show{display:block}
-.big{font-size:32px;font-weight:1000;margin:15px}
-.desc{color:#8a7664}
-.history-item{display:flex;justify-content:space-between;padding:10px;border-bottom:1px dashed #eadccc}
-</style>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+
+  <title>5149823｜熊猫 圆桌结构模型 v1.0</title>
+
+  <style>
+    :root {
+      --bg: #f7f3ec;
+      --card: #fffaf2;
+      --card2: #ffffff;
+      --text: #2b2118;
+      --muted: #8a7664;
+      --red: #d94b3d;
+      --red2: #b8342b;
+      --green: #1f9d67;
+      --orange: #d98c22;
+      --blue: #315eae;
+      --purple: #7a4cb3;
+      --border: #eadccc;
+      --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top left,
+          rgba(217, 75, 61, 0.12),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at bottom right,
+          rgba(217, 140, 34, 0.12),
+          transparent 26%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "PingFang SC",
+        "Microsoft YaHei",
+        Arial,
+        sans-serif;
+
+      padding: 22px 14px 42px;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin: 6px 0 8px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .panel {
+      background: rgba(255, 250, 242, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(8px);
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    input {
+      width: min(100%, 360px);
+      height: 58px;
+      border: 2px solid #e7d2c0;
+      border-radius: 18px;
+      outline: none;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: var(--text);
+      background: #fff;
+      box-shadow: inset 0 2px 6px rgba(80, 50, 30, 0.05);
+    }
+
+    input:focus {
+      border-color: var(--red);
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-weight: 900;
+      transition: 0.18s ease;
+    }
+
+    .btn-main {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--red), var(--red2));
+      color: white;
+      font-size: 18px;
+      box-shadow: 0 10px 22px rgba(217, 75, 61, 0.34);
+      flex: 0 0 auto;
+    }
+
+    .btn-main:active {
+      transform: scale(0.96);
+    }
+
+    .btn-small {
+      padding: 9px 13px;
+      border-radius: 12px;
+      background: #f0e2d3;
+      color: #6b5644;
+      font-size: 13px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 16px;
+      background: var(--card2);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      margin: 3px;
+    }
+
+    .badge.ok {
+      background: rgba(31, 157, 103, 0.12);
+      color: var(--green);
+      border: 1px solid rgba(31, 157, 103, 0.24);
+    }
+
+    .badge.no {
+      background: rgba(217, 75, 61, 0.10);
+      color: var(--red2);
+      border: 1px solid rgba(217, 75, 61, 0.22);
+    }
+
+    .badge.warn {
+      background: rgba(217, 140, 34, 0.12);
+      color: #a6630f;
+      border: 1px solid rgba(217, 140, 34, 0.22);
+    }
+
+    .badge.blue {
+      background: rgba(60, 120, 220, 0.10);
+      color: var(--blue);
+      border: 1px solid rgba(60, 120, 220, 0.22);
+    }
+
+    .badge.purple {
+      background: rgba(122, 76, 179, 0.10);
+      color: var(--purple);
+      border: 1px solid rgba(122, 76, 179, 0.22);
+    }
+
+    .big {
+      font-size: 34px;
+      font-weight: 1000;
+      margin: 10px 0 4px;
+    }
+
+    .desc {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .stat {
+      background: #fff8ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .stat .v {
+      font-size: 20px;
+      font-weight: 1000;
+      color: var(--text);
+    }
+
+    .stat .k {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .section-title {
+      font-weight: 1000;
+      font-size: 18px;
+      margin: 3px 0 12px;
+    }
+
+    .combo-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .combo {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .combo.grade-a {
+      border-color: rgba(31, 157, 103, 0.30);
+    }
+
+    .combo.grade-b {
+      border-color: rgba(49, 94, 174, 0.30);
+    }
+
+    .combo.black {
+      border-color: rgba(217, 75, 61, 0.36);
+      background: #fff7f5;
+    }
+
+    .combo .name {
+      font-weight: 1000;
+      margin-bottom: 6px;
+    }
+
+    .combo .rule {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .pick-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pick {
+      background: #fff8ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .pick.main {
+      border-color: rgba(217, 75, 61, 0.42);
+      background: #fff4ee;
+    }
+
+    .pick.grade-a {
+      box-shadow: inset 4px 0 0 rgba(31, 157, 103, 0.68);
+    }
+
+    .pick.grade-b {
+      box-shadow: inset 4px 0 0 rgba(49, 94, 174, 0.62);
+    }
+
+    .pick .pick-title {
+      font-weight: 1000;
+      margin-bottom: 6px;
+    }
+
+    .pick .pick-rule {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .debug {
+      margin-top: 12px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1180px;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    th,
+    td {
+      padding: 9px 8px;
+      border-bottom: 1px solid #f0e2d3;
+      font-size: 12px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #fff1e1;
+      color: #6b5644;
+      font-weight: 900;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed #e4d3c3;
+      font-size: 14px;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-left {
+      font-weight: 900;
+    }
+
+    .history-right {
+      color: var(--muted);
+      text-align: right;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 16px 10px 34px;
+      }
+
+      .title {
+        font-size: 23px;
+      }
+
+      .panel {
+        padding: 14px;
+        border-radius: 20px;
+      }
+
+      .input-row {
+        gap: 8px;
+      }
+
+      input {
+        height: 56px;
+        font-size: 25px;
+        letter-spacing: 4px;
+      }
+
+      .btn-main {
+        width: 64px;
+        height: 64px;
+        font-size: 16px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .big {
+        font-size: 26px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="wrap">
-<div class="panel">
-<div class="title">抓环机｜房卡规则</div>
-<div class="sub">房间号 - 49835</div>
-<div class="input-row">
-<input id="roomInput" maxlength="5" inputmode="numeric" placeholder="输入5位房号">
-<button onclick="run()">计算</button>
-</div>
-<div id="result" class="result"></div>
-</div>
-<div class="panel">
-<h3>历史记录</h3>
-<div id="history">暂无记录</div>
-</div>
-</div>
-<script>
-const KEY="grab_machine_history";
-function run(){
- let room=document.getElementById("roomInput").value.replace(/\D/g,"");
- if(room.length!==5){alert("请输入5位数字房间号");return;}
- let result=Number(room)-49835;
- document.getElementById("result").className="result show";
- document.getElementById("result").innerHTML=`<div class="big">${room} - 49835 = ${result}</div><div class="desc">抓环机｜房卡规则</div>`;
- let list=JSON.parse(localStorage.getItem(KEY)||"[]");
- list.unshift({room,result});
- localStorage.setItem(KEY,JSON.stringify(list.slice(0,50)));
- show();
-}
-function show(){
- let list=JSON.parse(localStorage.getItem(KEY)||"[]");
- document.getElementById("history").innerHTML=list.length?list.map(x=>`<div class="history-item"><span>${x.room}</span><b>${x.result}</b></div>`).join(""):"暂无记录";
-}
-show();
-</script>
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="title">5149823｜熊猫 圆桌结构模型 v1.0</div>
+
+      <div class="sub">
+        83局样本｜核心A优先｜B级仅作无A时补充｜前二&gt;后二硬黑名单｜最多推荐3个位子
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">输入5位房号</div>
+
+      <div class="input-row">
+        <input
+          id="roomInput"
+          type="tel"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="5"
+          placeholder="例如 63420"
+          autocomplete="off"
+        />
+
+        <button class="btn-main" onclick="run()">开干</button>
+      </div>
+
+      <div id="result" class="result"></div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">当前实战口径回测</div>
+
+      <div class="grid">
+        <div class="stat">
+          <div class="v">83局</div>
+          <div class="k">总样本</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">22局</div>
+          <div class="k">记录座位命中</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">26.51%</div>
+          <div class="k">记录座位进房率</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">90.91%</div>
+          <div class="k">胜率</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">20胜2负</div>
+          <div class="k">胜负结果</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">+13000</div>
+          <div class="k">总净分</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">+591</div>
+          <div class="k">命中场均</div>
+        </div>
+
+        <div class="stat">
+          <div class="v">0局</div>
+          <div class="k">历史大输</div>
+        </div>
+      </div>
+
+      <div class="desc" style="margin-top: 12px;">
+        这里按“网页现在真正执行的推荐逻辑”重新统计：
+        先执行硬黑名单，再执行核心A优先；只有整房没有安全A位时才启用B级补充。
+        在83条已有记录中，记录座位命中22局，20胜2负，净+13000，
+        最差-360，≤-500大输为0。
+        <br><br>
+        注意：此前“44局 / 53.01% / 38胜1平5负 / 净+23100”属于
+        “A+B规则并集合并回测”，没有执行现在这套“A优先 + 黑名单硬排除”的最终实战选位流程，
+        所以本网页不再混用旧口径。
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">当前模型规则</div>
+      <div class="combo-list" id="comboList"></div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">
+        历史记录
+
+        <button
+          class="btn-small"
+          onclick="clearHistory()"
+          style="float: right;"
+        >
+          清空
+        </button>
+      </div>
+
+      <div id="historyBox" class="desc">暂无记录</div>
+    </div>
+
+    <div class="footer-note">
+      固定规则：房号记作ABCDE；1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。
+      圆桌相邻：A看E/B，B看A/C，C看B/D，D看C/E，E看D/A。
+      “前二/后二”也按圆桌继续向外数第二格。
+      当前网页以“核心A优先、B级仅在无安全A位时启用、硬黑名单优先排除”为最终实战口径。
+    </div>
+  </div>
+
+  <script>
+    const MODEL_STAT = {
+      account: "熊猫",
+      id: "5149823",
+      version: "v1.0",
+      sample: "83局",
+      hitCount: "22局",
+      hitRate: "26.51%",
+      winRate: "90.91%",
+      record: "20胜2负",
+      net: "+13000",
+      average: "+591",
+      bigLoss: "0大输",
+      worst: "-360"
+    };
+
+    /*
+      ============================================================
+      5149823｜熊猫 圆桌结构模型 v1.0
+      ============================================================
+
+      最终实战流程：
+
+      第1步：每个座位计算圆桌一层/二层结构。
+      第2步：若“前二 > 后二”，该座位直接进入硬黑名单，不参与推荐。
+      第3步：先寻找核心A规则。
+      第4步：只要整房存在至少1个安全A位，就只输出A位，不再让B级补充抢位。
+      第5步：若整房完全没有安全A位，才启用B级补充规则。
+      第6步：最多输出3个位子，按规则rank排序。
+
+      这样可以保证测试房：
+      63420 => 只推荐4号。
+      3号虽然命中无重号偶X方向规则，但“前二6 > 后二0”，硬排除。
+      1号、2号只属于B级补充；因为4号已有安全A位，所以不越级输出。
+    */
+
+    const RULES = [
+      {
+        id: "A1",
+        tier: "A",
+        rank: 1,
+        name: "大重号高点",
+        shortName: "7/8/9相邻重号高点",
+        gradeText: "核心A1｜当前最强结构",
+        stat: "原始观察：8局8胜｜净+6580｜0大输",
+        rule:
+          "X必须为7/8/9；X在房号中至少重复2次；X左右至少一侧紧挨同号；并且左右两侧都不能大于X。",
+        test: (seat, room) => {
+          const f = getSeatGeometry(room, seat);
+
+          return (
+            [7, 8, 9].includes(f.x) &&
+            room.digitMap[f.x] >= 2 &&
+            (f.prev.value === f.x || f.next.value === f.x) &&
+            f.prev.value <= f.x &&
+            f.next.value <= f.x
+          );
+        }
+      },
+
+      {
+        id: "A2",
+        tier: "A",
+        rank: 2,
+        name: "小重号相邻",
+        shortName: "1/2相邻重号",
+        gradeText: "核心A2｜小号甜区",
+        stat: "原始观察：5局4胜｜净+920",
+        rule:
+          "X必须为1或2；X在房号中至少重复2次；并且X左右至少一侧紧挨另一个相同数字。",
+        test: (seat, room) => {
+          const f = getSeatGeometry(room, seat);
+
+          return (
+            [1, 2].includes(f.x) &&
+            room.digitMap[f.x] >= 2 &&
+            (f.prev.value === f.x || f.next.value === f.x)
+          );
+        }
+      },
+
+      {
+        id: "A3",
+        tier: "A",
+        rank: 3,
+        name: "无重号偶X方向",
+        shortName: "无重号+偶X+前邻>后邻",
+        gradeText: "核心A3｜无重号主规则",
+        stat: "原始观察：7局6胜1负｜净+4680｜唯一亏损-190",
+        rule:
+          "整房不能有重号；X必须为偶数；X的前邻必须大于后邻。最终仍要经过“前二>后二”硬黑名单检查。",
+        test: (seat, room) => {
+          const f = getSeatGeometry(room, seat);
+
+          return (
+            !room.hasRepeat &&
+            f.x % 2 === 0 &&
+            f.prev.value > f.next.value
+          );
+        }
+      },
+
+      {
+        id: "A4",
+        tier: "A",
+        rank: 4,
+        name: "有重号但4号不追重",
+        shortName: "有重号+4号偶X且X不重",
+        gradeText: "核心A4｜4号备用结构",
+        stat: "原始观察：5局5胜｜净+2100｜0大输",
+        rule:
+          "整房存在重号，但4号位X=D本身不能是重号；D必须为偶数。",
+        test: (seat, room) => {
+          if (seat !== 4) return false;
+
+          const f = getSeatGeometry(room, seat);
+
+          return (
+            room.hasRepeat &&
+            room.digitMap[f.x] === 1 &&
+            f.x % 2 === 0
+          );
+        }
+      },
+
+      {
+        id: "B1",
+        tier: "B",
+        rank: 5,
+        name: "奇数X紧邻小区间",
+        shortName: "奇X+邻差≤2+邻和≤10",
+        gradeText: "B1补充｜仅无安全A位时启用",
+        stat: "扩展观察：12局9胜3负｜净+5490｜4大赢｜0大输",
+        rule:
+          "X必须为奇数；左右相邻数字差值≤2；左右相邻数字之和≤10。",
+        test: (seat, room) => {
+          const f = getSeatGeometry(room, seat);
+
+          return (
+            f.x % 2 === 1 &&
+            Math.abs(f.prev.value - f.next.value) <= 2 &&
+            f.prev.value + f.next.value <= 10
+          );
+        }
+      },
+
+      {
+        id: "B2",
+        tier: "B",
+        rank: 6,
+        name: "奇数非重X外层相等",
+        shortName: "奇数非重X+前二=后二",
+        gradeText: "B2补充｜大赢观察结构",
+        stat: "扩展观察：2局2大赢｜+1210、+990",
+        rule:
+          "X必须为奇数；X在整房中只出现1次；X的前二位与后二位必须相等。",
+        test: (seat, room) => {
+          const f = getSeatGeometry(room, seat);
+
+          return (
+            f.x % 2 === 1 &&
+            room.digitMap[f.x] === 1 &&
+            f.prev2.value === f.next2.value
+          );
+        }
+      },
+
+      {
+        id: "B3",
+        tier: "B",
+        rank: 7,
+        name: "前3座双层上升",
+        shortName: "1/2/3号双层上升",
+        gradeText: "B3补充｜仅1至3号",
+        stat: "扩展观察：5局4胜1平｜净+1130｜0大输",
+        rule:
+          "只允许1/2/3号位；前邻<后邻，并且前二<后二，两层方向同时向后上升。",
+        test: (seat, room) => {
+          if (![1, 2, 3].includes(seat)) return false;
+
+          const f = getSeatGeometry(room, seat);
+
+          return (
+            f.prev.value < f.next.value &&
+            f.prev2.value < f.next2.value
+          );
+        }
+      }
+    ];
+
+    const BLACKLISTS = [
+      {
+        id: "BL1",
+        name: "外二层反向",
+        shortName: "前二>后二",
+        stat: "扩展观察中出现极差方向，因此当前作为实战硬排除。",
+        rule:
+          "任一候选座位，只要前二位数字 > 后二位数字，直接排除，不参与A/B推荐。",
+        test: (seat, room) => {
+          const f = getSeatGeometry(room, seat);
+          return f.prev2.value > f.next2.value;
+        }
+      }
+    ];
+
+    function countMap(arr) {
+      const map = {};
+
+      arr.forEach(value => {
+        map[value] = (map[value] || 0) + 1;
+      });
+
+      return map;
+    }
+
+    function isLow(number) {
+      return number >= 0 && number <= 4;
+    }
+
+    function isHigh(number) {
+      return number >= 5 && number <= 9;
+    }
+
+    function oddEvenText(number) {
+      return number % 2 === 0 ? "偶" : "奇";
+    }
+
+    function highLowText(number) {
+      return isLow(number) ? "低" : "高";
+    }
+
+    function moveText(a, b) {
+      if (a < b) return "升";
+      if (a > b) return "降";
+      return "平";
+    }
+
+    function getSeatXPosition(seat) {
+      if (seat === 1) return "A";
+      if (seat === 2) return "B";
+      if (seat === 3) return "C";
+      if (seat === 4) return "D";
+
+      return "E";
+    }
+
+    function getPositionIndex(pos) {
+      return ["A", "B", "C", "D", "E"].indexOf(pos);
+    }
+
+    function getPositionItem(room, index) {
+      const positions = ["A", "B", "C", "D", "E"];
+      const normalizedIndex = (index + 5) % 5;
+      const pos = positions[normalizedIndex];
+
+      return {
+        pos,
+        value: room[pos]
+      };
+    }
+
+    function getSeatGeometry(room, seat) {
+      const xPos = getSeatXPosition(seat);
+      const i = getPositionIndex(xPos);
+
+      return {
+        seat,
+        xPos,
+        x: room[xPos],
+
+        prev: getPositionItem(room, i - 1),
+        next: getPositionItem(room, i + 1),
+
+        prev2: getPositionItem(room, i - 2),
+        next2: getPositionItem(room, i + 2)
+      };
+    }
+
+    function getBlackHits(room, seat) {
+      return BLACKLISTS.filter(rule => {
+        return rule.test(seat, room);
+      });
+    }
+
+    function getRuleHits(room, seat, tier) {
+      return RULES
+        .filter(rule => {
+          return rule.tier === tier && rule.test(seat, room);
+        })
+        .sort((a, b) => {
+          return a.rank - b.rank;
+        });
+    }
+
+    function analyzeRoom(roomNumber) {
+      const digits = roomNumber.split("").map(Number);
+      const [A, B, C, D, E] = digits;
+
+      const digitMap = countMap(digits);
+
+      const lowCount = digits.filter(isLow).length;
+      const highCount = digits.filter(isHigh).length;
+
+      const oddCount = digits.filter(number => {
+        return number % 2 === 1;
+      }).length;
+
+      const evenCount = digits.filter(number => {
+        return number % 2 === 0;
+      }).length;
+
+      const leftSum = A + B;
+      const rightSum = D + E;
+      const leftRightDiff = Math.abs(leftSum - rightSum);
+
+      const edgeDiff = Math.abs(A - E);
+      const innerDiff = Math.abs(B - D);
+      const mirrorDiff = edgeDiff + innerDiff;
+
+      const trend = [
+        moveText(A, B),
+        moveText(B, C),
+        moveText(C, D),
+        moveText(D, E)
+      ];
+
+      const repeatDigits = Object.keys(digitMap)
+        .map(Number)
+        .filter(number => {
+          return digitMap[number] >= 2;
+        });
+
+      return {
+        room: roomNumber,
+
+        digits,
+        digitMap,
+
+        A,
+        B,
+        C,
+        D,
+        E,
+
+        lowCount,
+        highCount,
+
+        oddCount,
+        evenCount,
+
+        highLowPattern:
+          digits.map(highLowText).join(""),
+
+        oddEvenPattern:
+          digits.map(oddEvenText).join(""),
+
+        leftSum,
+        rightSum,
+        leftRightDiff,
+
+        edgeDiff,
+        innerDiff,
+        mirrorDiff,
+
+        trend,
+        trendCode: trend.join(""),
+
+        repeatDigits,
+        hasRepeat: repeatDigits.length > 0,
+
+        sum: digits.reduce((total, number) => {
+          return total + number;
+        }, 0)
+      };
+    }
+
+    function analyzeSeats(room) {
+      const seats = [];
+
+      for (let seat = 1; seat <= 6; seat++) {
+        const geometry = getSeatGeometry(room, seat);
+
+        const blackHits = getBlackHits(room, seat);
+        const aHits = getRuleHits(room, seat, "A");
+        const bHits = getRuleHits(room, seat, "B");
+
+        seats.push({
+          seat,
+          x: geometry.x,
+          geometry,
+          blackHits,
+          aHits,
+          bHits
+        });
+      }
+
+      return seats;
+    }
+
+    function getSafeACandidates(seats) {
+      return seats
+        .filter(item => {
+          return (
+            item.blackHits.length === 0 &&
+            item.aHits.length > 0
+          );
+        })
+        .sort((a, b) => {
+          const aRank = a.aHits[0].rank;
+          const bRank = b.aHits[0].rank;
+
+          if (aRank !== bRank) {
+            return aRank - bRank;
+          }
+
+          return a.seat - b.seat;
+        });
+    }
+
+    function getSafeBCandidates(seats) {
+      return seats
+        .filter(item => {
+          return (
+            item.blackHits.length === 0 &&
+            item.aHits.length === 0 &&
+            item.bHits.length > 0
+          );
+        })
+        .sort((a, b) => {
+          const aRank = a.bHits[0].rank;
+          const bRank = b.bHits[0].rank;
+
+          if (aRank !== bRank) {
+            return aRank - bRank;
+          }
+
+          return a.seat - b.seat;
+        });
+    }
+
+    function choosePicks(seats) {
+      const safeA = getSafeACandidates(seats);
+
+      if (safeA.length) {
+        return {
+          tier: "A",
+          allPicks: safeA,
+          finalPicks: safeA.slice(0, 3),
+          hiddenPickCount: Math.max(0, safeA.length - 3)
+        };
+      }
+
+      const safeB = getSafeBCandidates(seats);
+
+      if (safeB.length) {
+        return {
+          tier: "B",
+          allPicks: safeB,
+          finalPicks: safeB.slice(0, 3),
+          hiddenPickCount: Math.max(0, safeB.length - 3)
+        };
+      }
+
+      return {
+        tier: "NONE",
+        allPicks: [],
+        finalPicks: [],
+        hiddenPickCount: 0
+      };
+    }
+
+    function run() {
+      const input =
+        document.getElementById("roomInput");
+
+      let roomNumber = input.value
+        .replace(/\D/g, "")
+        .slice(0, 5);
+
+      input.value = roomNumber;
+
+      if (roomNumber.length !== 5) {
+        showError("请输入完整的5位数字房号。");
+        return;
+      }
+
+      const room = analyzeRoom(roomNumber);
+      const seats = analyzeSeats(room);
+      const decision = choosePicks(seats);
+
+      renderResult(
+        room,
+        seats,
+        decision
+      );
+
+      saveHistory(
+        room,
+        decision
+      );
+
+      renderHistory();
+    }
+
+    function showError(message) {
+      const box =
+        document.getElementById("result");
+
+      box.className = "result show";
+
+      box.innerHTML = `
+        <span class="badge no">输入错误</span>
+
+        <div class="big">不处理</div>
+
+        <div class="desc">
+          ${message}
+        </div>
+      `;
+    }
+
+    function renderRoomLine(room) {
+      return `
+        ABCDE=${room.A}${room.B}${room.C}${room.D}${room.E}<br>
+
+        高低排列：${room.highLowPattern}
+        ｜奇偶排列：${room.oddEvenPattern}<br>
+
+        低${room.lowCount}高${room.highCount}
+        ｜奇${room.oddCount}偶${room.evenCount}
+        ｜总和=${room.sum}<br>
+
+        走势：${room.trendCode}
+        ｜左右差=${room.leftRightDiff}
+        ｜镜像差=${room.mirrorDiff}<br>
+
+        重号：${
+          room.hasRepeat
+            ? room.repeatDigits.join("、")
+            : "无"
+        }
+      `;
+    }
+
+    function geometryText(item) {
+      const g = item.geometry;
+
+      return `
+        X=${g.x}（${g.xPos}）｜
+        前邻${g.prev.pos}=${g.prev.value}｜
+        后邻${g.next.pos}=${g.next.value}｜
+        前二${g.prev2.pos}=${g.prev2.value}｜
+        后二${g.next2.pos}=${g.next2.value}
+      `;
+    }
+
+    function renderResult(
+      room,
+      seats,
+      decision
+    ) {
+      const box =
+        document.getElementById("result");
+
+      const picks = decision.finalPicks;
+
+      if (!picks.length) {
+        box.className = "result show";
+
+        box.innerHTML = `
+          <span class="badge no">跳过</span>
+
+          <div class="big">${room.room}</div>
+
+          <div class="desc">
+            当前1至6号位没有通过“硬黑名单 + A优先/B补充”最终流程，
+            本房不推荐进。<br><br>
+
+            ${renderRoomLine(room)}
+          </div>
+
+          ${renderDebug(room, seats, decision)}
+        `;
+
+        return;
+      }
+
+      const pickNames = picks
+        .map(pick => `${pick.seat}号`)
+        .join("、");
+
+      const pickHtml = picks
+        .map((pick, index) => {
+          const hits =
+            decision.tier === "A"
+              ? pick.aHits
+              : pick.bHits;
+
+          const allHitNames = hits
+            .map(rule => {
+              return `${rule.id} ${rule.shortName}`;
+            })
+            .join("、");
+
+          const allRuleDetails = hits
+            .map(rule => {
+              return `
+                <div style="margin-top:8px;">
+                  <b>${rule.name}｜${rule.gradeText}</b><br>
+                  ${rule.stat}<br>
+                  ${rule.rule}
+                </div>
+              `;
+            })
+            .join("");
+
+          return `
+            <div
+              class="
+                pick
+                ${index === 0 ? "main" : ""}
+                ${
+                  decision.tier === "A"
+                    ? "grade-a"
+                    : "grade-b"
+                }
+              "
+            >
+              <div class="pick-title">
+                ${
+                  index === 0
+                    ? "🔥第一推荐"
+                    : "⚡同时推荐"
+                }
+                ｜${pick.seat}号
+                ｜X=${pick.x}
+                ｜${decision.tier}级
+              </div>
+
+              <div class="pick-rule">
+                命中：${allHitNames}<br>
+                圆桌结构：${geometryText(pick)}<br>
+                黑名单：未触发
+
+                ${allRuleDetails}
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      const hiddenText =
+        decision.hiddenPickCount > 0
+          ? `
+            <div class="desc" style="margin-top:10px;">
+              该层级还有${decision.hiddenPickCount}个位子命中，
+              但模型按优先级只输出前3位。
+            </div>
+          `
+          : "";
+
+      const tierExplain =
+        decision.tier === "A"
+          ? "本房存在安全核心A位，因此B级补充全部不参与最终推荐。"
+          : "本房没有安全核心A位，因此启用B级补充规则。";
+
+      box.className = "result show";
+
+      box.innerHTML = `
+        <span class="badge ok">建议进房</span>
+
+        ${
+          decision.tier === "A"
+            ? `<span class="badge ok">核心A</span>`
+            : `<span class="badge blue">B级补充</span>`
+        }
+
+        <span class="badge warn">最多3位</span>
+
+        <div class="big">
+          推荐：${pickNames}
+        </div>
+
+        <div class="desc">
+          ${tierExplain}
+        </div>
+
+        <div class="pick-list">
+          ${pickHtml}
+        </div>
+
+        ${hiddenText}
+
+        <div class="desc" style="margin-top:14px;">
+          房号：<b>${room.room}</b><br>
+          ${renderRoomLine(room)}
+        </div>
+
+        <div class="grid">
+          <div class="stat">
+            <div class="v">${MODEL_STAT.sample}</div>
+            <div class="k">样本库</div>
+          </div>
+
+          <div class="stat">
+            <div class="v">${MODEL_STAT.hitCount}</div>
+            <div class="k">实战口径命中</div>
+          </div>
+
+          <div class="stat">
+            <div class="v">${MODEL_STAT.winRate}</div>
+            <div class="k">历史胜率</div>
+          </div>
+
+          <div class="stat">
+            <div class="v">${MODEL_STAT.bigLoss}</div>
+            <div class="k">安全口径</div>
+          </div>
+        </div>
+
+        ${renderDebug(room, seats, decision)}
+      `;
+    }
+
+    function renderDebug(room, seats, decision) {
+      const safeAExists =
+        getSafeACandidates(seats).length > 0;
+
+      const rows = seats
+        .map(item => {
+          let status = "无命中";
+
+          if (item.blackHits.length) {
+            const blackNames = item.blackHits
+              .map(rule => rule.shortName)
+              .join("、");
+
+            const rawHits = [
+              ...item.aHits.map(rule => `A:${rule.shortName}`),
+              ...item.bHits.map(rule => `B:${rule.shortName}`)
+            ].join("、");
+
+            status =
+              `❌硬黑名单：${blackNames}` +
+              (rawHits ? `｜原始命中：${rawHits}` : "");
+          } else if (item.aHits.length) {
+            status = item.aHits
+              .map(rule => {
+                return `✅A：${rule.shortName}`;
+              })
+              .join("、");
+          } else if (item.bHits.length) {
+            if (safeAExists) {
+              status =
+                item.bHits
+                  .map(rule => {
+                    return `B：${rule.shortName}`;
+                  })
+                  .join("、") +
+                "｜已有安全A位，本轮不启用";
+            } else {
+              status = item.bHits
+                .map(rule => {
+                  return `✅B：${rule.shortName}`;
+                })
+                .join("、");
+            }
+          }
+
+          return `
+            <tr>
+              <td>${item.seat}号</td>
+              <td>${item.x}</td>
+              <td>${item.geometry.prev.pos}${item.geometry.prev.value}</td>
+              <td>${item.geometry.next.pos}${item.geometry.next.value}</td>
+              <td>${item.geometry.prev2.pos}${item.geometry.prev2.value}</td>
+              <td>${item.geometry.next2.pos}${item.geometry.next2.value}</td>
+              <td>${status}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      return `
+        <div class="debug">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="7">
+                  房号结构：
+                  ${room.highLowPattern}
+                  ｜${room.oddEvenPattern}
+                  ｜奇${room.oddCount}偶${room.evenCount}
+                  ｜总和${room.sum}
+                  ｜走势${room.trendCode}
+                  ｜${room.hasRepeat ? "有重号" : "无重号"}
+                  ｜最终层级：${decision.tier}
+                </th>
+              </tr>
+
+              <tr>
+                <th>位子</th>
+                <th>X</th>
+                <th>前邻</th>
+                <th>后邻</th>
+                <th>前二</th>
+                <th>后二</th>
+                <th>模型结果</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function saveHistory(
+      room,
+      decision
+    ) {
+      const item = {
+        room: room.room,
+
+        time: new Date().toLocaleString(),
+
+        tier: decision.tier,
+
+        result: decision.finalPicks.length
+          ? decision.finalPicks
+              .map(pick => `${pick.seat}号`)
+              .join("、")
+          : "跳过",
+
+        hiddenPickCount:
+          decision.hiddenPickCount
+      };
+
+      const key =
+        "panda_5149823_v10_history";
+
+      const list = JSON.parse(
+        localStorage.getItem(key) || "[]"
+      );
+
+      list.unshift(item);
+
+      localStorage.setItem(
+        key,
+        JSON.stringify(list.slice(0, 50))
+      );
+    }
+
+    function renderHistory() {
+      const box =
+        document.getElementById("historyBox");
+
+      const key =
+        "panda_5149823_v10_history";
+
+      const list = JSON.parse(
+        localStorage.getItem(key) || "[]"
+      );
+
+      if (!list.length) {
+        box.innerHTML = "暂无记录";
+        return;
+      }
+
+      box.innerHTML = list
+        .map(item => {
+          const hiddenText =
+            item.hiddenPickCount > 0
+              ? `<br>另有${item.hiddenPickCount}位因超过上限未显示`
+              : "";
+
+          const tierText =
+            item.tier === "NONE"
+              ? ""
+              : `｜${item.tier}级`;
+
+          return `
+            <div class="history-item">
+              <div class="history-left">
+                ${item.room}
+              </div>
+
+              <div class="history-right">
+                ${item.result}${tierText}
+                ${hiddenText}<br>
+                ${item.time}
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function clearHistory() {
+      localStorage.removeItem(
+        "panda_5149823_v10_history"
+      );
+
+      renderHistory();
+    }
+
+    function renderComboList() {
+      const box =
+        document.getElementById("comboList");
+
+      const blackHtml = BLACKLISTS
+        .map(rule => {
+          return `
+            <div class="combo black">
+              <div class="name">
+                ${rule.id}｜硬黑名单｜${rule.name}
+              </div>
+
+              <div class="rule">
+                ${rule.rule}<br>
+                ${rule.stat}
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      const orderedRules =
+        [...RULES].sort((a, b) => {
+          return a.rank - b.rank;
+        });
+
+      const ruleHtml = orderedRules
+        .map(rule => {
+          return `
+            <div class="combo ${
+              rule.tier === "A"
+                ? "grade-a"
+                : "grade-b"
+            }">
+              <div class="name">
+                ${rule.id}｜${rule.name}｜${rule.gradeText}
+              </div>
+
+              <div class="rule">
+                ${rule.rule}<br>
+                ${rule.stat}
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      box.innerHTML =
+        blackHtml + ruleHtml;
+    }
+
+    /*
+      ============================================================
+      内置一致性自检
+      ============================================================
+      这个测试不显示在网页上，只在浏览器Console里执行。
+      如果以后改代码导致63420不再只推荐4号，会直接报错。
+    */
+    function runSelfTests() {
+      const tests = [
+        {
+          room: "63420",
+          expected: [4]
+        }
+      ];
+
+      tests.forEach(test => {
+        const room =
+          analyzeRoom(test.room);
+
+        const seats =
+          analyzeSeats(room);
+
+        const decision =
+          choosePicks(seats);
+
+        const actual =
+          decision.finalPicks.map(item => item.seat);
+
+        const pass =
+          JSON.stringify(actual) ===
+          JSON.stringify(test.expected);
+
+        if (!pass) {
+          console.error(
+            `[模型自检失败] 房号${test.room}`,
+            {
+              expected: test.expected,
+              actual
+            }
+          );
+        } else {
+          console.log(
+            `[模型自检通过] ${test.room} => ${actual.join("、")}号`
+          );
+        }
+      });
+    }
+
+    document
+      .getElementById("roomInput")
+      .addEventListener("input", event => {
+        event.target.value = event.target.value
+          .replace(/\D/g, "")
+          .slice(0, 5);
+      });
+
+    document
+      .getElementById("roomInput")
+      .addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          run();
+        }
+      });
+
+    renderComboList();
+    renderHistory();
+    runSelfTests();
+  </script>
 </body>
 </html>
