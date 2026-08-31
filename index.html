@@ -1,3 +1,5 @@
+可以，下面就是完整代码，直接复制保存成 .html 文件即可：
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,9 +8,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
-
-  <title>5149823｜熊猫 三层X精选模型 v1.1</title>
-
+  <title>5155555｜奖来 差值精选模型 v1.0</title>
   <style>
     :root {
       --bg: #f7f3ec;
@@ -25,11 +25,9 @@
       --border: #eadccc;
       --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
     }
-
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       min-height: 100vh;
@@ -45,9 +43,7 @@
           transparent 26%
         ),
         var(--bg);
-
       color: var(--text);
-
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -55,33 +51,27 @@
         "Microsoft YaHei",
         Arial,
         sans-serif;
-
       padding: 22px 14px 42px;
     }
-
     .wrap {
       max-width: 860px;
       margin: 0 auto;
     }
-
     .hero {
       text-align: center;
       margin-bottom: 18px;
     }
-
     .title {
       font-size: 28px;
       font-weight: 900;
       letter-spacing: 1px;
       margin: 6px 0 8px;
     }
-
     .sub {
       color: var(--muted);
       font-size: 14px;
       line-height: 1.65;
     }
-
     .panel {
       background: rgba(255, 250, 242, 0.92);
       border: 1px solid var(--border);
@@ -91,7 +81,6 @@
       margin-bottom: 16px;
       backdrop-filter: blur(8px);
     }
-
     .input-row {
       display: flex;
       gap: 10px;
@@ -99,7 +88,6 @@
       justify-content: center;
       margin-top: 8px;
     }
-
     input {
       width: min(100%, 360px);
       height: 58px;
@@ -114,18 +102,15 @@
       background: #fff;
       box-shadow: inset 0 2px 6px rgba(80, 50, 30, 0.05);
     }
-
     input:focus {
       border-color: var(--red);
     }
-
     button {
       border: none;
       cursor: pointer;
       font-weight: 900;
       transition: 0.18s ease;
     }
-
     .btn-main {
       width: 72px;
       height: 72px;
@@ -136,11 +121,9 @@
       box-shadow: 0 10px 22px rgba(217, 75, 61, 0.34);
       flex: 0 0 auto;
     }
-
     .btn-main:active {
       transform: scale(0.96);
     }
-
     .btn-small {
       padding: 9px 13px;
       border-radius: 12px;
@@ -148,7 +131,6 @@
       color: #6b5644;
       font-size: 13px;
     }
-
     .result {
       display: none;
       margin-top: 16px;
@@ -157,11 +139,9 @@
       border: 1px solid var(--border);
       padding: 16px;
     }
-
     .result.show {
       display: block;
     }
-
     .badge {
       display: inline-flex;
       align-items: center;
@@ -172,56 +152,42 @@
       font-weight: 900;
       margin: 3px;
     }
-
     .badge.ok {
       background: rgba(31, 157, 103, 0.12);
       color: var(--green);
       border: 1px solid rgba(31, 157, 103, 0.24);
     }
-
     .badge.no {
       background: rgba(217, 75, 61, 0.10);
       color: var(--red2);
       border: 1px solid rgba(217, 75, 61, 0.22);
     }
-
     .badge.warn {
       background: rgba(217, 140, 34, 0.12);
       color: #a6630f;
       border: 1px solid rgba(217, 140, 34, 0.22);
     }
-
     .badge.blue {
       background: rgba(60, 120, 220, 0.10);
       color: var(--blue);
       border: 1px solid rgba(60, 120, 220, 0.22);
     }
-
-    .badge.purple {
-      background: rgba(122, 76, 179, 0.10);
-      color: var(--purple);
-      border: 1px solid rgba(122, 76, 179, 0.22);
-    }
-
     .big {
       font-size: 34px;
       font-weight: 1000;
       margin: 10px 0 4px;
     }
-
     .desc {
       color: var(--muted);
       line-height: 1.65;
       font-size: 14px;
     }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
       margin-top: 12px;
     }
-
     .stat {
       background: #fff8ef;
       border: 1px solid var(--border);
@@ -229,126 +195,89 @@
       padding: 12px 8px;
       text-align: center;
     }
-
     .stat .v {
       font-size: 20px;
       font-weight: 1000;
       color: var(--text);
     }
-
     .stat .k {
       margin-top: 4px;
       color: var(--muted);
       font-size: 12px;
     }
-
     .section-title {
       font-weight: 1000;
       font-size: 18px;
       margin: 3px 0 12px;
     }
-
     .combo-list {
       display: grid;
       gap: 10px;
     }
-
     .combo {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 12px;
     }
-
-    .combo.small-x {
-      border-color: rgba(49, 94, 174, 0.28);
+    .combo.main-rule {
+      border-color: rgba(31, 157, 103, 0.35);
+      background: #f8fffb;
     }
-
-    .combo.mid-x {
-      border-color: rgba(122, 76, 179, 0.28);
-    }
-
-    .combo.large-x {
-      border-color: rgba(31, 157, 103, 0.30);
-    }
-
-    .combo.black {
-      border-color: rgba(217, 75, 61, 0.35);
-      background: #fff7f5;
-    }
-
     .combo.observe {
       border-color: rgba(217, 140, 34, 0.35);
       background: #fffaf2;
     }
-
+    .combo.off {
+      border-color: rgba(217, 75, 61, 0.25);
+      background: #fff8f6;
+    }
     .combo .name {
       font-weight: 1000;
       margin-bottom: 6px;
     }
-
     .combo .rule {
       color: var(--muted);
       font-size: 13px;
       line-height: 1.6;
     }
-
     .pick-list {
       display: grid;
       gap: 10px;
       margin-top: 12px;
     }
-
     .pick {
       background: #fff8ef;
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 12px;
     }
-
     .pick.main {
       border-color: rgba(217, 75, 61, 0.42);
       background: #fff4ee;
     }
-
-    .pick.small-x {
-      box-shadow: inset 4px 0 0 rgba(49, 94, 174, 0.62);
-    }
-
-    .pick.mid-x {
-      box-shadow: inset 4px 0 0 rgba(122, 76, 179, 0.62);
-    }
-
-    .pick.large-x {
-      box-shadow: inset 4px 0 0 rgba(31, 157, 103, 0.68);
-    }
-
     .pick .pick-title {
       font-weight: 1000;
       margin-bottom: 6px;
     }
-
     .pick .pick-rule {
       color: var(--muted);
       font-size: 13px;
       line-height: 1.6;
     }
-
     .debug {
       margin-top: 12px;
       overflow-x: auto;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1200px;
+      min-width: 980px;
       background: #fff;
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--border);
     }
-
     th,
     td {
       padding: 9px 8px;
@@ -357,17 +286,14 @@
       text-align: center;
       white-space: nowrap;
     }
-
     th {
       background: #fff1e1;
       color: #6b5644;
       font-weight: 900;
     }
-
     tr:last-child td {
       border-bottom: none;
     }
-
     .history-item {
       display: flex;
       justify-content: space-between;
@@ -377,22 +303,18 @@
       border-bottom: 1px dashed #e4d3c3;
       font-size: 14px;
     }
-
     .history-item:last-child {
       border-bottom: none;
     }
-
     .history-left {
       font-weight: 900;
     }
-
     .history-right {
       color: var(--muted);
       text-align: right;
       font-size: 13px;
       line-height: 1.5;
     }
-
     .footer-note {
       text-align: center;
       color: var(--muted);
@@ -400,64 +322,53 @@
       line-height: 1.65;
       margin-top: 16px;
     }
-
     @media (max-width: 620px) {
       body {
         padding: 16px 10px 34px;
       }
-
       .title {
         font-size: 23px;
       }
-
       .panel {
         padding: 14px;
         border-radius: 20px;
       }
-
       .input-row {
         gap: 8px;
       }
-
       input {
         height: 56px;
         font-size: 25px;
         letter-spacing: 4px;
       }
-
       .btn-main {
         width: 64px;
         height: 64px;
         font-size: 16px;
       }
-
       .grid {
         grid-template-columns: repeat(2, 1fr);
       }
-
       .big {
         font-size: 26px;
       }
     }
   </style>
 </head>
-
 <body>
   <div class="wrap">
-
     <div class="hero">
       <div class="title">
-        5149823｜熊猫 三层X精选模型 v1.1
+        5155555｜奖来 差值精选模型 v1.0
       </div>
-
       <div class="sub">
-        89局独立样本｜小X / 中X / 大X分层判断｜白名单 + 本层黑名单排雷｜最多推荐3个位子
+        47局独立样本｜只使用座位 + 房号差值关系｜正式位：4 / 5 / 6号｜2号观察｜1 / 3号暂不推荐
       </div>
     </div>
-
     <div class="panel">
-      <div class="section-title">输入5位房号</div>
-
+      <div class="section-title">
+        输入5位房号
+      </div>
       <div class="input-row">
         <input
           id="roomInput"
@@ -465,10 +376,9 @@
           inputmode="numeric"
           pattern="[0-9]*"
           maxlength="5"
-          placeholder="例如 58462"
+          placeholder="例如 62117"
           autocomplete="off"
         />
-
         <button
           class="btn-main"
           onclick="run()"
@@ -476,102 +386,86 @@
           开干
         </button>
       </div>
-
       <div
         id="result"
         class="result"
       ></div>
     </div>
-
     <div class="panel">
       <div class="section-title">
-        v1.1 候选扩展历史回测
+        奖来 v1.0 历史回测
       </div>
-
       <div class="grid">
         <div class="stat">
-          <div class="v">89局</div>
+          <div class="v">47局</div>
           <div class="k">独立样本</div>
         </div>
-
         <div class="stat">
-          <div class="v">40局</div>
-          <div class="k">模型命中</div>
+          <div class="v">10局</div>
+          <div class="k">正式模型命中</div>
         </div>
-
         <div class="stat">
-          <div class="v">44.94%</div>
-          <div class="k">进房率</div>
+          <div class="v">21.28%</div>
+          <div class="k">正式进房率</div>
         </div>
-
         <div class="stat">
-          <div class="v">90.00%</div>
-          <div class="k">胜率</div>
+          <div class="v">80.00%</div>
+          <div class="k">正式模型胜率</div>
         </div>
-
         <div class="stat">
-          <div class="v">36胜4负</div>
-          <div class="k">胜负结果</div>
+          <div class="v">8胜2负</div>
+          <div class="k">正式胜负</div>
         </div>
-
         <div class="stat">
-          <div class="v">+24580</div>
-          <div class="k">总净分</div>
+          <div class="v">+7280</div>
+          <div class="k">正式净分</div>
         </div>
-
         <div class="stat">
-          <div class="v">22局</div>
-          <div class="k">历史大赢</div>
+          <div class="v">8局</div>
+          <div class="k">正式大赢</div>
         </div>
-
         <div class="stat">
           <div class="v">0局</div>
-          <div class="k">历史大输</div>
+          <div class="k">正式大输</div>
         </div>
       </div>
-
       <div
         class="desc"
-        style="margin-top: 12px;"
+        style="margin-top:12px;"
       >
-        当前正式研究口径：
-        89局独立样本，40局命中，
-        36胜4负，胜率90.00%，
-        净收益+24580，
-        22局大赢，0局大输，
-        最差-480。
+        当前网页与聊天直接判断保持同一口径：
+        <b>
+          6号位：X比其他数字大6；
+          4号位：X比其他数字大3；
+          5号位：X比其他数字小3。
+        </b>
         <br><br>
-        先根据X值进入小X / 中X / 大X对应层，
-        只允许调用该层规则。
-        命中白名单后如果同时命中本层黑名单，
-        直接排除。
+        2号位“X比其他数字大6”
+        目前只作为观察规则，
+        不参与正式推荐；
+        1号位、3号位暂时没有可靠正式规则。
       </div>
     </div>
-
     <div class="panel">
       <div class="section-title">
-        三层X正式规则
+        奖来 v1.0 正式规则
       </div>
-
       <div
         class="combo-list"
         id="comboList"
       ></div>
     </div>
-
     <div class="panel">
       <div class="section-title">
         历史记录
-
         <button
           class="btn-small"
           onclick="clearHistory()"
-          style="float: right;"
+          style="float:right;"
         >
           清空
         </button>
       </div>
-
       <div
         id="historyBox"
         class="desc"
@@ -579,823 +473,248 @@
         暂无记录
       </div>
     </div>
-
     <div class="footer-note">
-      固定规则：
+      固定映射：
       房号记作ABCDE；
       1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。
-      圆桌相邻：
-      A看E/B，B看A/C，C看B/D，D看C/E，E看D/A。
-      前二/后二继续沿圆桌方向向外数第二格。
-      小X=0–2，中X=3–6，大X=7–9。
+      <br>
+      差值只看X与房号中“其他位置”的数字关系；
+      同位置自身不参与差值命中。
+      <br>
+      例如6号位X=7，
+      房号中另有1，
+      则7−1=6，
+      命中“差6坐大数端”。
     </div>
   </div>
-
   <script>
     /*
       ==========================================================
-      熊猫账号 5149823
-      三层X精选模型 v1.1 候选扩展
+      奖来 5155555
+      差值精选模型 v1.0
       ==========================================================
-
-      小X = 0~2
-      中X = 3~6
-      大X = 7~9
-
-      每个座位流程：
-
-      1. 根据X确定所属层级
-      2. 只运行对应层级白名单
-      3. 再检查本层黑名单
-      4. 黑名单命中 => 直接排除
-      5. 至少命中一条正式白名单 => 候选
-      6. 按规则强度排序
-      7. 最多推荐3个位子
-
-      S-W4 为观察规则，不参与正式推荐。
-    */
-
-    const MODEL_STAT = {
-      account: "熊猫",
-      id: "5149823",
-      version: "三层X精选 v1.1",
-      sample: "89局",
-      hitCount: "40局",
-      hitRate: "44.94%",
-      winRate: "90.00%",
-      record: "36胜4负",
-      net: "+24580",
-      bigWin: "22大赢",
-      bigLoss: "0大输",
-      worst: "-480"
-    };
-
-    /*
-      ==========================================================
-      正式白名单
-      ==========================================================
-    */
-
-    const WHITE_RULES = [
-
-      /*
-        ======================
-        大X层
-        ======================
-      */
-
-      {
-        id: "L-W1",
-        layer: "L",
-        rank: 1,
-
-        name: "大重号贴X",
-        shortName: "大重号贴X",
-
-        stat:
-          "历史8局8胜｜净+6580｜7大赢｜0大输",
-
-        rule:
-          "X=7/8/9；X在房号中至少出现2次；X左右至少一侧也是相同数字。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isLargeX(f.x)) {
-            return false;
-          }
-
-          return (
-            room.digitMap[f.x] >= 2 &&
-            (
-              f.prev.value === f.x ||
-              f.next.value === f.x
-            )
-          );
-        }
-      },
-
-      /*
-        ======================
-        中X层
-        ======================
-      */
-
-      {
-        id: "M-W2",
-        layer: "M",
-        rank: 2,
-
-        name: "中奇数坡道型",
-        shortName: "3/5坡道",
-
-        stat:
-          "历史5局4胜1负｜净+3500｜0大输",
-
-        rule:
-          "X只能为3或5；前邻<后邻；前二+后二≤10。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          return (
-            [3, 5].includes(f.x) &&
-            f.prev.value < f.next.value &&
-            (
-              f.prev2.value +
-              f.next2.value
-            ) <= 10
-          );
-        }
-      },
-
-      /*
-        ======================
-        小X层
-        ======================
-      */
-
-      {
-        id: "S-W1",
-        layer: "S",
-        rank: 3,
-
-        name: "小X外层高台",
-        shortName: "外层高台",
-
-        stat:
-          "历史7局6胜1负｜净+3120｜0大输｜最差-320",
-
-        rule:
-          "X=0/1/2；|前二-后二|≤2；前二+后二≥10。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isSmallX(f.x)) {
-            return false;
-          }
-
-          return (
-            Math.abs(
-              f.prev2.value -
-              f.next2.value
-            ) <= 2 &&
-            (
-              f.prev2.value +
-              f.next2.value
-            ) >= 10
-          );
-        }
-      },
-
-      /*
-        ======================
-        大X新增
-        ======================
-      */
-
-      {
-        id: "L-W3",
-        layer: "L",
-        rank: 4,
-
-        name: "大X低邻紧凑型",
-        shortName: "低邻紧凑",
-
-        stat:
-          "历史补抓3局3胜｜3局全部大赢｜净+2930｜0大输",
-
-        rule:
-          "X=7/8/9；X本身不重；|前邻-后邻|≤2；前邻+后邻≤10。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isLargeX(f.x)) {
-            return false;
-          }
-
-          return (
-            room.digitMap[f.x] === 1 &&
-            Math.abs(
-              f.prev.value -
-              f.next.value
-            ) <= 2 &&
-            (
-              f.prev.value +
-              f.next.value
-            ) <= 10
-          );
-        }
-      },
-
-      /*
-        ======================
-        中X
-        ======================
-      */
-
-      {
-        id: "M-W1",
-        layer: "M",
-        rank: 5,
-
-        name: "中X左右打开型",
-        shortName: "左右打开",
-
-        stat:
-          "历史5局4胜1负｜净+2130｜0大输｜最差-20",
-
-        rule:
-          "X=3/4/5/6；X本身不重；|前邻-后邻|≥4。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isMidX(f.x)) {
-            return false;
-          }
-
-          return (
-            room.digitMap[f.x] === 1 &&
-            Math.abs(
-              f.prev.value -
-              f.next.value
-            ) >= 4
-          );
-        }
-      },
-
-      /*
-        ======================
-        小X
-        ======================
-      */
-
-      {
-        id: "S-W2",
-        layer: "S",
-        rank: 6,
-
-        name: "小X无重号方向型",
-        shortName: "无重号方向",
-
-        stat:
-          "历史4局4胜｜净+2420｜0大输",
-
-        rule:
-          "X=0/1/2；整房无重号；前邻>后邻；前二+后二≥10。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isSmallX(f.x)) {
-            return false;
-          }
-
-          return (
-            !room.hasRepeat &&
-            f.prev.value > f.next.value &&
-            (
-              f.prev2.value +
-              f.next2.value
-            ) >= 10
-          );
-        }
-      },
-
-      /*
-        ======================
-        小X新增
-        ======================
-      */
-
-      {
-        id: "S-W3",
-        layer: "S",
-        rank: 7,
-
-        name: "小X重号方向补充",
-        shortName: "小重号方向",
-
-        stat:
-          "历史补抓4局4胜｜净+1280｜2大赢｜0大输",
-
-        rule:
-          "X=0/1/2；X本身是重号；相同数字紧贴X；前二>后二。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isSmallX(f.x)) {
-            return false;
-          }
-
-          return (
-            room.digitMap[f.x] >= 2 &&
-            (
-              f.prev.value === f.x ||
-              f.next.value === f.x
-            ) &&
-            f.prev2.value >
-            f.next2.value
-          );
-        }
-      },
-
-      /*
-        ======================
-        中X新增
-        ======================
-      */
-
-      {
-        id: "M-W3",
-        layer: "M",
-        rank: 8,
-
-        name: "中奇数重号房紧邻型",
-        shortName: "奇中重号房紧邻",
-
-        stat:
-          "历史3局2胜1负｜净+2490｜2大赢｜0大输｜最差-480",
-
-        rule:
-          "X只能为3或5；房间存在重号；|前邻-后邻|≤2。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          return (
-            [3, 5].includes(f.x) &&
-            room.hasRepeat &&
-            Math.abs(
-              f.prev.value -
-              f.next.value
-            ) <= 2
-          );
-        }
-      },
-
-      /*
-        ======================
-        大X第二型
-        ======================
-      */
-
-      {
-        id: "L-W2",
-        layer: "L",
-        rank: 9,
-
-        name: "大X外层低位支撑",
-        shortName: "外层低位支撑",
-
-        stat:
-          "大X第二类正式白名单｜0大输历史结构",
-
-        rule:
-          "X=7/8/9；X本身不重；前二<后二；前二+后二≤10。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isLargeX(f.x)) {
-            return false;
-          }
-
-          return (
-            room.digitMap[f.x] === 1 &&
-            f.prev2.value <
-            f.next2.value &&
-            (
-              f.prev2.value +
-              f.next2.value
-            ) <= 10
-          );
-        }
-      }
-    ];
-
-    /*
-      ==========================================================
-      各层硬黑名单
-      ==========================================================
-    */
-
-    const BLACK_RULES = [
-
-      /*
-        小X黑名单
-      */
-
-      {
-        id: "S-BL1",
-        layer: "S",
-
-        name: "小X弱外围低谷",
-        shortName: "局部低点+外和≤6",
-
-        stat:
-          "历史4局0胜4负｜净-2640｜3大输",
-
-        rule:
-          "X=0/1/2；前邻>X；后邻>X；前二+后二≤6。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isSmallX(f.x)) {
-            return false;
-          }
-
-          return (
-            f.prev.value > f.x &&
-            f.next.value > f.x &&
-            (
-              f.prev2.value +
-              f.next2.value
-            ) <= 6
-          );
-        }
-      },
-
-      /*
-        中X黑名单
-      */
-
-      {
-        id: "M-BL1",
-        layer: "M",
-
-        name: "中X高位夹击",
-        shortName: "邻和≥12+外差≥2",
-
-        stat:
-          "历史6局0胜6负｜净-3780｜3大输",
-
-        rule:
-          "X=3/4/5/6；前邻+后邻≥12；|前二-后二|≥2。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isMidX(f.x)) {
-            return false;
-          }
-
-          return (
-            (
-              f.prev.value +
-              f.next.value
-            ) >= 12 &&
-            Math.abs(
-              f.prev2.value -
-              f.next2.value
-            ) >= 2
-          );
-        }
-      },
-
-      /*
-        大X黑名单
-      */
-
-      {
-        id: "L-BL1",
-        layer: "L",
-
-        name: "大X孤立高点",
-        shortName: "严格局部最大+邻差≥4",
-
-        stat:
-          "历史6局0胜1平｜净-3490｜3大输",
-
-        rule:
-          "X=7/8/9；X>前邻；X>后邻；|前邻-后邻|≥4。",
-
-        test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isLargeX(f.x)) {
-            return false;
-          }
-
-          return (
-            f.x > f.prev.value &&
-            f.x > f.next.value &&
-            Math.abs(
-              f.prev.value -
-              f.next.value
-            ) >= 4
-          );
-        }
-      }
-    ];
-
-    /*
-      ==========================================================
-      观察级规则
+      正式推荐：
+      J-W1
+      6号位
+      X - n = +6
+      坐差6大数端
+      J-W2
+      4号位
+      X - n = +3
+      坐差3大数端
+      J-W3
+      5号位
+      n - X = +3
+      坐差3小数端
+      观察：
+      J-O1
+      2号位
+      X - n = +6
       不参与正式推荐
+      暂停：
+      1号、3号
+      当前无正式规则
+      注意：
+      5号与6号虽然都映射E，
+      但是两个独立座位规则。
+      5号：
+      只看差3小数端
+      6号：
+      只看差6大数端
+    */
+    const MODEL_STAT = {
+      account: "奖来",
+      id: "5155555",
+      version: "差值精选 v1.0",
+      sample: 47,
+      hitCount: 10,
+      hitRate: "21.28%",
+      winRate: "80.00%",
+      record: "8胜2负",
+      net: "+7280",
+      bigWin: "8大赢",
+      bigLoss: "0大输"
+    };
+    /*
+      ==========================================================
+      正式规则
       ==========================================================
     */
-
-    const OBSERVE_RULES = [
+    const FORMAL_RULES = [
+      /*
+        6号
+        差6
+        坐大数
+      */
       {
-        id: "S-W4",
-        layer: "S",
-
-        name: "小X双层拉开型",
-        shortName: "双层拉开",
-
+        id: "J-W1",
+        seat: 6,
+        rank: 1,
+        name: "6号差6大数端",
+        shortName: "差6大数",
         stat:
-          "观察样本2局2胜｜净+820｜样本不足，不参与正式推荐",
-
+          "历史4局4胜｜4局全大赢｜净+3210｜0大输",
         rule:
-          "X=0/1/2；邻差≥3；外差≥3；外和≤10。",
-
+          "仅6号位；X与房号中另一个位置数字n满足 X-n=6。",
         test: (seat, room) => {
-          const f =
-            getSeatGeometry(room, seat);
-
-          if (!isSmallX(f.x)) {
+          if (seat !== 6) {
             return false;
           }
-
           return (
-            Math.abs(
-              f.prev.value -
-              f.next.value
-            ) >= 3 &&
-            Math.abs(
-              f.prev2.value -
-              f.next2.value
-            ) >= 3 &&
-            (
-              f.prev2.value +
-              f.next2.value
-            ) <= 10
+            findDirectionalMatches(
+              room,
+              seat,
+              6,
+              "X_GREATER"
+            ).length > 0
+          );
+        }
+      },
+      /*
+        4号
+        差3
+        坐大数
+      */
+      {
+        id: "J-W2",
+        seat: 4,
+        rank: 2,
+        name: "4号差3大数端",
+        shortName: "差3大数",
+        stat:
+          "历史4局2胜2负｜2局大赢｜0大输｜净+2180",
+        rule:
+          "仅4号位；X与房号中另一个位置数字n满足 X-n=3。",
+        test: (seat, room) => {
+          if (seat !== 4) {
+            return false;
+          }
+          return (
+            findDirectionalMatches(
+              room,
+              seat,
+              3,
+              "X_GREATER"
+            ).length > 0
+          );
+        }
+      },
+      /*
+        5号
+        差3
+        坐小数
+      */
+      {
+        id: "J-W3",
+        seat: 5,
+        rank: 3,
+        name: "5号差3小数端",
+        shortName: "差3小数",
+        stat:
+          "历史2局2胜｜2局全大赢｜净+1890｜0大输",
+        rule:
+          "仅5号位；X与房号中另一个位置数字n满足 n-X=3。",
+        test: (seat, room) => {
+          if (seat !== 5) {
+            return false;
+          }
+          return (
+            findDirectionalMatches(
+              room,
+              seat,
+              3,
+              "X_SMALLER"
+            ).length > 0
           );
         }
       }
     ];
-
+    /*
+      ==========================================================
+      观察规则
+      ==========================================================
+    */
+    const OBSERVE_RULES = [
+      /*
+        2号
+        差6
+        坐大数
+        仅观察
+      */
+      {
+        id: "J-O1",
+        seat: 2,
+        rank: 100,
+        name: "2号差6大数端",
+        shortName: "2号差6观察",
+        stat:
+          "历史3局2胜1负｜2大赢｜0大输｜净+900｜暂不正式推荐",
+        rule:
+          "仅2号位；X与房号中另一个位置数字n满足 X-n=6。",
+        test: (seat, room) => {
+          if (seat !== 2) {
+            return false;
+          }
+          return (
+            findDirectionalMatches(
+              room,
+              seat,
+              6,
+              "X_GREATER"
+            ).length > 0
+          );
+        }
+      }
+    ];
     /*
       ==========================================================
       基础函数
       ==========================================================
     */
-
     function countMap(arr) {
       const map = {};
-
       arr.forEach(value => {
         map[value] =
           (map[value] || 0) + 1;
       });
-
       return map;
     }
-
-    function isSmallX(x) {
-      return x >= 0 && x <= 2;
-    }
-
-    function isMidX(x) {
-      return x >= 3 && x <= 6;
-    }
-
-    function isLargeX(x) {
-      return x >= 7 && x <= 9;
-    }
-
-    function getLayerByX(x) {
-      if (isSmallX(x)) {
-        return "S";
-      }
-
-      if (isMidX(x)) {
-        return "M";
-      }
-
-      return "L";
-    }
-
-    function getLayerName(layer) {
-      if (layer === "S") {
-        return "小X 0–2";
-      }
-
-      if (layer === "M") {
-        return "中X 3–6";
-      }
-
-      return "大X 7–9";
-    }
-
-    function getLayerClass(layer) {
-      if (layer === "S") {
-        return "small-x";
-      }
-
-      if (layer === "M") {
-        return "mid-x";
-      }
-
-      return "large-x";
-    }
-
-    function getLayerBadge(layer) {
-      if (layer === "S") {
-        return `
-          <span class="badge blue">
-            小X层
-          </span>
-        `;
-      }
-
-      if (layer === "M") {
-        return `
-          <span class="badge purple">
-            中X层
-          </span>
-        `;
-      }
-
-      return `
-        <span class="badge ok">
-          大X层
-        </span>
-      `;
-    }
-
-    function highLowText(number) {
-      if (number <= 2) {
-        return "小";
-      }
-
-      if (number <= 6) {
-        return "中";
-      }
-
-      return "大";
-    }
-
-    function oddEvenText(number) {
-      return number % 2 === 0
-        ? "偶"
-        : "奇";
-    }
-
-    function moveText(a, b) {
-      if (a < b) {
-        return "升";
-      }
-
-      if (a > b) {
-        return "降";
-      }
-
-      return "平";
-    }
-
     /*
       ==========================================================
       座位映射
       ==========================================================
+      1号 = A
+      2号 = B
+      3号 = C
+      4号 = D
+      5号 = E
+      6号 = E
     */
-
     function getSeatXPosition(seat) {
       if (seat === 1) {
         return "A";
       }
-
       if (seat === 2) {
         return "B";
       }
-
       if (seat === 3) {
         return "C";
       }
-
       if (seat === 4) {
         return "D";
       }
-
       return "E";
     }
-
-    function getPositionIndex(pos) {
-      return [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E"
-      ].indexOf(pos);
-    }
-
-    function getPositionItem(
-      room,
-      index
-    ) {
-      const positions = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E"
-      ];
-
-      const normalizedIndex =
-        (index + 5) % 5;
-
-      const pos =
-        positions[normalizedIndex];
-
-      return {
-        pos,
-        value: room[pos]
-      };
-    }
-
     /*
       ==========================================================
-      圆桌结构
+      房号解析
       ==========================================================
     */
-
-    function getSeatGeometry(
-      room,
-      seat
-    ) {
-      const xPos =
-        getSeatXPosition(seat);
-
-      const i =
-        getPositionIndex(xPos);
-
-      return {
-        seat,
-
-        xPos,
-
-        x:
-          room[xPos],
-
-        prev:
-          getPositionItem(
-            room,
-            i - 1
-          ),
-
-        next:
-          getPositionItem(
-            room,
-            i + 1
-          ),
-
-        prev2:
-          getPositionItem(
-            room,
-            i - 2
-          ),
-
-        next2:
-          getPositionItem(
-            room,
-            i + 2
-          )
-      };
-    }
-
-    /*
-      ==========================================================
-      房间分析
-      ==========================================================
-    */
-
-    function analyzeRoom(
-      roomNumber
-    ) {
+    function analyzeRoom(roomNumber) {
       const digits =
         roomNumber
           .split("")
           .map(Number);
-
       const [
         A,
         B,
@@ -1403,124 +722,123 @@
         D,
         E
       ] = digits;
-
+      const positions = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ];
       const digitMap =
         countMap(digits);
-
-      const repeatDigits =
-        Object
-          .keys(digitMap)
-          .map(Number)
-          .filter(number => {
-            return (
-              digitMap[number] >= 2
-            );
-          });
-
-      const oddCount =
-        digits.filter(number => {
-          return (
-            number % 2 === 1
-          );
-        }).length;
-
-      const evenCount =
-        digits.length -
-        oddCount;
-
-      const smallCount =
-        digits.filter(isSmallX).length;
-
-      const midCount =
-        digits.filter(isMidX).length;
-
-      const largeCount =
-        digits.filter(isLargeX).length;
-
-      const trend = [
-        moveText(A, B),
-        moveText(B, C),
-        moveText(C, D),
-        moveText(D, E)
-      ];
-
       return {
         room:
           roomNumber,
-
         digits,
-
+        positions,
         digitMap,
-
         A,
         B,
         C,
         D,
         E,
-
-        repeatDigits,
-
+        hasZero:
+          digits.includes(0),
         hasRepeat:
-          repeatDigits.length > 0,
-
-        oddCount,
-
-        evenCount,
-
-        smallCount,
-
-        midCount,
-
-        largeCount,
-
-        layerPattern:
-          digits
-            .map(highLowText)
-            .join(""),
-
-        oddEvenPattern:
-          digits
-            .map(oddEvenText)
-            .join(""),
-
-        trendCode:
-          trend.join(""),
-
-        sum:
-          digits.reduce(
-            (total, number) => {
-              return total + number;
-            },
-            0
-          )
+          Object
+            .values(digitMap)
+            .some(value => {
+              return value >= 2;
+            })
       };
     }
-
     /*
       ==========================================================
-      按X层级调用规则
+      有方向差值扫描
+      ==========================================================
+      direction = X_GREATER
+      表示：
+      X - n = diff
+      也就是：
+      X坐大数字端
+      direction = X_SMALLER
+      表示：
+      n - X = diff
+      也就是：
+      X坐小数字端
+      注意：
+      X所在的那个位置自身
+      不参与差值。
+      例如：
+      6号位映射E
+      那么只比较：
+      E 对 A/B/C/D
+      不会拿E自己和E比较。
+    */
+    function findDirectionalMatches(
+      room,
+      seat,
+      diff,
+      direction
+    ) {
+      const xPos =
+        getSeatXPosition(seat);
+      const x =
+        room[xPos];
+      const matches = [];
+      room.positions.forEach(pos => {
+        /*
+          跳过X自己的位置
+        */
+        if (pos === xPos) {
+          return;
+        }
+        const n =
+          room[pos];
+        /*
+          X坐大数端
+        */
+        if (
+          direction === "X_GREATER" &&
+          x - n === diff
+        ) {
+          matches.push({
+            pos,
+            value: n,
+            text:
+              `${x}-${n}=${diff}`
+          });
+        }
+        /*
+          X坐小数端
+        */
+        if (
+          direction === "X_SMALLER" &&
+          n - x === diff
+        ) {
+          matches.push({
+            pos,
+            value: n,
+            text:
+              `${n}-${x}=${diff}`
+          });
+        }
+      });
+      return matches;
+    }
+    /*
+      ==========================================================
+      正式命中
       ==========================================================
     */
-
-    function getWhiteHits(
+    function getFormalHits(
       room,
       seat
     ) {
-      const geometry =
-        getSeatGeometry(
-          room,
-          seat
-        );
-
-      const layer =
-        getLayerByX(
-          geometry.x
-        );
-
-      return WHITE_RULES
+      return FORMAL_RULES
         .filter(rule => {
           return (
-            rule.layer === layer &&
+            rule.seat === seat &&
             rule.test(
               seat,
               room
@@ -1534,53 +852,19 @@
           );
         });
     }
-
-    function getBlackHits(
-      room,
-      seat
-    ) {
-      const geometry =
-        getSeatGeometry(
-          room,
-          seat
-        );
-
-      const layer =
-        getLayerByX(
-          geometry.x
-        );
-
-      return BLACK_RULES
-        .filter(rule => {
-          return (
-            rule.layer === layer &&
-            rule.test(
-              seat,
-              room
-            )
-          );
-        });
-    }
-
+    /*
+      ==========================================================
+      观察命中
+      ==========================================================
+    */
     function getObserveHits(
       room,
       seat
     ) {
-      const geometry =
-        getSeatGeometry(
-          room,
-          seat
-        );
-
-      const layer =
-        getLayerByX(
-          geometry.x
-        );
-
       return OBSERVE_RULES
         .filter(rule => {
           return (
-            rule.layer === layer &&
+            rule.seat === seat &&
             rule.test(
               seat,
               room
@@ -1588,106 +872,133 @@
           );
         });
     }
-
     /*
       ==========================================================
-      分析全部座位
+      根据规则取实际差值关系
       ==========================================================
     */
-
+    function getRuleMatches(
+      rule,
+      room,
+      seat
+    ) {
+      /*
+        6号
+        差6
+        大数端
+      */
+      if (rule.id === "J-W1") {
+        return findDirectionalMatches(
+          room,
+          seat,
+          6,
+          "X_GREATER"
+        );
+      }
+      /*
+        4号
+        差3
+        大数端
+      */
+      if (rule.id === "J-W2") {
+        return findDirectionalMatches(
+          room,
+          seat,
+          3,
+          "X_GREATER"
+        );
+      }
+      /*
+        5号
+        差3
+        小数端
+      */
+      if (rule.id === "J-W3") {
+        return findDirectionalMatches(
+          room,
+          seat,
+          3,
+          "X_SMALLER"
+        );
+      }
+      /*
+        2号观察
+        差6
+        大数端
+      */
+      if (rule.id === "J-O1") {
+        return findDirectionalMatches(
+          room,
+          seat,
+          6,
+          "X_GREATER"
+        );
+      }
+      return [];
+    }
+    /*
+      ==========================================================
+      分析1-6号
+      ==========================================================
+    */
     function analyzeSeats(room) {
-      const seats = [];
-
+      const result = [];
       for (
         let seat = 1;
         seat <= 6;
         seat++
       ) {
-        const geometry =
-          getSeatGeometry(
+        const xPos =
+          getSeatXPosition(seat);
+        const x =
+          room[xPos];
+        const formalHits =
+          getFormalHits(
             room,
             seat
           );
-
-        const layer =
-          getLayerByX(
-            geometry.x
-          );
-
-        const whiteHits =
-          getWhiteHits(
-            room,
-            seat
-          );
-
-        const blackHits =
-          getBlackHits(
-            room,
-            seat
-          );
-
         const observeHits =
           getObserveHits(
             room,
             seat
           );
-
-        const isBlocked =
-          (
-            whiteHits.length > 0 &&
-            blackHits.length > 0
-          );
-
-        const isCandidate =
-          (
-            whiteHits.length > 0 &&
-            !isBlocked
-          );
-
-        seats.push({
+        result.push({
           seat,
-
-          x:
-            geometry.x,
-
-          layer,
-
-          geometry,
-
-          whiteHits,
-
-          blackHits,
-
+          xPos,
+          x,
+          formalHits,
           observeHits,
-
-          isBlocked,
-
-          isCandidate,
-
+          isCandidate:
+            formalHits.length > 0,
           bestRank:
-            whiteHits.length
-              ? whiteHits[0].rank
+            formalHits.length
+              ? formalHits[0].rank
               : 999
         });
       }
-
-      return seats;
+      return result;
     }
-
     /*
       ==========================================================
-      最终推荐
+      最终输出
       ==========================================================
+      当前不限制最多3位。
+      只要正式规则命中，
+      就全部输出。
+      排序：
+      6号规则
+      >
+      4号规则
+      >
+      5号规则
     */
-
     function choosePicks(seats) {
-      const allPicks =
+      const formal =
         seats
           .filter(item => {
             return item.isCandidate;
           })
           .sort((a, b) => {
-
             if (
               a.bestRank !==
               b.bestRank
@@ -1697,183 +1008,195 @@
                 b.bestRank
               );
             }
-
             return (
               a.seat -
               b.seat
             );
           });
-
+      const observe =
+        seats.filter(item => {
+          return (
+            item.observeHits.length > 0
+          );
+        });
       return {
-        allPicks,
-
         finalPicks:
-          allPicks.slice(
-            0,
-            3
-          ),
-
-        hiddenPickCount:
-          Math.max(
-            0,
-            allPicks.length - 3
-          )
+          formal,
+        observePicks:
+          observe
       };
     }
-
     /*
       ==========================================================
       主执行
       ==========================================================
     */
-
     function run() {
       const input =
         document.getElementById(
           "roomInput"
         );
-
       let roomNumber =
         input.value
           .replace(/\D/g, "")
           .slice(0, 5);
-
       input.value =
         roomNumber;
-
+      /*
+        必须5位
+      */
       if (
         roomNumber.length !== 5
       ) {
         showError(
           "请输入完整的5位数字房号。"
         );
-
         return;
       }
-
+      /*
+        分析房号
+      */
       const room =
         analyzeRoom(
           roomNumber
         );
-
+      /*
+        分析全部座位
+      */
       const seats =
         analyzeSeats(
           room
         );
-
+      /*
+        最终选位
+      */
       const decision =
         choosePicks(
           seats
         );
-
+      /*
+        显示
+      */
       renderResult(
         room,
         seats,
         decision
       );
-
+      /*
+        保存历史
+      */
       saveHistory(
         room,
         decision
       );
-
       renderHistory();
     }
-
     /*
       ==========================================================
       输入错误
       ==========================================================
     */
-
     function showError(message) {
       const box =
         document.getElementById(
           "result"
         );
-
       box.className =
         "result show";
-
       box.innerHTML = `
         <span class="badge no">
           输入错误
         </span>
-
         <div class="big">
           不处理
         </div>
-
         <div class="desc">
           ${message}
         </div>
       `;
     }
-
     /*
       ==========================================================
       房号总览
       ==========================================================
     */
-
     function renderRoomLine(room) {
       return `
         ABCDE=
         ${room.A}${room.B}${room.C}${room.D}${room.E}
         <br>
-
-        三层排列：
-        ${room.layerPattern}
-        ｜奇偶排列：
-        ${room.oddEvenPattern}
+        A=${room.A}
+        ｜B=${room.B}
+        ｜C=${room.C}
+        ｜D=${room.D}
+        ｜E=${room.E}
         <br>
-
-        小${room.smallCount}
-        ｜中${room.midCount}
-        ｜大${room.largeCount}
-        ｜奇${room.oddCount}
-        ｜偶${room.evenCount}
-        ｜总和=${room.sum}
-        <br>
-
-        走势：
-        ${room.trendCode}
-        <br>
-
-        重号：
+        ${
+          room.hasZero
+            ? "含0"
+            : "无0"
+        }
+        ｜
         ${
           room.hasRepeat
-            ? room.repeatDigits.join("、")
-            : "无"
+            ? "有重号"
+            : "无重号"
         }
       `;
     }
-
     /*
       ==========================================================
-      圆桌描述
+      正式座位关系
       ==========================================================
     */
-
-    function geometryText(item) {
-      const g =
-        item.geometry;
-
-      return `
-        X=${g.x}（${g.xPos}）
-        ｜前邻${g.prev.pos}=${g.prev.value}
-        ｜后邻${g.next.pos}=${g.next.value}
-        ｜前二${g.prev2.pos}=${g.prev2.value}
-        ｜后二${g.next2.pos}=${g.next2.value}
-      `;
+    function renderSeatRelation(
+      item,
+      room
+    ) {
+      const blocks = [];
+      item.formalHits.forEach(rule => {
+        const matches =
+          getRuleMatches(
+            rule,
+            room,
+            item.seat
+          );
+        blocks.push(`
+          <div
+            style="
+              margin-top:8px;
+            "
+          >
+            <b>
+              ${rule.id}
+              ｜${rule.name}
+            </b>
+            <br>
+            X=
+            ${item.x}
+            （${item.xPos}）
+            ｜命中关系：
+            ${
+              matches
+                .map(match => {
+                  return (
+                    `${match.pos}=${match.value} → ${match.text}`
+                  );
+                })
+                .join("；")
+            }
+            <br>
+            ${rule.stat}
+          </div>
+        `);
+      });
+      return blocks.join("");
     }
-
     /*
       ==========================================================
       结果显示
       ==========================================================
     */
-
     function renderResult(
       room,
       seats,
@@ -1883,91 +1206,101 @@
         document.getElementById(
           "result"
         );
-
       const picks =
         decision.finalPicks;
-
+      const observe =
+        decision.observePicks;
       /*
-        无正式命中
+        ========================================================
+        没有正式推荐
+        ========================================================
       */
-
       if (!picks.length) {
-        const observeSeats =
-          seats.filter(item => {
-            return (
-              item.observeHits.length > 0
-            );
-          });
-
         let observeText = "";
-
+        /*
+          有2号观察位
+        */
         if (
-          observeSeats.length
+          observe.length
         ) {
           observeText = `
             <div
               class="desc"
-              style="margin-top:12px;"
+              style="
+                margin-top:12px;
+              "
             >
-              ⚠ 当前没有正式推荐位，
-              但存在观察级结构：
+              <span
+                class="badge warn"
+              >
+                观察位
+              </span>
               ${
-                observeSeats
+                observe
                   .map(item => {
-                    return `${item.seat}号`;
+                    const rule =
+                      item.observeHits[0];
+                    const matches =
+                      getRuleMatches(
+                        rule,
+                        room,
+                        item.seat
+                      );
+                    return `
+                      ${item.seat}号
+                      （X=${item.x}，
+                      ${
+                        matches
+                          .map(match => {
+                            return match.text;
+                          })
+                          .join(" / ")
+                      }）
+                    `;
                   })
-                  .join("、")
-              }。
-              观察规则不参与正式推荐。
+                  .join("；")
+              }
+              <br>
+              2号位当前只记录，
+              不计入正式推荐。
             </div>
           `;
         }
-
         box.className =
           "result show";
-
         box.innerHTML = `
           <span class="badge no">
             跳过
           </span>
-
           <div class="big">
             ${room.room}
           </div>
-
           <div class="desc">
-            当前1至6号位没有通过
-            “三层白名单 + 本层黑名单排雷”
-            的正式标准，
-            本房不推荐进。
+            当前没有命中
+            奖来 v1.0
+            的正式差值位。
             <br><br>
-
             ${renderRoomLine(room)}
           </div>
-
           ${observeText}
-
           ${renderDebug(
             room,
-            seats,
-            decision
+            seats
           )}
         `;
-
         return;
       }
-
       /*
-        有推荐位
+        ========================================================
+        有正式推荐
+        ========================================================
       */
-
       const pickNames =
         picks
           .map(pick => {
             return `${pick.seat}号`;
           })
           .join("、");
-
       const pickHtml =
         picks
           .map(
@@ -1975,73 +1308,13 @@
               pick,
               index
             ) => {
-
-              const layerClass =
-                getLayerClass(
-                  pick.layer
-                );
-
-              const hitNames =
-                pick.whiteHits
-                  .map(rule => {
-                    return (
-                      `${rule.id} ${rule.shortName}`
-                    );
-                  })
-                  .join("、");
-
-              const ruleDetails =
-                pick.whiteHits
-                  .map(rule => {
-                    return `
-                      <div
-                        style="
-                          margin-top:8px;
-                        "
-                      >
-                        <b>
-                          ${rule.id}
-                          ｜${rule.name}
-                        </b>
-                        <br>
-
-                        ${rule.stat}
-                        <br>
-
-                        ${rule.rule}
-                      </div>
-                    `;
-                  })
-                  .join("");
-
-              const observeText =
-                pick.observeHits.length
-                  ? `
-                    <br>
-                    <span
-                      class="badge warn"
-                    >
-                      同时命中观察规则
-                    </span>
-                    ${
-                      pick.observeHits
-                        .map(rule => {
-                          return rule.id;
-                        })
-                        .join("、")
-                    }
-                  `
-                  : "";
-
               return `
                 <div
                   class="
                     pick
                     ${index === 0 ? "main" : ""}
-                    ${layerClass}
                   "
                 >
-
                   <div
                     class="pick-title"
                   >
@@ -2050,130 +1323,112 @@
                         ? "🔥第一推荐"
                         : "⚡同时推荐"
                     }
-
                     ｜${pick.seat}号
                     ｜X=${pick.x}
-                    ｜${getLayerName(
-                      pick.layer
-                    )}
                   </div>
-
                   <div
                     class="pick-rule"
                   >
-                    ${getLayerBadge(
-                      pick.layer
-                    )}
-
                     <span
                       class="badge ok"
                     >
-                      黑名单安全
+                      正式差值命中
                     </span>
-
-                    <br>
-
-                    命中：
-                    ${hitNames}
-                    <br>
-
-                    圆桌结构：
-                    ${geometryText(pick)}
-
-                    ${observeText}
-
-                    ${ruleDetails}
+                    ${
+                      renderSeatRelation(
+                        pick,
+                        room
+                      )
+                    }
                   </div>
                 </div>
               `;
             }
           )
           .join("");
-
-      const hiddenText =
-        decision.hiddenPickCount > 0
+      /*
+        观察位显示
+      */
+      const observeHtml =
+        observe.length
           ? `
             <div
               class="desc"
-              style="margin-top:10px;"
+              style="
+                margin-top:12px;
+              "
             >
-              该房间还有
-              ${decision.hiddenPickCount}
-              个正式候选位，
-              但模型按规则优先级
-              只输出前3位。
+              <span
+                class="badge warn"
+              >
+                另有观察位
+              </span>
+              ${
+                observe
+                  .map(item => {
+                    return `${item.seat}号`;
+                  })
+                  .join("、")
+              }
+              ｜不参与正式推荐。
             </div>
           `
           : "";
-
       box.className =
         "result show";
-
       box.innerHTML = `
         <span class="badge ok">
           建议进房
         </span>
-
         <span class="badge blue">
-          三层X v1.1
+          奖来 v1.0
         </span>
-
-        <span class="badge warn">
-          最多3位
-        </span>
-
         <div class="big">
           推荐：
           ${pickNames}
         </div>
-
         <div class="pick-list">
           ${pickHtml}
         </div>
-
-        ${hiddenText}
-
+        ${observeHtml}
         <div
           class="desc"
-          style="margin-top:14px;"
+          style="
+            margin-top:14px;
+          "
         >
           房号：
           <b>
             ${room.room}
           </b>
           <br>
-
           ${renderRoomLine(room)}
         </div>
-
         <div class="grid">
           <div class="stat">
             <div class="v">
-              ${MODEL_STAT.sample}
+              ${MODEL_STAT.sample}局
             </div>
             <div class="k">
               样本库
             </div>
           </div>
-
           <div class="stat">
             <div class="v">
-              ${MODEL_STAT.hitCount}
+              ${MODEL_STAT.hitCount}局
             </div>
             <div class="k">
-              历史命中
+              正式命中
             </div>
           </div>
-
           <div class="stat">
             <div class="v">
               ${MODEL_STAT.winRate}
             </div>
             <div class="k">
-              历史胜率
+              正式胜率
             </div>
           </div>
-
           <div class="stat">
             <div class="v">
               ${MODEL_STAT.bigLoss}
@@ -2183,163 +1438,116 @@
             </div>
           </div>
         </div>
-
         ${renderDebug(
           room,
-          seats,
-          decision
+          seats
         )}
       `;
     }
-
     /*
       ==========================================================
-      调试表
+      调试差值表
       ==========================================================
     */
-
     function renderDebug(
       room,
-      seats,
-      decision
+      seats
     ) {
-      const selectedSet =
-        new Set(
-          decision.finalPicks
-            .map(item => {
-              return item.seat;
-            })
-        );
-
       const rows =
         seats
           .map(item => {
-
             let status =
-              "无正式命中";
-
+              "不参与";
+            /*
+              正式命中
+            */
             if (
-              item.whiteHits.length
+              item.formalHits.length
             ) {
-              const whiteText =
-                item.whiteHits
+              status =
+                "✅ " +
+                item.formalHits
                   .map(rule => {
-                    return (
-                      `${rule.id}:${rule.shortName}`
-                    );
+                    return rule.shortName;
                   })
                   .join("、");
-
-              if (
-                item.blackHits.length
-              ) {
-                const blackText =
-                  item.blackHits
-                    .map(rule => {
-                      return (
-                        `${rule.id}:${rule.shortName}`
-                      );
-                    })
-                    .join("、");
-
-                status =
-                  `❌白名单 ${whiteText} ｜ 黑名单 ${blackText} ｜ 排除`;
-              } else {
-                status =
-                  `✅ ${whiteText}`;
-
-                if (
-                  selectedSet.has(
-                    item.seat
-                  )
-                ) {
-                  status +=
-                    "｜最终推荐";
-                } else {
-                  status +=
-                    "｜正式命中但未进前三";
-                }
-              }
             }
-
-            if (
+            /*
+              观察命中
+            */
+            else if (
               item.observeHits.length
             ) {
-              const observeText =
+              status =
+                "🟠 " +
                 item.observeHits
                   .map(rule => {
-                    return rule.id;
+                    return rule.shortName;
                   })
                   .join("、");
-
-              status +=
-                `｜观察:${observeText}`;
             }
-
+            /*
+              1号 / 3号
+            */
+            else if (
+              [1, 3].includes(
+                item.seat
+              )
+            ) {
+              status =
+                "暂无正式规则";
+            }
+            /*
+              4/5/6没有命中
+            */
+            else {
+              status =
+                "未命中";
+            }
+            /*
+              列出：
+              X - 其他位置数字
+              +号：
+              X比对方大
+              -号：
+              X比对方小
+            */
+            const allRelations = [];
+            room.positions.forEach(pos => {
+              /*
+                不比较X自身位置
+              */
+              if (
+                pos === item.xPos
+              ) {
+                return;
+              }
+              const n =
+                room[pos];
+              const d =
+                item.x - n;
+              allRelations.push(
+                `${pos}:${
+                  d >= 0
+                    ? "+"
+                    : ""
+                }${d}`
+              );
+            });
             return `
               <tr>
                 <td>
                   ${item.seat}号
                 </td>
-
+                <td>
+                  ${item.xPos}
+                </td>
                 <td>
                   ${item.x}
                 </td>
-
                 <td>
-                  ${getLayerName(
-                    item.layer
-                  )}
+                  ${allRelations.join(" / ")}
                 </td>
-
-                <td>
-                  ${item.geometry.prev.pos}${item.geometry.prev.value}
-                </td>
-
-                <td>
-                  ${item.geometry.next.pos}${item.geometry.next.value}
-                </td>
-
-                <td>
-                  ${item.geometry.prev2.pos}${item.geometry.prev2.value}
-                </td>
-
-                <td>
-                  ${item.geometry.next2.pos}${item.geometry.next2.value}
-                </td>
-
-                <td>
-                  ${
-                    Math.abs(
-                      item.geometry.prev.value -
-                      item.geometry.next.value
-                    )
-                  }
-                </td>
-
-                <td>
-                  ${
-                    item.geometry.prev.value +
-                    item.geometry.next.value
-                  }
-                </td>
-
-                <td>
-                  ${
-                    Math.abs(
-                      item.geometry.prev2.value -
-                      item.geometry.next2.value
-                    )
-                  }
-                </td>
-
-                <td>
-                  ${
-                    item.geometry.prev2.value +
-                    item.geometry.next2.value
-                  }
-                </td>
-
                 <td>
                   ${status}
                 </td>
@@ -2347,55 +1555,194 @@
             `;
           })
           .join("");
-
       return `
         <div class="debug">
           <table>
-
             <thead>
               <tr>
-                <th colspan="12">
-                  房号：
+                <th colspan="5">
+                  房号
                   ${room.room}
-                  ｜三层结构：
-                  ${room.layerPattern}
-                  ｜奇偶：
-                  ${room.oddEvenPattern}
-                  ｜${room.hasRepeat ? "有重号" : "无重号"}
+                  ｜差值表中的“+”
+                  表示X比对方大，
+                  “-”
+                  表示X比对方小
                 </th>
               </tr>
-
               <tr>
-                <th>位子</th>
-                <th>X</th>
-                <th>X层</th>
-                <th>前邻</th>
-                <th>后邻</th>
-                <th>前二</th>
-                <th>后二</th>
-                <th>邻差</th>
-                <th>邻和</th>
-                <th>外差</th>
-                <th>外和</th>
-                <th>模型结果</th>
+                <th>
+                  位子
+                </th>
+                <th>
+                  X位置
+                </th>
+                <th>
+                  X
+                </th>
+                <th>
+                  X-其他位数字
+                </th>
+                <th>
+                  模型结果
+                </th>
               </tr>
             </thead>
-
             <tbody>
               ${rows}
             </tbody>
-
           </table>
         </div>
       `;
     }
-
+    /*
+      ==========================================================
+      规则展示
+      ==========================================================
+    */
+    function renderComboList() {
+      const box =
+        document.getElementById(
+          "comboList"
+        );
+      box.innerHTML = `
+        <div
+          class="
+            combo
+            main-rule
+          "
+        >
+          <div class="name">
+            🟢 J-W1
+            ｜6号正式白名单
+            ｜差6坐大数端
+          </div>
+          <div class="rule">
+            6号位映射E，
+            X=E。
+            房号其他
+            A/B/C/D
+            任一数字n满足：
+            <b>
+              X-n=6
+            </b>
+            即命中。
+            <br>
+            历史4局4胜，
+            4局全部大赢，
+            净+3210，
+            0大输。
+          </div>
+        </div>
+        <div
+          class="
+            combo
+            main-rule
+          "
+        >
+          <div class="name">
+            🟢 J-W2
+            ｜4号正式白名单
+            ｜差3坐大数端
+          </div>
+          <div class="rule">
+            4号位映射D，
+            X=D。
+            房号其他
+            A/B/C/E
+            任一数字n满足：
+            <b>
+              X-n=3
+            </b>
+            即命中。
+            <br>
+            历史4局2胜2负，
+            2局大赢，
+            0大输。
+          </div>
+        </div>
+        <div
+          class="
+            combo
+            main-rule
+          "
+        >
+          <div class="name">
+            🟢 J-W3
+            ｜5号正式白名单
+            ｜差3坐小数端
+          </div>
+          <div class="rule">
+            5号位映射E，
+            X=E。
+            房号其他
+            A/B/C/D
+            任一数字n满足：
+            <b>
+              n-X=3
+            </b>
+            即命中。
+            <br>
+            历史2局2胜，
+            2局全部大赢，
+            净+1890，
+            0大输。
+          </div>
+        </div>
+        <div
+          class="
+            combo
+            observe
+          "
+        >
+          <div class="name">
+            🟠 J-O1
+            ｜2号观察规则
+            ｜差6坐大数端
+          </div>
+          <div class="rule">
+            2号位映射B，
+            X=B。
+            其他
+            A/C/D/E
+            任一数字n满足：
+            <b>
+              X-n=6
+            </b>
+            时只显示：
+            “观察位”。
+            <br>
+            当前不计入正式输出。
+          </div>
+        </div>
+        <div
+          class="
+            combo
+            off
+          "
+        >
+          <div class="name">
+            🔴 1号 / 3号
+            ｜暂不下正式规则
+          </div>
+          <div class="rule">
+            当前47局样本中，
+            还没有找到足够稳定、
+            可以直接使用的差值白名单。
+            <br>
+            网页不会因为：
+            奇偶、
+            X大小、
+            熊猫旧模型
+            错误推荐1号或3号。
+          </div>
+        </div>
+      `;
+    }
     /*
       ==========================================================
       历史记录
       ==========================================================
     */
-
     function saveHistory(
       room,
       decision
@@ -2403,43 +1750,43 @@
       const item = {
         room:
           room.room,
-
         time:
           new Date()
             .toLocaleString(),
-
         result:
           decision
             .finalPicks
             .length
-              ? decision
-                  .finalPicks
-                  .map(pick => {
-                    return (
-                      `${pick.seat}号`
-                    );
-                  })
-                  .join("、")
-              : "跳过",
-
-        hiddenPickCount:
-          decision.hiddenPickCount
+            ? decision
+                .finalPicks
+                .map(pick => {
+                  return `${pick.seat}号`;
+                })
+                .join("、")
+            : "跳过",
+        observe:
+          decision
+            .observePicks
+            .length
+            ? decision
+                .observePicks
+                .map(pick => {
+                  return `${pick.seat}号`;
+                })
+                .join("、")
+            : ""
       };
-
       const key =
-        "panda_5149823_3layer_v11_history";
-
+        "jianglai_5155555_diff_v10_history";
       const list =
         JSON.parse(
           localStorage.getItem(
             key
           ) || "[]"
         );
-
       list.unshift(
         item
       );
-
       localStorage.setItem(
         key,
         JSON.stringify(
@@ -2450,519 +1797,208 @@
         )
       );
     }
-
     function renderHistory() {
       const box =
         document.getElementById(
           "historyBox"
         );
-
       const key =
-        "panda_5149823_3layer_v11_history";
-
+        "jianglai_5155555_diff_v10_history";
       const list =
         JSON.parse(
           localStorage.getItem(
             key
           ) || "[]"
         );
-
       if (!list.length) {
         box.innerHTML =
           "暂无记录";
-
         return;
       }
-
       box.innerHTML =
         list
           .map(item => {
-
-            const hiddenText =
-              item.hiddenPickCount > 0
-                ? `
-                  <br>
-                  另有
-                  ${item.hiddenPickCount}
-                  位因超过上限未显示
-                `
-                : "";
-
             return `
               <div
                 class="history-item"
               >
-
                 <div
                   class="history-left"
                 >
                   ${item.room}
                 </div>
-
                 <div
                   class="history-right"
                 >
+                  正式：
                   ${item.result}
-                  ${hiddenText}
+                  ${
+                    item.observe
+                      ? `
+                        <br>
+                        观察：
+                        ${item.observe}
+                      `
+                      : ""
+                  }
                   <br>
                   ${item.time}
                 </div>
-
               </div>
             `;
           })
           .join("");
     }
-
     function clearHistory() {
       localStorage.removeItem(
-        "panda_5149823_3layer_v11_history"
+        "jianglai_5155555_diff_v10_history"
       );
-
       renderHistory();
     }
-
     /*
       ==========================================================
-      模型规则展示
+      模型自检
       ==========================================================
+      用已知历史战绩检查：
+      6号规则
+      4号规则
+      5号规则
+      2号观察规则
+      防止以后改代码后，
+      输出逻辑发生偏移。
     */
-
-    function renderComboList() {
-      const box =
-        document.getElementById(
-          "comboList"
-        );
-
-      /*
-        小X
-      */
-
-      const smallWhite =
-        WHITE_RULES
-          .filter(rule => {
-            return (
-              rule.layer === "S"
-            );
-          })
-          .sort((a, b) => {
-            return (
-              a.rank -
-              b.rank
-            );
-          })
-          .map(rule => {
-            return `
-              <div
-                class="combo small-x"
-              >
-                <div class="name">
-                  ${rule.id}
-                  ｜小X白名单
-                  ｜${rule.name}
-                </div>
-
-                <div class="rule">
-                  ${rule.rule}
-                  <br>
-                  ${rule.stat}
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-
-      const smallBlack =
-        BLACK_RULES
-          .filter(rule => {
-            return (
-              rule.layer === "S"
-            );
-          })
-          .map(rule => {
-            return `
-              <div
-                class="combo black"
-              >
-                <div class="name">
-                  ${rule.id}
-                  ｜小X硬黑名单
-                  ｜${rule.name}
-                </div>
-
-                <div class="rule">
-                  ${rule.rule}
-                  <br>
-                  ${rule.stat}
-                  <br>
-                  命中后直接排除。
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-
-      /*
-        中X
-      */
-
-      const midWhite =
-        WHITE_RULES
-          .filter(rule => {
-            return (
-              rule.layer === "M"
-            );
-          })
-          .sort((a, b) => {
-            return (
-              a.rank -
-              b.rank
-            );
-          })
-          .map(rule => {
-            return `
-              <div
-                class="combo mid-x"
-              >
-                <div class="name">
-                  ${rule.id}
-                  ｜中X白名单
-                  ｜${rule.name}
-                </div>
-
-                <div class="rule">
-                  ${rule.rule}
-                  <br>
-                  ${rule.stat}
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-
-      const midBlack =
-        BLACK_RULES
-          .filter(rule => {
-            return (
-              rule.layer === "M"
-            );
-          })
-          .map(rule => {
-            return `
-              <div
-                class="combo black"
-              >
-                <div class="name">
-                  ${rule.id}
-                  ｜中X硬黑名单
-                  ｜${rule.name}
-                </div>
-
-                <div class="rule">
-                  ${rule.rule}
-                  <br>
-                  ${rule.stat}
-                  <br>
-                  命中后直接排除。
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-
-      /*
-        大X
-      */
-
-      const largeWhite =
-        WHITE_RULES
-          .filter(rule => {
-            return (
-              rule.layer === "L"
-            );
-          })
-          .sort((a, b) => {
-            return (
-              a.rank -
-              b.rank
-            );
-          })
-          .map(rule => {
-            return `
-              <div
-                class="combo large-x"
-              >
-                <div class="name">
-                  ${rule.id}
-                  ｜大X白名单
-                  ｜${rule.name}
-                </div>
-
-                <div class="rule">
-                  ${rule.rule}
-                  <br>
-                  ${rule.stat}
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-
-      const largeBlack =
-        BLACK_RULES
-          .filter(rule => {
-            return (
-              rule.layer === "L"
-            );
-          })
-          .map(rule => {
-            return `
-              <div
-                class="combo black"
-              >
-                <div class="name">
-                  ${rule.id}
-                  ｜大X硬黑名单
-                  ｜${rule.name}
-                </div>
-
-                <div class="rule">
-                  ${rule.rule}
-                  <br>
-                  ${rule.stat}
-                  <br>
-                  命中后直接排除。
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-
-      /*
-        观察规则
-      */
-
-      const observeHtml =
-        OBSERVE_RULES
-          .map(rule => {
-            return `
-              <div
-                class="combo observe"
-              >
-                <div class="name">
-                  ${rule.id}
-                  ｜观察级
-                  ｜${rule.name}
-                </div>
-
-                <div class="rule">
-                  ${rule.rule}
-                  <br>
-                  ${rule.stat}
-                  <br>
-                  当前不参与正式推荐。
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-
-      box.innerHTML = `
-        <div class="combo small-x">
-          <div class="name">
-            🔵 第一层｜小X 0–2
-          </div>
-
-          <div class="rule">
-            核心逻辑：
-            小X主要看外围支撑。
-            外围高、外围稳定更有利；
-            弱外围低谷属于危险结构。
-          </div>
-        </div>
-
-        ${smallWhite}
-        ${smallBlack}
-
-        <div class="combo mid-x">
-          <div class="name">
-            🟣 第二层｜中X 3–6
-          </div>
-
-          <div class="rule">
-            核心逻辑：
-            中X主要看左右坡度和重号环境。
-            无保护时偏好左右打开；
-            奇数3/5在重号房里允许紧邻型结构。
-          </div>
-        </div>
-
-        ${midWhite}
-        ${midBlack}
-
-        <div class="combo large-x">
-          <div class="name">
-            🟢 第三层｜大X 7–9
-          </div>
-
-          <div class="rule">
-            核心逻辑：
-            大X优先看重号保护；
-            无重号保护时，
-            需要低位邻居或低位外层支撑。
-            孤立高点属于危险结构。
-          </div>
-        </div>
-
-        ${largeWhite}
-        ${largeBlack}
-
-        <div class="combo observe">
-          <div class="name">
-            🟠 观察规则
-          </div>
-
-          <div class="rule">
-            样本量不足的结构只记录，
-            不参与正式选位。
-          </div>
-        </div>
-
-        ${observeHtml}
-      `;
-    }
-
-    /*
-      ==========================================================
-      内置模型自检
-      ==========================================================
-      用历史已知结构检查代码是否仍然按预期工作。
-    */
-
     function runSelfTests() {
       const tests = [
-
         /*
-          58462
-          5号 X=2：
-          无重号
-          前邻D=6 > 后邻A=5
-          外和 C4+B8=12
-          => S-W2
+          6号差6大数端
         */
-
         {
-          room: "58462",
-          seat: 5,
-          shouldCandidate: true
+          room: "38439",
+          expectedFormal: [6]
         },
-
-        /*
-          72774
-          4号 X=7
-          重号7贴X
-          => L-W1
-        */
-
         {
-          room: "72774",
-          seat: 4,
-          shouldCandidate: true
+          room: "62117",
+          expectedFormal: [6]
         },
-
-        /*
-          22585
-          3号 X=5
-          B2 < D8
-          外和 A2+E5=7
-          => M-W2
-        */
-
         {
-          room: "22585",
-          seat: 3,
-          shouldCandidate: true
+          room: "30199",
+          expectedFormal: [6]
         },
-
-        /*
-          12134
-          3号 X=1
-          局部低点
-          外和 A1+E4=5
-          => S-BL1危险
-        */
-
         {
-          room: "12134",
-          seat: 3,
-          shouldBlocked: true
+          room: "90288",
+          expectedFormal: [6]
+        },
+        /*
+          4号差3大数端
+        */
+        {
+          room: "87741",
+          expectedFormal: [4]
+        },
+        {
+          room: "57574",
+          expectedFormal: [4]
+        },
+        /*
+          5号差3小数端
+        */
+        {
+          room: "36491",
+          expectedFormal: [5]
+        },
+        {
+          room: "93825",
+          expectedFormal: [5]
+        },
+        /*
+          2号只观察
+        */
+        {
+          room: "16201",
+          expectedFormal: [],
+          expectedObserve: [2]
+        },
+        {
+          room: "88121",
+          expectedFormal: [],
+          expectedObserve: [2]
         }
       ];
-
       tests.forEach(test => {
         const room =
           analyzeRoom(
             test.room
           );
-
         const seats =
           analyzeSeats(
             room
           );
-
-        const result =
-          seats.find(item => {
-            return (
-              item.seat ===
-              test.seat
-            );
-          });
-
+        const decision =
+          choosePicks(
+            seats
+          );
+        const formal =
+          decision
+            .finalPicks
+            .map(item => {
+              return item.seat;
+            });
+        const observe =
+          decision
+            .observePicks
+            .map(item => {
+              return item.seat;
+            });
+        const formalOK =
+          JSON.stringify(
+            formal
+          ) ===
+          JSON.stringify(
+            test.expectedFormal
+          );
+        const observeOK =
+          !test.expectedObserve ||
+          JSON.stringify(
+            observe
+          ) ===
+          JSON.stringify(
+            test.expectedObserve
+          );
         if (
-          "shouldCandidate" in test
+          !formalOK ||
+          !observeOK
         ) {
-          if (
-            result.isCandidate !==
-            test.shouldCandidate
-          ) {
-            console.error(
-              `[模型自检失败] ${test.room} ${test.seat}号`,
-              result
-            );
-          } else {
-            console.log(
-              `[模型自检通过] ${test.room} ${test.seat}号 candidate=${result.isCandidate}`
-            );
-          }
-        }
-
-        if (
-          "shouldBlocked" in test
-        ) {
-          if (
-            result.blackHits.length === 0
-          ) {
-            console.error(
-              `[黑名单自检失败] ${test.room} ${test.seat}号`,
-              result
-            );
-          } else {
-            console.log(
-              `[黑名单自检通过] ${test.room} ${test.seat}号`,
-              result.blackHits
-                .map(rule => rule.id)
-            );
-          }
+          console.error(
+            "[奖来模型自检失败]",
+            test.room,
+            {
+              expectedFormal:
+                test.expectedFormal,
+              actualFormal:
+                formal,
+              expectedObserve:
+                test.expectedObserve || [],
+              actualObserve:
+                observe
+            }
+          );
+        } else {
+          console.log(
+            "[奖来模型自检通过]",
+            test.room,
+            {
+              formal,
+              observe
+            }
+          );
         }
       });
     }
-
     /*
       ==========================================================
       输入监听
       ==========================================================
     */
-
     document
       .getElementById(
         "roomInput"
@@ -2976,7 +2012,6 @@
               .slice(0, 5);
         }
       );
-
     document
       .getElementById(
         "roomInput"
@@ -2992,13 +2027,11 @@
           }
         }
       );
-
     /*
       ==========================================================
       页面初始化
       ==========================================================
     */
-
     renderComboList();
     renderHistory();
     runSelfTests();
