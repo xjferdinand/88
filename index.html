@@ -6,7 +6,8 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
-  <title>5159843｜白核 v0.2</title>
+  <title>5159843｜白核 v0.3</title>
+
   <style>
     :root {
       --bg: #f7f3ec;
@@ -396,10 +397,10 @@
   <div class="wrap">
     <div class="hero">
       <div class="title">
-        5159843｜白核 v0.2
+        5159843｜白核 v0.3
       </div>
       <div class="sub">
-        34局样本｜只保留差8 + 差2小X｜删除4散规则｜命中任意白核即推荐｜不命中跳过
+        36局样本｜只保留差8 + 差2小X无差0｜删除4散和裸差2小X｜命中任意白核即推荐｜不命中跳过
       </div>
     </div>
 
@@ -426,31 +427,31 @@
 
     <div class="panel">
       <div class="section-title">
-        5159843 白核 v0.2 历史回测
+        5159843 白核 v0.3 历史回测
       </div>
       <div class="grid">
         <div class="stat">
-          <div class="v">34局</div>
+          <div class="v">36局</div>
           <div class="k">样本库</div>
         </div>
         <div class="stat">
-          <div class="v">8局</div>
+          <div class="v">6局</div>
           <div class="k">白核命中</div>
         </div>
         <div class="stat">
-          <div class="v">23.5%</div>
+          <div class="v">16.7%</div>
           <div class="k">进房率</div>
         </div>
         <div class="stat">
-          <div class="v">87.5%</div>
+          <div class="v">100%</div>
           <div class="k">胜率</div>
         </div>
         <div class="stat">
-          <div class="v">7胜1负</div>
+          <div class="v">6胜0负</div>
           <div class="k">胜负结构</div>
         </div>
         <div class="stat">
-          <div class="v">+3850</div>
+          <div class="v">+4260</div>
           <div class="k">净分</div>
         </div>
         <div class="stat">
@@ -465,14 +466,17 @@
 
       <div class="desc" style="margin-top:12px;">
         当前正式规则只保留：
-        <b>① 差8；② 差2小X。</b>
+        <b>① 差8；② 差2小X + 无差0。</b>
         <br><br>
         已删除：
         <b>4个有效差值全不同</b>
-        ，因为实测无效，不再参与推荐。
+        和
+        <b>裸差2小X</b>。
         <br>
         差2小X = 当前座位X比其他某个数字小2，即：
         <b>n - X = 2</b>。
+        <br>
+        无差0 = 当前座位X不能和其他任意位置数字相同。
       </div>
     </div>
 
@@ -511,38 +515,39 @@
   <script>
     /*
       ==========================================================
-      5159843｜白核 v0.2
+      5159843｜白核 v0.3
       ==========================================================
 
       正式白核：
       1. 有差8
-      2. 有差2小X
+      2. 有差2小X + 无差0
 
       删除：
-      4个有效差值全不同
+      1. 4个有效差值全不同
+      2. 裸差2小X
 
       命中任意一个 => 推荐
       都不命中 => 跳过
 
       回测：
-      34局样本
-      命中8局
-      7胜1负
-      胜率87.5%
-      净分+3850
+      36局样本
+      命中6局
+      6胜0负
+      胜率100%
+      净分+4260
       大赢4局
       大输0局
     */
 
     const MODEL_STAT = {
       account: "5159843",
-      version: "白核 v0.2",
-      sample: 34,
-      hitCount: 8,
-      hitRate: "23.5%",
-      winRate: "87.5%",
-      record: "7胜1负",
-      net: "+3850",
+      version: "白核 v0.3",
+      sample: 36,
+      hitCount: 6,
+      hitRate: "16.7%",
+      winRate: "100%",
+      record: "6胜0负",
+      net: "+4260",
       bigWin: "4大赢",
       bigLoss: "0大输"
     };
@@ -563,30 +568,44 @@
       if (seat === 1) {
         return "A";
       }
+
       if (seat === 2) {
         return "B";
       }
+
       if (seat === 3) {
         return "C";
       }
+
       if (seat === 4) {
         return "D";
       }
+
       return "E";
     }
 
     function countMap(arr) {
       const map = {};
+
       arr.forEach(value => {
         map[value] = (map[value] || 0) + 1;
       });
+
       return map;
     }
 
     function analyzeRoom(roomNumber) {
       const digits = roomNumber.split("").map(Number);
       const [A, B, C, D, E] = digits;
-      const positions = ["A", "B", "C", "D", "E"];
+
+      const positions = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ];
+
       const digitMap = countMap(digits);
 
       return {
@@ -600,7 +619,9 @@
         D,
         E,
         hasZero: digits.includes(0),
-        hasRepeat: Object.values(digitMap).some(value => value >= 2)
+        hasRepeat: Object.values(digitMap).some(value => {
+          return value >= 2;
+        })
       };
     }
 
@@ -644,13 +665,18 @@
         xPos,
         x,
         diffs,
-        validDiffs: diffs.filter(item => item.absDiff > 0)
+        validDiffs: diffs.filter(item => {
+          return item.absDiff > 0;
+        })
       };
     }
 
     function findAbsDiff(room, seat, diff) {
       const info = getSeatDiffs(room, seat);
-      return info.validDiffs.filter(item => item.absDiff === diff);
+
+      return info.validDiffs.filter(item => {
+        return item.absDiff === diff;
+      });
     }
 
     function findDirectionalDiff(room, seat, diff, direction) {
@@ -669,9 +695,18 @@
       });
     }
 
+    function hasZeroDiffForSeat(room, seat) {
+      const info = getSeatDiffs(room, seat);
+
+      return info.diffs.some(item => {
+        return item.absDiff === 0;
+      });
+    }
+
     function getEffectiveUniqueDiffCount(room, seat) {
       const info = getSeatDiffs(room, seat);
       const set = new Set(info.validDiffs.map(item => item.absDiff));
+
       return set.size;
     }
 
@@ -699,23 +734,46 @@
       {
         id: "M-W2",
         rank: 2,
-        name: "差2小X",
-        shortName: "差2小X",
-        stat: "历史7局5胜2负｜胜率71.4%｜净+2600｜0大输",
-        rule: "当前座位X比其他任一数字n小2，即 n-X=2。",
+        name: "差2小X + 无差0",
+        shortName: "差2小X无重",
+        stat: "历史4局4胜｜胜率100%｜净+3180｜0大输",
+        rule: "当前座位X比其他任一数字n小2，即 n-X=2；同时X不能和其他位置数字相同，也就是不能有差0。",
         test: (seat, room) => {
-          return findDirectionalDiff(room, seat, 2, "X_SMALLER").length > 0;
+          const hasDiff2Small =
+            findDirectionalDiff(
+              room,
+              seat,
+              2,
+              "X_SMALLER"
+            ).length > 0;
+
+          const hasZero =
+            hasZeroDiffForSeat(
+              room,
+              seat
+            );
+
+          return hasDiff2Small && !hasZero;
         },
         getMatches: (seat, room) => {
-          return findDirectionalDiff(room, seat, 2, "X_SMALLER");
+          return findDirectionalDiff(
+            room,
+            seat,
+            2,
+            "X_SMALLER"
+          );
         }
       }
     ];
 
     function getFormalHits(room, seat) {
       return FORMAL_RULES
-        .filter(rule => rule.test(seat, room))
-        .sort((a, b) => a.rank - b.rank);
+        .filter(rule => {
+          return rule.test(seat, room);
+        })
+        .sort((a, b) => {
+          return a.rank - b.rank;
+        });
     }
 
     function analyzeSeats(room) {
@@ -734,7 +792,8 @@
           formalHits,
           isCandidate: formalHits.length > 0,
           bestRank: formalHits.length ? formalHits[0].rank : 999,
-          effectiveUniqueDiffCount: getEffectiveUniqueDiffCount(room, seat)
+          effectiveUniqueDiffCount: getEffectiveUniqueDiffCount(room, seat),
+          hasZeroDiff: hasZeroDiffForSeat(room, seat)
         });
       }
 
@@ -743,11 +802,14 @@
 
     function choosePicks(seats) {
       const finalPicks = seats
-        .filter(item => item.isCandidate)
+        .filter(item => {
+          return item.isCandidate;
+        })
         .sort((a, b) => {
           if (a.bestRank !== b.bestRank) {
             return a.bestRank - b.bestRank;
           }
+
           return a.seat - b.seat;
         });
 
@@ -760,6 +822,7 @@
       const input = document.getElementById("roomInput");
 
       let roomNumber = input.value.replace(/\D/g, "").slice(0, 5);
+
       input.value = roomNumber;
 
       if (roomNumber.length !== 5) {
@@ -771,8 +834,17 @@
       const seats = analyzeSeats(room);
       const decision = choosePicks(seats);
 
-      renderResult(room, seats, decision);
-      saveHistory(room, decision);
+      renderResult(
+        room,
+        seats,
+        decision
+      );
+
+      saveHistory(
+        room,
+        decision
+      );
+
       renderHistory();
     }
 
@@ -780,6 +852,7 @@
       const box = document.getElementById("result");
 
       box.className = "result show";
+
       box.innerHTML = `
         <span class="badge no">输入错误</span>
         <div class="big">不处理</div>
@@ -829,12 +902,13 @@
 
       if (!picks.length) {
         box.className = "result show";
+
         box.innerHTML = `
           <span class="badge no">跳过</span>
           <span class="badge blue">未命中白核</span>
           <div class="big">${room.room}</div>
           <div class="desc">
-            当前房号没有任何座位命中 5159843 白核 v0.2。
+            当前房号没有任何座位命中 5159843 白核 v0.3。
             <br>
             这局不进，不硬打。
             <br><br>
@@ -842,10 +916,13 @@
           </div>
           ${renderDebug(room, seats)}
         `;
+
         return;
       }
 
-      const pickNames = picks.map(pick => `${pick.seat}号`).join("、");
+      const pickNames = picks.map(pick => {
+        return `${pick.seat}号`;
+      }).join("、");
 
       const pickHtml = picks
         .map((pick, index) => {
@@ -868,7 +945,7 @@
 
       box.innerHTML = `
         <span class="badge ok">建议进房</span>
-        <span class="badge blue">5159843 白核 v0.2</span>
+        <span class="badge blue">5159843 白核 v0.3</span>
         <div class="big">推荐：${pickNames}</div>
 
         <div class="pick-list">
@@ -913,7 +990,9 @@
             status =
               "✅ " +
               item.formalHits
-                .map(rule => rule.shortName)
+                .map(rule => {
+                  return rule.shortName;
+                })
                 .join("、");
           }
 
@@ -924,7 +1003,9 @@
             .join(" / ");
 
           const validShape = item.validDiffs
-            .map(diff => diff.absDiff)
+            .map(diff => {
+              return diff.absDiff;
+            })
             .join("、");
 
           return `
@@ -935,6 +1016,7 @@
               <td>${allRelations}</td>
               <td>${validShape || "无有效差值"}</td>
               <td>${item.effectiveUniqueDiffCount}种</td>
+              <td>${item.hasZeroDiff ? "有差0" : "无差0"}</td>
               <td>${status}</td>
             </tr>
           `;
@@ -946,7 +1028,7 @@
           <table>
             <thead>
               <tr>
-                <th colspan="7">
+                <th colspan="8">
                   房号 ${room.room}｜差值表中的“+”表示X比对方大，“-”表示X比对方小
                 </th>
               </tr>
@@ -957,6 +1039,7 @@
                 <th>X-其他位数字</th>
                 <th>有效差值</th>
                 <th>有效差值种类</th>
+                <th>差0状态</th>
                 <th>模型结果</th>
               </tr>
             </thead>
@@ -991,16 +1074,20 @@
           `
             <div class="combo off">
               <div class="name">
-                🔴 已删除规则｜4个有效差值全不同
+                🔴 已删除规则｜4散 + 裸差2小X
               </div>
               <div class="rule">
                 “4个有效差值全不同”经实测无效，
                 当前版本不再参与推荐。
                 <br>
+                “裸差2小X”里出现亏损局，
+                现在升级为：
+                <b>差2小X + 无差0</b>。
+                <br>
                 本版只打：
                 <b>差8</b>
                 和
-                <b>差2小X</b>。
+                <b>差2小X + 无差0</b>。
               </div>
             </div>
           `;
@@ -1011,21 +1098,28 @@
         room: room.room,
         time: new Date().toLocaleString(),
         result: decision.finalPicks.length
-          ? decision.finalPicks.map(pick => `${pick.seat}号`).join("、")
+          ? decision.finalPicks.map(pick => {
+              return `${pick.seat}号`;
+            }).join("、")
           : "跳过"
       };
 
-      const key = "id_5159843_white_core_v02_history";
+      const key = "id_5159843_white_core_v03_history";
+
       const list = JSON.parse(localStorage.getItem(key) || "[]");
 
       list.unshift(item);
 
-      localStorage.setItem(key, JSON.stringify(list.slice(0, 50)));
+      localStorage.setItem(
+        key,
+        JSON.stringify(list.slice(0, 50))
+      );
     }
 
     function renderHistory() {
       const box = document.getElementById("historyBox");
-      const key = "id_5159843_white_core_v02_history";
+      const key = "id_5159843_white_core_v03_history";
+
       const list = JSON.parse(localStorage.getItem(key) || "[]");
 
       if (!list.length) {
@@ -1050,16 +1144,20 @@
     }
 
     function clearHistory() {
-      localStorage.removeItem("id_5159843_white_core_v02_history");
+      localStorage.removeItem("id_5159843_white_core_v03_history");
       renderHistory();
     }
 
     function runSelfTests() {
       const tests = [
+        "13689",
         "38030",
         "59857",
+        "62891",
         "95318",
         "10648",
+        "12000",
+        "13571",
         "72641"
       ];
 
@@ -1068,12 +1166,14 @@
         const seats = analyzeSeats(room);
         const decision = choosePicks(seats);
 
-        console.log("[5159843白核v0.2自检]", test, {
+        console.log("[5159843白核v0.3自检]", test, {
           picks: decision.finalPicks.map(item => {
             return {
               seat: item.seat,
               x: item.x,
-              rules: item.formalHits.map(rule => rule.name)
+              rules: item.formalHits.map(rule => {
+                return rule.name;
+              })
             };
           })
         });
