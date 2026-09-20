@@ -6,8 +6,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
-  <title>5159326｜白海豚 v1.0 双差值白链模型</title>
-
+  <title>5159843｜白核 v0.2</title>
   <style>
     :root {
       --bg: #f7f3ec;
@@ -20,7 +19,6 @@
       --green: #1f9d67;
       --orange: #d98c22;
       --blue: #315eae;
-      --purple: #7a4cb3;
       --border: #eadccc;
       --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
     }
@@ -33,20 +31,10 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(
-          circle at top left,
-          rgba(217, 75, 61, 0.12),
-          transparent 28%
-        ),
-        radial-gradient(
-          circle at bottom right,
-          rgba(217, 140, 34, 0.12),
-          transparent 26%
-        ),
+        radial-gradient(circle at top left, rgba(217, 75, 61, 0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(217, 140, 34, 0.12), transparent 26%),
         var(--bg);
-
       color: var(--text);
-
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -54,7 +42,6 @@
         "Microsoft YaHei",
         Arial,
         sans-serif;
-
       padding: 22px 14px 42px;
     }
 
@@ -184,12 +171,6 @@
       border: 1px solid rgba(217, 75, 61, 0.22);
     }
 
-    .badge.warn {
-      background: rgba(217, 140, 34, 0.12);
-      color: #a6630f;
-      border: 1px solid rgba(217, 140, 34, 0.22);
-    }
-
     .badge.blue {
       background: rgba(60, 120, 220, 0.10);
       color: var(--blue);
@@ -258,11 +239,6 @@
       background: #f8fffb;
     }
 
-    .combo.observe {
-      border-color: rgba(217, 140, 34, 0.35);
-      background: #fffaf2;
-    }
-
     .combo.off {
       border-color: rgba(217, 75, 61, 0.25);
       background: #fff8f6;
@@ -297,11 +273,6 @@
       background: #fff4ee;
     }
 
-    .pick.warning {
-      border-color: rgba(217, 140, 34, 0.55);
-      background: #fff9ec;
-    }
-
     .pick .pick-title {
       font-weight: 1000;
       margin-bottom: 6px;
@@ -313,21 +284,6 @@
       line-height: 1.6;
     }
 
-    .diff-chip {
-      display: inline-flex;
-      min-width: 34px;
-      height: 34px;
-      align-items: center;
-      justify-content: center;
-      margin: 3px;
-      padding: 0 9px;
-      border-radius: 10px;
-      background: #f0e2d3;
-      color: #5f4938;
-      font-weight: 1000;
-      font-size: 14px;
-    }
-
     .debug {
       margin-top: 12px;
       overflow-x: auto;
@@ -336,7 +292,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 780px;
+      min-width: 980px;
       background: #fff;
       border-radius: 14px;
       overflow: hidden;
@@ -438,14 +394,12 @@
 
 <body>
   <div class="wrap">
-
     <div class="hero">
       <div class="title">
-        5159326｜白海豚 v1.0 双差值白链
+        5159843｜白核 v0.2
       </div>
-
       <div class="sub">
-        23局首批样本｜只打双差值白链｜绝对差值不分方向｜0忽略｜重复差值保留｜黑辅观察
+        34局样本｜只保留差8 + 差2小X｜删除4散规则｜命中任意白核即推荐｜不命中跳过
       </div>
     </div>
 
@@ -453,7 +407,6 @@
       <div class="section-title">
         输入5位房号
       </div>
-
       <div class="input-row">
         <input
           id="roomInput"
@@ -461,182 +414,83 @@
           inputmode="numeric"
           pattern="[0-9]*"
           maxlength="5"
-          placeholder="例如 11299"
+          placeholder="例如 95318"
           autocomplete="off"
         />
-
-        <button
-          class="btn-main"
-          onclick="run()"
-        >
+        <button class="btn-main" onclick="run()">
           开干
         </button>
       </div>
-
-      <div
-        id="result"
-        class="result"
-      ></div>
+      <div id="result" class="result"></div>
     </div>
 
     <div class="panel">
       <div class="section-title">
-        v1.0 双差值白链历史回测
+        5159843 白核 v0.2 历史回测
       </div>
-
       <div class="grid">
-
         <div class="stat">
-          <div class="v">23局</div>
-          <div class="k">首批样本</div>
+          <div class="v">34局</div>
+          <div class="k">样本库</div>
         </div>
-
         <div class="stat">
-          <div class="v">10局</div>
-          <div class="k">白链命中</div>
+          <div class="v">8局</div>
+          <div class="k">白核命中</div>
         </div>
-
         <div class="stat">
-          <div class="v">43.48%</div>
+          <div class="v">23.5%</div>
           <div class="k">进房率</div>
         </div>
-
         <div class="stat">
-          <div class="v">80.0%</div>
+          <div class="v">87.5%</div>
           <div class="k">胜率</div>
         </div>
-
         <div class="stat">
-          <div class="v">8胜2负</div>
+          <div class="v">7胜1负</div>
           <div class="k">胜负结构</div>
         </div>
-
         <div class="stat">
-          <div class="v">+4370</div>
+          <div class="v">+3850</div>
           <div class="k">净分</div>
         </div>
-
         <div class="stat">
-          <div class="v">5局</div>
+          <div class="v">4局</div>
           <div class="k">大赢≥500</div>
         </div>
-
         <div class="stat">
           <div class="v">0局</div>
           <div class="k">大输≤-500</div>
         </div>
-
       </div>
 
-      <div
-        class="desc"
-        style="margin-top:12px;"
-      >
-        当前模型只使用
-        <b>绝对差值双组合</b>。
+      <div class="desc" style="margin-top:12px;">
+        当前正式规则只保留：
+        <b>① 差8；② 差2小X。</b>
         <br><br>
-
-        正式白链：
-        <b>1+4、1+3、5+6、5+8</b>。
+        已删除：
+        <b>4个有效差值全不同</b>
+        ，因为实测无效，不再参与推荐。
         <br>
-
-        不区分X在大数端还是小数端；
-        只要当前座位的有效绝对差值中包含对应组合，即视为命中。
-        <br>
-
-        0差值忽略；
-        重复差值保留，并用于黑辅观察。
+        差2小X = 当前座位X比其他某个数字小2，即：
+        <b>n - X = 2</b>。
       </div>
     </div>
 
     <div class="panel">
       <div class="section-title">
-        5159326｜正式白链规则
+        5159843 正式白核规则
       </div>
-
-      <div
-        class="combo-list"
-        id="comboList"
-      ></div>
-    </div>
-
-    <div class="panel">
-      <div class="section-title">
-        黑辅观察池
-      </div>
-
-      <div class="combo-list">
-
-        <div class="combo observe">
-          <div class="name">
-            ⚠️ 1+3 + 重复3
-          </div>
-
-          <div class="rule">
-            历史观察：
-            1,3,3,3 → -420。
-            <br>
-            当前只做风险提示，
-            不作为硬性否决条件。
-          </div>
-        </div>
-
-        <div class="combo observe">
-          <div class="name">
-            ⚠️ 5+6 + 重复5
-          </div>
-
-          <div class="rule">
-            历史观察：
-            2,5,5,6 → -210。
-            <br>
-            当前只做风险提示，
-            不作为硬性否决条件。
-          </div>
-        </div>
-
-        <div class="combo main-rule">
-          <div class="name">
-            🟢 1+4
-          </div>
-
-          <div class="rule">
-            当前4次历史命中全部盈利，
-            暂未发现经过验证的黑辅。
-          </div>
-        </div>
-
-        <div class="combo main-rule">
-          <div class="name">
-            🟢 5+8
-          </div>
-
-          <div class="rule">
-            当前2次历史命中均为大赢，
-            暂未发现经过验证的黑辅。
-          </div>
-        </div>
-
-      </div>
+      <div id="comboList" class="combo-list"></div>
     </div>
 
     <div class="panel">
       <div class="section-title">
         历史记录
-
-        <button
-          class="btn-small"
-          onclick="clearHistory()"
-          style="float:right;"
-        >
+        <button class="btn-small" onclick="clearHistory()" style="float:right;">
           清空
         </button>
       </div>
-
-      <div
-        id="historyBox"
-        class="desc"
-      >
+      <div id="historyBox" class="desc">
         暂无记录
       </div>
     </div>
@@ -646,230 +500,94 @@
       房号记作ABCDE；
       1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。
       <br>
-
-      5号和6号虽然都映射E，
-      但仍作为两个独立座位输出。
+      5号和6号虽然都映射E，但作为两个独立座位输出。
       <br>
-
-      差值统一使用 |X-n|；
-      0忽略；
-      重复差值不去重。
+      大X：X-n=差值；
+      小X：n-X=差值；
+      差0只代表重号，不算有效差值。
     </div>
-
   </div>
 
   <script>
-
     /*
       ==========================================================
-      5159326｜白海豚
-      v1.0 双差值白链模型
+      5159843｜白核 v0.2
       ==========================================================
 
-      正式白链：
-      1. 1 + 4
-      2. 1 + 3
-      3. 5 + 6
-      4. 5 + 8
+      正式白核：
+      1. 有差8
+      2. 有差2小X
 
-      黑辅观察：
-      1. 1+3 命中后，3重复
-      2. 5+6 命中后，5重复
+      删除：
+      4个有效差值全不同
 
-      黑辅目前只提示，不硬杀。
+      命中任意一个 => 推荐
+      都不命中 => 跳过
 
-      单差值模型：
-      已取消，不参与进房。
-
-      差值：
-      使用绝对差 |X-n|
-      不分大X/小X
-      0忽略
-      重复差值保留
+      回测：
+      34局样本
+      命中8局
+      7胜1负
+      胜率87.5%
+      净分+3850
+      大赢4局
+      大输0局
     */
 
     const MODEL_STAT = {
-      account: "白海豚",
-      id: "5159326",
-      version: "v1.0 双差值白链",
-      sample: 23,
-      hitCount: 10,
-      hitRate: "43.48%",
-      winRate: "80.0%",
-      record: "8胜2负",
-      net: "+4370",
-      bigWin: "5局",
-      bigLoss: "0局"
+      account: "5159843",
+      version: "白核 v0.2",
+      sample: 34,
+      hitCount: 8,
+      hitRate: "23.5%",
+      winRate: "87.5%",
+      record: "7胜1负",
+      net: "+3850",
+      bigWin: "4大赢",
+      bigLoss: "0大输"
     };
-
-    /*
-      ==========================================================
-      正式白链
-      ==========================================================
-    */
-
-    const FORMAL_RULES = [
-
-      {
-        id: "BH-W1",
-        rank: 1,
-        name: "差值1 + 差值4",
-        shortName: "1+4",
-        diffs: [1, 4],
-        stat: "历史4次命中｜4胜0负｜2大赢｜0大输",
-        rule: "当前座位有效绝对差值中，同时存在1和4。"
-      },
-
-      {
-        id: "BH-W2",
-        rank: 2,
-        name: "差值5 + 差值8",
-        shortName: "5+8",
-        diffs: [5, 8],
-        stat: "历史2次命中｜2胜0负｜2大赢｜0大输",
-        rule: "当前座位有效绝对差值中，同时存在5和8。"
-      },
-
-      {
-        id: "BH-W3",
-        rank: 3,
-        name: "差值5 + 差值6",
-        shortName: "5+6",
-        diffs: [5, 6],
-        stat: "历史3次命中｜2胜1负｜2大赢｜0大输",
-        rule: "当前座位有效绝对差值中，同时存在5和6。"
-      },
-
-      {
-        id: "BH-W4",
-        rank: 4,
-        name: "差值1 + 差值3",
-        shortName: "1+3",
-        diffs: [1, 3],
-        stat: "历史4次命中｜3胜1负｜2大赢｜0大输",
-        rule: "当前座位有效绝对差值中，同时存在1和3。"
-      }
-
-    ];
-
-    /*
-      ==========================================================
-      黑辅观察规则
-      ==========================================================
-      注意：
-      目前不硬否决。
-      只给风险提示。
-    */
-
-    const BLACK_OBSERVE_RULES = [
-
-      {
-        id: "BH-B1",
-        name: "1+3 + 重复3",
-        parentRule: "1+3",
-
-        check(seatData) {
-
-          return (
-            seatData.diffCounts[1] >= 1 &&
-            seatData.diffCounts[3] >= 2
-          );
-
-        },
-
-        text:
-          "命中1+3，同时差值3重复。历史观察1,3,3,3为-420；当前仅提示，不硬否决。"
-      },
-
-      {
-        id: "BH-B2",
-        name: "5+6 + 重复5",
-        parentRule: "5+6",
-
-        check(seatData) {
-
-          return (
-            seatData.diffCounts[5] >= 2 &&
-            seatData.diffCounts[6] >= 1
-          );
-
-        },
-
-        text:
-          "命中5+6，同时差值5重复。历史观察2,5,5,6为-210；当前仅提示，不硬否决。"
-      }
-
-    ];
-
-    /*
-      ==========================================================
-      基础函数
-      ==========================================================
-    */
-
-    function countMap(arr) {
-
-      const map = {};
-
-      arr.forEach(value => {
-
-        map[value] =
-          (map[value] || 0) + 1;
-
-      });
-
-      return map;
-
-    }
 
     /*
       ==========================================================
       座位映射
       ==========================================================
+      1号 = A
+      2号 = B
+      3号 = C
+      4号 = D
+      5号 = E
+      6号 = E
     */
 
     function getSeatXPosition(seat) {
-
-      if (seat === 1) return "A";
-      if (seat === 2) return "B";
-      if (seat === 3) return "C";
-      if (seat === 4) return "D";
-
+      if (seat === 1) {
+        return "A";
+      }
+      if (seat === 2) {
+        return "B";
+      }
+      if (seat === 3) {
+        return "C";
+      }
+      if (seat === 4) {
+        return "D";
+      }
       return "E";
-
     }
 
-    /*
-      ==========================================================
-      房号解析
-      ==========================================================
-    */
+    function countMap(arr) {
+      const map = {};
+      arr.forEach(value => {
+        map[value] = (map[value] || 0) + 1;
+      });
+      return map;
+    }
 
     function analyzeRoom(roomNumber) {
-
-      const digits =
-        roomNumber
-          .split("")
-          .map(Number);
-
-      const [
-        A,
-        B,
-        C,
-        D,
-        E
-      ] = digits;
-
-      const positions = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E"
-      ];
-
-      const digitMap =
-        countMap(digits);
+      const digits = roomNumber.split("").map(Number);
+      const [A, B, C, D, E] = digits;
+      const positions = ["A", "B", "C", "D", "E"];
+      const digitMap = countMap(digits);
 
       return {
         room: roomNumber,
@@ -881,1272 +599,504 @@
         C,
         D,
         E,
-
-        hasZero:
-          digits.includes(0),
-
-        hasRepeat:
-          Object
-            .values(digitMap)
-            .some(value => {
-              return value >= 2;
-            })
+        hasZero: digits.includes(0),
+        hasRepeat: Object.values(digitMap).some(value => value >= 2)
       };
-
     }
 
     /*
       ==========================================================
-      计算某座位的4个原始绝对差值
+      差值扫描
       ==========================================================
-
-      规则：
-      1. X所在位置自身不比较
-      2. 与剩余4个位置分别计算 |X-n|
-      3. 原始4差值保留0
-      4. 有效差值删除0
-      5. 重复差值绝对不能去重
     */
 
-    function getSeatDiffData(
-      room,
-      seat
-    ) {
-
-      const xPos =
-        getSeatXPosition(seat);
-
-      const x =
-        room[xPos];
-
-      const rawRelations = [];
+    function getSeatDiffs(room, seat) {
+      const xPos = getSeatXPosition(seat);
+      const x = room[xPos];
+      const diffs = [];
 
       room.positions.forEach(pos => {
-
         if (pos === xPos) {
           return;
         }
 
-        const n =
-          room[pos];
+        const n = room[pos];
+        const absDiff = Math.abs(x - n);
+        const signedDiff = x - n;
 
-        const diff =
-          Math.abs(x - n);
-
-        rawRelations.push({
+        diffs.push({
           pos,
           value: n,
-          diff,
-          text:
-            `|${x}-${n}|=${diff}`
+          absDiff,
+          signedDiff,
+          text: `${pos}=${n}，|${x}-${n}|=${absDiff}`,
+          directionText:
+            signedDiff > 0
+              ? `差${absDiff}大X`
+              : signedDiff < 0
+                ? `差${absDiff}小X`
+                : "差0重号"
         });
-
       });
-
-      const rawDiffs =
-        rawRelations.map(item => {
-          return item.diff;
-        });
-
-      const effectiveDiffs =
-        rawDiffs.filter(diff => {
-          return diff !== 0;
-        });
-
-      const diffCounts =
-        countMap(effectiveDiffs);
 
       return {
         seat,
         xPos,
         x,
-        rawRelations,
-        rawDiffs,
-        effectiveDiffs,
-        diffCounts
+        diffs,
+        validDiffs: diffs.filter(item => item.absDiff > 0)
       };
-
     }
 
-    /*
-      ==========================================================
-      判断白链是否命中
-      ==========================================================
-    */
+    function findAbsDiff(room, seat, diff) {
+      const info = getSeatDiffs(room, seat);
+      return info.validDiffs.filter(item => item.absDiff === diff);
+    }
 
-    function ruleHits(
-      rule,
-      seatData
-    ) {
+    function findDirectionalDiff(room, seat, diff, direction) {
+      const info = getSeatDiffs(room, seat);
 
-      return rule.diffs.every(diff => {
+      return info.validDiffs.filter(item => {
+        if (direction === "X_GREATER") {
+          return item.signedDiff === diff;
+        }
 
-        return (
-          (seatData.diffCounts[diff] || 0) >= 1
-        );
+        if (direction === "X_SMALLER") {
+          return item.signedDiff === -diff;
+        }
 
+        return false;
       });
+    }
 
+    function getEffectiveUniqueDiffCount(room, seat) {
+      const info = getSeatDiffs(room, seat);
+      const set = new Set(info.validDiffs.map(item => item.absDiff));
+      return set.size;
     }
 
     /*
       ==========================================================
-      获取正式白链
+      正式白核规则
       ==========================================================
     */
 
-    function getFormalHits(
-      seatData
-    ) {
+    const FORMAL_RULES = [
+      {
+        id: "M-W1",
+        rank: 1,
+        name: "差8强核",
+        shortName: "差8",
+        stat: "历史3局3胜｜胜率100%｜净+2380｜0大输",
+        rule: "当前座位X与其他任一数字n满足：|X-n|=8。",
+        test: (seat, room) => {
+          return findAbsDiff(room, seat, 8).length > 0;
+        },
+        getMatches: (seat, room) => {
+          return findAbsDiff(room, seat, 8);
+        }
+      },
+      {
+        id: "M-W2",
+        rank: 2,
+        name: "差2小X",
+        shortName: "差2小X",
+        stat: "历史7局5胜2负｜胜率71.4%｜净+2600｜0大输",
+        rule: "当前座位X比其他任一数字n小2，即 n-X=2。",
+        test: (seat, room) => {
+          return findDirectionalDiff(room, seat, 2, "X_SMALLER").length > 0;
+        },
+        getMatches: (seat, room) => {
+          return findDirectionalDiff(room, seat, 2, "X_SMALLER");
+        }
+      }
+    ];
 
+    function getFormalHits(room, seat) {
       return FORMAL_RULES
-        .filter(rule => {
-          return ruleHits(
-            rule,
-            seatData
-          );
-        })
-        .sort((a, b) => {
-          return a.rank - b.rank;
-        });
-
+        .filter(rule => rule.test(seat, room))
+        .sort((a, b) => a.rank - b.rank);
     }
-
-    /*
-      ==========================================================
-      黑辅观察
-      ==========================================================
-    */
-
-    function getBlackObservations(
-      seatData
-    ) {
-
-      return BLACK_OBSERVE_RULES
-        .filter(rule => {
-          return rule.check(
-            seatData
-          );
-        });
-
-    }
-
-    /*
-      ==========================================================
-      分析1-6号
-      ==========================================================
-    */
 
     function analyzeSeats(room) {
-
       const result = [];
 
-      for (
-        let seat = 1;
-        seat <= 6;
-        seat++
-      ) {
-
-        const seatData =
-          getSeatDiffData(
-            room,
-            seat
-          );
-
-        const formalHits =
-          getFormalHits(
-            seatData
-          );
-
-        const blackObservations =
-          getBlackObservations(
-            seatData
-          );
+      for (let seat = 1; seat <= 6; seat++) {
+        const diffInfo = getSeatDiffs(room, seat);
+        const formalHits = getFormalHits(room, seat);
 
         result.push({
-          ...seatData,
-
+          seat,
+          xPos: diffInfo.xPos,
+          x: diffInfo.x,
+          diffs: diffInfo.diffs,
+          validDiffs: diffInfo.validDiffs,
           formalHits,
-
-          blackObservations,
-
-          isCandidate:
-            formalHits.length > 0,
-
-          hasBlackObservation:
-            blackObservations.length > 0,
-
-          bestRank:
-            formalHits.length
-              ? formalHits[0].rank
-              : 999
+          isCandidate: formalHits.length > 0,
+          bestRank: formalHits.length ? formalHits[0].rank : 999,
+          effectiveUniqueDiffCount: getEffectiveUniqueDiffCount(room, seat)
         });
-
       }
 
       return result;
-
     }
-
-    /*
-      ==========================================================
-      最终推荐排序
-      ==========================================================
-
-      规则：
-      1. 必须命中正式双差值白链
-      2. 黑辅目前不硬杀
-      3. 无黑辅观察的座位优先
-      4. 再按白链rank排序
-      5. 再按座位号排序
-    */
 
     function choosePicks(seats) {
-
-      const formal =
-        seats
-          .filter(item => {
-            return item.isCandidate;
-          })
-          .sort((a, b) => {
-
-            if (
-              a.hasBlackObservation !==
-              b.hasBlackObservation
-            ) {
-              return (
-                a.hasBlackObservation
-                  ? 1
-                  : -1
-              );
-            }
-
-            if (
-              a.bestRank !==
-              b.bestRank
-            ) {
-              return (
-                a.bestRank -
-                b.bestRank
-              );
-            }
-
-            return (
-              a.seat -
-              b.seat
-            );
-
-          });
+      const finalPicks = seats
+        .filter(item => item.isCandidate)
+        .sort((a, b) => {
+          if (a.bestRank !== b.bestRank) {
+            return a.bestRank - b.bestRank;
+          }
+          return a.seat - b.seat;
+        });
 
       return {
-        finalPicks: formal
+        finalPicks
       };
-
     }
-
-    /*
-      ==========================================================
-      主执行
-      ==========================================================
-    */
 
     function run() {
+      const input = document.getElementById("roomInput");
 
-      const input =
-        document.getElementById(
-          "roomInput"
-        );
+      let roomNumber = input.value.replace(/\D/g, "").slice(0, 5);
+      input.value = roomNumber;
 
-      let roomNumber =
-        input.value
-          .replace(/\D/g, "")
-          .slice(0, 5);
-
-      input.value =
-        roomNumber;
-
-      if (
-        roomNumber.length !== 5
-      ) {
-
-        showError(
-          "请输入完整的5位数字房号。"
-        );
-
+      if (roomNumber.length !== 5) {
+        showError("请输入完整的5位数字房号。");
         return;
-
       }
 
-      const room =
-        analyzeRoom(
-          roomNumber
-        );
+      const room = analyzeRoom(roomNumber);
+      const seats = analyzeSeats(room);
+      const decision = choosePicks(seats);
 
-      const seats =
-        analyzeSeats(
-          room
-        );
-
-      const decision =
-        choosePicks(
-          seats
-        );
-
-      renderResult(
-        room,
-        seats,
-        decision
-      );
-
-      saveHistory(
-        room,
-        decision
-      );
-
+      renderResult(room, seats, decision);
+      saveHistory(room, decision);
       renderHistory();
-
     }
-
-    /*
-      ==========================================================
-      输入错误
-      ==========================================================
-    */
 
     function showError(message) {
+      const box = document.getElementById("result");
 
-      const box =
-        document.getElementById(
-          "result"
-        );
-
-      box.className =
-        "result show";
-
+      box.className = "result show";
       box.innerHTML = `
-        <span class="badge no">
-          输入错误
-        </span>
-
-        <div class="big">
-          不处理
-        </div>
-
-        <div class="desc">
-          ${message}
-        </div>
+        <span class="badge no">输入错误</span>
+        <div class="big">不处理</div>
+        <div class="desc">${message}</div>
       `;
-
     }
-
-    /*
-      ==========================================================
-      房号总览
-      ==========================================================
-    */
 
     function renderRoomLine(room) {
-
       return `
-        ABCDE=
-        ${room.A}${room.B}${room.C}${room.D}${room.E}
+        ABCDE=${room.A}${room.B}${room.C}${room.D}${room.E}
         <br>
-
-        A=${room.A}
-        ｜B=${room.B}
-        ｜C=${room.C}
-        ｜D=${room.D}
-        ｜E=${room.E}
+        A=${room.A}｜B=${room.B}｜C=${room.C}｜D=${room.D}｜E=${room.E}
         <br>
-
-        ${
-          room.hasZero
-            ? "含0"
-            : "无0"
-        }
-
-        ｜
-
-        ${
-          room.hasRepeat
-            ? "有重号"
-            : "无重号"
-        }
+        ${room.hasZero ? "含0" : "无0"}｜${room.hasRepeat ? "有重号" : "无重号"}
       `;
-
     }
 
-    /*
-      ==========================================================
-      差值标签
-      ==========================================================
-    */
+    function renderSeatRelation(item, room) {
+      const blocks = [];
 
-    function renderDiffChips(
-      diffs
-    ) {
+      item.formalHits.forEach(rule => {
+        const matches = rule.getMatches(item.seat, room);
 
-      if (!diffs.length) {
+        const matchText = matches
+          .map(match => {
+            return `${match.pos}=${match.value} → ${match.directionText}｜${match.text}`;
+          })
+          .join("<br>");
 
-        return `
-          <span class="badge warn">
-            无有效差值
-          </span>
+        blocks.push(`
+          <div style="margin-top:8px;">
+            <b>${rule.id}｜${rule.name}</b>
+            <br>
+            X=${item.x}（${item.xPos}）｜${rule.stat}
+            <br>
+            ${matchText}
+          </div>
+        `);
+      });
+
+      return blocks.join("");
+    }
+
+    function renderResult(room, seats, decision) {
+      const box = document.getElementById("result");
+      const picks = decision.finalPicks;
+
+      if (!picks.length) {
+        box.className = "result show";
+        box.innerHTML = `
+          <span class="badge no">跳过</span>
+          <span class="badge blue">未命中白核</span>
+          <div class="big">${room.room}</div>
+          <div class="desc">
+            当前房号没有任何座位命中 5159843 白核 v0.2。
+            <br>
+            这局不进，不硬打。
+            <br><br>
+            ${renderRoomLine(room)}
+          </div>
+          ${renderDebug(room, seats)}
         `;
-
+        return;
       }
 
-      return diffs
-        .map(diff => {
+      const pickNames = picks.map(pick => `${pick.seat}号`).join("、");
 
+      const pickHtml = picks
+        .map((pick, index) => {
           return `
-            <span class="diff-chip">
-              ${diff}
-            </span>
+            <div class="pick ${index === 0 ? "main" : ""}">
+              <div class="pick-title">
+                ${index === 0 ? "🔥第一推荐" : "⚡同时推荐"}
+                ｜${pick.seat}号｜X=${pick.x}
+              </div>
+              <div class="pick-rule">
+                <span class="badge ok">白核命中</span>
+                ${renderSeatRelation(pick, room)}
+              </div>
+            </div>
           `;
-
         })
         .join("");
 
-    }
-
-    /*
-      ==========================================================
-      座位详细关系
-      ==========================================================
-    */
-
-    function renderSeatRelation(
-      item
-    ) {
-
-      const relationText =
-        item.rawRelations
-          .map(relation => {
-
-            return `
-              ${relation.pos}
-              =
-              ${relation.value}
-              →
-              ${relation.text}
-            `;
-
-          })
-          .join("；");
-
-      const ruleText =
-        item.formalHits
-          .map(rule => {
-
-            return `
-              <div style="margin-top:7px;">
-                <b>
-                  ${rule.id}
-                  ｜${rule.name}
-                </b>
-                <br>
-                ${rule.stat}
-              </div>
-            `;
-
-          })
-          .join("");
-
-      const blackText =
-        item.blackObservations.length
-
-          ? item.blackObservations
-              .map(rule => {
-
-                return `
-                  <div style="margin-top:7px;">
-                    <span class="badge warn">
-                      ⚠️ 黑辅观察
-                    </span>
-                    <br>
-                    <b>${rule.name}</b>
-                    <br>
-                    ${rule.text}
-                  </div>
-                `;
-
-              })
-              .join("")
-
-          : `
-              <div style="margin-top:7px;">
-                <span class="badge ok">
-                  暂无已知黑辅
-                </span>
-              </div>
-            `;
-
-      return `
-        X=
-        ${item.x}
-        （${item.xPos}）
-        <br><br>
-
-        <b>有效差值：</b>
-        <br>
-
-        ${renderDiffChips(
-          item.effectiveDiffs
-        )}
-
-        <br><br>
-
-        <b>完整4次比较：</b>
-        <br>
-        ${relationText}
-
-        ${ruleText}
-        ${blackText}
-      `;
-
-    }
-
-    /*
-      ==========================================================
-      结果显示
-      ==========================================================
-    */
-
-    function renderResult(
-      room,
-      seats,
-      decision
-    ) {
-
-      const box =
-        document.getElementById(
-          "result"
-        );
-
-      const picks =
-        decision.finalPicks;
-
-      /*
-        ========================================================
-        没有推荐
-        ========================================================
-      */
-
-      if (!picks.length) {
-
-        box.className =
-          "result show";
-
-        box.innerHTML = `
-          <span class="badge no">
-            跳过
-          </span>
-
-          <span class="badge blue">
-            未命中双差值白链
-          </span>
-
-          <div class="big">
-            ${room.room}
-          </div>
-
-          <div class="desc">
-            当前房号没有任何座位命中：
-            <br>
-            <b>
-              1+4 / 1+3 / 5+6 / 5+8
-            </b>
-            <br><br>
-
-            单差值不进房。
-            <br>
-            本局直接跳过。
-            <br><br>
-
-            ${renderRoomLine(room)}
-          </div>
-
-          ${renderDebug(
-            room,
-            seats
-          )}
-        `;
-
-        return;
-
-      }
-
-      /*
-        ========================================================
-        有推荐
-        ========================================================
-      */
-
-      const cleanPicks =
-        picks.filter(item => {
-          return !item.hasBlackObservation;
-        });
-
-      const warningPicks =
-        picks.filter(item => {
-          return item.hasBlackObservation;
-        });
-
-      const pickNames =
-        picks
-          .map(pick => {
-            return `${pick.seat}号`;
-          })
-          .join("、");
-
-      const pickHtml =
-        picks
-          .map(
-            (
-              pick,
-              index
-            ) => {
-
-              const warning =
-                pick.hasBlackObservation;
-
-              return `
-                <div
-                  class="
-                    pick
-                    ${index === 0 ? "main" : ""}
-                    ${warning ? "warning" : ""}
-                  "
-                >
-
-                  <div
-                    class="pick-title"
-                  >
-                    ${
-                      index === 0
-                        ? "🔥第一推荐"
-                        : "⚡同时命中"
-                    }
-
-                    ｜${pick.seat}号
-                    ｜X=${pick.x}
-                  </div>
-
-                  <div
-                    class="pick-rule"
-                  >
-
-                    <span class="badge ok">
-                      双差值白链命中
-                    </span>
-
-                    ${
-                      warning
-                        ? `
-                            <span class="badge warn">
-                              黑辅观察
-                            </span>
-                          `
-                        : `
-                            <span class="badge blue">
-                              当前无黑辅
-                            </span>
-                          `
-                    }
-
-                    <br>
-
-                    ${
-                      renderSeatRelation(
-                        pick
-                      )
-                    }
-
-                  </div>
-
-                </div>
-              `;
-
-            }
-          )
-          .join("");
-
-      box.className =
-        "result show";
+      box.className = "result show";
 
       box.innerHTML = `
-
-        <span class="badge ok">
-          建议进房
-        </span>
-
-        <span class="badge blue">
-          白海豚 v1.0
-        </span>
-
-        ${
-          warningPicks.length
-            ? `
-                <span class="badge warn">
-                  有黑辅观察位
-                </span>
-              `
-            : ""
-        }
-
-        <div class="big">
-          推荐：
-          ${pickNames}
-        </div>
-
-        ${
-          cleanPicks.length
-            ? `
-                <div class="desc">
-                  无黑辅观察位：
-                  <b>
-                    ${
-                      cleanPicks
-                        .map(item => {
-                          return `${item.seat}号`;
-                        })
-                        .join("、")
-                    }
-                  </b>
-                </div>
-              `
-            : ""
-        }
+        <span class="badge ok">建议进房</span>
+        <span class="badge blue">5159843 白核 v0.2</span>
+        <div class="big">推荐：${pickNames}</div>
 
         <div class="pick-list">
           ${pickHtml}
         </div>
 
-        <div
-          class="desc"
-          style="margin-top:14px;"
-        >
-          房号：
-          <b>
-            ${room.room}
-          </b>
+        <div class="desc" style="margin-top:14px;">
+          房号：<b>${room.room}</b>
           <br>
-
           ${renderRoomLine(room)}
         </div>
 
         <div class="grid">
-
           <div class="stat">
-            <div class="v">
-              ${MODEL_STAT.sample}局
-            </div>
-            <div class="k">
-              样本库
-            </div>
+            <div class="v">${MODEL_STAT.sample}局</div>
+            <div class="k">样本库</div>
           </div>
-
           <div class="stat">
-            <div class="v">
-              ${MODEL_STAT.hitCount}局
-            </div>
-            <div class="k">
-              白链命中
-            </div>
+            <div class="v">${MODEL_STAT.hitCount}局</div>
+            <div class="k">白核命中</div>
           </div>
-
           <div class="stat">
-            <div class="v">
-              ${MODEL_STAT.winRate}
-            </div>
-            <div class="k">
-              历史胜率
-            </div>
+            <div class="v">${MODEL_STAT.winRate}</div>
+            <div class="k">胜率</div>
           </div>
-
           <div class="stat">
-            <div class="v">
-              ${MODEL_STAT.net}
-            </div>
-            <div class="k">
-              历史净分
-            </div>
+            <div class="v">${MODEL_STAT.bigLoss}</div>
+            <div class="k">大输记录</div>
           </div>
-
         </div>
 
-        ${renderDebug(
-          room,
-          seats
-        )}
+        ${renderDebug(room, seats)}
       `;
-
     }
 
-    /*
-      ==========================================================
-      调试差值表
-      ==========================================================
-    */
+    function renderDebug(room, seats) {
+      const rows = seats
+        .map(item => {
+          let status = "未命中";
 
-    function renderDebug(
-      room,
-      seats
-    ) {
+          if (item.formalHits.length) {
+            status =
+              "✅ " +
+              item.formalHits
+                .map(rule => rule.shortName)
+                .join("、");
+          }
 
-      const rows =
-        seats
-          .map(item => {
+          const allRelations = item.diffs
+            .map(diff => {
+              return `${diff.pos}:${diff.signedDiff >= 0 ? "+" : ""}${diff.signedDiff}（${diff.directionText}）`;
+            })
+            .join(" / ");
 
-            let status =
-              "未命中";
+          const validShape = item.validDiffs
+            .map(diff => diff.absDiff)
+            .join("、");
 
-            if (
-              item.formalHits.length
-            ) {
-
-              status =
-                "✅ " +
-                item.formalHits
-                  .map(rule => {
-                    return rule.shortName;
-                  })
-                  .join("、");
-
-              if (
-                item.blackObservations.length
-              ) {
-
-                status +=
-                  " ｜⚠️ " +
-                  item.blackObservations
-                    .map(rule => {
-                      return rule.name;
-                    })
-                    .join("、");
-
-              }
-
-            }
-
-            const raw =
-              item.rawDiffs
-                .join(" / ");
-
-            const effective =
-              item.effectiveDiffs.length
-                ? item.effectiveDiffs.join(" / ")
-                : "无";
-
-            return `
-              <tr>
-
-                <td>
-                  ${item.seat}号
-                </td>
-
-                <td>
-                  ${item.xPos}
-                </td>
-
-                <td>
-                  ${item.x}
-                </td>
-
-                <td>
-                  ${raw}
-                </td>
-
-                <td>
-                  ${effective}
-                </td>
-
-                <td>
-                  ${status}
-                </td>
-
-              </tr>
-            `;
-
-          })
-          .join("");
+          return `
+            <tr>
+              <td>${item.seat}号</td>
+              <td>${item.xPos}</td>
+              <td>${item.x}</td>
+              <td>${allRelations}</td>
+              <td>${validShape || "无有效差值"}</td>
+              <td>${item.effectiveUniqueDiffCount}种</td>
+              <td>${status}</td>
+            </tr>
+          `;
+        })
+        .join("");
 
       return `
         <div class="debug">
-
           <table>
-
             <thead>
-
               <tr>
-                <th colspan="6">
-                  房号
-                  ${room.room}
-                  ｜全部使用绝对差值
-                  ｜0忽略
-                  ｜重复保留
+                <th colspan="7">
+                  房号 ${room.room}｜差值表中的“+”表示X比对方大，“-”表示X比对方小
                 </th>
               </tr>
-
               <tr>
                 <th>位子</th>
                 <th>X位置</th>
                 <th>X</th>
-                <th>原始4差值</th>
+                <th>X-其他位数字</th>
                 <th>有效差值</th>
+                <th>有效差值种类</th>
                 <th>模型结果</th>
               </tr>
-
             </thead>
-
             <tbody>
               ${rows}
             </tbody>
-
           </table>
-
         </div>
       `;
-
     }
 
-    /*
-      ==========================================================
-      规则展示
-      ==========================================================
-    */
-
     function renderComboList() {
-
-      const box =
-        document.getElementById(
-          "comboList"
-        );
+      const box = document.getElementById("comboList");
 
       box.innerHTML =
         FORMAL_RULES
           .map(rule => {
-
             return `
-              <div
-                class="
-                  combo
-                  main-rule
-                "
-              >
-
+              <div class="combo main-rule">
                 <div class="name">
-                  🟢 ${rule.id}
-                  ｜${rule.name}
+                  🟢 ${rule.id}｜${rule.name}
                 </div>
-
                 <div class="rule">
                   ${rule.rule}
                   <br>
                   ${rule.stat}
                 </div>
-
               </div>
             `;
-
           })
           .join("") +
-
           `
-            <div
-              class="
-                combo
-                off
-              "
-            >
-
+            <div class="combo off">
               <div class="name">
-                🔴 单差值模型已关闭
+                🔴 已删除规则｜4个有效差值全不同
               </div>
-
               <div class="rule">
-                单独出现差值1、3、4、5、6、8等，
-                均不作为进房依据。
+                “4个有效差值全不同”经实测无效，
+                当前版本不再参与推荐。
                 <br>
-                必须至少命中上面四条正式双差值白链之一。
+                本版只打：
+                <b>差8</b>
+                和
+                <b>差2小X</b>。
               </div>
-
             </div>
           `;
-
     }
 
-    /*
-      ==========================================================
-      历史记录
-      ==========================================================
-    */
-
-    function saveHistory(
-      room,
-      decision
-    ) {
-
-      const picks =
-        decision.finalPicks;
-
+    function saveHistory(room, decision) {
       const item = {
-
-        room:
-          room.room,
-
-        time:
-          new Date()
-            .toLocaleString(),
-
-        result:
-          picks.length
-
-            ? picks
-                .map(pick => {
-
-                  const warning =
-                    pick.hasBlackObservation
-                      ? "⚠️"
-                      : "";
-
-                  return (
-                    `${pick.seat}号${warning}`
-                  );
-
-                })
-                .join("、")
-
-            : "跳过"
-
+        room: room.room,
+        time: new Date().toLocaleString(),
+        result: decision.finalPicks.length
+          ? decision.finalPicks.map(pick => `${pick.seat}号`).join("、")
+          : "跳过"
       };
 
-      const key =
-        "baihaitun_5159326_v10_double_diff_history";
+      const key = "id_5159843_white_core_v02_history";
+      const list = JSON.parse(localStorage.getItem(key) || "[]");
 
-      const list =
-        JSON.parse(
-          localStorage.getItem(
-            key
-          ) || "[]"
-        );
+      list.unshift(item);
 
-      list.unshift(
-        item
-      );
-
-      localStorage.setItem(
-        key,
-        JSON.stringify(
-          list.slice(
-            0,
-            50
-          )
-        )
-      );
-
+      localStorage.setItem(key, JSON.stringify(list.slice(0, 50)));
     }
 
     function renderHistory() {
-
-      const box =
-        document.getElementById(
-          "historyBox"
-        );
-
-      const key =
-        "baihaitun_5159326_v10_double_diff_history";
-
-      const list =
-        JSON.parse(
-          localStorage.getItem(
-            key
-          ) || "[]"
-        );
+      const box = document.getElementById("historyBox");
+      const key = "id_5159843_white_core_v02_history";
+      const list = JSON.parse(localStorage.getItem(key) || "[]");
 
       if (!list.length) {
-
-        box.innerHTML =
-          "暂无记录";
-
+        box.innerHTML = "暂无记录";
         return;
-
       }
 
-      box.innerHTML =
-        list
-          .map(item => {
-
-            return `
-              <div
-                class="history-item"
-              >
-
-                <div
-                  class="history-left"
-                >
-                  ${item.room}
-                </div>
-
-                <div
-                  class="history-right"
-                >
-                  推荐：
-                  ${item.result}
-                  <br>
-                  ${item.time}
-                </div>
-
+      box.innerHTML = list
+        .map(item => {
+          return `
+            <div class="history-item">
+              <div class="history-left">${item.room}</div>
+              <div class="history-right">
+                推荐：${item.result}
+                <br>
+                ${item.time}
               </div>
-            `;
-
-          })
-          .join("");
-
+            </div>
+          `;
+        })
+        .join("");
     }
 
     function clearHistory() {
-
-      localStorage.removeItem(
-        "baihaitun_5159326_v10_double_diff_history"
-      );
-
+      localStorage.removeItem("id_5159843_white_core_v02_history");
       renderHistory();
-
     }
-
-    /*
-      ==========================================================
-      模型自检
-      ==========================================================
-    */
 
     function runSelfTests() {
-
       const tests = [
-
-        "61965",
-        "65271",
-        "74856",
-        "72038",
-        "11299",
-        "86867",
-        "13248",
-        "61876"
-
+        "38030",
+        "59857",
+        "95318",
+        "10648",
+        "72641"
       ];
 
-      tests.forEach(roomNumber => {
+      tests.forEach(test => {
+        const room = analyzeRoom(test);
+        const seats = analyzeSeats(room);
+        const decision = choosePicks(seats);
 
-        const room =
-          analyzeRoom(
-            roomNumber
-          );
-
-        const seats =
-          analyzeSeats(
-            room
-          );
-
-        const decision =
-          choosePicks(
-            seats
-          );
-
-        console.log(
-          "[白海豚5159326自检]",
-          roomNumber,
-          {
-            picks:
-              decision
-                .finalPicks
-                .map(item => {
-
-                  return {
-
-                    seat:
-                      item.seat,
-
-                    x:
-                      item.x,
-
-                    diffs:
-                      item.effectiveDiffs,
-
-                    rules:
-                      item.formalHits
-                        .map(rule => {
-                          return rule.shortName;
-                        }),
-
-                    black:
-                      item.blackObservations
-                        .map(rule => {
-                          return rule.name;
-                        })
-
-                  };
-
-                })
-          }
-        );
-
+        console.log("[5159843白核v0.2自检]", test, {
+          picks: decision.finalPicks.map(item => {
+            return {
+              seat: item.seat,
+              x: item.x,
+              rules: item.formalHits.map(rule => rule.name)
+            };
+          })
+        });
       });
-
     }
 
-    /*
-      ==========================================================
-      输入监听
-      ==========================================================
-    */
+    document
+      .getElementById("roomInput")
+      .addEventListener("input", event => {
+        event.target.value = event.target.value.replace(/\D/g, "").slice(0, 5);
+      });
 
     document
-      .getElementById(
-        "roomInput"
-      )
-      .addEventListener(
-        "input",
-        event => {
-
-          event.target.value =
-            event.target.value
-              .replace(/\D/g, "")
-              .slice(0, 5);
-
+      .getElementById("roomInput")
+      .addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          run();
         }
-      );
-
-    document
-      .getElementById(
-        "roomInput"
-      )
-      .addEventListener(
-        "keydown",
-        event => {
-
-          if (
-            event.key ===
-            "Enter"
-          ) {
-            run();
-          }
-
-        }
-      );
-
-    /*
-      ==========================================================
-      页面初始化
-      ==========================================================
-    */
+      });
 
     renderComboList();
     renderHistory();
     runSelfTests();
-
   </script>
-
 </body>
 </html>
