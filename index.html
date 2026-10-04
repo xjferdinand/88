@@ -1,1202 +1,2957 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
-  <title>5159843｜白核 v0.3</title>
+<meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+/>
 
-  <style>
-    :root {
-      --bg: #f7f3ec;
-      --card: #fffaf2;
-      --card2: #ffffff;
-      --text: #2b2118;
-      --muted: #8a7664;
-      --red: #d94b3d;
-      --red2: #b8342b;
-      --green: #1f9d67;
-      --orange: #d98c22;
-      --blue: #315eae;
-      --border: #eadccc;
-      --shadow: 0 14px 36px rgba(70, 48, 28, 0.12);
-    }
+<title>5161482｜龙虾黄金差值 v1.0</title>
 
-    * {
-      box-sizing: border-box;
-    }
+<style>
+:root {
+  --bg: #f7f3ec;
+  --card: #fffaf2;
+  --card2: #ffffff;
+  --text: #2b2118;
+  --muted: #8a7664;
+  --red: #d94b3d;
+  --red2: #b8342b;
+  --green: #1f9d67;
+  --orange: #d98c22;
+  --blue: #315eae;
+  --purple: #7652a8;
+  --border: #eadccc;
+  --shadow: 0 14px 36px rgba(70,48,28,.12);
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, rgba(217, 75, 61, 0.12), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(217, 140, 34, 0.12), transparent 26%),
-        var(--bg);
-      color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "PingFang SC",
-        "Microsoft YaHei",
-        Arial,
-        sans-serif;
-      padding: 22px 14px 42px;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .wrap {
-      max-width: 860px;
-      margin: 0 auto;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(217,75,61,.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(217,140,34,.12), transparent 26%),
+    var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "PingFang SC",
+    "Microsoft YaHei",
+    Arial,
+    sans-serif;
+  padding: 22px 14px 42px;
+}
 
-    .hero {
-      text-align: center;
-      margin-bottom: 18px;
-    }
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-    .title {
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      margin: 6px 0 8px;
-    }
+.hero {
+  text-align: center;
+  margin-bottom: 18px;
+}
 
-    .sub {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.65;
-    }
+.title {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin: 6px 0 8px;
+}
 
-    .panel {
-      background: rgba(255, 250, 242, 0.92);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 18px;
-      margin-bottom: 16px;
-      backdrop-filter: blur(8px);
-    }
+.sub {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
 
-    .input-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      margin-top: 8px;
-    }
+.panel {
+  background: rgba(255,250,242,.92);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(8px);
+}
 
-    input {
-      width: min(100%, 360px);
-      height: 58px;
-      border: 2px solid #e7d2c0;
-      border-radius: 18px;
-      outline: none;
-      text-align: center;
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 6px;
-      color: var(--text);
-      background: #fff;
-      box-shadow: inset 0 2px 6px rgba(80, 50, 30, 0.05);
-    }
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+}
 
-    input:focus {
-      border-color: var(--red);
-    }
+input {
+  width: min(100%,360px);
+  height: 58px;
+  border: 2px solid #e7d2c0;
+  border-radius: 18px;
+  outline: none;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: var(--text);
+  background: #fff;
+  box-shadow: inset 0 2px 6px rgba(80,50,30,.05);
+}
 
-    button {
-      border: none;
-      cursor: pointer;
-      font-weight: 900;
-      transition: 0.18s ease;
-    }
+input:focus {
+  border-color: var(--red);
+}
 
-    .btn-main {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: linear-gradient(145deg, var(--red), var(--red2));
-      color: white;
-      font-size: 18px;
-      box-shadow: 0 10px 22px rgba(217, 75, 61, 0.34);
-      flex: 0 0 auto;
-    }
+button {
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  transition: .18s ease;
+}
 
-    .btn-main:active {
-      transform: scale(0.96);
-    }
+.btn-main {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(145deg,var(--red),var(--red2));
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 10px 22px rgba(217,75,61,.34);
+  flex: 0 0 auto;
+}
 
-    .btn-small {
-      padding: 9px 13px;
-      border-radius: 12px;
-      background: #f0e2d3;
-      color: #6b5644;
-      font-size: 13px;
-    }
+.btn-main:active {
+  transform: scale(.96);
+}
 
-    .result {
-      display: none;
-      margin-top: 16px;
-      background: var(--card2);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      padding: 16px;
-    }
+.btn-small {
+  padding: 9px 13px;
+  border-radius: 12px;
+  background: #f0e2d3;
+  color: #6b5644;
+  font-size: 13px;
+}
 
-    .result.show {
-      display: block;
-    }
+.result {
+  display: none;
+  margin-top: 16px;
+  background: var(--card2);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  padding: 16px;
+}
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 900;
-      margin: 3px;
-    }
+.result.show {
+  display: block;
+}
 
-    .badge.ok {
-      background: rgba(31, 157, 103, 0.12);
-      color: var(--green);
-      border: 1px solid rgba(31, 157, 103, 0.24);
-    }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+  margin: 3px;
+}
 
-    .badge.no {
-      background: rgba(217, 75, 61, 0.10);
-      color: var(--red2);
-      border: 1px solid rgba(217, 75, 61, 0.22);
-    }
+.badge.ok {
+  background: rgba(31,157,103,.12);
+  color: var(--green);
+  border: 1px solid rgba(31,157,103,.24);
+}
 
-    .badge.blue {
-      background: rgba(60, 120, 220, 0.10);
-      color: var(--blue);
-      border: 1px solid rgba(60, 120, 220, 0.22);
-    }
+.badge.no {
+  background: rgba(217,75,61,.10);
+  color: var(--red2);
+  border: 1px solid rgba(217,75,61,.22);
+}
 
-    .big {
-      font-size: 34px;
-      font-weight: 1000;
-      margin: 10px 0 4px;
-    }
+.badge.blue {
+  background: rgba(60,120,220,.10);
+  color: var(--blue);
+  border: 1px solid rgba(60,120,220,.22);
+}
 
-    .desc {
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 14px;
-    }
+.badge.gold {
+  background: rgba(217,140,34,.13);
+  color: #a66710;
+  border: 1px solid rgba(217,140,34,.30);
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 12px;
-    }
+.big {
+  font-size: 34px;
+  font-weight: 1000;
+  margin: 10px 0 4px;
+}
 
-    .stat {
-      background: #fff8ef;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 8px;
-      text-align: center;
-    }
+.desc {
+  color: var(--muted);
+  line-height: 1.65;
+  font-size: 14px;
+}
 
-    .stat .v {
-      font-size: 20px;
-      font-weight: 1000;
-      color: var(--text);
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
 
-    .stat .k {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 12px;
-    }
+.stat {
+  background: #fff8ef;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 8px;
+  text-align: center;
+}
 
-    .section-title {
-      font-weight: 1000;
-      font-size: 18px;
-      margin: 3px 0 12px;
-    }
+.stat .v {
+  font-size: 20px;
+  font-weight: 1000;
+  color: var(--text);
+}
 
-    .combo-list {
-      display: grid;
-      gap: 10px;
-    }
+.stat .k {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
 
-    .combo {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px;
-    }
+.section-title {
+  font-weight: 1000;
+  font-size: 18px;
+  margin: 3px 0 12px;
+}
 
-    .combo.main-rule {
-      border-color: rgba(31, 157, 103, 0.35);
-      background: #f8fffb;
-    }
+.combo-list {
+  display: grid;
+  gap: 10px;
+}
 
-    .combo.off {
-      border-color: rgba(217, 75, 61, 0.25);
-      background: #fff8f6;
-    }
+.combo {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+}
 
-    .combo .name {
-      font-weight: 1000;
-      margin-bottom: 6px;
-    }
+.combo.main-rule {
+  border-color: rgba(31,157,103,.35);
+  background: #f8fffb;
+}
 
-    .combo .rule {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
+.combo.special {
+  border-color: rgba(217,140,34,.40);
+  background: #fffaf0;
+}
 
-    .pick-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
+.combo.off {
+  border-color: rgba(217,75,61,.25);
+  background: #fff8f6;
+}
 
-    .pick {
-      background: #fff8ef;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px;
-    }
+.combo .name {
+  font-weight: 1000;
+  margin-bottom: 6px;
+}
 
-    .pick.main {
-      border-color: rgba(217, 75, 61, 0.42);
-      background: #fff4ee;
-    }
+.combo .rule {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
 
-    .pick .pick-title {
-      font-weight: 1000;
-      margin-bottom: 6px;
-    }
+.pick-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
 
-    .pick .pick-rule {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
+.pick {
+  background: #fff8ef;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+}
 
-    .debug {
-      margin-top: 12px;
-      overflow-x: auto;
-    }
+.pick.main {
+  border-color: rgba(217,75,61,.42);
+  background: #fff4ee;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 980px;
-      background: #fff;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
+.pick .pick-title {
+  font-weight: 1000;
+  margin-bottom: 6px;
+}
 
-    th,
-    td {
-      padding: 9px 8px;
-      border-bottom: 1px solid #f0e2d3;
-      font-size: 12px;
-      text-align: center;
-      white-space: nowrap;
-    }
+.pick .pick-rule {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
 
-    th {
-      background: #fff1e1;
-      color: #6b5644;
-      font-weight: 900;
-    }
+.debug {
+  margin-top: 12px;
+  overflow-x: auto;
+}
 
-    tr:last-child td {
-      border-bottom: none;
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 980px;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
 
-    .history-item {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px dashed #e4d3c3;
-      font-size: 14px;
-    }
+th,
+td {
+  padding: 9px 8px;
+  border-bottom: 1px solid #f0e2d3;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
 
-    .history-item:last-child {
-      border-bottom: none;
-    }
+th {
+  background: #fff1e1;
+  color: #6b5644;
+  font-weight: 900;
+}
 
-    .history-left {
-      font-weight: 900;
-    }
+tr:last-child td {
+  border-bottom: none;
+}
 
-    .history-right {
-      color: var(--muted);
-      text-align: right;
-      font-size: 13px;
-      line-height: 1.5;
-    }
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed #e4d3c3;
+  font-size: 14px;
+}
 
-    .footer-note {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.65;
-      margin-top: 16px;
-    }
+.history-item:last-child {
+  border-bottom: none;
+}
 
-    @media (max-width: 620px) {
-      body {
-        padding: 16px 10px 34px;
-      }
+.history-left {
+  font-weight: 900;
+}
 
-      .title {
-        font-size: 23px;
-      }
+.history-right {
+  color: var(--muted);
+  text-align: right;
+  font-size: 13px;
+  line-height: 1.5;
+}
 
-      .panel {
-        padding: 14px;
-        border-radius: 20px;
-      }
+.hit-history {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
 
-      .input-row {
-        gap: 8px;
-      }
+.hit-item {
+  padding: 9px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+}
 
-      input {
-        height: 56px;
-        font-size: 25px;
-        letter-spacing: 4px;
-      }
+.win {
+  color: var(--green);
+}
 
-      .btn-main {
-        width: 64px;
-        height: 64px;
-        font-size: 16px;
-      }
+.loss {
+  color: var(--red);
+}
 
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+.footer-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+  margin-top: 16px;
+}
 
-      .big {
-        font-size: 26px;
-      }
-    }
-  </style>
+@media(max-width:620px) {
+  body {
+    padding: 16px 10px 34px;
+  }
+
+  .title {
+    font-size: 23px;
+  }
+
+  .panel {
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .input-row {
+    gap: 8px;
+  }
+
+  input {
+    height: 56px;
+    font-size: 25px;
+    letter-spacing: 4px;
+  }
+
+  .btn-main {
+    width: 64px;
+    height: 64px;
+    font-size: 16px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .hit-history {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .big {
+    font-size: 26px;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <div class="title">
-        5159843｜白核 v0.3
-      </div>
-      <div class="sub">
-        36局样本｜只保留差8 + 差2小X无差0｜删除4散和裸差2小X｜命中任意白核即推荐｜不命中跳过
-      </div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="title">
+      🦞 5161482｜龙虾黄金差值 v1.0
     </div>
 
-    <div class="panel">
-      <div class="section-title">
-        输入5位房号
-      </div>
-      <div class="input-row">
-        <input
-          id="roomInput"
-          type="tel"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          maxlength="5"
-          placeholder="例如 95318"
-          autocomplete="off"
-        />
-        <button class="btn-main" onclick="run()">
-          开干
-        </button>
-      </div>
-      <div id="result" class="result"></div>
-    </div>
-
-    <div class="panel">
-      <div class="section-title">
-        5159843 白核 v0.3 历史回测
-      </div>
-      <div class="grid">
-        <div class="stat">
-          <div class="v">36局</div>
-          <div class="k">样本库</div>
-        </div>
-        <div class="stat">
-          <div class="v">6局</div>
-          <div class="k">白核命中</div>
-        </div>
-        <div class="stat">
-          <div class="v">16.7%</div>
-          <div class="k">进房率</div>
-        </div>
-        <div class="stat">
-          <div class="v">100%</div>
-          <div class="k">胜率</div>
-        </div>
-        <div class="stat">
-          <div class="v">6胜0负</div>
-          <div class="k">胜负结构</div>
-        </div>
-        <div class="stat">
-          <div class="v">+4260</div>
-          <div class="k">净分</div>
-        </div>
-        <div class="stat">
-          <div class="v">4局</div>
-          <div class="k">大赢≥500</div>
-        </div>
-        <div class="stat">
-          <div class="v">0局</div>
-          <div class="k">大输≤-500</div>
-        </div>
-      </div>
-
-      <div class="desc" style="margin-top:12px;">
-        当前正式规则只保留：
-        <b>① 差8；② 差2小X + 无差0。</b>
-        <br><br>
-        已删除：
-        <b>4个有效差值全不同</b>
-        和
-        <b>裸差2小X</b>。
-        <br>
-        差2小X = 当前座位X比其他某个数字小2，即：
-        <b>n - X = 2</b>。
-        <br>
-        无差0 = 当前座位X不能和其他任意位置数字相同。
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="section-title">
-        5159843 正式白核规则
-      </div>
-      <div id="comboList" class="combo-list"></div>
-    </div>
-
-    <div class="panel">
-      <div class="section-title">
-        历史记录
-        <button class="btn-small" onclick="clearHistory()" style="float:right;">
-          清空
-        </button>
-      </div>
-      <div id="historyBox" class="desc">
-        暂无记录
-      </div>
-    </div>
-
-    <div class="footer-note">
-      固定映射：
-      房号记作ABCDE；
-      1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。
+    <div class="sub">
+      44局历史样本｜13局命中｜11胜2负｜胜率84.62%｜净+8770
       <br>
-      5号和6号虽然都映射E，但作为两个独立座位输出。
-      <br>
-      大X：X-n=差值；
-      小X：n-X=差值；
-      差0只代表重号，不算有效差值。
+      核心目标：保留大赢，过滤大输｜当前历史命中0次大输
     </div>
   </div>
 
-  <script>
+
+  <!-- 输入 -->
+  <div class="panel">
+
+    <div class="section-title">
+      输入5位房号
+    </div>
+
+    <div class="input-row">
+
+      <input
+        id="roomInput"
+        type="tel"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        maxlength="5"
+        placeholder="例如 25062"
+        autocomplete="off"
+      />
+
+      <button
+        class="btn-main"
+        onclick="run()"
+      >
+        开干
+      </button>
+
+    </div>
+
+    <div
+      id="result"
+      class="result"
+    ></div>
+
+  </div>
+
+
+  <!-- 回测 -->
+  <div class="panel">
+
+    <div class="section-title">
+      5161482 龙虾 v1.0 历史回测
+    </div>
+
+    <div class="grid">
+
+      <div class="stat">
+        <div class="v">44局</div>
+        <div class="k">总样本</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">13局</div>
+        <div class="k">模型命中</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">29.55%</div>
+        <div class="k">出手率</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">84.62%</div>
+        <div class="k">胜率</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">11胜2负</div>
+        <div class="k">胜负结构</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">+8770</div>
+        <div class="k">历史净分</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">8局</div>
+        <div class="k">大赢 ≥ +500</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">0局</div>
+        <div class="k">大输 ≤ -400</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">61.54%</div>
+        <div class="k">命中后大赢率</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">0%</div>
+        <div class="k">命中后大输率</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">-330</div>
+        <div class="k">最大单局亏损</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">+674.6</div>
+        <div class="k">平均每次命中</div>
+      </div>
+
+    </div>
+
+    <div
+      class="desc"
+      style="margin-top:14px;"
+    >
+      <b>当前原则：</b>
+      同一条件如果历史同时出现大赢和大输，则不能作为黄金进房规则。
+      当前模型优先保留“大赢 + 小输噪音”的结构。
+      <br><br>
+
+      <b>大赢：</b> ≥ +500
+      <br>
+      <b>大输：</b> ≤ -400
+      <br>
+      <b>差值：</b>全部使用绝对差，不区分大X、小X。
+    </div>
+
+  </div>
+
+
+  <!-- 规则 -->
+  <div class="panel">
+
+    <div class="section-title">
+      🔥 正式黄金差值规则
+    </div>
+
+    <div
+      id="comboList"
+      class="combo-list"
+    ></div>
+
+  </div>
+
+
+  <!-- 历史命中 -->
+  <div class="panel">
+
+    <div class="section-title">
+      历史13局模型命中
+    </div>
+
+    <div class="hit-history">
+
+      <div class="hit-item win">82527｜2号｜+460</div>
+      <div class="hit-item win">25062｜3号｜+2100</div>
+      <div class="hit-item win">81852｜6号｜+170</div>
+
+      <div class="hit-item win">80138｜3号｜+760</div>
+      <div class="hit-item win">31771｜1号｜+510</div>
+      <div class="hit-item loss">60835｜2号｜-270</div>
+
+      <div class="hit-item loss">81162｜1号｜-330</div>
+      <div class="hit-item win">12135｜1号｜+600</div>
+      <div class="hit-item win">88110｜3号｜+1020</div>
+
+      <div class="hit-item win">88813｜3号｜+180</div>
+      <div class="hit-item win">62308｜6号｜+1180</div>
+      <div class="hit-item win">82437｜2号｜+790</div>
+
+      <div class="hit-item win">13134｜3号｜+1600</div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 查询历史 -->
+  <div class="panel">
+
+    <div class="section-title">
+
+      查询历史
+
+      <button
+        class="btn-small"
+        onclick="clearHistory()"
+        style="float:right;"
+      >
+        清空
+      </button>
+
+    </div>
+
+    <div
+      id="historyBox"
+      class="desc"
+    >
+      暂无记录
+    </div>
+
+  </div>
+
+
+  <div class="footer-note">
+
+    固定映射：
+    房号记作 ABCDE；
+    1号=A，2号=B，3号=C，4号=D，5号=E，6号=E。
+
+    <br>
+
+    5号和6号虽然都映射E，
+    但作为两个独立座位判断。
+
+    <br>
+
+    本模型所有正式规则均使用绝对差值：
+    |X-n|。
+
+  </div>
+
+</div>
+
+
+<script>
+
+/*
+==========================================================
+5161482｜龙虾黄金差值 v1.0
+==========================================================
+
+正式规则：
+
+1号
+- 单差2
+- 差2 + 差4
+
+2号
+- 差5 + 差6
+
+3号
+- 单差0
+- 单差7
+- 双差7
+- 双差2 + 差5 + 差6
+
+4号
+- 无
+
+5号
+- 无
+
+6号
+- 单差6
+- 差1 + 差6
+
+注意：
+组合规则是加强规则。
+如果单差已经命中，组合同时命中时仍会显示，
+但最终只推荐一次该座位。
+
+差0：
+当前座位X与其他位置出现相同数字。
+
+双差7：
+四个对比数字中至少有两个与X绝对差为7。
+
+双差2 + 差5 + 差6：
+差2至少出现两次，
+并且同时至少存在一个差5和一个差6。
+*/
+
+
+const MODEL_STAT = {
+
+  account: "5161482",
+
+  name: "龙虾",
+
+  version: "黄金差值 v1.0",
+
+  sample: 44,
+
+  hitCount: 13,
+
+  hitRate: "29.55%",
+
+  winRate: "84.62%",
+
+  record: "11胜2负",
+
+  net: "+8770",
+
+  bigWin: "8局",
+
+  bigLoss: "0局",
+
+  maxLoss: "-330",
+
+  average: "+674.6"
+
+};
+
+
+/*
+==========================================================
+座位映射
+==========================================================
+
+1号=A
+2号=B
+3号=C
+4号=D
+5号=E
+6号=E
+
+*/
+
+
+function getSeatXPosition(seat) {
+
+  if (seat === 1) {
+    return "A";
+  }
+
+  if (seat === 2) {
+    return "B";
+  }
+
+  if (seat === 3) {
+    return "C";
+  }
+
+  if (seat === 4) {
+    return "D";
+  }
+
+  return "E";
+
+}
+
+
+function countMap(arr) {
+
+  const map = {};
+
+  arr.forEach(value => {
+
+    map[value] =
+      (map[value] || 0) + 1;
+
+  });
+
+  return map;
+
+}
+
+
+function analyzeRoom(roomNumber) {
+
+  const digits =
+    roomNumber
+      .split("")
+      .map(Number);
+
+  const [A,B,C,D,E] = digits;
+
+  const positions = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ];
+
+  const digitMap =
+    countMap(digits);
+
+  return {
+
+    room: roomNumber,
+
+    digits,
+
+    positions,
+
+    digitMap,
+
+    A,
+    B,
+    C,
+    D,
+    E,
+
+    hasZero:
+      digits.includes(0),
+
+    hasRepeat:
+      Object
+        .values(digitMap)
+        .some(value => value >= 2)
+
+  };
+
+}
+
+
+/*
+==========================================================
+差值计算
+==========================================================
+*/
+
+
+function getSeatDiffs(room,seat) {
+
+  const xPos =
+    getSeatXPosition(seat);
+
+  const x =
+    room[xPos];
+
+  const diffs = [];
+
+  room.positions.forEach(pos => {
+
     /*
-      ==========================================================
-      5159843｜白核 v0.3
-      ==========================================================
+    排除座位自身位置。
 
-      正式白核：
-      1. 有差8
-      2. 有差2小X + 无差0
-
-      删除：
-      1. 4个有效差值全不同
-      2. 裸差2小X
-
-      命中任意一个 => 推荐
-      都不命中 => 跳过
-
-      回测：
-      36局样本
-      命中6局
-      6胜0负
-      胜率100%
-      净分+4260
-      大赢4局
-      大输0局
+    注意5号、6号都映射E，
+    所以都会排除E自身，
+    然后与ABCD比较。
     */
 
-    const MODEL_STAT = {
-      account: "5159843",
-      version: "白核 v0.3",
-      sample: 36,
-      hitCount: 6,
-      hitRate: "16.7%",
-      winRate: "100%",
-      record: "6胜0负",
-      net: "+4260",
-      bigWin: "4大赢",
-      bigLoss: "0大输"
-    };
+    if (pos === xPos) {
+      return;
+    }
+
+    const n =
+      room[pos];
+
+    const absDiff =
+      Math.abs(x - n);
+
+    const signedDiff =
+      x - n;
+
+    diffs.push({
+
+      pos,
+
+      value: n,
+
+      absDiff,
+
+      signedDiff,
+
+      text:
+        `${pos}=${n}，|${x}-${n}|=${absDiff}`,
+
+      directionText:
+        signedDiff > 0
+          ? `差${absDiff}大X`
+          : signedDiff < 0
+            ? `差${absDiff}小X`
+            : "差0重号"
+
+    });
+
+  });
+
+
+  return {
+
+    seat,
+
+    xPos,
+
+    x,
+
+    diffs,
 
     /*
-      ==========================================================
-      座位映射
-      ==========================================================
-      1号 = A
-      2号 = B
-      3号 = C
-      4号 = D
-      5号 = E
-      6号 = E
+    这里不能删除差0，
+    因为3号正式规则需要判断差0。
     */
 
-    function getSeatXPosition(seat) {
-      if (seat === 1) {
-        return "A";
-      }
+    allDiffs: diffs.map(
+      item => item.absDiff
+    ),
 
-      if (seat === 2) {
-        return "B";
-      }
+    nonZeroDiffs:
+      diffs.filter(
+        item => item.absDiff > 0
+      )
 
-      if (seat === 3) {
-        return "C";
-      }
+  };
 
-      if (seat === 4) {
-        return "D";
-      }
+}
 
-      return "E";
+
+/*
+==========================================================
+差值辅助函数
+==========================================================
+*/
+
+
+function findAbsDiff(
+  room,
+  seat,
+  diff
+) {
+
+  const info =
+    getSeatDiffs(room,seat);
+
+  return info.diffs.filter(
+    item => item.absDiff === diff
+  );
+
+}
+
+
+function countAbsDiff(
+  room,
+  seat,
+  diff
+) {
+
+  return findAbsDiff(
+    room,
+    seat,
+    diff
+  ).length;
+
+}
+
+
+function hasDiff(
+  room,
+  seat,
+  diff
+) {
+
+  return countAbsDiff(
+    room,
+    seat,
+    diff
+  ) >= 1;
+
+}
+
+
+function hasDoubleDiff(
+  room,
+  seat,
+  diff
+) {
+
+  return countAbsDiff(
+    room,
+    seat,
+    diff
+  ) >= 2;
+
+}
+
+
+function hasDiffCombo(
+  room,
+  seat,
+  diffs
+) {
+
+  return diffs.every(diff => {
+
+    return hasDiff(
+      room,
+      seat,
+      diff
+    );
+
+  });
+
+}
+
+
+function getUniqueDiffCount(
+  room,
+  seat
+) {
+
+  const info =
+    getSeatDiffs(
+      room,
+      seat
+    );
+
+  return new Set(
+    info.diffs.map(
+      item => item.absDiff
+    )
+  ).size;
+
+}
+
+
+/*
+==========================================================
+正式规则
+==========================================================
+*/
+
+
+const FORMAL_RULES = [
+
+  /*
+  ======================
+  1号
+  ======================
+  */
+
+  {
+
+    id: "L-1A",
+
+    seat: 1,
+
+    rank: 2,
+
+    type: "单差",
+
+    name: "1号｜差2",
+
+    shortName: "差2",
+
+    stat:
+      "历史主核｜2次大赢 + 1次小输｜0大输",
+
+    rule:
+      "1号位X与其他任意数字的绝对差出现差2。",
+
+    test: (seat,room) => {
+
+      return (
+        seat === 1 &&
+        hasDiff(room,seat,2)
+      );
+
+    },
+
+    getMatches: (seat,room) => {
+
+      return findAbsDiff(
+        room,
+        seat,
+        2
+      );
+
     }
 
-    function countMap(arr) {
-      const map = {};
+  },
 
-      arr.forEach(value => {
-        map[value] = (map[value] || 0) + 1;
-      });
 
-      return map;
-    }
+  {
 
-    function analyzeRoom(roomNumber) {
-      const digits = roomNumber.split("").map(Number);
-      const [A, B, C, D, E] = digits;
+    id: "L-1B",
 
-      const positions = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E"
+    seat: 1,
+
+    rank: 1,
+
+    type: "加强组合",
+
+    name: "1号｜差2 + 差4",
+
+    shortName: "2+4",
+
+    stat:
+      "历史2局2次大赢｜+510 / +600｜0大输",
+
+    rule:
+      "1号位同时至少存在一个差2和一个差4。",
+
+    test: (seat,room) => {
+
+      return (
+        seat === 1 &&
+        hasDiffCombo(
+          room,
+          seat,
+          [2,4]
+        )
+      );
+
+    },
+
+    getMatches: (seat,room) => {
+
+      return [
+        ...findAbsDiff(room,seat,2),
+        ...findAbsDiff(room,seat,4)
       ];
 
-      const digitMap = countMap(digits);
-
-      return {
-        room: roomNumber,
-        digits,
-        positions,
-        digitMap,
-        A,
-        B,
-        C,
-        D,
-        E,
-        hasZero: digits.includes(0),
-        hasRepeat: Object.values(digitMap).some(value => {
-          return value >= 2;
-        })
-      };
     }
 
-    /*
-      ==========================================================
-      差值扫描
-      ==========================================================
-    */
+  },
 
-    function getSeatDiffs(room, seat) {
-      const xPos = getSeatXPosition(seat);
-      const x = room[xPos];
-      const diffs = [];
 
-      room.positions.forEach(pos => {
-        if (pos === xPos) {
-          return;
-        }
+  /*
+  ======================
+  2号
+  ======================
+  */
 
-        const n = room[pos];
-        const absDiff = Math.abs(x - n);
-        const signedDiff = x - n;
+  {
 
-        diffs.push({
-          pos,
-          value: n,
-          absDiff,
-          signedDiff,
-          text: `${pos}=${n}，|${x}-${n}|=${absDiff}`,
-          directionText:
-            signedDiff > 0
-              ? `差${absDiff}大X`
-              : signedDiff < 0
-                ? `差${absDiff}小X`
-                : "差0重号"
-        });
-      });
+    id: "L-2A",
 
-      return {
-        seat,
-        xPos,
-        x,
-        diffs,
-        validDiffs: diffs.filter(item => {
-          return item.absDiff > 0;
-        })
-      };
-    }
+    seat: 2,
 
-    function findAbsDiff(room, seat, diff) {
-      const info = getSeatDiffs(room, seat);
+    rank: 1,
 
-      return info.validDiffs.filter(item => {
-        return item.absDiff === diff;
-      });
-    }
+    type: "黄金组合",
 
-    function findDirectionalDiff(room, seat, diff, direction) {
-      const info = getSeatDiffs(room, seat);
+    name: "2号｜差5 + 差6",
 
-      return info.validDiffs.filter(item => {
-        if (direction === "X_GREATER") {
-          return item.signedDiff === diff;
-        }
+    shortName: "5+6",
 
-        if (direction === "X_SMALLER") {
-          return item.signedDiff === -diff;
-        }
+    stat:
+      "历史 +460 / -270 / +790｜0大输",
 
-        return false;
-      });
-    }
+    rule:
+      "2号位同时至少存在一个差5和一个差6。",
 
-    function hasZeroDiffForSeat(room, seat) {
-      const info = getSeatDiffs(room, seat);
+    test: (seat,room) => {
 
-      return info.diffs.some(item => {
-        return item.absDiff === 0;
-      });
-    }
-
-    function getEffectiveUniqueDiffCount(room, seat) {
-      const info = getSeatDiffs(room, seat);
-      const set = new Set(info.validDiffs.map(item => item.absDiff));
-
-      return set.size;
-    }
-
-    /*
-      ==========================================================
-      正式白核规则
-      ==========================================================
-    */
-
-    const FORMAL_RULES = [
-      {
-        id: "M-W1",
-        rank: 1,
-        name: "差8强核",
-        shortName: "差8",
-        stat: "历史3局3胜｜胜率100%｜净+2380｜0大输",
-        rule: "当前座位X与其他任一数字n满足：|X-n|=8。",
-        test: (seat, room) => {
-          return findAbsDiff(room, seat, 8).length > 0;
-        },
-        getMatches: (seat, room) => {
-          return findAbsDiff(room, seat, 8);
-        }
-      },
-      {
-        id: "M-W2",
-        rank: 2,
-        name: "差2小X + 无差0",
-        shortName: "差2小X无重",
-        stat: "历史4局4胜｜胜率100%｜净+3180｜0大输",
-        rule: "当前座位X比其他任一数字n小2，即 n-X=2；同时X不能和其他位置数字相同，也就是不能有差0。",
-        test: (seat, room) => {
-          const hasDiff2Small =
-            findDirectionalDiff(
-              room,
-              seat,
-              2,
-              "X_SMALLER"
-            ).length > 0;
-
-          const hasZero =
-            hasZeroDiffForSeat(
-              room,
-              seat
-            );
-
-          return hasDiff2Small && !hasZero;
-        },
-        getMatches: (seat, room) => {
-          return findDirectionalDiff(
-            room,
-            seat,
-            2,
-            "X_SMALLER"
-          );
-        }
-      }
-    ];
-
-    function getFormalHits(room, seat) {
-      return FORMAL_RULES
-        .filter(rule => {
-          return rule.test(seat, room);
-        })
-        .sort((a, b) => {
-          return a.rank - b.rank;
-        });
-    }
-
-    function analyzeSeats(room) {
-      const result = [];
-
-      for (let seat = 1; seat <= 6; seat++) {
-        const diffInfo = getSeatDiffs(room, seat);
-        const formalHits = getFormalHits(room, seat);
-
-        result.push({
+      return (
+        seat === 2 &&
+        hasDiffCombo(
+          room,
           seat,
-          xPos: diffInfo.xPos,
-          x: diffInfo.x,
-          diffs: diffInfo.diffs,
-          validDiffs: diffInfo.validDiffs,
-          formalHits,
-          isCandidate: formalHits.length > 0,
-          bestRank: formalHits.length ? formalHits[0].rank : 999,
-          effectiveUniqueDiffCount: getEffectiveUniqueDiffCount(room, seat),
-          hasZeroDiff: hasZeroDiffForSeat(room, seat)
-        });
-      }
-
-      return result;
-    }
-
-    function choosePicks(seats) {
-      const finalPicks = seats
-        .filter(item => {
-          return item.isCandidate;
-        })
-        .sort((a, b) => {
-          if (a.bestRank !== b.bestRank) {
-            return a.bestRank - b.bestRank;
-          }
-
-          return a.seat - b.seat;
-        });
-
-      return {
-        finalPicks
-      };
-    }
-
-    function run() {
-      const input = document.getElementById("roomInput");
-
-      let roomNumber = input.value.replace(/\D/g, "").slice(0, 5);
-
-      input.value = roomNumber;
-
-      if (roomNumber.length !== 5) {
-        showError("请输入完整的5位数字房号。");
-        return;
-      }
-
-      const room = analyzeRoom(roomNumber);
-      const seats = analyzeSeats(room);
-      const decision = choosePicks(seats);
-
-      renderResult(
-        room,
-        seats,
-        decision
+          [5,6]
+        )
       );
 
-      saveHistory(
-        room,
-        decision
+    },
+
+    getMatches: (seat,room) => {
+
+      return [
+        ...findAbsDiff(room,seat,5),
+        ...findAbsDiff(room,seat,6)
+      ];
+
+    }
+
+  },
+
+
+  /*
+  ======================
+  3号
+  ======================
+  */
+
+  {
+
+    id: "L-3A",
+
+    seat: 3,
+
+    rank: 2,
+
+    type: "单差",
+
+    name: "3号｜差0",
+
+    shortName: "差0",
+
+    stat:
+      "历史3局3正｜+1020 / +180 / +1600｜0大输",
+
+    rule:
+      "3号位X与其他任意位置出现相同数字，即差0。",
+
+    test: (seat,room) => {
+
+      return (
+        seat === 3 &&
+        hasDiff(room,seat,0)
       );
 
-      renderHistory();
+    },
+
+    getMatches: (seat,room) => {
+
+      return findAbsDiff(
+        room,
+        seat,
+        0
+      );
+
     }
 
-    function showError(message) {
-      const box = document.getElementById("result");
+  },
 
-      box.className = "result show";
 
-      box.innerHTML = `
-        <span class="badge no">输入错误</span>
-        <div class="big">不处理</div>
-        <div class="desc">${message}</div>
-      `;
+  {
+
+    id: "L-3B",
+
+    seat: 3,
+
+    rank: 2,
+
+    type: "单差",
+
+    name: "3号｜差7",
+
+    shortName: "差7",
+
+    stat:
+      "历史3局3正｜+760 / +1020 / +180｜0大输",
+
+    rule:
+      "3号位X与其他任意数字的绝对差出现差7。",
+
+    test: (seat,room) => {
+
+      return (
+        seat === 3 &&
+        hasDiff(room,seat,7)
+      );
+
+    },
+
+    getMatches: (seat,room) => {
+
+      return findAbsDiff(
+        room,
+        seat,
+        7
+      );
+
     }
 
-    function renderRoomLine(room) {
-      return `
-        ABCDE=${room.A}${room.B}${room.C}${room.D}${room.E}
-        <br>
-        A=${room.A}｜B=${room.B}｜C=${room.C}｜D=${room.D}｜E=${room.E}
-        <br>
-        ${room.hasZero ? "含0" : "无0"}｜${room.hasRepeat ? "有重号" : "无重号"}
-      `;
+  },
+
+
+  {
+
+    id: "L-3C",
+
+    seat: 3,
+
+    rank: 1,
+
+    type: "强核",
+
+    name: "3号｜双差7",
+
+    shortName: "双差7",
+
+    stat:
+      "历史2局2次大赢｜+760 / +1020｜0大输",
+
+    rule:
+      "3号位与其余4个数字比较，差7至少出现2次。",
+
+    test: (seat,room) => {
+
+      return (
+        seat === 3 &&
+        hasDoubleDiff(
+          room,
+          seat,
+          7
+        )
+      );
+
+    },
+
+    getMatches: (seat,room) => {
+
+      return findAbsDiff(
+        room,
+        seat,
+        7
+      );
+
     }
 
-    function renderSeatRelation(item, room) {
-      const blocks = [];
+  },
 
-      item.formalHits.forEach(rule => {
-        const matches = rule.getMatches(item.seat, room);
 
-        const matchText = matches
+  {
+
+    id: "L-3D",
+
+    seat: 3,
+
+    rank: 1,
+
+    type: "特殊强核",
+
+    name:
+      "3号｜双差2 + 差5 + 差6",
+
+    shortName:
+      "双2+5+6",
+
+    stat:
+      "特殊大赢结构｜25062 +2100｜当前0大输",
+
+    rule:
+      "3号位差2至少出现2次，同时还必须存在差5和差6。",
+
+    test: (seat,room) => {
+
+      if (seat !== 3) {
+        return false;
+      }
+
+      const double2 =
+        countAbsDiff(
+          room,
+          seat,
+          2
+        ) >= 2;
+
+      const diff5 =
+        hasDiff(
+          room,
+          seat,
+          5
+        );
+
+      const diff6 =
+        hasDiff(
+          room,
+          seat,
+          6
+        );
+
+      return (
+        double2 &&
+        diff5 &&
+        diff6
+      );
+
+    },
+
+    getMatches: (seat,room) => {
+
+      return [
+        ...findAbsDiff(room,seat,2),
+        ...findAbsDiff(room,seat,5),
+        ...findAbsDiff(room,seat,6)
+      ];
+
+    }
+
+  },
+
+
+  /*
+  ======================
+  6号
+  ======================
+  */
+
+  {
+
+    id: "L-6A",
+
+    seat: 6,
+
+    rank: 2,
+
+    type: "单差",
+
+    name: "6号｜差6",
+
+    shortName: "差6",
+
+    stat:
+      "历史 +170 / +1180｜2局全正｜0大输",
+
+    rule:
+      "6号位X与其他任意数字的绝对差出现差6。",
+
+    test: (seat,room) => {
+
+      return (
+        seat === 6 &&
+        hasDiff(room,seat,6)
+      );
+
+    },
+
+    getMatches: (seat,room) => {
+
+      return findAbsDiff(
+        room,
+        seat,
+        6
+      );
+
+    }
+
+  },
+
+
+  {
+
+    id: "L-6B",
+
+    seat: 6,
+
+    rank: 1,
+
+    type: "加强组合",
+
+    name: "6号｜差1 + 差6",
+
+    shortName: "1+6",
+
+    stat:
+      "加强观察结构｜历史未出现大输",
+
+    rule:
+      "6号位同时至少存在一个差1和一个差6。",
+
+    test: (seat,room) => {
+
+      return (
+        seat === 6 &&
+        hasDiffCombo(
+          room,
+          seat,
+          [1,6]
+        )
+      );
+
+    },
+
+    getMatches: (seat,room) => {
+
+      return [
+        ...findAbsDiff(room,seat,1),
+        ...findAbsDiff(room,seat,6)
+      ];
+
+    }
+
+  }
+
+];
+
+
+/*
+==========================================================
+获取命中规则
+==========================================================
+*/
+
+
+function getFormalHits(
+  room,
+  seat
+) {
+
+  return FORMAL_RULES
+
+    .filter(rule => {
+
+      return rule.test(
+        seat,
+        room
+      );
+
+    })
+
+    .sort((a,b) => {
+
+      if (a.rank !== b.rank) {
+        return a.rank - b.rank;
+      }
+
+      return a.id.localeCompare(b.id);
+
+    });
+
+}
+
+
+/*
+==========================================================
+分析6个位子
+==========================================================
+*/
+
+
+function analyzeSeats(room) {
+
+  const result = [];
+
+  for (
+    let seat = 1;
+    seat <= 6;
+    seat++
+  ) {
+
+    const diffInfo =
+      getSeatDiffs(
+        room,
+        seat
+      );
+
+    const formalHits =
+      getFormalHits(
+        room,
+        seat
+      );
+
+    result.push({
+
+      seat,
+
+      xPos:
+        diffInfo.xPos,
+
+      x:
+        diffInfo.x,
+
+      diffs:
+        diffInfo.diffs,
+
+      formalHits,
+
+      isCandidate:
+        formalHits.length > 0,
+
+      bestRank:
+        formalHits.length
+          ? formalHits[0].rank
+          : 999,
+
+      uniqueDiffCount:
+        getUniqueDiffCount(
+          room,
+          seat
+        )
+
+    });
+
+  }
+
+  return result;
+
+}
+
+
+/*
+==========================================================
+选择推荐位
+==========================================================
+*/
+
+
+function choosePicks(seats) {
+
+  const finalPicks = seats
+
+    .filter(item => {
+
+      return item.isCandidate;
+
+    })
+
+    .sort((a,b) => {
+
+      if (
+        a.bestRank !==
+        b.bestRank
+      ) {
+
+        return (
+          a.bestRank -
+          b.bestRank
+        );
+
+      }
+
+      return (
+        a.seat -
+        b.seat
+      );
+
+    });
+
+
+  return {
+    finalPicks
+  };
+
+}
+
+
+/*
+==========================================================
+执行
+==========================================================
+*/
+
+
+function run() {
+
+  const input =
+    document.getElementById(
+      "roomInput"
+    );
+
+  let roomNumber =
+    input.value
+      .replace(/\D/g,"")
+      .slice(0,5);
+
+  input.value =
+    roomNumber;
+
+  if (
+    roomNumber.length !== 5
+  ) {
+
+    showError(
+      "请输入完整的5位数字房号。"
+    );
+
+    return;
+
+  }
+
+
+  const room =
+    analyzeRoom(
+      roomNumber
+    );
+
+  const seats =
+    analyzeSeats(
+      room
+    );
+
+  const decision =
+    choosePicks(
+      seats
+    );
+
+
+  renderResult(
+    room,
+    seats,
+    decision
+  );
+
+
+  saveHistory(
+    room,
+    decision
+  );
+
+
+  renderHistory();
+
+}
+
+
+/*
+==========================================================
+错误
+==========================================================
+*/
+
+
+function showError(message) {
+
+  const box =
+    document.getElementById(
+      "result"
+    );
+
+  box.className =
+    "result show";
+
+  box.innerHTML = `
+
+    <span class="badge no">
+      输入错误
+    </span>
+
+    <div class="big">
+      不处理
+    </div>
+
+    <div class="desc">
+      ${message}
+    </div>
+
+  `;
+
+}
+
+
+/*
+==========================================================
+房号信息
+==========================================================
+*/
+
+
+function renderRoomLine(room) {
+
+  return `
+
+    ABCDE=
+    ${room.A}${room.B}${room.C}${room.D}${room.E}
+
+    <br>
+
+    A=${room.A}
+    ｜B=${room.B}
+    ｜C=${room.C}
+    ｜D=${room.D}
+    ｜E=${room.E}
+
+    <br>
+
+    ${
+      room.hasZero
+        ? "房号含数字0"
+        : "房号无数字0"
+    }
+
+    ｜
+
+    ${
+      room.hasRepeat
+        ? "有重复数字"
+        : "无重复数字"
+    }
+
+  `;
+
+}
+
+
+/*
+==========================================================
+显示命中关系
+==========================================================
+*/
+
+
+function renderSeatRelation(
+  item,
+  room
+) {
+
+  const blocks = [];
+
+  item.formalHits.forEach(
+    rule => {
+
+      const matches =
+        rule.getMatches(
+          item.seat,
+          room
+        );
+
+
+      const matchText =
+        matches
+
           .map(match => {
-            return `${match.pos}=${match.value} → ${match.directionText}｜${match.text}`;
+
+            return `
+
+              ${match.pos}=${match.value}
+
+              →
+
+              ${match.directionText}
+
+              ｜
+
+              ${match.text}
+
+            `;
+
           })
+
           .join("<br>");
 
-        blocks.push(`
-          <div style="margin-top:8px;">
-            <b>${rule.id}｜${rule.name}</b>
-            <br>
-            X=${item.x}（${item.xPos}）｜${rule.stat}
-            <br>
-            ${matchText}
-          </div>
-        `);
-      });
 
-      return blocks.join("");
-    }
+      blocks.push(`
 
-    function renderResult(room, seats, decision) {
-      const box = document.getElementById("result");
-      const picks = decision.finalPicks;
+        <div
+          style="
+            margin-top:10px;
+            padding-top:8px;
+            border-top:1px dashed #eadccc;
+          "
+        >
 
-      if (!picks.length) {
-        box.className = "result show";
+          <b>
+            ${rule.id}
+            ｜${rule.name}
+          </b>
 
-        box.innerHTML = `
-          <span class="badge no">跳过</span>
-          <span class="badge blue">未命中白核</span>
-          <div class="big">${room.room}</div>
-          <div class="desc">
-            当前房号没有任何座位命中 5159843 白核 v0.3。
-            <br>
-            这局不进，不硬打。
-            <br><br>
-            ${renderRoomLine(room)}
-          </div>
-          ${renderDebug(room, seats)}
-        `;
-
-        return;
-      }
-
-      const pickNames = picks.map(pick => {
-        return `${pick.seat}号`;
-      }).join("、");
-
-      const pickHtml = picks
-        .map((pick, index) => {
-          return `
-            <div class="pick ${index === 0 ? "main" : ""}">
-              <div class="pick-title">
-                ${index === 0 ? "🔥第一推荐" : "⚡同时推荐"}
-                ｜${pick.seat}号｜X=${pick.x}
-              </div>
-              <div class="pick-rule">
-                <span class="badge ok">白核命中</span>
-                ${renderSeatRelation(pick, room)}
-              </div>
-            </div>
-          `;
-        })
-        .join("");
-
-      box.className = "result show";
-
-      box.innerHTML = `
-        <span class="badge ok">建议进房</span>
-        <span class="badge blue">5159843 白核 v0.3</span>
-        <div class="big">推荐：${pickNames}</div>
-
-        <div class="pick-list">
-          ${pickHtml}
-        </div>
-
-        <div class="desc" style="margin-top:14px;">
-          房号：<b>${room.room}</b>
           <br>
-          ${renderRoomLine(room)}
+
+          <span class="badge ${
+            rule.rank === 1
+              ? "gold"
+              : "ok"
+          }">
+            ${rule.type}
+          </span>
+
+          <br>
+
+          X=${item.x}
+          （${item.xPos}）
+
+          <br>
+
+          ${rule.stat}
+
+          <br>
+
+          ${matchText}
+
         </div>
 
-        <div class="grid">
-          <div class="stat">
-            <div class="v">${MODEL_STAT.sample}局</div>
-            <div class="k">样本库</div>
-          </div>
-          <div class="stat">
-            <div class="v">${MODEL_STAT.hitCount}局</div>
-            <div class="k">白核命中</div>
-          </div>
-          <div class="stat">
-            <div class="v">${MODEL_STAT.winRate}</div>
-            <div class="k">胜率</div>
-          </div>
-          <div class="stat">
-            <div class="v">${MODEL_STAT.bigLoss}</div>
-            <div class="k">大输记录</div>
-          </div>
-        </div>
+      `);
 
-        ${renderDebug(room, seats)}
-      `;
     }
+  );
 
-    function renderDebug(room, seats) {
-      const rows = seats
-        .map(item => {
-          let status = "未命中";
+  return blocks.join("");
 
-          if (item.formalHits.length) {
-            status =
-              "✅ " +
-              item.formalHits
-                .map(rule => {
-                  return rule.shortName;
-                })
-                .join("、");
-          }
+}
 
-          const allRelations = item.diffs
+
+/*
+==========================================================
+结果
+==========================================================
+*/
+
+
+function renderResult(
+  room,
+  seats,
+  decision
+) {
+
+  const box =
+    document.getElementById(
+      "result"
+    );
+
+  const picks =
+    decision.finalPicks;
+
+
+  /*
+  无推荐
+  */
+
+  if (!picks.length) {
+
+    box.className =
+      "result show";
+
+    box.innerHTML = `
+
+      <span class="badge no">
+        ❌ 跳过
+      </span>
+
+      <span class="badge blue">
+        未命中黄金差值
+      </span>
+
+      <div class="big">
+        ${room.room}
+      </div>
+
+      <div class="desc">
+
+        当前房号没有任何座位
+        命中龙虾 v1.0 正式规则。
+
+        <br>
+
+        <b>
+          这局不进，不硬打。
+        </b>
+
+        <br><br>
+
+        ${renderRoomLine(room)}
+
+      </div>
+
+      ${renderDebug(
+        room,
+        seats
+      )}
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+  有推荐
+  */
+
+
+  const pickNames =
+    picks
+      .map(pick => {
+
+        return `${pick.seat}号`;
+
+      })
+      .join("、");
+
+
+  const pickHtml =
+    picks
+
+      .map(
+        (pick,index) => {
+
+          const hasStrong =
+            pick.formalHits
+              .some(
+                rule =>
+                  rule.rank === 1
+              );
+
+          return `
+
+            <div
+              class="pick ${
+                index === 0
+                  ? "main"
+                  : ""
+              }"
+            >
+
+              <div class="pick-title">
+
+                ${
+                  index === 0
+                    ? "🔥 第一推荐"
+                    : "⚡ 同时推荐"
+                }
+
+                ｜${pick.seat}号
+
+                ｜X=${pick.x}
+
+              </div>
+
+
+              <div class="pick-rule">
+
+                <span class="badge ok">
+                  黄金规则命中
+                </span>
+
+                ${
+                  hasStrong
+                    ? `
+                      <span class="badge gold">
+                        强组合
+                      </span>
+                    `
+                    : ""
+                }
+
+                ${renderSeatRelation(
+                  pick,
+                  room
+                )}
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+
+      .join("");
+
+
+  box.className =
+    "result show";
+
+
+  box.innerHTML = `
+
+    <span class="badge ok">
+      🔥 建议进房
+    </span>
+
+    <span class="badge blue">
+      5161482 龙虾 v1.0
+    </span>
+
+
+    <div class="big">
+
+      推荐：
+      ${pickNames}
+
+    </div>
+
+
+    <div class="pick-list">
+
+      ${pickHtml}
+
+    </div>
+
+
+    <div
+      class="desc"
+      style="margin-top:14px;"
+    >
+
+      房号：
+      <b>${room.room}</b>
+
+      <br>
+
+      ${renderRoomLine(room)}
+
+    </div>
+
+
+    <div class="grid">
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.sample}局
+        </div>
+
+        <div class="k">
+          历史样本
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.hitCount}局
+        </div>
+
+        <div class="k">
+          模型命中
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.winRate}
+        </div>
+
+        <div class="k">
+          历史胜率
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.bigLoss}
+        </div>
+
+        <div class="k">
+          历史大输
+        </div>
+
+      </div>
+
+    </div>
+
+
+    ${renderDebug(
+      room,
+      seats
+    )}
+
+  `;
+
+}
+
+
+/*
+==========================================================
+完整差值调试表
+==========================================================
+*/
+
+
+function renderDebug(
+  room,
+  seats
+) {
+
+  const rows =
+    seats
+
+      .map(item => {
+
+        let status =
+          "未命中";
+
+
+        if (
+          item.formalHits.length
+        ) {
+
+          status =
+            "✅ " +
+
+            item.formalHits
+
+              .map(rule => {
+
+                return (
+                  rule.shortName
+                );
+
+              })
+
+              .join("、");
+
+        }
+
+
+        const allRelations =
+          item.diffs
+
             .map(diff => {
-              return `${diff.pos}:${diff.signedDiff >= 0 ? "+" : ""}${diff.signedDiff}（${diff.directionText}）`;
+
+              return `
+
+                ${diff.pos}:
+
+                ${
+                  diff.signedDiff >= 0
+                    ? "+"
+                    : ""
+                }
+
+                ${diff.signedDiff}
+
+                （${diff.directionText}）
+
+              `;
+
             })
+
             .join(" / ");
 
-          const validShape = item.validDiffs
+
+        const diffShape =
+          item.diffs
+
             .map(diff => {
+
               return diff.absDiff;
+
             })
+
             .join("、");
 
-          return `
-            <tr>
-              <td>${item.seat}号</td>
-              <td>${item.xPos}</td>
-              <td>${item.x}</td>
-              <td>${allRelations}</td>
-              <td>${validShape || "无有效差值"}</td>
-              <td>${item.effectiveUniqueDiffCount}种</td>
-              <td>${item.hasZeroDiff ? "有差0" : "无差0"}</td>
-              <td>${status}</td>
-            </tr>
-          `;
-        })
-        .join("");
 
-      return `
-        <div class="debug">
-          <table>
-            <thead>
-              <tr>
-                <th colspan="8">
-                  房号 ${room.room}｜差值表中的“+”表示X比对方大，“-”表示X比对方小
-                </th>
-              </tr>
-              <tr>
-                <th>位子</th>
-                <th>X位置</th>
-                <th>X</th>
-                <th>X-其他位数字</th>
-                <th>有效差值</th>
-                <th>有效差值种类</th>
-                <th>差0状态</th>
-                <th>模型结果</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
+        const count =
+          countMap(
+            item.diffs.map(
+              diff => diff.absDiff
+            )
+          );
 
-    function renderComboList() {
-      const box = document.getElementById("comboList");
 
-      box.innerHTML =
-        FORMAL_RULES
-          .map(rule => {
-            return `
-              <div class="combo main-rule">
-                <div class="name">
-                  🟢 ${rule.id}｜${rule.name}
-                </div>
-                <div class="rule">
-                  ${rule.rule}
-                  <br>
-                  ${rule.stat}
-                </div>
-              </div>
-            `;
-          })
-          .join("") +
-          `
-            <div class="combo off">
-              <div class="name">
-                🔴 已删除规则｜4散 + 裸差2小X
-              </div>
-              <div class="rule">
-                “4个有效差值全不同”经实测无效，
-                当前版本不再参与推荐。
-                <br>
-                “裸差2小X”里出现亏损局，
-                现在升级为：
-                <b>差2小X + 无差0</b>。
-                <br>
-                本版只打：
-                <b>差8</b>
-                和
-                <b>差2小X + 无差0</b>。
-              </div>
+        const repeatShape =
+          Object.entries(count)
+
+            .map(([diff,num]) => {
+
+              if (num >= 2) {
+
+                return (
+                  `差${diff}×${num}`
+                );
+
+              }
+
+              return null;
+
+            })
+
+            .filter(Boolean)
+
+            .join("、");
+
+
+        return `
+
+          <tr>
+
+            <td>
+              ${item.seat}号
+            </td>
+
+            <td>
+              ${item.xPos}
+            </td>
+
+            <td>
+              ${item.x}
+            </td>
+
+            <td>
+              ${allRelations}
+            </td>
+
+            <td>
+              ${diffShape}
+            </td>
+
+            <td>
+              ${
+                repeatShape ||
+                "无双差"
+              }
+            </td>
+
+            <td>
+              ${status}
+            </td>
+
+          </tr>
+
+        `;
+
+      })
+
+      .join("");
+
+
+  return `
+
+    <div class="debug">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th colspan="7">
+
+              房号 ${room.room}
+
+              ｜“+”表示X比对方大
+
+              ｜“-”表示X比对方小
+
+            </th>
+
+          </tr>
+
+
+          <tr>
+
+            <th>
+              位子
+            </th>
+
+            <th>
+              X位置
+            </th>
+
+            <th>
+              X
+            </th>
+
+            <th>
+              X-其他数字
+            </th>
+
+            <th>
+              绝对差值
+            </th>
+
+            <th>
+              双差结构
+            </th>
+
+            <th>
+              模型结果
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          ${rows}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+
+}
+
+
+/*
+==========================================================
+规则列表
+==========================================================
+*/
+
+
+function renderComboList() {
+
+  const box =
+    document.getElementById(
+      "comboList"
+    );
+
+
+  box.innerHTML = `
+
+
+    <div class="combo main-rule">
+
+      <div class="name">
+        🔥 1号｜单差2
+      </div>
+
+      <div class="rule">
+
+        1号=A。
+
+        <br>
+
+        A与BCDE任意一个数字
+        出现绝对差2即可命中。
+
+        <br>
+
+        <b>
+          历史：2次大赢 + 1次小输，
+          0大输。
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <div class="combo special">
+
+      <div class="name">
+        ⭐ 1号加强｜差2 + 差4
+      </div>
+
+      <div class="rule">
+
+        同时存在差2和差4。
+
+        <br>
+
+        <b>
+          历史：+510、+600，
+          2/2大赢，0大输。
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <div class="combo main-rule">
+
+      <div class="name">
+        🔥 2号｜差5 + 差6
+      </div>
+
+      <div class="rule">
+
+        2号=B。
+
+        <br>
+
+        必须同时存在差5和差6。
+
+        <br>
+
+        <b>
+          历史：+460、-270、+790，
+          0大输。
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <div class="combo main-rule">
+
+      <div class="name">
+        🔥 3号｜差0 或 差7
+      </div>
+
+      <div class="rule">
+
+        3号=C。
+
+        <br>
+
+        出现差0或者差7，
+        即进入正式候选。
+
+        <br>
+
+        <b>
+          当前龙虾最重要的单差主核。
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <div class="combo special">
+
+      <div class="name">
+        🔥 3号强核｜双差7
+      </div>
+
+      <div class="rule">
+
+        与ABDE比较时，
+        差7至少出现2次。
+
+        <br>
+
+        <b>
+          历史：+760、+1020，
+          2/2大赢，0大输。
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <div class="combo special">
+
+      <div class="name">
+        🔥 3号特殊核｜双差2 + 差5 + 差6
+      </div>
+
+      <div class="rule">
+
+        差2必须至少出现2次，
+
+        并且同时有差5和差6。
+
+        <br>
+
+        典型：
+
+        <b>
+          25062｜3号
+        </b>
+
+        <br>
+
+        C=0，
+
+        四差：
+
+        <b>
+          2 / 5 / 6 / 2
+        </b>
+
+        <br>
+
+        战绩：
+
+        <b>
+          +2100
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <div class="combo main-rule">
+
+      <div class="name">
+        ⭐ 6号｜差6
+      </div>
+
+      <div class="rule">
+
+        6号=E。
+
+        <br>
+
+        E与ABCD任意数字
+        出现绝对差6即可命中。
+
+        <br>
+
+        <b>
+          历史：+170、+1180，
+          0大输。
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <div class="combo special">
+
+      <div class="name">
+        ⭐ 6号加强｜差1 + 差6
+      </div>
+
+      <div class="rule">
+
+        同时存在差1和差6。
+
+        <br>
+
+        当前作为加强结构观察。
+
+      </div>
+
+    </div>
+
+
+    <div class="combo off">
+
+      <div class="name">
+        ❌ 4号 / 5号
+      </div>
+
+      <div class="rule">
+
+        当前44局样本没有找到
+        达到正式标准的黄金规则。
+
+        <br>
+
+        <b>
+          不为了凑规则而硬打。
+        </b>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/*
+==========================================================
+历史
+==========================================================
+*/
+
+
+function saveHistory(
+  room,
+  decision
+) {
+
+  const item = {
+
+    room:
+      room.room,
+
+    time:
+      new Date()
+        .toLocaleString(),
+
+    result:
+      decision.finalPicks.length
+
+        ? decision.finalPicks
+
+            .map(pick => {
+
+              const rules =
+                pick.formalHits
+
+                  .map(rule => {
+                    return rule.shortName;
+                  })
+
+                  .join("+");
+
+              return (
+                `${pick.seat}号(${rules})`
+              );
+
+            })
+
+            .join("、")
+
+        : "跳过"
+
+  };
+
+
+  const key =
+    "id_5161482_lobster_gold_v10_history";
+
+
+  const list =
+    JSON.parse(
+      localStorage.getItem(key) ||
+      "[]"
+    );
+
+
+  list.unshift(item);
+
+
+  localStorage.setItem(
+
+    key,
+
+    JSON.stringify(
+      list.slice(0,50)
+    )
+
+  );
+
+}
+
+
+function renderHistory() {
+
+  const box =
+    document.getElementById(
+      "historyBox"
+    );
+
+
+  const key =
+    "id_5161482_lobster_gold_v10_history";
+
+
+  const list =
+    JSON.parse(
+      localStorage.getItem(key) ||
+      "[]"
+    );
+
+
+  if (!list.length) {
+
+    box.innerHTML =
+      "暂无记录";
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+
+    list
+
+      .map(item => {
+
+        return `
+
+          <div class="history-item">
+
+            <div class="history-left">
+
+              ${item.room}
+
             </div>
-          `;
+
+
+            <div class="history-right">
+
+              推荐：
+              ${item.result}
+
+              <br>
+
+              ${item.time}
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+
+      .join("");
+
+}
+
+
+function clearHistory() {
+
+  localStorage.removeItem(
+    "id_5161482_lobster_gold_v10_history"
+  );
+
+  renderHistory();
+
+}
+
+
+/*
+==========================================================
+自检
+==========================================================
+*/
+
+
+function runSelfTests() {
+
+  const tests = [
+
+    "25062",
+    "80138",
+    "12135",
+    "62308",
+    "82527",
+    "60835",
+    "88110",
+    "13134"
+
+  ];
+
+
+  tests.forEach(test => {
+
+    const room =
+      analyzeRoom(test);
+
+    const seats =
+      analyzeSeats(room);
+
+    const decision =
+      choosePicks(seats);
+
+
+    console.log(
+
+      "[5161482 龙虾黄金模型 v1.0]",
+
+      test,
+
+      decision.finalPicks.map(
+        item => {
+
+          return {
+
+            seat:
+              item.seat,
+
+            x:
+              item.x,
+
+            diffs:
+              item.diffs.map(
+                diff =>
+                  diff.absDiff
+              ),
+
+            rules:
+              item.formalHits.map(
+                rule =>
+                  rule.name
+              )
+
+          };
+
+        }
+      )
+
+    );
+
+  });
+
+}
+
+
+/*
+==========================================================
+输入监听
+==========================================================
+*/
+
+
+document
+  .getElementById(
+    "roomInput"
+  )
+  .addEventListener(
+    "input",
+    event => {
+
+      event.target.value =
+        event.target.value
+          .replace(/\D/g,"")
+          .slice(0,5);
+
     }
+  );
 
-    function saveHistory(room, decision) {
-      const item = {
-        room: room.room,
-        time: new Date().toLocaleString(),
-        result: decision.finalPicks.length
-          ? decision.finalPicks.map(pick => {
-              return `${pick.seat}号`;
-            }).join("、")
-          : "跳过"
-      };
 
-      const key = "id_5159843_white_core_v03_history";
+document
+  .getElementById(
+    "roomInput"
+  )
+  .addEventListener(
+    "keydown",
+    event => {
 
-      const list = JSON.parse(localStorage.getItem(key) || "[]");
+      if (
+        event.key === "Enter"
+      ) {
 
-      list.unshift(item);
+        run();
 
-      localStorage.setItem(
-        key,
-        JSON.stringify(list.slice(0, 50))
-      );
-    }
-
-    function renderHistory() {
-      const box = document.getElementById("historyBox");
-      const key = "id_5159843_white_core_v03_history";
-
-      const list = JSON.parse(localStorage.getItem(key) || "[]");
-
-      if (!list.length) {
-        box.innerHTML = "暂无记录";
-        return;
       }
 
-      box.innerHTML = list
-        .map(item => {
-          return `
-            <div class="history-item">
-              <div class="history-left">${item.room}</div>
-              <div class="history-right">
-                推荐：${item.result}
-                <br>
-                ${item.time}
-              </div>
-            </div>
-          `;
-        })
-        .join("");
     }
+  );
 
-    function clearHistory() {
-      localStorage.removeItem("id_5159843_white_core_v03_history");
-      renderHistory();
-    }
 
-    function runSelfTests() {
-      const tests = [
-        "13689",
-        "38030",
-        "59857",
-        "62891",
-        "95318",
-        "10648",
-        "12000",
-        "13571",
-        "72641"
-      ];
+/*
+==========================================================
+启动
+==========================================================
+*/
 
-      tests.forEach(test => {
-        const room = analyzeRoom(test);
-        const seats = analyzeSeats(room);
-        const decision = choosePicks(seats);
 
-        console.log("[5159843白核v0.3自检]", test, {
-          picks: decision.finalPicks.map(item => {
-            return {
-              seat: item.seat,
-              x: item.x,
-              rules: item.formalHits.map(rule => {
-                return rule.name;
-              })
-            };
-          })
-        });
-      });
-    }
+renderComboList();
 
-    document
-      .getElementById("roomInput")
-      .addEventListener("input", event => {
-        event.target.value = event.target.value.replace(/\D/g, "").slice(0, 5);
-      });
+renderHistory();
 
-    document
-      .getElementById("roomInput")
-      .addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-          run();
-        }
-      });
+runSelfTests();
 
-    renderComboList();
-    renderHistory();
-    runSelfTests();
-  </script>
+</script>
+
 </body>
 </html>
