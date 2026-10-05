@@ -2,16 +2,14 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 />
 
-<title>双账号｜黄金差值模型</title>
+<title>5161482｜龙虾 大赢组合模型 v3.0</title>
 
 <style>
-
 :root {
   --bg: #f7f3ec;
   --card: #fffaf2;
@@ -35,22 +33,11 @@
 body {
   margin: 0;
   min-height: 100vh;
-
   background:
-    radial-gradient(
-      circle at top left,
-      rgba(217,75,61,.12),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(217,140,34,.12),
-      transparent 26%
-    ),
+    radial-gradient(circle at top left, rgba(217,75,61,.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(217,140,34,.12), transparent 26%),
     var(--bg);
-
   color: var(--text);
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -58,7 +45,6 @@ body {
     "Microsoft YaHei",
     Arial,
     sans-serif;
-
   padding: 22px 14px 42px;
 }
 
@@ -82,7 +68,7 @@ body {
 .sub {
   color: var(--muted);
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 .panel {
@@ -93,12 +79,6 @@ body {
   padding: 18px;
   margin-bottom: 16px;
   backdrop-filter: blur(8px);
-}
-
-.section-title {
-  font-weight: 1000;
-  font-size: 18px;
-  margin: 3px 0 12px;
 }
 
 .input-row {
@@ -137,20 +117,10 @@ button {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-
-  background:
-    linear-gradient(
-      145deg,
-      var(--red),
-      var(--red2)
-    );
-
+  background: linear-gradient(145deg,var(--red),var(--red2));
   color: white;
   font-size: 18px;
-
-  box-shadow:
-    0 10px 22px rgba(217,75,61,.34);
-
+  box-shadow: 0 10px 22px rgba(217,75,61,.34);
   flex: 0 0 auto;
 }
 
@@ -165,55 +135,14 @@ button {
 .result {
   display: none;
   margin-top: 16px;
-}
-
-.result.show {
-  display: block;
-}
-
-.result-head {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 15px;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-.room-big {
-  font-size: 34px;
-  font-weight: 1000;
-  margin: 6px 0;
-}
-
-.account-card {
   background: var(--card2);
   border-radius: 20px;
   border: 1px solid var(--border);
   padding: 16px;
-  margin-top: 12px;
 }
 
-.account-card.lobster {
-  border-color: rgba(217,140,34,.38);
-  background: #fffaf0;
-}
-
-.account-card.ranzai {
-  border-color: rgba(217,75,61,.28);
-  background: #fff8f5;
-}
-
-.account-title {
-  font-size: 20px;
-  font-weight: 1000;
-  margin-bottom: 10px;
-}
-
-.account-pick {
-  font-size: 27px;
-  font-weight: 1000;
-  margin: 9px 0 12px;
+.result.show {
+  display: block;
 }
 
 .badge {
@@ -250,77 +179,16 @@ button {
   border: 1px solid rgba(217,140,34,.30);
 }
 
-.badge.watch {
-  background: rgba(118,82,168,.11);
-  color: var(--purple);
-  border: 1px solid rgba(118,82,168,.25);
-}
-
-.badge.boom {
-  background: rgba(217,75,61,.11);
-  color: var(--red);
-  border: 1px solid rgba(217,75,61,.30);
+.big {
+  font-size: 34px;
+  font-weight: 1000;
+  margin: 10px 0 4px;
 }
 
 .desc {
   color: var(--muted);
   line-height: 1.65;
   font-size: 14px;
-}
-
-.pick-list {
-  display: grid;
-  gap: 10px;
-}
-
-.pick {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 12px;
-}
-
-.pick.formal {
-  border-color: rgba(31,157,103,.34);
-  background: #f8fffb;
-}
-
-.pick.strong {
-  border-color: rgba(217,140,34,.40);
-  background: #fffaf0;
-}
-
-.pick.watch {
-  border-color: rgba(118,82,168,.30);
-  background: #fbf8ff;
-}
-
-.pick.boom {
-  border-color: rgba(217,75,61,.34);
-  background: #fff7f5;
-}
-
-.pick-title {
-  font-weight: 1000;
-  font-size: 17px;
-  margin-bottom: 7px;
-}
-
-.pick-rule {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.rule-hit {
-  margin-top: 9px;
-  padding-top: 9px;
-  border-top: 1px dashed #eadccc;
-}
-
-.rule-name {
-  font-weight: 900;
-  color: var(--text);
 }
 
 .grid {
@@ -349,22 +217,20 @@ button {
   font-size: 12px;
 }
 
-.model-block {
-  margin-top: 15px;
-}
-
-.model-heading {
-  font-size: 16px;
+.section-title {
   font-weight: 1000;
-  margin-bottom: 8px;
+  font-size: 18px;
+  margin: 3px 0 12px;
 }
 
-.combo-list {
+.combo-list,
+.pick-list {
   display: grid;
   gap: 10px;
 }
 
-.combo {
+.combo,
+.pick {
   background: #fff;
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -381,25 +247,22 @@ button {
   background: #fffaf0;
 }
 
-.combo.watch-rule {
-  border-color: rgba(118,82,168,.30);
-  background: #fbf8ff;
-}
-
-.combo.boom-rule {
-  border-color: rgba(217,75,61,.34);
-  background: #fff7f5;
-}
-
-.combo .name {
+.combo .name,
+.pick-title {
   font-weight: 1000;
   margin-bottom: 6px;
 }
 
-.combo .rule {
+.combo .rule,
+.pick-rule {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.6;
+}
+
+.pick.main {
+  border-color: rgba(217,75,61,.42);
+  background: #fff4ee;
 }
 
 .debug {
@@ -410,14 +273,13 @@ button {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1000px;
+  min-width: 1050px;
   background: #fff;
   border-radius: 14px;
   overflow: hidden;
 }
 
-th,
-td {
+th, td {
   padding: 9px 8px;
   border-bottom: 1px solid #f0e2d3;
   font-size: 12px;
@@ -433,22 +295,19 @@ th {
 .history-item {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  padding: 11px 0;
+  padding: 10px 0;
   border-bottom: 1px dashed #e4d3c3;
   font-size: 14px;
 }
 
 .history-left {
   font-weight: 900;
-  font-size: 16px;
 }
 
 .history-right {
   color: var(--muted);
   text-align: right;
   font-size: 13px;
-  line-height: 1.55;
 }
 
 .footer-note {
@@ -459,53 +318,15 @@ th {
   margin-top: 16px;
 }
 
-.divider {
-  height: 1px;
-  background: #eadccc;
-  margin: 16px 0;
-}
-
 @media(max-width:620px) {
-
-  body {
-    padding: 16px 10px 34px;
-  }
-
-  .title {
-    font-size: 23px;
-  }
-
-  .panel {
-    padding: 14px;
-    border-radius: 20px;
-  }
-
-  input {
-    height: 56px;
-    font-size: 25px;
-    letter-spacing: 4px;
-  }
-
-  .btn-main {
-    width: 64px;
-    height: 64px;
-    font-size: 16px;
-  }
-
-  .grid {
-    grid-template-columns: repeat(2,1fr);
-  }
-
-  .room-big {
-    font-size: 29px;
-  }
-
-  .account-pick {
-    font-size: 23px;
-  }
-
+  body { padding:16px 10px 34px; }
+  .title { font-size:23px; }
+  .panel { padding:14px; border-radius:20px; }
+  input { height:56px; font-size:25px; letter-spacing:4px; }
+  .btn-main { width:64px; height:64px; font-size:16px; }
+  .grid { grid-template-columns:repeat(2,1fr); }
+  .big { font-size:26px; }
 }
-
 </style>
 </head>
 
@@ -513,30 +334,24 @@ th {
 
 <div class="wrap">
 
-  <!-- ================================
-  标题
-  ================================= -->
-
   <div class="hero">
 
     <div class="title">
-      🔥 双账号黄金模型
+      🦞 5161482｜龙虾 大赢组合模型 v3.0
     </div>
 
     <div class="sub">
-      🦞 5161482｜龙虾 S/L黄金模型 v2.0
+      93局历史样本｜17局命中｜16胜1负｜胜率94.12%｜净+14,790
       <br>
-      🔥 5130004｜然崽 黄金差值 v1.1
+      14局大赢｜0局大输｜命中后大赢率82.35%
       <br>
-      输入一次房号，同时扫描两个账号
+      差值门票 → 精确次数 → S/L环境 → S/L排列
     </div>
 
   </div>
 
 
-  <!-- ================================
-  输入
-  ================================= -->
+  <!-- 输入 -->
 
   <div class="panel">
 
@@ -551,13 +366,13 @@ th {
         type="tel"
         inputmode="numeric"
         maxlength="5"
-        placeholder="例如 25062"
+        placeholder="例如 86235"
         autocomplete="off"
       />
 
       <button
         class="btn-main"
-        onclick="runBoth()"
+        onclick="run()"
       >
         开干
       </button>
@@ -572,190 +387,118 @@ th {
   </div>
 
 
-  <!-- ================================
-  两账号历史回测
-  ================================= -->
+  <!-- 历史回测 -->
 
   <div class="panel">
 
     <div class="section-title">
-      📊 两账号模型历史回测
+      5161482 龙虾 v3.0 历史回测
     </div>
 
-    <div class="model-block">
+    <div class="grid">
 
-      <div class="model-heading">
-        🦞 5161482｜龙虾 v2.0
+      <div class="stat">
+        <div class="v">93局</div>
+        <div class="k">总样本</div>
       </div>
 
-      <div class="grid">
+      <div class="stat">
+        <div class="v">17局</div>
+        <div class="k">模型命中</div>
+      </div>
 
-        <div class="stat">
-          <div class="v">74局</div>
-          <div class="k">总样本</div>
-        </div>
+      <div class="stat">
+        <div class="v">18.28%</div>
+        <div class="k">出手率</div>
+      </div>
 
-        <div class="stat">
-          <div class="v">25局</div>
-          <div class="k">模型命中</div>
-        </div>
+      <div class="stat">
+        <div class="v">94.12%</div>
+        <div class="k">胜率</div>
+      </div>
 
-        <div class="stat">
-          <div class="v">96.00%</div>
-          <div class="k">胜率</div>
-        </div>
+      <div class="stat">
+        <div class="v">16胜1负</div>
+        <div class="k">胜负结构</div>
+      </div>
 
-        <div class="stat">
-          <div class="v">+17,930</div>
-          <div class="k">历史净分</div>
-        </div>
+      <div class="stat">
+        <div class="v">+14,790</div>
+        <div class="k">历史净分</div>
+      </div>
 
-        <div class="stat">
-          <div class="v">24胜1负</div>
-          <div class="k">胜负结构</div>
-        </div>
+      <div class="stat">
+        <div class="v">14局</div>
+        <div class="k">大赢 ≥ +500</div>
+      </div>
 
-        <div class="stat">
-          <div class="v">16局</div>
-          <div class="k">大赢</div>
-        </div>
+      <div class="stat">
+        <div class="v">0局</div>
+        <div class="k">大输 ≤ -400</div>
+      </div>
 
-        <div class="stat">
-          <div class="v">0局</div>
-          <div class="k">大输</div>
-        </div>
+      <div class="stat">
+        <div class="v">82.35%</div>
+        <div class="k">命中后大赢率</div>
+      </div>
 
-        <div class="stat">
-          <div class="v">+717.2</div>
-          <div class="k">平均命中</div>
-        </div>
+      <div class="stat">
+        <div class="v">0%</div>
+        <div class="k">命中后大输率</div>
+      </div>
 
+      <div class="stat">
+        <div class="v">-250</div>
+        <div class="k">最大命中亏损</div>
+      </div>
+
+      <div class="stat">
+        <div class="v">+870.0</div>
+        <div class="k">平均每次命中</div>
       </div>
 
     </div>
 
+    <div class="desc" style="margin-top:14px;">
 
-    <div class="divider"></div>
+      <b>S小差：</b>0–4
+      <br>
 
+      <b>L大差：</b>5–9
+      <br><br>
 
-    <div class="model-block">
+      <b>大赢：</b>≥ +500
+      ｜
+      <b>大输：</b>≤ -400
 
-      <div class="model-heading">
-        🔥 5130004｜然崽 v1.1 正式黄金池
-      </div>
+      <br><br>
 
-      <div class="grid">
-
-        <div class="stat">
-          <div class="v">201局</div>
-          <div class="k">总样本</div>
-        </div>
-
-        <div class="stat">
-          <div class="v">42局</div>
-          <div class="k">正式池命中</div>
-        </div>
-
-        <div class="stat">
-          <div class="v">88.10%</div>
-          <div class="k">胜率</div>
-        </div>
-
-        <div class="stat">
-          <div class="v">+20,510</div>
-          <div class="k">历史净分</div>
-        </div>
-
-        <div class="stat">
-          <div class="v">37胜5负</div>
-          <div class="k">胜负结构</div>
-        </div>
-
-        <div class="stat">
-          <div class="v">16局</div>
-          <div class="k">大赢</div>
-        </div>
-
-        <div class="stat">
-          <div class="v">0局</div>
-          <div class="k">大输</div>
-        </div>
-
-        <div class="stat">
-          <div class="v">+488.3</div>
-          <div class="k">平均命中</div>
-        </div>
-
-      </div>
-
-      <div
-        class="desc"
-        style="margin-top:12px;"
-      >
-        然崽以上成绩只统计<b>正式黄金池</b>。
-        观察池单独显示，不混入正式池88.10%的胜率。
-      </div>
+      <b>新模型判断顺序：</b>
+      <br>
+      位子 → 差值门票 → 精确次数 → S/L环境 → S/L位置排列
 
     </div>
 
   </div>
 
 
-  <!-- ================================
-  龙虾规则
-  ================================= -->
+  <!-- 正式规则 -->
 
   <div class="panel">
 
     <div class="section-title">
-      🦞 5161482｜龙虾 v2.0 正式规则
+      🔥 v3.0 大赢组合池
     </div>
 
     <div
-      id="lobsterRuleList"
+      id="comboList"
       class="combo-list"
     ></div>
 
   </div>
 
 
-  <!-- ================================
-  然崽规则
-  ================================= -->
-
-  <div class="panel">
-
-    <div class="section-title">
-      🔥 5130004｜然崽 v1.1
-    </div>
-
-    <div class="model-heading">
-      🔥 正式黄金池
-    </div>
-
-    <div
-      id="ranzaiFormalList"
-      class="combo-list"
-    ></div>
-
-    <div
-      class="model-heading"
-      style="margin-top:20px;"
-    >
-      🟡 观察池
-    </div>
-
-    <div
-      id="ranzaiWatchList"
-      class="combo-list"
-    ></div>
-
-  </div>
-
-
-  <!-- ================================
-  查询历史
-  ================================= -->
+  <!-- 历史 -->
 
   <div class="panel">
 
@@ -765,7 +508,7 @@ th {
 
       <button
         class="btn-small"
-        onclick="clearBothHistory()"
+        onclick="clearHistory()"
         style="float:right;"
       >
         清空
@@ -794,11 +537,11 @@ th {
 
     <br>
 
-    S=差0–4｜L=差5–9
+    S=0–4｜L=5–9
 
     <br>
 
-    大赢 ≥ +500｜大输 ≤ -400
+    排列只作为差值门票成立后的过滤/加强条件，不独立开门。
 
   </div>
 
@@ -808,25 +551,71 @@ th {
 <script>
 
 /*
-========================================================
-双账号同步黄金模型
+====================================================
+5161482 龙虾｜大赢组合模型 v3.0
 
-🦞 5161482 龙虾 v2.0
-原模型规则保持不变
+93局历史反推：
 
-🔥 5130004 然崽 v1.1
-正式黄金池 + 观察池
+17局命中
+16胜1负
+胜率94.12%
 
-输入一次房号
-同时扫描两个账号
-========================================================
+净 +14,790
+
+14局大赢
+0局大输
+
+命中后大赢率82.35%
+
+平均 +870 / 次
+
+
+核心原则：
+
+① 位子
+② 差值门票
+③ 精确次数
+④ S/L环境
+⑤ S/L位置排列
+
+排列绝对不能脱离差值门票独立开门。
+====================================================
 */
 
 
+const MODEL_STAT = {
+
+  sample: 93,
+
+  hitCount: 17,
+
+  hitRate: "18.28%",
+
+  winRate: "94.12%",
+
+  record: "16胜1负",
+
+  net: "+14,790",
+
+  bigWin: "14局",
+
+  bigWinRate: "82.35%",
+
+  bigLoss: "0局",
+
+  bigLossRate: "0%",
+
+  maxLoss: "-250",
+
+  average: "+870.0"
+
+};
+
+
 /*
-========================================================
-通用基础函数
-========================================================
+====================================================
+座位对应位置
+====================================================
 */
 
 function getSeatXPosition(seat) {
@@ -843,20 +632,31 @@ function getSeatXPosition(seat) {
 }
 
 
+/*
+====================================================
+计数
+====================================================
+*/
+
 function countMap(arr) {
 
   const map = {};
 
   arr.forEach(v => {
 
-    map[v] =
-      (map[v] || 0) + 1;
+    map[v] = (map[v] || 0) + 1;
 
   });
 
   return map;
 }
 
+
+/*
+====================================================
+房号分析
+====================================================
+*/
 
 function analyzeRoom(roomNumber) {
 
@@ -865,8 +665,7 @@ function analyzeRoom(roomNumber) {
       .split("")
       .map(Number);
 
-  const [A,B,C,D,E] =
-    digits;
+  const [A,B,C,D,E] = digits;
 
   return {
 
@@ -874,8 +673,13 @@ function analyzeRoom(roomNumber) {
 
     digits,
 
-    positions:
-      ["A","B","C","D","E"],
+    positions: [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
 
     A,
     B,
@@ -888,14 +692,38 @@ function analyzeRoom(roomNumber) {
 
     hasRepeat:
       Object
-        .values(
-          countMap(digits)
-        )
+        .values(countMap(digits))
         .some(v => v >= 2)
 
   };
 }
 
+
+/*
+====================================================
+计算四差
+
+固定排列顺序：
+
+1号 A：
+A-B / A-C / A-D / A-E
+
+2号 B：
+B-A / B-C / B-D / B-E
+
+3号 C：
+C-A / C-B / C-D / C-E
+
+4号 D：
+D-A / D-B / D-C / D-E
+
+5号 E：
+E-A / E-B / E-C / E-D
+
+6号 E：
+E-A / E-B / E-C / E-D
+====================================================
+*/
 
 function getSeatDiffs(room,seat) {
 
@@ -907,22 +735,25 @@ function getSeatDiffs(room,seat) {
 
   const diffs = [];
 
+
   room.positions.forEach(pos => {
 
     if (pos === xPos) {
       return;
     }
 
+
     const value =
       room[pos];
 
+
     const absDiff =
-      Math.abs(
-        x - value
-      );
+      Math.abs(x - value);
+
 
     const signedDiff =
       x - value;
+
 
     diffs.push({
 
@@ -937,6 +768,7 @@ function getSeatDiffs(room,seat) {
     });
 
   });
+
 
   return {
 
@@ -957,6 +789,12 @@ function getSeatDiffs(room,seat) {
 }
 
 
+/*
+====================================================
+差值次数
+====================================================
+*/
+
 function countAbsDiff(
   room,
   seat,
@@ -967,13 +805,19 @@ function countAbsDiff(
     room,
     seat
   )
-  .diffs
-  .filter(
-    d => d.absDiff === diff
-  )
-  .length;
+    .allDiffs
+    .filter(
+      v => v === diff
+    )
+    .length;
 }
 
+
+/*
+====================================================
+普通存在差
+====================================================
+*/
 
 function hasDiff(
   room,
@@ -981,47 +825,99 @@ function hasDiff(
   diff
 ) {
 
-  return (
-    countAbsDiff(
-      room,
-      seat,
-      diff
-    ) >= 1
-  );
+  return countAbsDiff(
+    room,
+    seat,
+    diff
+  ) >= 1;
 }
 
 
-function hasDoubleDiff(
+/*
+====================================================
+恰好单差
+====================================================
+*/
+
+function hasSingleDiff(
   room,
   seat,
   diff
 ) {
 
-  return (
-    countAbsDiff(
-      room,
-      seat,
-      diff
-    ) >= 2
-  );
+  return countAbsDiff(
+    room,
+    seat,
+    diff
+  ) === 1;
 }
 
 
-function hasTripleDiff(
+/*
+====================================================
+恰好双差
+====================================================
+*/
+
+function hasExactDoubleDiff(
   room,
   seat,
   diff
 ) {
 
-  return (
-    countAbsDiff(
-      room,
-      seat,
-      diff
-    ) >= 3
-  );
+  return countAbsDiff(
+    room,
+    seat,
+    diff
+  ) === 2;
 }
 
+
+/*
+====================================================
+恰好三差
+====================================================
+*/
+
+function hasExactTripleDiff(
+  room,
+  seat,
+  diff
+) {
+
+  return countAbsDiff(
+    room,
+    seat,
+    diff
+  ) === 3;
+}
+
+
+/*
+====================================================
+恰好四差
+====================================================
+*/
+
+function hasExactQuadDiff(
+  room,
+  seat,
+  diff
+) {
+
+  return countAbsDiff(
+    room,
+    seat,
+    diff
+  ) === 4;
+}
+
+
+/*
+====================================================
+差值组合
+====================================================
+*/
 
 function hasDiffCombo(
   room,
@@ -1041,14 +937,30 @@ function hasDiffCombo(
 
 
 /*
-========================================================
+====================================================
 S / L
-S = 0–4
-L = 5–9
-========================================================
+
+S = 差0–4
+L = 差5–9
+
+例：
+
+6 / 2 / 1 / 5
+
+=
+
+L S S L
+
+=
+
+LSSL
+====================================================
 */
 
-function getSL(room,seat) {
+function getSL(
+  room,
+  seat
+) {
 
   const diffs =
     getSeatDiffs(
@@ -1056,19 +968,35 @@ function getSL(room,seat) {
       seat
     ).allDiffs;
 
+
+  const shape =
+    diffs
+      .map(
+        d =>
+          d <= 4
+            ? "S"
+            : "L"
+      )
+      .join("");
+
+
   const S =
-    diffs.filter(
-      d =>
-        d >= 0 &&
-        d <= 4
-    ).length;
+    shape
+      .split("")
+      .filter(
+        v => v === "S"
+      )
+      .length;
+
 
   const L =
-    diffs.filter(
-      d =>
-        d >= 5 &&
-        d <= 9
-    ).length;
+    shape
+      .split("")
+      .filter(
+        v => v === "L"
+      )
+      .length;
+
 
   return {
 
@@ -1077,11 +1005,19 @@ function getSL(room,seat) {
     L,
 
     code:
-      `${S}S${L}L`
+      `${S}S${L}L`,
+
+    shape
 
   };
 }
 
+
+/*
+====================================================
+判断 S/L 数量
+====================================================
+*/
 
 function isSL(
   room,
@@ -1096,6 +1032,7 @@ function isSL(
       seat
     );
 
+
   return (
     sl.S === S &&
     sl.L === L
@@ -1104,176 +1041,165 @@ function isSL(
 
 
 /*
-========================================================
-🦞 5161482 龙虾 v2.0
-
-保持原有模型
-========================================================
+====================================================
+判断具体排列
+====================================================
 */
 
-const LOBSTER_RULES = [
+function isSLShape(
+  room,
+  seat,
+  shape
+) {
+
+  return (
+    getSL(
+      room,
+      seat
+    ).shape === shape
+  );
+}
+
+
+/*
+====================================================
+🔥 正式大赢组合池
+====================================================
+*/
+
+const FORMAL_RULES = [
+
 
   /*
+  ==================================================
   1号
+
+  差1 + 差2
+  4S0L
+  SSSS
+
+  7局
+  6胜1小负
+  4大赢
+  净+4200
+  0大输
+  ==================================================
   */
 
   {
 
-    id: "L1-A",
+    id: "L1-BIG",
 
     seat: 1,
+
+    rank: 1,
+
+    type: "大赢主核",
+
+    name:
+      "1号｜差1+差2｜4S0L｜SSSS",
+
+    shortName:
+      "1+2·SSSS",
+
+    stat:
+      "7局6胜1小负｜4大赢｜净+4200｜0大输",
+
+    test:
+      (seat,room) =>
+
+        seat === 1 &&
+
+        hasDiffCombo(
+          room,
+          seat,
+          [1,2]
+        ) &&
+
+        isSL(
+          room,
+          seat,
+          4,
+          0
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "SSSS"
+        )
+
+  },
+
+
+  /*
+  ==================================================
+  2号
+
+  恰好单差2
+  3S1L
+  SLSS
+
+  42953 +800
+  ==================================================
+  */
+
+  {
+
+    id: "L2-BIG",
+
+    seat: 2,
 
     rank: 2,
 
-    type: "黄金主核",
+    type: "大赢候选",
 
     name:
-      "1号｜差2 + 4S0L",
+      "2号｜单差2｜3S1L｜SLSS",
 
     shortName:
-      "差2·4S0L",
+      "单2·SLSS",
 
     stat:
-      "历史8局8正｜6大赢｜净+5810｜0大输",
+      "1局命中｜1次大赢+800｜样本少",
 
-    test: (seat,room) =>
+    test:
+      (seat,room) =>
 
-      seat === 1 &&
+        seat === 2 &&
 
-      hasDiff(
-        room,
-        seat,
-        2
-      ) &&
+        hasSingleDiff(
+          room,
+          seat,
+          2
+        ) &&
 
-      isSL(
-        room,
-        seat,
-        4,
-        0
-      )
+        isSL(
+          room,
+          seat,
+          3,
+          1
+        ) &&
 
-  },
-
-
-  {
-
-    id: "L1-S",
-
-    seat: 1,
-
-    rank: 1,
-
-    type: "超级加强",
-
-    name:
-      "1号｜双差2 + 4S0L",
-
-    shortName:
-      "双2·4S0L",
-
-    stat:
-      "历史5局5次大赢｜净+4630｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 1 &&
-
-      hasDoubleDiff(
-        room,
-        seat,
-        2
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        4,
-        0
-      )
+        isSLShape(
+          room,
+          seat,
+          "SLSS"
+        )
 
   },
 
 
   /*
-  2号
-  */
-
-  {
-
-    id: "L2-A",
-
-    seat: 2,
-
-    rank: 1,
-
-    type:
-      "独立黄金核",
-
-    name:
-      "2号｜双差1",
-
-    shortName:
-      "双差1",
-
-    stat:
-      "历史2局2正｜净+1600｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 2 &&
-
-      hasDoubleDiff(
-        room,
-        seat,
-        1
-      )
-
-  },
-
-
-  {
-
-    id: "L2-B",
-
-    seat: 2,
-
-    rank: 1,
-
-    type:
-      "S/L黄金核",
-
-    name:
-      "2号｜差5+差6 + 2S2L",
-
-    shortName:
-      "5+6·2S2L",
-
-    stat:
-      "历史3局3正｜2大赢｜净+2430｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 2 &&
-
-      hasDiffCombo(
-        room,
-        seat,
-        [5,6]
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        2,
-        2
-      )
-
-  },
-
-
-  /*
+  ==================================================
   3号
+
+  差7
+  2S2L
+  LSSL
+
+  80138 +760
+  ==================================================
   */
 
   {
@@ -1282,79 +1208,57 @@ const LOBSTER_RULES = [
 
     seat: 3,
 
-    rank: 2,
-
-    type:
-      "黄金主核",
-
-    name:
-      "3号｜差7 + 2S2L",
-
-    shortName:
-      "差7·2S2L",
-
-    stat:
-      "历史3局3正｜净+1960｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 3 &&
-
-      hasDiff(
-        room,
-        seat,
-        7
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        2,
-        2
-      )
-
-  },
-
-
-  {
-
-    id: "L3-S",
-
-    seat: 3,
-
     rank: 1,
 
-    type:
-      "超级加强",
+    type: "大赢组合",
 
     name:
-      "3号｜双差7 + 2S2L",
+      "3号｜差7｜2S2L｜LSSL",
 
     shortName:
-      "双7·2S2L",
+      "差7·LSSL",
 
     stat:
-      "历史2局2次大赢｜净+1780｜0大输",
+      "历史大赢+760｜0大输",
 
-    test: (seat,room) =>
+    test:
+      (seat,room) =>
 
-      seat === 3 &&
+        seat === 3 &&
 
-      hasDoubleDiff(
-        room,
-        seat,
-        7
-      ) &&
+        hasDiff(
+          room,
+          seat,
+          7
+        ) &&
 
-      isSL(
-        room,
-        seat,
-        2,
-        2
-      )
+        isSL(
+          room,
+          seat,
+          2,
+          2
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "LSSL"
+        )
 
   },
 
+
+  /*
+  ==================================================
+  3号
+
+  差7
+  2S2L
+  LLSS
+
+  88110 +1020
+  ==================================================
+  */
 
   {
 
@@ -1364,121 +1268,246 @@ const LOBSTER_RULES = [
 
     rank: 1,
 
-    type:
-      "独立爆分核",
+    type: "大赢组合",
 
     name:
-      "3号｜差1 + 差7",
+      "3号｜差7｜2S2L｜LLSS",
 
     shortName:
-      "1+7",
+      "差7·LLSS",
 
     stat:
-      "历史3局3次大赢｜净+3540｜0大输",
+      "历史大赢+1020｜0大输",
 
-    test: (seat,room) =>
+    test:
+      (seat,room) =>
 
-      seat === 3 &&
+        seat === 3 &&
 
-      hasDiffCombo(
-        room,
-        seat,
-        [1,7]
-      )
+        hasDiff(
+          room,
+          seat,
+          7
+        ) &&
+
+        isSL(
+          room,
+          seat,
+          2,
+          2
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "LLSS"
+        )
 
   },
 
 
   /*
-  4号
+  ==================================================
+  3号
+
+  差1 + 差7
+  1S3L
+  LLSL
+
+  76015 +1760
+  ==================================================
   */
 
   {
 
-    id: "L4-A",
+    id: "L3-C",
+
+    seat: 3,
+
+    rank: 1,
+
+    type: "爆分组合",
+
+    name:
+      "3号｜差1+差7｜1S3L｜LLSL",
+
+    shortName:
+      "1+7·LLSL",
+
+    stat:
+      "历史大赢+1760｜0大输",
+
+    test:
+      (seat,room) =>
+
+        seat === 3 &&
+
+        hasDiffCombo(
+          room,
+          seat,
+          [1,7]
+        ) &&
+
+        isSL(
+          room,
+          seat,
+          1,
+          3
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "LLSL"
+        )
+
+  },
+
+
+  /*
+  ==================================================
+  4号
+
+  差1
+  +
+  恰好单差2
+  +
+  3S1L
+  +
+  LSSS
+
+  86235 +1230
+  93431 +820
+
+  2局2次大赢
+  净+2050
+  ==================================================
+  */
+
+  {
+
+    id: "L4-BIG",
 
     seat: 4,
 
-    rank: 2,
+    rank: 1,
 
-    type:
-      "黄金候选",
+    type: "爆分组合",
 
     name:
-      "4号｜差1+差2 + 3S1L",
+      "4号｜差1+单差2｜3S1L｜LSSS",
 
     shortName:
-      "1+2·3S1L",
+      "1+单2·LSSS",
 
     stat:
-      "历史2局2正｜净+1720｜0大输",
+      "2局2次大赢｜净+2050｜0大输",
 
-    test: (seat,room) =>
+    test:
+      (seat,room) =>
 
-      seat === 4 &&
+        seat === 4 &&
 
-      hasDiffCombo(
-        room,
-        seat,
-        [1,2]
-      ) &&
+        hasDiff(
+          room,
+          seat,
+          1
+        ) &&
 
-      isSL(
-        room,
-        seat,
-        3,
-        1
-      )
+        hasSingleDiff(
+          room,
+          seat,
+          2
+        ) &&
+
+        isSL(
+          room,
+          seat,
+          3,
+          1
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "LSSS"
+        )
 
   },
 
 
   /*
+  ==================================================
   5号
+
+  恰好单差2
+  +
+  2S2L
+  +
+  SLSL
+
+  82907 +1030
+  ==================================================
   */
 
   {
 
-    id: "L5-A",
+    id: "L5-BIG",
 
     seat: 5,
 
     rank: 2,
 
-    type:
-      "S/L黄金候选",
+    type: "大赢候选",
 
     name:
-      "5号｜差2 + 2S2L",
+      "5号｜单差2｜2S2L｜SLSL",
 
     shortName:
-      "差2·2S2L",
+      "单2·SLSL",
 
     stat:
-      "历史2局2正｜净+1050｜0大输",
+      "1局命中｜1次大赢+1030｜样本少",
 
-    test: (seat,room) =>
+    test:
+      (seat,room) =>
 
-      seat === 5 &&
+        seat === 5 &&
 
-      hasDiff(
-        room,
-        seat,
-        2
-      ) &&
+        hasSingleDiff(
+          room,
+          seat,
+          2
+        ) &&
 
-      isSL(
-        room,
-        seat,
-        2,
-        2
-      )
+        isSL(
+          room,
+          seat,
+          2,
+          2
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "SLSL"
+        )
 
   },
 
 
   /*
+  ==================================================
   6号
+
+  差6
+  +
+  2S2L
+  +
+  SSLL
+
+  35117 +870
+  ==================================================
   */
 
   {
@@ -1487,32 +1516,59 @@ const LOBSTER_RULES = [
 
     seat: 6,
 
-    rank: 2,
+    rank: 1,
 
-    type:
-      "黄金候选",
+    type: "大赢组合",
 
     name:
-      "6号｜差6",
+      "6号｜差6｜2S2L｜SSLL",
 
     shortName:
-      "差6",
+      "差6·SSLL",
 
     stat:
-      "历史2局2正｜净+1350｜0大输",
+      "历史大赢+870｜0大输",
 
-    test: (seat,room) =>
+    test:
+      (seat,room) =>
 
-      seat === 6 &&
+        seat === 6 &&
 
-      hasDiff(
-        room,
-        seat,
-        6
-      )
+        hasDiff(
+          room,
+          seat,
+          6
+        ) &&
+
+        isSL(
+          room,
+          seat,
+          2,
+          2
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "SSLL"
+        )
 
   },
 
+
+  /*
+  ==================================================
+  6号
+
+  差6
+  +
+  1S3L
+  +
+  SLLL
+
+  62308 +1180
+  ==================================================
+  */
 
   {
 
@@ -1520,387 +1576,102 @@ const LOBSTER_RULES = [
 
     seat: 6,
 
-    rank: 2,
-
-    type:
-      "S/L副核",
-
-    name:
-      "6号｜差1 + 3S1L",
-
-    shortName:
-      "差1·3S1L",
-
-    stat:
-      "历史3局2正1小负｜净+1430｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 6 &&
-
-      hasDiff(
-        room,
-        seat,
-        1
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        3,
-        1
-      )
-
-  }
-
-];
-
-
-/*
-========================================================
-🔥 5130004 然崽 v1.1
-
-正式黄金池
-========================================================
-*/
-
-const RANZAI_FORMAL_RULES = [
-
-  /*
-  1号
-  */
-
-  {
-
-    id: "R1-S",
-
-    seat: 1,
-
     rank: 1,
 
-    level: "S",
-
-    type:
-      "S级黄金核",
+    type: "爆分组合",
 
     name:
-      "1号｜差6",
+      "6号｜差6｜1S3L｜SLLL",
 
     shortName:
-      "差6",
+      "差6·SLLL",
 
     stat:
-      "历史6局5胜1小负｜83.3%｜净+3980｜4大赢｜0大输",
+      "历史大赢+1180｜0大输",
 
-    test: (seat,room) =>
+    test:
+      (seat,room) =>
 
-      seat === 1 &&
+        seat === 6 &&
 
-      hasDiff(
-        room,
-        seat,
-        6
-      )
+        hasDiff(
+          room,
+          seat,
+          6
+        ) &&
+
+        isSL(
+          room,
+          seat,
+          1,
+          3
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "SLLL"
+        )
 
   },
 
 
   /*
-  2号
-  */
-
-  {
-
-    id: "R2-S1",
-
-    seat: 2,
-
-    rank: 1,
-
-    level: "S",
-
-    type:
-      "S级黄金核",
-
-    name:
-      "2号｜差3 + 3S1L",
-
-    shortName:
-      "差3·3S1L",
-
-    stat:
-      "历史11局9胜2小负｜81.8%｜净+5910｜4大赢｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 2 &&
-
-      hasDiff(
-        room,
-        seat,
-        3
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        3,
-        1
-      )
-
-  },
-
-
-  {
-
-    id: "R2-S2",
-
-    seat: 2,
-
-    rank: 1,
-
-    level: "S",
-
-    type:
-      "S级独立核",
-
-    name:
-      "2号｜差5 + 3S1L",
-
-    shortName:
-      "差5·3S1L",
-
-    stat:
-      "历史6局6胜｜100%｜净+3700｜3大赢｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 2 &&
-
-      hasDiff(
-        room,
-        seat,
-        5
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        3,
-        1
-      )
-
-  },
-
-
-  /*
-  3号
-  */
-
-  {
-
-    id: "R3-A1",
-
-    seat: 3,
-
-    rank: 2,
-
-    level: "A",
-
-    type:
-      "A级正式核",
-
-    name:
-      "3号｜双差4 + 4S0L",
-
-    shortName:
-      "双4·4S0L",
-
-    stat:
-      "历史4局4胜｜100%｜净+1770｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 3 &&
-
-      hasDoubleDiff(
-        room,
-        seat,
-        4
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        4,
-        0
-      )
-
-  },
-
-
-  {
-
-    id: "R3-A2",
-
-    seat: 3,
-
-    rank: 2,
-
-    level: "A",
-
-    type:
-      "A级独立黄金核",
-
-    name:
-      "3号｜差1 + 差8",
-
-    shortName:
-      "差1+差8",
-
-    stat:
-      "历史5局4胜1小负｜80%｜净+1660｜2大赢｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 3 &&
-
-      hasDiffCombo(
-        room,
-        seat,
-        [1,8]
-      )
-
-  },
-
-
-  /*
-  4号
-  */
-
-  {
-
-    id: "R4-A",
-
-    seat: 4,
-
-    rank: 2,
-
-    level: "A",
-
-    type:
-      "A级正式核",
-
-    name:
-      "4号｜差1 + 2S2L",
-
-    shortName:
-      "差1·2S2L",
-
-    stat:
-      "历史4局4胜｜100%｜净+2300｜1大赢｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 4 &&
-
-      hasDiff(
-        room,
-        seat,
-        1
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        2,
-        2
-      )
-
-  },
-
-
-  /*
-  5号
-  */
-
-  {
-
-    id: "R5-A",
-
-    seat: 5,
-
-    rank: 2,
-
-    level: "A",
-
-    type:
-      "A级正式核",
-
-    name:
-      "5号｜差1 + 2S2L",
-
-    shortName:
-      "差1·2S2L",
-
-    stat:
-      "历史3局3胜｜100%｜净+1930｜2大赢｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 5 &&
-
-      hasDiff(
-        room,
-        seat,
-        1
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        2,
-        2
-      )
-
-  },
-
-
-  /*
+  ==================================================
   6号
+
+  恰好单差1
+  +
+  3S1L
+  +
+  SSSL
+
+  48708 +1120
+  ==================================================
   */
 
   {
 
-    id: "R6-A",
+    id: "L6-C",
 
     seat: 6,
 
-    rank: 2,
+    rank: 1,
 
-    level: "A",
-
-    type:
-      "A级组合核",
+    type: "爆分组合",
 
     name:
-      "6号｜差1 + 差4",
+      "6号｜单差1｜3S1L｜SSSL",
 
     shortName:
-      "差1+差4",
+      "单1·SSSL",
 
     stat:
-      "历史6局5胜1小负｜83.3%｜净+1500｜1大赢｜0大输",
+      "历史大赢+1120｜0大输",
 
-    test: (seat,room) =>
+    test:
+      (seat,room) =>
 
-      seat === 6 &&
+        seat === 6 &&
 
-      hasDiffCombo(
-        room,
-        seat,
-        [1,4]
-      )
+        hasSingleDiff(
+          room,
+          seat,
+          1
+        ) &&
+
+        isSL(
+          room,
+          seat,
+          3,
+          1
+        ) &&
+
+        isSLShape(
+          room,
+          seat,
+          "SSSL"
+        )
 
   }
 
@@ -1908,252 +1679,66 @@ const RANZAI_FORMAL_RULES = [
 
 
 /*
-========================================================
-🟡 5130004 然崽 v1.1
-
-观察池
-========================================================
+====================================================
+获取命中规则
+====================================================
 */
 
-const RANZAI_WATCH_RULES = [
-
-  /*
-  2号
-  */
-
-  {
-
-    id: "RW2-A",
-
-    seat: 2,
-
-    rank: 3,
-
-    level: "WATCH",
-
-    type:
-      "A级观察核",
-
-    name:
-      "2号｜差2 + 差4",
-
-    shortName:
-      "差2+差4",
-
-    stat:
-      "历史4局3胜1负｜75%｜净+1760｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 2 &&
-
-      hasDiffCombo(
-        room,
-        seat,
-        [2,4]
-      )
-
-  },
-
-
-  {
-
-    id: "RW2-B",
-
-    seat: 2,
-
-    rank: 4,
-
-    level: "WATCH",
-
-    type:
-      "观察核",
-
-    name:
-      "2号｜差2 + 差7 + 2S2L",
-
-    shortName:
-      "差2+差7·2S2L",
-
-    stat:
-      "历史3局3胜｜100%｜净+950｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 2 &&
-
-      hasDiffCombo(
-        room,
-        seat,
-        [2,7]
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        2,
-        2
-      )
-
-  },
-
-
-  /*
-  3号
-  */
-
-  {
-
-    id: "RW3-A",
-
-    seat: 3,
-
-    rank: 3,
-
-    level: "BOOM",
-
-    type:
-      "爆分观察核",
-
-    name:
-      "3号｜双差1 + 3S1L",
-
-    shortName:
-      "双1·3S1L",
-
-    stat:
-      "历史3局3胜｜净+1890｜2大赢｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 3 &&
-
-      hasDoubleDiff(
-        room,
-        seat,
-        1
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        3,
-        1
-      )
-
-  },
-
-
-  /*
-  5号
-  */
-
-  {
-
-    id: "RW5-A",
-
-    seat: 5,
-
-    rank: 3,
-
-    level: "WATCH",
-
-    type:
-      "A级观察核",
-
-    name:
-      "5号｜差3 + 3S1L",
-
-    shortName:
-      "差3·3S1L",
-
-    stat:
-      "历史4局3胜1小负｜75%｜净+1610｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 5 &&
-
-      hasDiff(
-        room,
-        seat,
-        3
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        3,
-        1
-      )
-
-  },
-
-
-  /*
-  6号
-  */
-
-  {
-
-    id: "RW6-A",
-
-    seat: 6,
-
-    rank: 3,
-
-    level: "BOOM",
-
-    type:
-      "爆分观察核",
-
-    name:
-      "6号｜差4 + 2S2L",
-
-    shortName:
-      "差4·2S2L",
-
-    stat:
-      "历史4局3胜1小负｜75%｜净+1950｜3大赢｜0大输",
-
-    test: (seat,room) =>
-
-      seat === 6 &&
-
-      hasDiff(
-        room,
-        seat,
-        4
-      ) &&
-
-      isSL(
-        room,
-        seat,
-        2,
-        2
-      )
-
-  }
-
-];
-
-
-/*
-========================================================
-扫描规则
-========================================================
-*/
-
-function scanRules(
+function getFormalHits(
   room,
-  rules
+  seat
 ) {
 
-  const results = [];
+  return FORMAL_RULES
 
-  for (
-    let seat = 1;
-    seat <= 6;
+    .filter(
+      rule =>
+        rule.test(
+          seat,
+          room
+        )
+    )
+
+    .sort(
+      (a,b) => {
+
+        if (
+          a.rank !== b.rank
+        ) {
+
+          return (
+            a.rank -
+            b.rank
+          );
+
+        }
+
+        return (
+          a.id.localeCompare(
+            b.id
+          )
+        );
+
+      }
+    );
+
+}
+
+
+/*
+====================================================
+分析6个位子
+====================================================
+*/
+
+function analyzeSeats(room) {
+
+  const result = [];
+
+
+  for(
+    let seat=1;
+    seat<=6;
     seat++
   ) {
 
@@ -2163,45 +1748,22 @@ function scanRules(
         seat
       );
 
+
     const sl =
       getSL(
         room,
         seat
       );
 
-    const hits =
-      rules
-        .filter(
-          rule =>
-            rule.test(
-              seat,
-              room
-            )
-        )
-        .sort(
-          (a,b) => {
 
-            if (
-              a.rank !== b.rank
-            ) {
+    const formalHits =
+      getFormalHits(
+        room,
+        seat
+      );
 
-              return (
-                a.rank -
-                b.rank
-              );
 
-            }
-
-            return (
-              a.id.localeCompare(
-                b.id
-              )
-            );
-
-          }
-        );
-
-    results.push({
+    result.push({
 
       seat,
 
@@ -2214,83 +1776,98 @@ function scanRules(
       diffs:
         info.diffs,
 
-      allDiffs:
-        info.allDiffs,
-
       sl,
 
-      hits,
+      formalHits,
+
+      isCandidate:
+        formalHits.length > 0,
 
       bestRank:
-        hits.length
-          ? hits[0].rank
+        formalHits.length
+          ? formalHits[0].rank
           : 999
 
     });
 
   }
 
-  return results;
+
+  return result;
 }
 
 
 /*
-========================================================
-只取命中座位
-========================================================
+====================================================
+推荐
+====================================================
 */
 
-function getHitSeats(
-  scan
-) {
+function choosePicks(seats) {
 
-  return scan
-    .filter(
-      item =>
-        item.hits.length > 0
-    )
-    .sort(
-      (a,b) => {
+  return {
 
-        if (
-          a.bestRank !==
-          b.bestRank
-        ) {
+    finalPicks:
 
-          return (
-            a.bestRank -
-            b.bestRank
-          );
+      seats
 
-        }
+        .filter(
+          s =>
+            s.isCandidate
+        )
 
-        return (
-          a.seat -
-          b.seat
-        );
+        .sort(
+          (a,b) => {
 
-      }
-    );
+            if (
+              a.bestRank !==
+              b.bestRank
+            ) {
+
+              return (
+                a.bestRank -
+                b.bestRank
+              );
+
+            }
+
+            return (
+              a.seat -
+              b.seat
+            );
+
+          }
+        )
+
+  };
 }
 
 
 /*
-========================================================
-同步执行
-========================================================
+====================================================
+运行
+====================================================
 */
 
-function runBoth() {
+function run() {
 
   const input =
     document.getElementById(
       "roomInput"
     );
 
+
   let roomNumber =
     input.value
-      .replace(/\D/g,"")
-      .slice(0,5);
+      .replace(
+        /\D/g,
+        ""
+      )
+      .slice(
+        0,
+        5
+      );
+
 
   input.value =
     roomNumber;
@@ -2305,7 +1882,6 @@ function runBoth() {
     );
 
     return;
-
   }
 
 
@@ -2315,118 +1891,39 @@ function runBoth() {
     );
 
 
-  /*
-  龙虾扫描
-  */
-
-  const lobsterScan =
-    scanRules(
-      room,
-      LOBSTER_RULES
-    );
-
-  const lobsterHits =
-    getHitSeats(
-      lobsterScan
+  const seats =
+    analyzeSeats(
+      room
     );
 
 
-  /*
-  然崽正式扫描
-  */
-
-  const ranzaiFormalScan =
-    scanRules(
-      room,
-      RANZAI_FORMAL_RULES
-    );
-
-  const ranzaiFormalHits =
-    getHitSeats(
-      ranzaiFormalScan
+  const decision =
+    choosePicks(
+      seats
     );
 
 
-  /*
-  然崽观察扫描
-  */
-
-  const ranzaiWatchScan =
-    scanRules(
-      room,
-      RANZAI_WATCH_RULES
-    );
-
-  const ranzaiWatchHits =
-    getHitSeats(
-      ranzaiWatchScan
-    );
-
-
-  /*
-  正式座位集合
-  */
-
-  const formalSeatSet =
-    new Set(
-      ranzaiFormalHits.map(
-        item => item.seat
-      )
-    );
-
-
-  /*
-  只命中观察池的座位
-  */
-
-  const ranzaiWatchOnly =
-    ranzaiWatchHits.filter(
-      item =>
-        !formalSeatSet.has(
-          item.seat
-        )
-    );
-
-
-  renderBothResult(
-
+  renderResult(
     room,
-
-    lobsterScan,
-    lobsterHits,
-
-    ranzaiFormalScan,
-    ranzaiFormalHits,
-
-    ranzaiWatchScan,
-    ranzaiWatchHits,
-    ranzaiWatchOnly
-
+    seats,
+    decision
   );
 
 
-  saveBothHistory(
-
+  saveHistory(
     room,
-
-    lobsterHits,
-
-    ranzaiFormalHits,
-
-    ranzaiWatchOnly
-
+    decision
   );
 
 
-  renderBothHistory();
-
+  renderHistory();
 }
 
 
 /*
-========================================================
+====================================================
 错误
-========================================================
+====================================================
 */
 
 function showError(message) {
@@ -2436,379 +1933,184 @@ function showError(message) {
       "result"
     );
 
+
   box.className =
     "result show";
 
+
   box.innerHTML = `
 
-    <div class="result-head">
+    <span class="badge no">
+      输入错误
+    </span>
 
-      <span class="badge no">
-        输入错误
-      </span>
+    <div class="big">
+      不处理
+    </div>
 
-      <div class="room-big">
-        不处理
-      </div>
-
-      <div class="desc">
-        ${message}
-      </div>
-
+    <div class="desc">
+      ${message}
     </div>
 
   `;
-
 }
 
 
 /*
-========================================================
-规则徽章
-========================================================
+====================================================
+房号详情
+====================================================
 */
 
-function renderRuleBadge(
-  rule,
-  model
-) {
-
-  if (
-    model === "lobster"
-  ) {
-
-    if (
-      rule.rank === 1
-    ) {
-
-      return `
-        <span class="badge gold">
-          🔥 ${rule.type}
-        </span>
-      `;
-
-    }
-
-    return `
-      <span class="badge ok">
-        ${rule.type}
-      </span>
-    `;
-
-  }
-
-
-  /*
-  然崽
-  */
-
-  if (
-    rule.level === "S"
-  ) {
-
-    return `
-      <span class="badge gold">
-        🔥 ${rule.type}
-      </span>
-    `;
-
-  }
-
-
-  if (
-    rule.level === "A"
-  ) {
-
-    return `
-      <span class="badge ok">
-        🟢 ${rule.type}
-      </span>
-    `;
-
-  }
-
-
-  if (
-    rule.level === "BOOM"
-  ) {
-
-    return `
-      <span class="badge boom">
-        💥 ${rule.type}
-      </span>
-    `;
-
-  }
-
+function renderRoomLine(room) {
 
   return `
-    <span class="badge watch">
-      🟡 ${rule.type}
-    </span>
+
+    ABCDE=
+    ${room.A}${room.B}${room.C}${room.D}${room.E}
+
+    <br>
+
+    A=${room.A}
+    ｜
+    B=${room.B}
+    ｜
+    C=${room.C}
+    ｜
+    D=${room.D}
+    ｜
+    E=${room.E}
+
+    <br>
+
+    ${
+      room.hasZero
+        ? "房号含0"
+        : "房号无0"
+    }
+
+    ｜
+
+    ${
+      room.hasRepeat
+        ? "有重复数字"
+        : "无重复数字"
+    }
+
   `;
-
 }
 
 
 /*
-========================================================
-座位规则详情
-========================================================
+====================================================
+显示座位关系
+====================================================
 */
 
-function renderRuleHits(
-  hits,
-  model
-) {
+function renderSeatRelation(item) {
 
-  return hits
-    .map(
-      rule => `
-
-        <div class="rule-hit">
-
-          <div class="rule-name">
-            ${rule.name}
-          </div>
-
-          ${renderRuleBadge(
-            rule,
-            model
-          )}
-
-          <div
-            class="desc"
-            style="margin-top:4px;"
-          >
-            ${rule.stat}
-          </div>
-
-        </div>
-
-      `
-    )
-    .join("");
-
-}
-
-
-/*
-========================================================
-座位卡
-========================================================
-*/
-
-function renderSeatCard(
-  item,
-  model,
-  mode,
-  extraWatchHits = []
-) {
-
-  let className =
-    "formal";
-
-  let heading =
-    "🔥 正式推荐";
-
-
-  if (
-    model === "lobster"
-  ) {
-
-    if (
-      item.hits.some(
-        r => r.rank === 1
-      )
-    ) {
-
-      className =
-        "strong";
-
-    }
-
-    heading =
-      item.hits.some(
-        r => r.rank === 1
-      )
-        ? "🔥 强核推荐"
-        : "🦞 黄金推荐";
-
-  }
-
-
-  if (
-    mode === "watch"
-  ) {
-
-    const hasBoom =
-      item.hits.some(
-        r =>
-          r.level === "BOOM"
-      );
-
-    className =
-      hasBoom
-        ? "boom"
-        : "watch";
-
-    heading =
-      hasBoom
-        ? "💥 爆分观察"
-        : "🟡 观察信号";
-
-  }
-
-
-  if (
-    model === "ranzai" &&
-    mode === "formal"
-  ) {
-
-    if (
-      item.hits.some(
-        r => r.level === "S"
-      )
-    ) {
-
-      className =
-        "strong";
-
-      heading =
-        "🔥 S级黄金推荐";
-
-    }
-    else {
-
-      heading =
-        "🟢 A级正式推荐";
-
-    }
-
-  }
-
-
-  const diffText =
-    item.allDiffs.join(" / ");
-
-
-  const relationText =
+  const diffs =
     item.diffs
       .map(
         d =>
-          `${d.pos}=${d.value}→差${d.absDiff}`
+          d.absDiff
       )
-      .join("｜");
+      .join(
+        " / "
+      );
 
 
-  let extraWatchHtml =
-    "";
+  const detail =
+    item.diffs
+      .map(
+        d =>
+          `${d.pos}=${d.value} → 差${d.absDiff}`
+      )
+      .join(
+        "<br>"
+      );
 
 
-  if (
-    extraWatchHits.length
-  ) {
+  const rules =
+    item.formalHits
+      .map(
+        rule => `
 
-    extraWatchHtml = `
+          <div style="
+            margin-top:10px;
+            padding-top:8px;
+            border-top:1px dashed #eadccc;
+          ">
 
-      <div
-        style="
-          margin-top:10px;
-          padding:9px;
-          border-radius:12px;
-          background:#fbf8ff;
-          border:1px dashed rgba(118,82,168,.35);
-        "
-      >
+            <b>
+              ${rule.name}
+            </b>
 
-        <span class="badge watch">
-          🟡 同时命中观察池
-        </span>
+            <br>
 
-        <br>
+            <span class="badge ${
+              rule.rank === 1
+                ? "gold"
+                : "ok"
+            }">
 
-        <b>
-          ${
-            extraWatchHits
-              .map(
-                r => r.shortName
-              )
-              .join(" + ")
-          }
-        </b>
+              ${rule.type}
 
-      </div>
+            </span>
 
-    `;
+            <br>
 
-  }
+            ${rule.stat}
+
+          </div>
+
+        `
+      )
+      .join("");
 
 
   return `
 
-    <div class="pick ${className}">
+    <div style="margin-top:8px;">
 
-      <div class="pick-title">
+      <b>四差：</b>
+      ${diffs}
 
-        ${heading}
+      <br>
 
-        ｜${item.seat}号
+      <b>S/L：</b>
+      ${item.sl.code}
 
-        ｜X=${item.x}
+      <br>
 
-      </div>
+      <b>S/L排列：</b>
 
-      <div class="pick-rule">
+      <span class="badge blue">
+        ${item.sl.shape}
+      </span>
 
-        <b>四差：</b>
-        ${diffText}
+      <br><br>
 
-        <br>
+      ${detail}
 
-        <b>S/L：</b>
-        ${item.sl.code}
-
-        <br>
-
-        <b>关系：</b>
-        ${relationText}
-
-        ${renderRuleHits(
-          item.hits,
-          model
-        )}
-
-        ${extraWatchHtml}
-
-      </div>
+      ${rules}
 
     </div>
 
   `;
-
 }
 
 
 /*
-========================================================
-结果显示
-========================================================
+====================================================
+显示结果
+====================================================
 */
 
-function renderBothResult(
-
+function renderResult(
   room,
-
-  lobsterScan,
-  lobsterHits,
-
-  ranzaiFormalScan,
-  ranzaiFormalHits,
-
-  ranzaiWatchScan,
-  ranzaiWatchHits,
-  ranzaiWatchOnly
-
+  seats,
+  decision
 ) {
 
   const box =
@@ -2817,370 +2119,145 @@ function renderBothResult(
     );
 
 
-  /*
-  房号头部
-  */
-
-  const roomHeader = `
-
-    <div class="result-head">
-
-      <span class="badge blue">
-        双账号同步扫描
-      </span>
-
-      <div class="room-big">
-        ${room.room}
-      </div>
-
-      <div class="desc">
-
-        A=${room.A}｜
-        B=${room.B}｜
-        C=${room.C}｜
-        D=${room.D}｜
-        E=${room.E}
-
-        <br>
-
-        ${
-          room.hasZero
-            ? "房号含0"
-            : "房号无0"
-        }
-
-        ｜
-
-        ${
-          room.hasRepeat
-            ? "有重复数字"
-            : "无重复数字"
-        }
-
-      </div>
-
-    </div>
-
-  `;
+  const picks =
+    decision.finalPicks;
 
 
   /*
-  龙虾
+  ==================================================
+  没有命中
+  ==================================================
   */
-
-  let lobsterHtml = "";
-
 
   if (
-    lobsterHits.length
+    !picks.length
   ) {
 
-    const lobsterNames =
-      lobsterHits
-        .map(
-          x => `${x.seat}号`
-        )
-        .join("、");
+    box.className =
+      "result show";
 
 
-    lobsterHtml = `
-
-      <div class="account-card lobster">
-
-        <div class="account-title">
-          🦞 5161482｜龙虾 v2.0
-        </div>
-
-        <span class="badge ok">
-          🔥 建议进房
-        </span>
-
-        <div class="account-pick">
-          推荐：${lobsterNames}
-        </div>
-
-        <div class="pick-list">
-
-          ${
-            lobsterHits
-              .map(
-                item =>
-                  renderSeatCard(
-                    item,
-                    "lobster",
-                    "formal"
-                  )
-              )
-              .join("")
-          }
-
-        </div>
-
-        ${renderDebug(
-          room,
-          lobsterScan,
-          "龙虾 v2.0"
-        )}
-
-      </div>
-
-    `;
-
-  }
-  else {
-
-    lobsterHtml = `
-
-      <div class="account-card lobster">
-
-        <div class="account-title">
-          🦞 5161482｜龙虾 v2.0
-        </div>
-
-        <span class="badge no">
-          ❌ 跳过
-        </span>
-
-        <div class="desc">
-          当前房号没有座位命中龙虾 v2.0 正式规则。
-        </div>
-
-        ${renderDebug(
-          room,
-          lobsterScan,
-          "龙虾 v2.0"
-        )}
-
-      </div>
-
-    `;
-
-  }
-
-
-  /*
-  然崽正式池
-  */
-
-  let ranzaiFormalHtml =
-    "";
-
-
-  if (
-    ranzaiFormalHits.length
-  ) {
-
-    const names =
-      ranzaiFormalHits
-        .map(
-          x => `${x.seat}号`
-        )
-        .join("、");
-
-
-    ranzaiFormalHtml = `
-
-      <span class="badge ok">
-        🔥 正式黄金池命中
-      </span>
-
-      <div class="account-pick">
-        正式推荐：${names}
-      </div>
-
-      <div class="pick-list">
-
-        ${
-          ranzaiFormalHits
-            .map(
-              item => {
-
-                const watchItem =
-                  ranzaiWatchHits
-                    .find(
-                      w =>
-                        w.seat ===
-                        item.seat
-                    );
-
-                const extraWatch =
-                  watchItem
-                    ? watchItem.hits
-                    : [];
-
-                return renderSeatCard(
-
-                  item,
-
-                  "ranzai",
-
-                  "formal",
-
-                  extraWatch
-
-                );
-
-              }
-            )
-            .join("")
-        }
-
-      </div>
-
-    `;
-
-  }
-
-
-  /*
-  然崽观察池
-  */
-
-  let ranzaiWatchHtml =
-    "";
-
-
-  if (
-    ranzaiWatchOnly.length
-  ) {
-
-    const watchNames =
-      ranzaiWatchOnly
-        .map(
-          x => `${x.seat}号`
-        )
-        .join("、");
-
-
-    ranzaiWatchHtml = `
-
-      <div
-        style="
-          margin-top:15px;
-          padding-top:13px;
-          border-top:1px dashed #eadccc;
-        "
-      >
-
-        <span class="badge watch">
-          🟡 观察池命中
-        </span>
-
-        <div
-          style="
-            font-size:21px;
-            font-weight:1000;
-            margin:9px 0;
-          "
-        >
-          观察：${watchNames}
-        </div>
-
-        <div class="pick-list">
-
-          ${
-            ranzaiWatchOnly
-              .map(
-                item =>
-                  renderSeatCard(
-                    item,
-                    "ranzai",
-                    "watch"
-                  )
-              )
-              .join("")
-          }
-
-        </div>
-
-      </div>
-
-    `;
-
-  }
-
-
-  /*
-  然崽整体
-  */
-
-  let ranzaiBody = "";
-
-
-  if (
-    !ranzaiFormalHits.length &&
-    !ranzaiWatchOnly.length
-  ) {
-
-    ranzaiBody = `
+    box.innerHTML = `
 
       <span class="badge no">
         ❌ 跳过
       </span>
 
-      <div class="desc">
-        当前房号正式黄金池与观察池均未命中。
+      <span class="badge blue">
+        未命中大赢组合
+      </span>
+
+
+      <div class="big">
+        ${room.room}
       </div>
+
+
+      <div class="desc">
+
+        当前没有任何座位同时满足：
+
+        <br><br>
+
+        <b>
+          差值门票
+          +
+          精确次数
+          +
+          S/L环境
+          +
+          S/L排列
+        </b>
+
+        <br><br>
+
+        <b>
+          这局不进。
+        </b>
+
+        <br><br>
+
+        ${renderRoomLine(room)}
+
+      </div>
+
+
+      ${renderDebug(
+        room,
+        seats
+      )}
 
     `;
 
-  }
-  else {
 
-    if (
-      !ranzaiFormalHits.length &&
-      ranzaiWatchOnly.length
-    ) {
-
-      ranzaiBody = `
-
-        <span class="badge watch">
-          🟡 仅观察池命中
-        </span>
-
-        <div class="desc">
-          当前没有正式黄金推荐，仅出现观察信号。
-        </div>
-
-        ${ranzaiWatchHtml}
-
-      `;
-
-    }
-    else {
-
-      ranzaiBody = `
-
-        ${ranzaiFormalHtml}
-
-        ${ranzaiWatchHtml}
-
-      `;
-
-    }
-
+    return;
   }
 
 
-  const ranzaiHtml = `
+  /*
+  ==================================================
+  有命中
+  ==================================================
+  */
 
-    <div class="account-card ranzai">
+  const pickNames =
+    picks
+      .map(
+        p =>
+          `${p.seat}号`
+      )
+      .join(
+        "、"
+      );
 
-      <div class="account-title">
-        🔥 5130004｜然崽 v1.1
-      </div>
 
-      ${ranzaiBody}
+  const pickHtml =
+    picks
+      .map(
+        (pick,index) => `
 
-      ${renderRanzaiCombinedDebug(
-        room,
-        ranzaiFormalScan,
-        ranzaiWatchScan
-      )}
+          <div class="pick ${
+            index === 0
+              ? "main"
+              : ""
+          }">
 
-    </div>
+            <div class="pick-title">
 
-  `;
+              ${
+                index === 0
+                  ? "🔥 第一推荐"
+                  : "⚡ 同时命中"
+              }
+
+              ｜
+
+              ${pick.seat}号
+
+              ｜
+
+              X=${pick.x}
+
+            </div>
+
+
+            <div class="pick-rule">
+
+              <span class="badge gold">
+                🔥 大赢组合命中
+              </span>
+
+              ${renderSeatRelation(
+                pick
+              )}
+
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
 
 
   box.className =
@@ -3189,115 +2266,297 @@ function renderBothResult(
 
   box.innerHTML = `
 
-    ${roomHeader}
+    <span class="badge ok">
+      🔥 建议进房
+    </span>
 
-    ${lobsterHtml}
+    <span class="badge gold">
+      龙虾 v3.0
+    </span>
 
-    ${ranzaiHtml}
+
+    <div class="big">
+
+      推荐：
+      ${pickNames}
+
+    </div>
+
+
+    <div class="pick-list">
+
+      ${pickHtml}
+
+    </div>
+
+
+    <div
+      class="desc"
+      style="margin-top:14px;"
+    >
+
+      房号：
+
+      <b>
+        ${room.room}
+      </b>
+
+      <br>
+
+      ${renderRoomLine(room)}
+
+    </div>
+
+
+    <div class="grid">
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.sample}局
+        </div>
+
+        <div class="k">
+          历史样本
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.hitCount}局
+        </div>
+
+        <div class="k">
+          模型命中
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.winRate}
+        </div>
+
+        <div class="k">
+          历史胜率
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.bigWinRate}
+        </div>
+
+        <div class="k">
+          命中后大赢率
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.net}
+        </div>
+
+        <div class="k">
+          历史净分
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.average}
+        </div>
+
+        <div class="k">
+          平均每次命中
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.bigWin}
+        </div>
+
+        <div class="k">
+          大赢 ≥500
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="v">
+          ${MODEL_STAT.bigLoss}
+        </div>
+
+        <div class="k">
+          大输 ≤-400
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    ${renderDebug(
+      room,
+      seats
+    )}
 
   `;
-
 }
 
 
 /*
-========================================================
-龙虾调试表
-========================================================
+====================================================
+调试表
+
+显示：
+位子
+X
+四差
+S/L
+排列
+精确重复差
+命中规则
+====================================================
 */
 
 function renderDebug(
   room,
-  scan,
-  title
+  seats
 ) {
 
   const rows =
-    scan.map(
-      item => {
-
-        const diffShape =
-          item.allDiffs
-            .join("、");
+    seats
+      .map(
+        item => {
 
 
-        const count =
-          countMap(
-            item.allDiffs
-          );
+          const diffShape =
+            item.diffs
+              .map(
+                d =>
+                  d.absDiff
+              )
+              .join(
+                "、"
+              );
 
 
-        const repeats =
-          Object
-            .entries(count)
-            .filter(
-              ([diff,num]) =>
-                num >= 2
-            )
-            .map(
-              ([diff,num]) =>
-                `差${diff}×${num}`
-            )
-            .join("、")
-          ||
-          "无双差";
-
-
-        const status =
-          item.hits.length
-
-            ? "✅ " +
-              item.hits
+          const count =
+            countMap(
+              item.diffs
                 .map(
-                  r =>
-                    r.shortName
+                  d =>
+                    d.absDiff
                 )
-                .join("、")
-
-            : "未命中";
+            );
 
 
-        return `
+          const repeats =
+            Object
+              .entries(
+                count
+              )
+              .filter(
+                ([diff,num]) =>
+                  num >= 2
+              )
+              .map(
+                ([diff,num]) =>
+                  `差${diff}×${num}`
+              )
+              .join(
+                "、"
+              )
+            ||
+            "无重复差";
 
-          <tr>
 
-            <td>
-              ${item.seat}号
-            </td>
+          const status =
+            item.formalHits.length
 
-            <td>
-              ${item.xPos}
-            </td>
+              ? "🔥 " +
+                item.formalHits
+                  .map(
+                    r =>
+                      r.shortName
+                  )
+                  .join(
+                    "、"
+                  )
 
-            <td>
-              ${item.x}
-            </td>
+              : "未命中";
 
-            <td>
-              ${diffShape}
-            </td>
 
-            <td>
-              <b>
-                ${item.sl.code}
-              </b>
-            </td>
+          return `
 
-            <td>
-              ${repeats}
-            </td>
+            <tr>
 
-            <td>
-              ${status}
-            </td>
+              <td>
+                ${item.seat}号
+              </td>
 
-          </tr>
+              <td>
+                ${item.xPos}
+              </td>
 
-        `;
+              <td>
+                ${item.x}
+              </td>
 
-      }
-    )
-    .join("");
+              <td>
+                ${diffShape}
+              </td>
+
+              <td>
+                <b>
+                  ${item.sl.code}
+                </b>
+              </td>
+
+              <td>
+                <b>
+                  ${item.sl.shape}
+                </b>
+              </td>
+
+              <td>
+                ${repeats}
+              </td>
+
+              <td>
+                ${status}
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join("");
 
 
   return `
@@ -3310,242 +2569,66 @@ function renderDebug(
 
           <tr>
 
-            <th colspan="7">
+            <th colspan="8">
 
-              ${title}
-              ｜房号 ${room.room}
+              房号
+              ${room.room}
+
+              ｜
+
+              S=0–4
+
+              ｜
+
+              L=5–9
 
             </th>
 
           </tr>
 
+
           <tr>
 
-            <th>位子</th>
+            <th>
+              位子
+            </th>
 
-            <th>X位置</th>
+            <th>
+              X位置
+            </th>
 
-            <th>X</th>
+            <th>
+              X
+            </th>
 
-            <th>四差</th>
+            <th>
+              四差
+            </th>
 
-            <th>S/L</th>
+            <th>
+              S/L
+            </th>
 
-            <th>重复差</th>
+            <th>
+              排列
+            </th>
 
-            <th>模型结果</th>
+            <th>
+              重复差
+            </th>
+
+            <th>
+              模型结果
+            </th>
 
           </tr>
 
         </thead>
 
+
         <tbody>
+
           ${rows}
-        </tbody>
-
-      </table>
-
-    </div>
-
-  `;
-
-}
-
-
-/*
-========================================================
-然崽正式+观察合并调试表
-========================================================
-*/
-
-function renderRanzaiCombinedDebug(
-  room,
-  formalScan,
-  watchScan
-) {
-
-  const rows = [];
-
-
-  for (
-    let seat = 1;
-    seat <= 6;
-    seat++
-  ) {
-
-    const formal =
-      formalScan.find(
-        x => x.seat === seat
-      );
-
-
-    const watch =
-      watchScan.find(
-        x => x.seat === seat
-      );
-
-
-    const item =
-      formal;
-
-
-    const count =
-      countMap(
-        item.allDiffs
-      );
-
-
-    const repeats =
-      Object
-        .entries(count)
-        .filter(
-          ([diff,num]) =>
-            num >= 2
-        )
-        .map(
-          ([diff,num]) =>
-            `差${diff}×${num}`
-        )
-        .join("、")
-      ||
-      "无双差";
-
-
-    let result =
-      "未命中";
-
-
-    if (
-      formal.hits.length
-    ) {
-
-      result =
-        "🔥 " +
-        formal.hits
-          .map(
-            r => r.shortName
-          )
-          .join("、");
-
-    }
-
-
-    if (
-      watch.hits.length
-    ) {
-
-      if (
-        formal.hits.length
-      ) {
-
-        result +=
-          "｜🟡 " +
-          watch.hits
-            .map(
-              r => r.shortName
-            )
-            .join("、");
-
-      }
-      else {
-
-        result =
-          "🟡 " +
-          watch.hits
-            .map(
-              r => r.shortName
-            )
-            .join("、");
-
-      }
-
-    }
-
-
-    rows.push(`
-
-      <tr>
-
-        <td>
-          ${seat}号
-        </td>
-
-        <td>
-          ${item.xPos}
-        </td>
-
-        <td>
-          ${item.x}
-        </td>
-
-        <td>
-          ${item.allDiffs.join("、")}
-        </td>
-
-        <td>
-          <b>
-            ${item.sl.code}
-          </b>
-        </td>
-
-        <td>
-          ${repeats}
-        </td>
-
-        <td>
-          ${result}
-        </td>
-
-      </tr>
-
-    `);
-
-  }
-
-
-  return `
-
-    <div class="debug">
-
-      <table>
-
-        <thead>
-
-          <tr>
-
-            <th colspan="7">
-
-              然崽 v1.1
-              ｜正式池 + 观察池
-              ｜房号 ${room.room}
-
-            </th>
-
-          </tr>
-
-          <tr>
-
-            <th>位子</th>
-
-            <th>X位置</th>
-
-            <th>X</th>
-
-            <th>四差</th>
-
-            <th>S/L</th>
-
-            <th>重复差</th>
-
-            <th>模型结果</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          ${rows.join("")}
 
         </tbody>
 
@@ -3554,41 +2637,128 @@ function renderRanzaiCombinedDebug(
     </div>
 
   `;
-
 }
 
 
 /*
-========================================================
-龙虾规则说明
-========================================================
+====================================================
+规则列表
+====================================================
 */
 
-function renderLobsterRules() {
+function renderComboList() {
 
-  const box =
-    document.getElementById(
-      "lobsterRuleList"
-    );
+  document
+    .getElementById(
+      "comboList"
+    )
+    .innerHTML = `
 
 
-  box.innerHTML = `
+    <!-- 1号 -->
 
-    <div class="combo main-rule">
+    <div class="combo special">
 
       <div class="name">
-        🥇 1号｜差2 + 4S0L
+
+        🔥 1号｜
+        差1+差2｜
+        4S0L｜
+        SSSS
+
       </div>
 
       <div class="rule">
 
-        必须有差2，而且四个差全部属于0–4。
+        必须同时存在差1、差2。
 
         <br>
 
+        四个差全部属于S。
+
+        <br><br>
+
         <b>
-          历史8局8正｜净+5810｜0大输
+          7局6胜1小负
+          ｜
+          4大赢
+          ｜
+          净+4200
+          ｜
+          0大输
         </b>
+
+      </div>
+
+    </div>
+
+
+    <!-- 2号 -->
+
+    <div class="combo">
+
+      <div class="name">
+
+        🟡 2号｜
+        单差2｜
+        3S1L｜
+        SLSS
+
+      </div>
+
+      <div class="rule">
+
+        差2必须恰好出现1次。
+
+        <br>
+
+        S/L排列必须为：
+
+        <b>SLSS</b>
+
+        <br><br>
+
+        <b>
+          历史+800
+          ｜
+          1次大赢
+          ｜
+          当前样本少
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <!-- 3号 -->
+
+    <div class="combo special">
+
+      <div class="name">
+
+        🔥 3号｜
+        差7｜
+        2S2L｜
+        LSSL
+
+      </div>
+
+      <div class="rule">
+
+        基础必须有差7。
+
+        <br>
+
+        S/L排列：
+
+        <b>LSSL</b>
+
+        <br>
+
+        历史大赢：
+
+        <b>+760</b>
 
       </div>
 
@@ -3598,39 +2768,29 @@ function renderLobsterRules() {
     <div class="combo special">
 
       <div class="name">
-        🔥 1号超级加强｜双差2 + 4S0L
+
+        🔥 3号｜
+        差7｜
+        2S2L｜
+        LLSS
+
       </div>
 
       <div class="rule">
 
-        在1号主核基础上，差2至少出现2次。
+        基础必须有差7。
 
         <br>
 
-        <b>
-          历史5局5次大赢｜净+4630
-        </b>
+        S/L排列：
 
-      </div>
-
-    </div>
-
-
-    <div class="combo main-rule">
-
-      <div class="name">
-        🥇 2号｜双差1
-      </div>
-
-      <div class="rule">
-
-        四差中差1至少出现2次。
+        <b>LLSS</b>
 
         <br>
 
-        <b>
-          历史2局2正｜净+1600｜0大输
-        </b>
+        历史大赢：
+
+        <b>+1020</b>
 
       </div>
 
@@ -3640,17 +2800,72 @@ function renderLobsterRules() {
     <div class="combo special">
 
       <div class="name">
-        🔥 2号｜差5+差6 + 2S2L
+
+        🔥🔥 3号｜
+        差1+差7｜
+        1S3L｜
+        LLSL
+
       </div>
 
       <div class="rule">
 
-        同时存在差5、差6，而且四差必须为2小2大。
+        必须同时有差1和差7。
 
         <br>
 
+        S/L排列：
+
+        <b>LLSL</b>
+
+        <br>
+
+        历史大赢：
+
+        <b>+1760</b>
+
+      </div>
+
+    </div>
+
+
+    <!-- 4号 -->
+
+    <div class="combo special">
+
+      <div class="name">
+
+        🔥🔥 4号｜
+        差1+单差2｜
+        3S1L｜
+        LSSS
+
+      </div>
+
+      <div class="rule">
+
+        必须存在差1。
+
+        <br>
+
+        差2必须恰好出现1次。
+
+        <br>
+
+        S/L排列必须：
+
+        <b>LSSS</b>
+
+        <br><br>
+
         <b>
-          历史3局3正｜净+2430｜0大输
+          +1230 / +820
+          <br>
+          2局2次大赢
+          ｜
+          净+2050
+          ｜
+          0大输
         </b>
 
       </div>
@@ -3658,21 +2873,68 @@ function renderLobsterRules() {
     </div>
 
 
-    <div class="combo main-rule">
+    <!-- 5号 -->
+
+    <div class="combo">
 
       <div class="name">
-        🥇 3号｜差7 + 2S2L
+
+        🔥 5号｜
+        单差2｜
+        2S2L｜
+        SLSL
+
       </div>
 
       <div class="rule">
 
-        必须出现差7，同时满足2S2L。
+        差2必须恰好出现1次。
 
         <br>
 
-        <b>
-          历史3局3正｜净+1960
-        </b>
+        S/L排列必须：
+
+        <b>SLSL</b>
+
+        <br>
+
+        历史大赢：
+
+        <b>+1030</b>
+
+      </div>
+
+    </div>
+
+
+    <!-- 6号 -->
+
+    <div class="combo special">
+
+      <div class="name">
+
+        🔥 6号｜
+        差6｜
+        2S2L｜
+        SSLL
+
+      </div>
+
+      <div class="rule">
+
+        必须存在差6。
+
+        <br>
+
+        S/L排列：
+
+        <b>SSLL</b>
+
+        <br>
+
+        历史大赢：
+
+        <b>+870</b>
 
       </div>
 
@@ -3682,18 +2944,29 @@ function renderLobsterRules() {
     <div class="combo special">
 
       <div class="name">
-        🔥 3号超级加强｜双差7 + 2S2L
+
+        🔥🔥 6号｜
+        差6｜
+        1S3L｜
+        SLLL
+
       </div>
 
       <div class="rule">
 
-        差7至少出现2次，并且为2S2L。
+        必须存在差6。
 
         <br>
 
-        <b>
-          历史2局2次大赢｜净+1780
-        </b>
+        S/L排列：
+
+        <b>SLLL</b>
+
+        <br>
+
+        历史大赢：
+
+        <b>+1180</b>
 
       </div>
 
@@ -3703,308 +2976,51 @@ function renderLobsterRules() {
     <div class="combo special">
 
       <div class="name">
-        🔥 3号独立爆分核｜差1 + 差7
+
+        🔥🔥 6号｜
+        单差1｜
+        3S1L｜
+        SSSL
+
       </div>
 
       <div class="rule">
 
-        四差同时存在差1和差7。
+        差1必须恰好出现1次。
 
         <br>
 
-        <b>
-          历史3局3次大赢｜净+3540｜0大输
-        </b>
+        S/L排列：
 
-      </div>
-
-    </div>
-
-
-    <div class="combo main-rule">
-
-      <div class="name">
-        ⭐ 4号｜差1+差2 + 3S1L
-      </div>
-
-      <div class="rule">
-
-        同时存在差1、差2，并且为3小1大。
+        <b>SSSL</b>
 
         <br>
 
-        <b>
-          历史2局2正｜净+1720
-        </b>
+        历史大赢：
 
-      </div>
-
-    </div>
-
-
-    <div class="combo main-rule">
-
-      <div class="name">
-        ⭐ 5号｜差2 + 2S2L
-      </div>
-
-      <div class="rule">
-
-        必须出现差2，并且四差为2小2大。
-
-        <br>
-
-        <b>
-          历史2局2正｜净+1050｜0大输
-        </b>
-
-      </div>
-
-    </div>
-
-
-    <div class="combo main-rule">
-
-      <div class="name">
-        ⭐ 6号｜差6
-      </div>
-
-      <div class="rule">
-
-        四差任意位置出现差6。
-
-        <br>
-
-        <b>
-          历史2局2正｜净+1350｜0大输
-        </b>
-
-      </div>
-
-    </div>
-
-
-    <div class="combo main-rule">
-
-      <div class="name">
-        ⭐ 6号｜差1 + 3S1L
-      </div>
-
-      <div class="rule">
-
-        必须出现差1，并且四差为3小1大。
-
-        <br>
-
-        <b>
-          历史3局2正1小负｜净+1430｜0大输
-        </b>
+        <b>+1120</b>
 
       </div>
 
     </div>
 
   `;
-
 }
 
 
 /*
-========================================================
-然崽正式规则说明
-========================================================
-*/
-
-function renderRanzaiFormalRules() {
-
-  const box =
-    document.getElementById(
-      "ranzaiFormalList"
-    );
-
-
-  box.innerHTML =
-    RANZAI_FORMAL_RULES
-      .map(
-        rule => `
-
-          <div class="combo ${
-            rule.level === "S"
-              ? "special"
-              : "main-rule"
-          }">
-
-            <div class="name">
-
-              ${
-                rule.level === "S"
-                  ? "🔥"
-                  : "🟢"
-              }
-
-              ${rule.name}
-
-            </div>
-
-            <div class="rule">
-
-              <b>
-                ${rule.type}
-              </b>
-
-              <br>
-
-              ${rule.stat}
-
-            </div>
-
-          </div>
-
-        `
-      )
-      .join("");
-
-}
-
-
-/*
-========================================================
-然崽观察规则说明
-========================================================
-*/
-
-function renderRanzaiWatchRules() {
-
-  const box =
-    document.getElementById(
-      "ranzaiWatchList"
-    );
-
-
-  box.innerHTML =
-    RANZAI_WATCH_RULES
-      .map(
-        rule => `
-
-          <div class="combo ${
-            rule.level === "BOOM"
-              ? "boom-rule"
-              : "watch-rule"
-          }">
-
-            <div class="name">
-
-              ${
-                rule.level === "BOOM"
-                  ? "💥"
-                  : "🟡"
-              }
-
-              ${rule.name}
-
-            </div>
-
-            <div class="rule">
-
-              <b>
-                ${rule.type}
-              </b>
-
-              <br>
-
-              ${rule.stat}
-
-            </div>
-
-          </div>
-
-        `
-      )
-      .join("");
-
-}
-
-
-/*
-========================================================
+====================================================
 历史记录
-
-一条房号同时保存两个账号结果
-========================================================
+====================================================
 */
 
-const BOTH_HISTORY_KEY =
-  "dual_5161482_5130004_gold_model_history_v1";
+const HISTORY_KEY =
+  "id_5161482_lobster_big_combo_v30_history";
 
 
-function seatListText(
-  list
-) {
-
-  if (
-    !list.length
-  ) {
-
-    return "跳过";
-
-  }
-
-
-  return list
-    .map(
-      item =>
-        `${item.seat}号`
-    )
-    .join("、");
-
-}
-
-
-function seatRuleText(
-  list
-) {
-
-  if (
-    !list.length
-  ) {
-
-    return "";
-
-  }
-
-
-  return list
-    .map(
-      item => {
-
-        const rules =
-          item.hits
-            .map(
-              r => r.shortName
-            )
-            .join("+");
-
-        return (
-          `${item.seat}号(${rules})`
-        );
-
-      }
-    )
-    .join("、");
-
-}
-
-
-function saveBothHistory(
-
+function saveHistory(
   room,
-
-  lobsterHits,
-
-  ranzaiFormalHits,
-
-  ranzaiWatchOnly
-
+  decision
 ) {
 
   const item = {
@@ -4012,50 +3028,53 @@ function saveBothHistory(
     room:
       room.room,
 
-    lobster:
-      seatListText(
-        lobsterHits
-      ),
-
-    lobsterDetail:
-      seatRuleText(
-        lobsterHits
-      ),
-
-    ranzai:
-      seatListText(
-        ranzaiFormalHits
-      ),
-
-    ranzaiDetail:
-      seatRuleText(
-        ranzaiFormalHits
-      ),
-
-    watch:
-      seatListText(
-        ranzaiWatchOnly
-      ),
-
-    watchDetail:
-      seatRuleText(
-        ranzaiWatchOnly
-      ),
-
     time:
       new Date()
-        .toLocaleString()
+        .toLocaleString(),
+
+    result:
+
+      decision
+        .finalPicks
+        .length
+
+        ?
+
+        decision
+          .finalPicks
+          .map(
+            p =>
+
+              `${p.seat}号(${
+                p.formalHits
+                  .map(
+                    r =>
+                      r.shortName
+                  )
+                  .join("+")
+              })`
+
+          )
+          .join("、")
+
+        :
+
+        "跳过"
 
   };
 
 
   const list =
     JSON.parse(
+
       localStorage.getItem(
-        BOTH_HISTORY_KEY
+        HISTORY_KEY
       )
+
       ||
+
       "[]"
+
     );
 
 
@@ -4066,27 +3085,28 @@ function saveBothHistory(
 
   localStorage.setItem(
 
-    BOTH_HISTORY_KEY,
+    HISTORY_KEY,
 
     JSON.stringify(
+
       list.slice(
         0,
         50
       )
+
     )
 
   );
-
 }
 
 
 /*
-========================================================
+====================================================
 显示历史
-========================================================
+====================================================
 */
 
-function renderBothHistory() {
+function renderHistory() {
 
   const box =
     document.getElementById(
@@ -4096,11 +3116,15 @@ function renderBothHistory() {
 
   const list =
     JSON.parse(
+
       localStorage.getItem(
-        BOTH_HISTORY_KEY
+        HISTORY_KEY
       )
+
       ||
+
       "[]"
+
     );
 
 
@@ -4112,7 +3136,6 @@ function renderBothHistory() {
       "暂无记录";
 
     return;
-
   }
 
 
@@ -4129,57 +3152,14 @@ function renderBothHistory() {
 
             </div>
 
+
             <div class="history-right">
 
-              🦞 龙虾：
-              ${item.lobster}
+              推荐：
 
-              ${
-                item.lobsterDetail
-                  ? `
-                    <br>
-                    ${item.lobsterDetail}
-                  `
-                  : ""
-              }
+              ${item.result}
 
-              <br><br>
-
-              🔥 然崽正式：
-              ${item.ranzai}
-
-              ${
-                item.ranzaiDetail
-                  ? `
-                    <br>
-                    ${item.ranzaiDetail}
-                  `
-                  : ""
-              }
-
-              ${
-                item.watch !== "跳过"
-                  ? `
-
-                    <br>
-
-                    🟡 然崽观察：
-                    ${item.watch}
-
-                    ${
-                      item.watchDetail
-                        ? `
-                          <br>
-                          ${item.watchDetail}
-                        `
-                        : ""
-                    }
-
-                  `
-                  : ""
-              }
-
-              <br><br>
+              <br>
 
               ${item.time}
 
@@ -4195,26 +3175,25 @@ function renderBothHistory() {
 
 
 /*
-========================================================
+====================================================
 清空历史
-========================================================
+====================================================
 */
 
-function clearBothHistory() {
+function clearHistory() {
 
   localStorage.removeItem(
-    BOTH_HISTORY_KEY
+    HISTORY_KEY
   );
 
-  renderBothHistory();
-
+  renderHistory();
 }
 
 
 /*
-========================================================
+====================================================
 输入限制
-========================================================
+====================================================
 */
 
 document
@@ -4240,6 +3219,12 @@ document
   );
 
 
+/*
+====================================================
+回车运行
+====================================================
+*/
+
 document
   .getElementById(
     "roomInput"
@@ -4249,11 +3234,10 @@ document
     event => {
 
       if (
-        event.key ===
-        "Enter"
+        event.key === "Enter"
       ) {
 
-        runBoth();
+        run();
 
       }
 
@@ -4262,18 +3246,14 @@ document
 
 
 /*
-========================================================
+====================================================
 启动
-========================================================
+====================================================
 */
 
-renderLobsterRules();
+renderComboList();
 
-renderRanzaiFormalRules();
-
-renderRanzaiWatchRules();
-
-renderBothHistory();
+renderHistory();
 
 </script>
 
