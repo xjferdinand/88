@@ -7,22 +7,16 @@
 <title>5161482｜龙虾｜721514 六位完整结构模型 V6.0</title>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
 
 body{
     margin:0;
-    padding:18px;
+    padding:10px;
     background:#090c12;
     color:#f3f4f6;
-    font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Microsoft YaHei",
-    sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
 }
 
 .wrap{
@@ -30,48 +24,51 @@ body{
     margin:auto;
 }
 
+/* =========================
+   顶部账号简介：缩小版
+========================= */
+
 .hero{
-    background:
-    linear-gradient(
-        135deg,
-        #171b25,
-        #10131a
-    );
+    background:linear-gradient(135deg,#171b25,#10131a);
     border:1px solid #292f3b;
-    border-radius:20px;
-    padding:22px;
-    margin-bottom:16px;
+    border-radius:15px;
+    padding:11px 13px;
+    margin-bottom:10px;
 }
 
 .title{
-    font-size:25px;
+    font-size:18px;
     font-weight:900;
 }
 
 .version{
     display:inline-block;
-    margin-top:10px;
-    padding:6px 10px;
+    margin-top:6px;
+    padding:4px 8px;
     border-radius:999px;
     background:#4a3511;
     color:#fcd34d;
-    font-size:12px;
+    font-size:10px;
     font-weight:800;
 }
 
 .sub{
-    margin-top:12px;
+    margin-top:7px;
     color:#9ca3af;
-    line-height:1.8;
-    font-size:14px;
+    line-height:1.5;
+    font-size:11px;
 }
+
+/* =========================
+   通用面板
+========================= */
 
 .panel{
     background:#151922;
     border:1px solid #292f3b;
     border-radius:18px;
     padding:18px;
-    margin-bottom:16px;
+    margin-bottom:14px;
 }
 
 .section-title{
@@ -80,26 +77,55 @@ body{
     margin-bottom:14px;
 }
 
+/* =========================
+   房号输入区域
+========================= */
+
+.room-panel{
+    padding:20px 16px;
+}
+
+.room-panel .section-title{
+    font-size:20px;
+    margin-bottom:13px;
+}
+
 .input-row{
     display:flex;
-    gap:10px;
+    gap:12px;
 }
 
 input{
     flex:1;
-    height:56px;
-    border-radius:13px;
-    border:1px solid #374151;
+    min-width:0;
+    height:82px;
+
+    border-radius:16px;
+    border:2px solid #374151;
+
     background:#0e1219;
     color:#fff;
-    padding:0 16px;
-    font-size:23px;
-    font-weight:700;
+
+    padding:0 20px;
+
+    font-size:38px;
+    font-weight:900;
+    letter-spacing:6px;
+    text-align:center;
+
     outline:none;
+}
+
+input::placeholder{
+    font-size:18px;
+    letter-spacing:0;
+    font-weight:600;
+    color:#626b79;
 }
 
 input:focus{
     border-color:#f59e0b;
+    box-shadow:0 0 0 3px rgba(245,158,11,.10);
 }
 
 button{
@@ -108,13 +134,21 @@ button{
 }
 
 .btn-main{
-    height:56px;
-    padding:0 26px;
-    border-radius:13px;
+    height:82px;
+    min-width:140px;
+    padding:0 24px;
+
+    border-radius:16px;
+
     background:#f59e0b;
     color:#111827;
-    font-size:17px;
+
+    font-size:19px;
     font-weight:900;
+}
+
+.btn-main:active{
+    transform:scale(.98);
 }
 
 .btn-small{
@@ -123,6 +157,10 @@ button{
     background:#2b313d;
     color:#ddd;
 }
+
+/* =========================
+   结果
+========================= */
 
 .result{
     display:none;
@@ -177,8 +215,7 @@ button{
 
 .pick.main{
     border:1px solid #f59e0b;
-    box-shadow:
-    0 0 0 1px rgba(245,158,11,.08);
+    box-shadow:0 0 0 1px rgba(245,158,11,.08);
 }
 
 .pick-title{
@@ -193,10 +230,13 @@ button{
     font-size:14px;
 }
 
+/* =========================
+   统计
+========================= */
+
 .grid{
     display:grid;
-    grid-template-columns:
-    repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap:10px;
 }
 
@@ -219,6 +259,10 @@ button{
     font-size:12px;
 }
 
+/* =========================
+   规则
+========================= */
+
 .combo-list{
     display:grid;
     gap:10px;
@@ -232,8 +276,7 @@ button{
 }
 
 .combo.special{
-    border-left:
-    4px solid #f59e0b;
+    border-left:4px solid #f59e0b;
 }
 
 .combo .name{
@@ -253,6 +296,10 @@ button{
     font-size:13px;
 }
 
+/* =========================
+   明细表
+========================= */
+
 .debug{
     margin-top:18px;
     overflow-x:auto;
@@ -267,8 +314,7 @@ table{
 th,
 td{
     padding:9px;
-    border-bottom:
-    1px solid #2b313d;
+    border-bottom:1px solid #2b313d;
     text-align:left;
     white-space:nowrap;
 }
@@ -286,14 +332,16 @@ th{
     color:#6b7280;
 }
 
+/* =========================
+   历史
+========================= */
+
 .history-item{
     display:flex;
-    justify-content:
-    space-between;
+    justify-content:space-between;
     gap:10px;
     padding:11px 0;
-    border-bottom:
-    1px solid #292f3b;
+    border-bottom:1px solid #292f3b;
 }
 
 .history-left{
@@ -326,43 +374,90 @@ th{
     line-height:1.7;
 }
 
+/* =========================
+   手机
+========================= */
+
 @media(max-width:650px){
 
     body{
-        padding:11px;
+        padding:9px;
     }
 
-    .grid{
-        grid-template-columns:
-        repeat(2,1fr);
+    .hero{
+        padding:10px 12px;
+        margin-bottom:9px;
     }
 
     .title{
-        font-size:21px;
+        font-size:17px;
+    }
+
+    .version{
+        font-size:9px;
+        margin-top:5px;
+    }
+
+    .sub{
+        font-size:10px;
+        line-height:1.45;
+        margin-top:6px;
+    }
+
+    .room-panel{
+        padding:18px 13px;
+    }
+
+    .room-panel .section-title{
+        font-size:19px;
     }
 
     .input-row{
         flex-direction:column;
     }
 
-    .btn-main{
+    input{
         width:100%;
+        height:90px;
+
+        font-size:42px;
+        font-weight:900;
+
+        text-align:center;
+        letter-spacing:8px;
+
+        padding-left:28px;
     }
 
-}
+    input::placeholder{
+        font-size:17px;
+        letter-spacing:0;
+    }
 
+    .btn-main{
+        width:100%;
+        height:62px;
+        font-size:20px;
+    }
+
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .big{
+        font-size:27px;
+    }
+}
 </style>
 </head>
-
 
 <body>
 
 <div class="wrap">
 
-
-<!-- ============================= -->
-<!-- 顶部 -->
-<!-- ============================= -->
+<!-- =============================
+     顶部账号
+============================= -->
 
 <div class="hero">
 
@@ -375,48 +470,26 @@ th{
     </div>
 
     <div class="sub">
-
-        玩家ID：
-        <b>161482</b>
-
-        <br>
-
-        比赛场ID：
-        <b>882996</b>
+        玩家ID：<b>161482</b>
+        ｜比赛场ID：<b>882996</b>
+        ｜基准：<b>721514</b>
 
         <br>
 
-        ID逐位绝对差基准：
-        <b>721514</b>
-
-        <br><br>
-
-        当前版本统一使用：
-
-        <b>
-        六差完整结构 /
-        六位整体形态
-        </b>
-
-        <br>
-
-        不使用单独某一个
-        d值作为局部过滤条件。
-
+        六差完整结构 / 六位整体形态
     </div>
 
 </div>
 
 
+<!-- =============================
+     房号输入
+============================= -->
 
-<!-- ============================= -->
-<!-- 输入 -->
-<!-- ============================= -->
-
-<div class="panel">
+<div class="panel room-panel">
 
     <div class="section-title">
-        输入5位房号
+        输入房间号
     </div>
 
     <div class="input-row">
@@ -426,7 +499,7 @@ th{
             type="tel"
             inputmode="numeric"
             maxlength="5"
-            placeholder="例如：26047"
+            placeholder="输入5位房号"
             autocomplete="off"
         >
 
@@ -447,10 +520,9 @@ th{
 </div>
 
 
-
-<!-- ============================= -->
-<!-- 历史回测 -->
-<!-- ============================= -->
+<!-- =============================
+     历史反推
+============================= -->
 
 <div class="panel">
 
@@ -461,135 +533,59 @@ th{
     <div class="grid">
 
         <div class="stat">
-
-            <div class="v">
-                40次
-            </div>
-
-            <div class="k">
-                规则命中
-            </div>
-
+            <div class="v">40次</div>
+            <div class="k">规则命中</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="v">
-                32次
-            </div>
-
-            <div class="k">
-                正收益
-            </div>
-
+            <div class="v">32次</div>
+            <div class="k">正收益</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="v">
-                80.0%
-            </div>
-
-            <div class="k">
-                历史正收益率
-            </div>
-
+            <div class="v">80.0%</div>
+            <div class="k">正收益率</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="v">
-                +17,529
-            </div>
-
-            <div class="k">
-                累计净分
-            </div>
-
+            <div class="v">+17,529</div>
+            <div class="k">累计净分</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="v">
-                18次
-            </div>
-
-            <div class="k">
-                大赢 ≥ +500
-            </div>
-
+            <div class="v">18次</div>
+            <div class="k">大赢 ≥+500</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="v">
-                0次
-            </div>
-
-            <div class="k">
-                大输 ≤ -400
-            </div>
-
+            <div class="v">0次</div>
+            <div class="k">大输 ≤-400</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="v">
-                +438
-            </div>
-
-            <div class="k">
-                单次平均
-            </div>
-
+            <div class="v">+438</div>
+            <div class="k">单次平均</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="v">
-                94局
-            </div>
-
-            <div class="k">
-                训练样本
-            </div>
-
+            <div class="v">94局</div>
+            <div class="k">历史样本</div>
         </div>
 
     </div>
 
-
     <div class="warning">
-
-        ⚠️ 以上属于94局历史训练集反推。
-
-        <br>
-
-        80%正收益率和0次大输
-        不等于未来真实胜率。
-
-        <br>
-
-        V6.0规则冻结以后，
-        新战绩应作为样本外验证，
-        不因为单局输赢自动修改规则。
-
+        ⚠️ 以上为94局历史反推结果。
+        V6.0冻结后，新战绩作为样本外验证，
+        不因为单局输赢临时修改条件。
     </div>
 
 </div>
 
 
-
-<!-- ============================= -->
-<!-- 六条冻结规则 -->
-<!-- ============================= -->
+<!-- =============================
+     六条规则
+============================= -->
 
 <div class="panel">
 
@@ -605,10 +601,9 @@ th{
 </div>
 
 
-
-<!-- ============================= -->
-<!-- 查询历史 -->
-<!-- ============================= -->
+<!-- =============================
+     查询历史
+============================= -->
 
 <div class="panel">
 
@@ -636,1428 +631,634 @@ th{
 </div>
 
 
-
 <div class="footer-note">
 
-    【统一计算流程】
+    房号 ABCDE → 根据位子取得 X → 插入X形成6位数 →
+    与721514逐位计算绝对差 →
+    得到 d1～d6 →
+    判断六位完整结构。
 
     <br><br>
 
-    房号 ABCDE
-
-    <br>
-
-    ↓
-
-    <br>
-
-    根据位子取得 X
-
-    <br>
-
-    ↓
-
-    <br>
-
-    按对应位置插入 X
-
-    <br>
-
-    ↓
-
-    <br>
-
-    形成6位结构
-
-    <br>
-
-    ↓
-
-    <br>
-
-    与 721514
-    逐位计算绝对差
-
-    <br>
-
-    ↓
-
-    <br>
-
-    得到：
-
-    d1 / d2 / d3 /
-    d4 / d5 / d6
-
-    <br>
-
-    ↓
-
-    <br>
-
-    判断完整六差结构
-
-    <br><br>
-
-    如果同时超过3个位子命中，
-    固定优先级：
+    超过3个位同时命中时，固定优先级：
 
     <br>
 
     <b>
-    3号 →
-    1号 →
-    4号 →
-    6号 →
-    2号 →
-    5号
+        3号 → 1号 → 4号 → 6号 → 2号 → 5号
     </b>
 
-    <br><br>
-
-    网页最多输出3个推荐位。
-
 </div>
 
-
 </div>
-
 
 
 <script>
 
-/*
-====================================
-721514 六位完整结构模型 V6.0
-====================================
+/* ====================================
+   721514 六位完整结构模型 V6.0
+==================================== */
 
-账号：
-5161482
-
-玩家ID：
-161482
-
-比赛场ID：
-882996
-
-逐位绝对差：
-
-|1-8| = 7
-|6-8| = 2
-|1-2| = 1
-|4-9| = 5
-|8-9| = 1
-|2-6| = 4
-
-所以固定基准：
-
-721514
-====================================
-*/
+const BASE = [7,2,1,5,1,4];
 
 
-const BASE = [
-    7,
-    2,
-    1,
-    5,
-    1,
-    4
-];
-
-
-
-/*
-====================================
-超过3个位同时命中时
-固定推荐优先级
-====================================
-*/
+/* 超过3个命中时的固定优先级 */
 
 const PRIORITY = {
-
     3:1,
-
     1:2,
-
     4:3,
-
     6:4,
-
     2:5,
-
     5:6
-
 };
 
 
-
-/*
-====================================
-辅助函数
-====================================
-*/
-
-
-/*
-最大值
-*/
+/* ====================================
+   基础函数
+==================================== */
 
 function getMax(d){
-
     return Math.max(...d);
-
 }
-
-
-/*
-最小值
-*/
 
 function getMin(d){
-
     return Math.min(...d);
-
 }
-
-
-/*
-跨度
-*/
 
 function getRange(d){
-
-    return (
-        getMax(d)
-        -
-        getMin(d)
-    );
-
+    return getMax(d) - getMin(d);
 }
 
-
-/*
-某个数出现多少次
-*/
-
-function countValue(
-    d,
-    value
-){
-
-    return d.filter(
-        x => x === value
-    ).length;
-
+function countValue(d,value){
+    return d.filter(x => x === value).length;
 }
-
-
-/*
-不同数值种类数量
-*/
 
 function uniqueCount(d){
-
-    return (
-        new Set(d)
-    ).size;
-
+    return new Set(d).size;
 }
-
-
-/*
-前3差总和
-*/
 
 function firstHalfSum(d){
-
-    return (
-        d[0]
-        +
-        d[1]
-        +
-        d[2]
-    );
-
+    return d[0]+d[1]+d[2];
 }
-
-
-/*
-后3差总和
-*/
 
 function secondHalfSum(d){
-
-    return (
-        d[3]
-        +
-        d[4]
-        +
-        d[5]
-    );
-
+    return d[3]+d[4]+d[5];
 }
 
 
-/*
-判断内部谷底
-
-内部位置：
-
-d2
-d3
-d4
-d5
-
-只要某一位：
-
-小于左边
-并且
-小于右边
-
-就算存在内部谷底
-*/
+/* 判断内部谷底 */
 
 function hasInternalValley(d){
 
-    for(
-        let i = 1;
-        i <= 4;
-        i++
-    ){
+    for(let i=1;i<=4;i++){
 
         if(
-
             d[i] < d[i-1]
-
             &&
-
             d[i] < d[i+1]
-
         ){
-
             return true;
-
         }
 
     }
 
     return false;
-
 }
 
 
-
-/*
-====================================
-V6.0 六条冻结规则
-====================================
-*/
+/* ====================================
+   V6.0 六条规则
+==================================== */
 
 const RULES = [
 
+    {
+        seat:1,
 
-/*
-------------------------------------
-1号
+        name:"1号｜六差整体跨度 = 6",
 
-完整六差跨度 = 6
+        description:
+        "max(d1~d6) - min(d1~d6) = 6",
 
-使用：
-最大值 + 最小值
+        stat:
+        "6局｜5正｜5大赢｜0大输｜+3560",
 
-不是某个固定d位置
-------------------------------------
-*/
+        test:d => getRange(d) === 6
+    },
 
-{
 
-    seat:1,
+    {
+        seat:2,
 
-    name:
-    "1号｜六差整体跨度 = 6",
+        name:"2号｜六差整体最大值 ≤ 4",
 
-    description:
-    "max(d1~d6) - min(d1~d6) = 6",
+        description:
+        "max(d1~d6) ≤ 4",
 
-    stat:
-    "6局｜5正｜5大赢｜0大输｜+3560",
+        stat:
+        "5局｜4正｜2大赢｜0大输｜+2050",
 
-    test:d => {
+        test:d => getMax(d) <= 4
+    },
 
-        return (
-            getRange(d)
-            ===
-            6
-        );
 
+    {
+        seat:3,
+
+        name:"3号｜六位完整交替峰谷",
+
+        description:
+        "d1 < d2 > d3 < d4 > d5 < d6",
+
+        stat:
+        "4局｜4正｜3大赢｜0大输｜+3800",
+
+        test:d => {
+
+            return (
+                d[0] < d[1]
+                &&
+                d[1] > d[2]
+                &&
+                d[2] < d[3]
+                &&
+                d[3] > d[4]
+                &&
+                d[4] < d[5]
+            );
+
+        }
+    },
+
+
+    {
+        seat:4,
+
+        name:
+        "4号｜唯一最低点 + 前后半差值平衡",
+
+        description:
+        "最小值只出现1次，并且 |(d1+d2+d3)-(d4+d5+d6)| ≤ 5",
+
+        stat:
+        "5局｜5正｜2大赢｜0大输｜+2080",
+
+        test:d => {
+
+            const min = getMin(d);
+
+            const uniqueMin =
+                countValue(d,min) === 1;
+
+            const balance =
+                Math.abs(
+                    firstHalfSum(d)
+                    -
+                    secondHalfSum(d)
+                ) <= 5;
+
+            return uniqueMin && balance;
+        }
+    },
+
+
+    {
+        seat:5,
+
+        name:
+        "5号｜六差唯一最高点",
+
+        description:
+        "max(d1~d6) 在六差中只出现1次",
+
+        stat:
+        "13局｜8正｜2大赢｜0大输｜+2639",
+
+        test:d => {
+
+            const max = getMax(d);
+
+            return countValue(d,max) === 1;
+        }
+    },
+
+
+    {
+        seat:6,
+
+        name:
+        "6号｜≥4种差值 + 内部谷底",
+
+        description:
+        "六差至少4种不同数值，并且d2~d5至少存在1个内部谷底",
+
+        stat:
+        "7局｜6正｜4大赢｜0大输｜+3400",
+
+        test:d => {
+
+            const enoughVariety =
+                uniqueCount(d) >= 4;
+
+            const valley =
+                hasInternalValley(d);
+
+            return enoughVariety && valley;
+        }
     }
-
-},
-
-
-
-/*
-------------------------------------
-2号
-
-六个差值全部不能超过4
-
-等价于：
-
-六差整体最大值 ≤ 4
-------------------------------------
-*/
-
-{
-
-    seat:2,
-
-    name:
-    "2号｜六差整体最大值 ≤ 4",
-
-    description:
-    "max(d1~d6) ≤ 4",
-
-    stat:
-    "5局｜4正｜2大赢｜0大输｜+2050",
-
-    test:d => {
-
-        return (
-            getMax(d)
-            <=
-            4
-        );
-
-    }
-
-},
-
-
-
-/*
-------------------------------------
-3号
-
-完整六位交替峰谷结构
-
-d1 < d2
-d2 > d3
-d3 < d4
-d4 > d5
-d5 < d6
-
-六个位置全部参与
-------------------------------------
-*/
-
-{
-
-    seat:3,
-
-    name:
-    "3号｜六位完整交替峰谷",
-
-    description:
-    "d1 < d2 > d3 < d4 > d5 < d6",
-
-    stat:
-    "4局｜4正｜3大赢｜0大输｜+3800",
-
-    test:d => {
-
-        return (
-
-            d[0] < d[1]
-
-            &&
-
-            d[1] > d[2]
-
-            &&
-
-            d[2] < d[3]
-
-            &&
-
-            d[3] > d[4]
-
-            &&
-
-            d[4] < d[5]
-
-        );
-
-    }
-
-},
-
-
-
-/*
-------------------------------------
-4号
-
-条件1：
-
-六差中的最小值
-只能出现1次
-
-也就是：
-唯一最低点
-
-
-条件2：
-
-前3差总和
-与
-后3差总和
-
-差距 ≤ 5
-
-
-完整结构：
-
-唯一最低点
-+
-前后两半总体接近
-------------------------------------
-*/
-
-{
-
-    seat:4,
-
-    name:
-    "4号｜唯一最低点 + 前后半差值平衡",
-
-    description:
-    "最小值只出现1次，并且 |(d1+d2+d3)-(d4+d5+d6)| ≤ 5",
-
-    stat:
-    "5局｜5正｜2大赢｜0大输｜+2080",
-
-    test:d => {
-
-        const min =
-            getMin(d);
-
-
-        const uniqueMin =
-            countValue(
-                d,
-                min
-            )
-            ===
-            1;
-
-
-        const balance =
-
-            Math.abs(
-
-                firstHalfSum(d)
-
-                -
-
-                secondHalfSum(d)
-
-            )
-            <=
-            5;
-
-
-        return (
-
-            uniqueMin
-
-            &&
-
-            balance
-
-        );
-
-    }
-
-},
-
-
-
-/*
-------------------------------------
-5号
-
-六差中的最高点
-只能出现1次
-
-不限制：
-
-最高值具体是多少
-
-只判断：
-
-完整六差结构中
-是否只有一个最高峰
-------------------------------------
-*/
-
-{
-
-    seat:5,
-
-    name:
-    "5号｜六差唯一最高点",
-
-    description:
-    "max(d1~d6) 在六差中只出现1次",
-
-    stat:
-    "13局｜8正｜2大赢｜0大输｜+2639",
-
-    test:d => {
-
-        const max =
-            getMax(d);
-
-
-        return (
-
-            countValue(
-                d,
-                max
-            )
-            ===
-            1
-
-        );
-
-    }
-
-},
-
-
-
-/*
-------------------------------------
-6号
-
-条件1：
-
-六差至少出现4种不同数值
-
-
-条件2：
-
-六位完整走势中
-至少存在一个内部谷底
-
-
-内部谷底：
-
-某个d
-同时小于
-左右两边
-------------------------------------
-*/
-
-{
-
-    seat:6,
-
-    name:
-    "6号｜≥4种差值 + 内部谷底",
-
-    description:
-    "六差至少4种不同数值，并且d2~d5至少存在1个内部谷底",
-
-    stat:
-    "7局｜6正｜4大赢｜0大输｜+3400",
-
-    test:d => {
-
-        const enoughVariety =
-
-            uniqueCount(d)
-            >=
-            4;
-
-
-        const valley =
-
-            hasInternalValley(d);
-
-
-        return (
-
-            enoughVariety
-
-            &&
-
-            valley
-
-        );
-
-    }
-
-}
 
 ];
 
 
+/* ====================================
+   插位算法
 
-/*
-====================================
-X插位算法
-====================================
+   房号 ABCDE
 
-原始房号：
+   1号：AABCDE
+   2号：ABBCDE
+   3号：ABCCDE
+   4号：ABCDDE
+   5号：ABCDEE
+   6号：EABCDE
+==================================== */
 
-A B C D E
-
-
-1号：
-X = A
-
-插第1位：
-
-A A B C D E
-
-
-2号：
-X = B
-
-插第2位：
-
-A B B C D E
-
-
-3号：
-X = C
-
-插第3位：
-
-A B C C D E
-
-
-4号：
-X = D
-
-插第4位：
-
-A B C D D E
-
-
-5号：
-X = E
-
-插第5位：
-
-A B C D E E
-
-
-6号：
-
-X = E
-
-但插入第1位：
-
-E A B C D E
-
-====================================
-*/
-
-
-function buildVector(
-    room,
-    seat
-){
+function buildVector(room,seat){
 
     const digits =
-
-        room
-        .split("")
-        .map(Number);
-
+        room.split("").map(Number);
 
     let x;
-
     let insertIndex;
 
+    if(seat <= 5){
 
-    /*
-    1~5号
-    */
+        x = digits[seat-1];
+        insertIndex = seat-1;
 
-    if(
-        seat <= 5
-    ){
+    }else{
 
-        x =
-            digits[
-                seat - 1
-            ];
+        /* 6号特殊：
+           X=E
+           插到第1位
+        */
 
-
-        insertIndex =
-            seat - 1;
-
+        x = digits[4];
+        insertIndex = 0;
     }
 
-
-    /*
-    6号特殊规则
-
-    X = E
-
-    但是插到第1位
-    */
-
-    else{
-
-        x =
-            digits[4];
-
-
-        insertIndex =
-            0;
-
-    }
-
-
-    const vector =
-        digits.slice();
-
+    const vector = digits.slice();
 
     vector.splice(
-
         insertIndex,
-
         0,
-
         x
-
     );
 
-
     return {
-
         vector,
-
         x,
-
         insertIndex
-
     };
-
 }
 
 
+/* ====================================
+   单个位计算
+==================================== */
 
-/*
-====================================
-计算六差
-====================================
-*/
-
-
-function calcSeat(
-    room,
-    seat
-){
+function calcSeat(room,seat){
 
     const built =
-
-        buildVector(
-            room,
-            seat
-        );
-
-
-    /*
-    与721514逐位绝对差
-    */
+        buildVector(room,seat);
 
     const d =
-
         built.vector.map(
-
-            (
-                number,
-                index
-            ) => {
-
-                return Math.abs(
-
-                    number
-
-                    -
-
-                    BASE[index]
-
-                );
-
-            }
-
+            (number,index) =>
+            Math.abs(
+                number - BASE[index]
+            )
         );
-
 
     const rule =
-
         RULES.find(
-
-            item =>
-            item.seat === seat
-
+            item => item.seat === seat
         );
 
-
     const hit =
-
         rule.test(d);
 
-
     return {
-
         seat,
-
-        x:
-        built.x,
-
-        vector:
-        built.vector,
-
+        x:built.x,
+        vector:built.vector,
         d,
-
         hit,
-
         rule
-
     };
-
 }
 
 
-
-/*
-====================================
-计算整个房间
-====================================
-*/
-
+/* ====================================
+   整个房间计算
+==================================== */
 
 function calculateRoom(room){
 
     const all = [];
 
-
-    /*
-    1~6号全部计算
-    */
-
-    for(
-        let seat = 1;
-        seat <= 6;
-        seat++
-    ){
+    for(let seat=1;seat<=6;seat++){
 
         all.push(
-
-            calcSeat(
-                room,
-                seat
-            )
-
+            calcSeat(room,seat)
         );
 
     }
 
-
-    /*
-    找到全部命中
-    */
-
     const hits =
-
         all
-        .filter(
-
-            item =>
-            item.hit
-
-        )
+        .filter(item => item.hit)
         .sort(
-
-            (
-                a,
-                b
-            ) => {
-
-                return (
-
-                    PRIORITY[a.seat]
-
-                    -
-
-                    PRIORITY[b.seat]
-
-                );
-
-            }
-
+            (a,b) =>
+            PRIORITY[a.seat]
+            -
+            PRIORITY[b.seat]
         );
 
-
-    /*
-    最多推荐3个
-    */
+    /* 最多推荐3个 */
 
     const picks =
-
-        hits.slice(
-            0,
-            3
-        );
-
+        hits.slice(0,3);
 
     return {
-
         all,
-
         hits,
-
         picks,
-
         hidden:
-
-            Math.max(
-
-                0,
-
-                hits.length - 3
-
-            )
-
+        Math.max(
+            0,
+            hits.length-3
+        )
     };
-
 }
 
 
-
-/*
-====================================
-点击计算
-====================================
-*/
-
+/* ====================================
+   点击计算
+==================================== */
 
 function run(){
 
     const input =
-
         document.getElementById(
             "roomInput"
         );
 
-
     const room =
-
         input.value
-        .replace(
-            /\D/g,
-            ""
-        )
-        .slice(
-            0,
-            5
-        );
+        .replace(/\D/g,"")
+        .slice(0,5);
 
+    input.value = room;
 
-    input.value =
-        room;
-
-
-    if(
-        room.length !== 5
-    ){
+    if(room.length !== 5){
 
         showError(
-
             "请输入完整的5位数字房号。"
-
         );
 
         return;
-
     }
 
-
     const result =
-
-        calculateRoom(
-            room
-        );
-
+        calculateRoom(room);
 
     renderResult(
         room,
         result
     );
 
-
     saveHistory(
         room,
         result
     );
 
-
     renderHistory();
-
 }
 
 
-
-/*
-====================================
-错误提示
-====================================
-*/
-
+/* ====================================
+   错误
+==================================== */
 
 function showError(message){
 
     const box =
-
         document.getElementById(
             "result"
         );
 
-
     box.className =
         "result show";
-
 
     box.innerHTML = `
 
         <span class="badge no">
-
             输入错误
-
         </span>
 
-
         <div class="big">
-
             不处理
-
         </div>
 
-
         <div class="desc">
-
             ${message}
-
         </div>
 
     `;
-
 }
 
 
+/* ====================================
+   显示结果
+==================================== */
 
-/*
-====================================
-结果显示
-====================================
-*/
-
-
-function renderResult(
-    room,
-    result
-){
+function renderResult(room,result){
 
     const box =
-
         document.getElementById(
             "result"
         );
-
 
     box.className =
         "result show";
 
 
-    /*
-    没有推荐
-    */
+    /* 没有任何命中 */
 
-    if(
-        result.picks.length === 0
-    ){
+    if(result.picks.length === 0){
 
         box.innerHTML = `
 
-        <span class="badge no">
+            <span class="badge no">
+                ❌ 跳过
+            </span>
 
-            ❌ 跳过
+            <div class="big">
+                ${room}
+            </div>
 
-        </span>
+            <div class="desc">
 
+                当前1～6号均未命中
+                V6.0完整结构条件。
 
-        <div class="big">
+                <br>
 
-            ${room}
+                这局不推荐。
 
-        </div>
+            </div>
 
-
-        <div class="desc">
-
-            当前1～6号
-            均未命中
-            V6.0完整结构条件。
-
-            <br>
-
-            这局不推荐。
-
-        </div>
-
-
-        ${debugTable(
-            result.all
-        )}
+            ${debugTable(result.all)}
 
         `;
 
-
         return;
-
     }
 
 
-
-    /*
-    推荐位子
-    */
-
     const names =
-
         result.picks
         .map(
-
-            item =>
-            item.seat + "号"
-
+            item => item.seat+"号"
         )
         .join("、");
 
 
-
-    /*
-    推荐卡片
-    */
-
     const cards =
-
         result.picks
         .map(
-
-            (
-                item,
-                index
-            ) => `
-
+            (item,index) => `
 
             <div
-                class="
-                pick
-                ${
-                    index === 0
+                class="pick ${
+                    index===0
                     ?
                     "main"
                     :
                     ""
-                }
-                "
+                }"
             >
-
 
                 <div class="pick-title">
 
                     ${
-                        index === 0
+                        index===0
                         ?
                         "🔥 第一推荐"
                         :
-                        "⚡ 推荐"
-                        +
-                        (index + 1)
+                        "⚡ 推荐"+(index+1)
                     }
 
-                    ｜
-
-                    ${item.seat}号
+                    ｜${item.seat}号
 
                 </div>
-
 
                 <div class="pick-rule">
 
-
                     <span class="badge gold">
-
                         完整结构命中
-
                     </span>
 
-
                     <br>
-
 
                     X：
-
-                    <b>
-                        ${item.x}
-                    </b>
-
+                    <b>${item.x}</b>
 
                     <br>
-
 
                     插位后：
-
                     <b>
-
                         ${item.vector.join("")}
-
                     </b>
-
 
                     <br>
 
-
                     六差：
-
                     <b>
-
                         ${item.d.join(" / ")}
-
                     </b>
-
 
                     <br><br>
 
-
                     <b>
-
                         ${item.rule.name}
-
                     </b>
 
-
                     <br>
-
 
                     ${item.rule.description}
 
-
                     <br>
 
-
                     历史：
-
                     ${item.rule.stat}
-
 
                 </div>
 
-
             </div>
 
-
             `
-
         )
         .join("");
 
 
-
-    /*
-    超过3个命中
-    */
-
     let hiddenText = "";
 
-
-    if(
-        result.hidden > 0
-    ){
+    if(result.hidden > 0){
 
         hiddenText = `
 
-        <div
-            class="desc"
-            style="margin-top:10px"
-        >
+            <div
+                class="desc"
+                style="margin-top:10px"
+            >
 
-            另有
+                另有
+                <b>${result.hidden}</b>
+                个位置命中。
 
-            <b>
-            ${result.hidden}
-            </b>
+                <br>
 
-            个位置命中。
+                按固定优先级
+                只输出前3个推荐位。
 
-            <br>
-
-            按固定优先级
-            只输出前3个推荐位。
-
-        </div>
+            </div>
 
         `;
-
     }
-
 
 
     box.innerHTML = `
 
-
         <span class="badge ok">
-
             🔥 建议进房
-
         </span>
-
 
         <span class="badge gold">
-
             V6.0 完整结构
-
         </span>
 
-
         <div class="big">
-
-            推荐：
-
-            ${names}
-
+            推荐：${names}
         </div>
-
 
         <div class="pick-list">
-
             ${cards}
-
         </div>
 
-
         ${hiddenText}
-
 
         <div
             class="desc"
@@ -2065,81 +1266,54 @@ function renderResult(
         >
 
             房号：
-
-            <b>
-                ${room}
-            </b>
+            <b>${room}</b>
 
             ｜
 
             固定基准：
-
-            <b>
-                721514
-            </b>
+            <b>721514</b>
 
         </div>
 
-
-        ${debugTable(
-            result.all
-        )}
+        ${debugTable(result.all)}
 
     `;
-
 }
 
 
-
-/*
-====================================
-显示1~6号完整计算
-====================================
-*/
-
+/* ====================================
+   1～6号完整计算明细
+==================================== */
 
 function debugTable(all){
 
     const rows =
-
         all
         .map(
-
             item => `
 
             <tr>
 
                 <td>
-
                     ${item.seat}号
-
                 </td>
 
-
                 <td>
-
                     ${item.vector.join("")}
-
                 </td>
-
 
                 <td>
-
                     ${item.d.join("、")}
-
                 </td>
-
 
                 <td
-                    class="
-                    ${
+                    class="${
                         item.hit
                         ?
                         "hit"
                         :
                         "miss"
-                    }
-                    "
+                    }"
                 >
 
                     ${
@@ -2152,113 +1326,74 @@ function debugTable(all){
 
                 </td>
 
-
                 <td>
-
                     ${item.rule.name}
-
                 </td>
 
             </tr>
 
             `
-
         )
         .join("");
 
 
-
     return `
 
-    <div class="debug">
+        <div class="debug">
 
-        <table
-            style="min-width:780px"
-        >
+            <table style="min-width:780px">
 
-            <thead>
+                <thead>
 
-                <tr>
+                    <tr>
 
-                    <th>
-                        位子
-                    </th>
+                        <th>位子</th>
 
-                    <th>
-                        插位后6位
-                    </th>
+                        <th>插位后6位</th>
 
-                    <th>
-                        d1～d6
-                    </th>
+                        <th>d1～d6</th>
 
-                    <th>
-                        判定
-                    </th>
+                        <th>判定</th>
 
-                    <th>
-                        V6.0规则
-                    </th>
+                        <th>V6.0规则</th>
 
-                </tr>
+                    </tr>
 
-            </thead>
+                </thead>
 
+                <tbody>
+                    ${rows}
+                </tbody>
 
-            <tbody>
+            </table>
 
-                ${rows}
-
-            </tbody>
-
-
-        </table>
-
-    </div>
+        </div>
 
     `;
-
 }
 
 
-
-/*
-====================================
-显示六条规则
-====================================
-*/
-
+/* ====================================
+   显示规则
+==================================== */
 
 function renderRules(){
 
     const box =
-
         document.getElementById(
             "comboList"
         );
 
-
     box.innerHTML =
-
         RULES
         .map(
-
             rule => `
 
-
-            <div
-                class="combo special"
-            >
-
+            <div class="combo special">
 
                 <div class="name">
-
-                    🔥
-
-                    ${rule.name}
-
+                    🔥 ${rule.name}
                 </div>
-
 
                 <div class="rule">
 
@@ -2267,74 +1402,47 @@ function renderRules(){
                     <br>
 
                     历史：
-
                     ${rule.stat}
 
                 </div>
 
-
             </div>
 
-
             `
-
         )
         .join("");
-
 }
 
 
-
-/*
-====================================
-本地查询历史
-====================================
-*/
-
+/* ====================================
+   本地查询历史
+==================================== */
 
 const HISTORY_KEY =
-
-"5161482_lobster_721514_v60";
-
+    "5161482_lobster_721514_v60";
 
 
-function saveHistory(
-    room,
-    result
-){
+function saveHistory(room,result){
 
     const recommendation =
-
         result.picks.length
-
         ?
-
         result.picks
         .map(
-
-            item =>
-            item.seat + "号"
-
+            item => item.seat+"号"
         )
         .join("、")
-
         :
-
         "跳过";
 
 
     const list =
-
         JSON.parse(
-
             localStorage.getItem(
                 HISTORY_KEY
             )
-
             ||
-
             "[]"
-
         );
 
 
@@ -2357,85 +1465,58 @@ function saveHistory(
         HISTORY_KEY,
 
         JSON.stringify(
-
-            list.slice(
-                0,
-                50
-            )
-
+            list.slice(0,50)
         )
 
     );
-
 }
 
 
-
-/*
-====================================
-显示查询历史
-====================================
-*/
-
+/* ====================================
+   显示历史
+==================================== */
 
 function renderHistory(){
 
     const box =
-
         document.getElementById(
             "historyBox"
         );
 
 
     const list =
-
         JSON.parse(
-
             localStorage.getItem(
                 HISTORY_KEY
             )
-
             ||
-
             "[]"
-
         );
 
 
-    if(
-        list.length === 0
-    ){
+    if(list.length===0){
 
         box.innerHTML =
             "暂无记录";
 
         return;
-
     }
 
 
     box.innerHTML =
-
         list
         .map(
-
             item => `
-
 
             <div class="history-item">
 
-
                 <div class="history-left">
-
                     ${item.room}
-
                 </div>
-
 
                 <div class="history-right">
 
                     推荐：
-
                     ${item.result}
 
                     <br>
@@ -2444,25 +1525,17 @@ function renderHistory(){
 
                 </div>
 
-
             </div>
 
-
             `
-
         )
         .join("");
-
 }
 
 
-
-/*
-====================================
-清空查询历史
-====================================
-*/
-
+/* ====================================
+   清空历史
+==================================== */
 
 function clearHistory(){
 
@@ -2470,149 +1543,79 @@ function clearHistory(){
         HISTORY_KEY
     );
 
-
     renderHistory();
-
 }
 
 
-
-/*
-====================================
-限制输入只能5位数字
-====================================
-*/
-
+/* ====================================
+   输入限制
+==================================== */
 
 document
-.getElementById(
-    "roomInput"
-)
+.getElementById("roomInput")
 .addEventListener(
-
     "input",
-
     event => {
 
         event.target.value =
-
             event.target.value
-            .replace(
-                /\D/g,
-                ""
-            )
-            .slice(
-                0,
-                5
-            );
+            .replace(/\D/g,"")
+            .slice(0,5);
 
     }
-
 );
 
 
-
-/*
-====================================
-回车直接计算
-====================================
-*/
-
+/* 回车计算 */
 
 document
-.getElementById(
-    "roomInput"
-)
+.getElementById("roomInput")
 .addEventListener(
-
     "keydown",
-
     event => {
 
-        if(
-            event.key === "Enter"
-        ){
-
+        if(event.key==="Enter"){
             run();
-
         }
 
     }
-
 );
 
 
-
-/*
-====================================
-初始化
-====================================
-*/
-
+/* ====================================
+   初始化
+==================================== */
 
 renderRules();
-
 renderHistory();
 
 
-
-/*
-====================================
-开发者自检
-
-这里不是推荐规则。
-
-只是用于防止以后修改代码时
-不小心破坏核心计算逻辑。
-====================================
-*/
-
+/* ====================================
+   核心算法自检
+==================================== */
 
 function selfCheck(){
 
-    /*
-    检查721514基准
-    */
+    /* 基准检查 */
 
-    const expectedBase =
-        "721514";
-
-
-    const currentBase =
-        BASE.join("");
-
-
-    if(
-        currentBase
-        !==
-        expectedBase
-    ){
+    if(BASE.join("") !== "721514"){
 
         console.error(
-            "V6.0自检失败：基准不是721514"
+            "V6.0自检失败：基准错误"
         );
 
     }
 
 
-    /*
-    检查6号插位方式
+    /* 6号插位检查
 
-    例如房号：
-
-    12345
-
-    6号：
-
-    X=E=5
-
-    应得到：
-
-    512345
+       12345
+       E=5
+       应为：
+       512345
     */
 
     const test6 =
-
         buildVector(
             "12345",
             6
@@ -2621,37 +1624,25 @@ function selfCheck(){
         .join("");
 
 
-    if(
-        test6 !== "512345"
-    ){
+    if(test6 !== "512345"){
 
         console.error(
-
-            "V6.0自检失败：",
-
-            "6号插位错误",
-
+            "V6.0自检失败：6号插位错误",
             test6
-
         );
 
     }
 
 
-    /*
-    检查4号插位
+    /* 4号插位检查
 
-    12345
-
-    D=4
-
-    应得到：
-
-    123445
+       12345
+       D=4
+       应为：
+       123445
     */
 
     const test4 =
-
         buildVector(
             "12345",
             4
@@ -2660,29 +1651,20 @@ function selfCheck(){
         .join("");
 
 
-    if(
-        test4 !== "123445"
-    ){
+    if(test4 !== "123445"){
 
         console.error(
-
-            "V6.0自检失败：",
-
-            "4号插位错误",
-
+            "V6.0自检失败：4号插位错误",
             test4
-
         );
 
     }
 
 
     console.log(
-        "721514 六位完整结构模型 V6.0 自检完成"
+        "721514 V6.0 自检完成"
     );
-
 }
-
 
 selfCheck();
 
