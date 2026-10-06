@@ -1,318 +1,297 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>5161482｜龙虾 五层完整结构模型 v4.2</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>5161482｜龙虾 721514 插位模型 v5.0</title>
 
 <style>
-:root{
-  --bg:#f7f3ec;
-  --card:#fffaf2;
-  --card2:#fff;
-  --text:#2b2118;
-  --muted:#8a7664;
-  --red:#d94b3d;
-  --red2:#b8342b;
-  --green:#1f9d67;
-  --orange:#d98c22;
-  --blue:#315eae;
-  --border:#eadccc;
-  --shadow:0 14px 36px rgba(70,48,28,.12);
+*{
+    box-sizing:border-box;
 }
 
-*{box-sizing:border-box}
-
 body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top left,rgba(217,75,61,.12),transparent 28%),
-    radial-gradient(circle at bottom right,rgba(217,140,34,.12),transparent 26%),
-    var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
-  padding:22px 14px 42px;
+    margin:0;
+    padding:20px;
+    background:#0b0d12;
+    color:#f3f4f6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
 }
 
 .wrap{
-  max-width:900px;
-  margin:0 auto;
+    max-width:900px;
+    margin:auto;
 }
 
 .hero{
-  text-align:center;
-  margin-bottom:18px;
+    padding:22px;
+    border-radius:18px;
+    background:#151922;
+    margin-bottom:16px;
+    border:1px solid #292f3b;
 }
 
 .title{
-  font-size:28px;
-  font-weight:900;
-  margin:6px 0 8px;
+    font-size:25px;
+    font-weight:800;
 }
 
 .sub{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.7;
+    margin-top:10px;
+    color:#9ca3af;
+    line-height:1.7;
+    font-size:14px;
 }
 
 .panel{
-  background:rgba(255,250,242,.92);
-  border:1px solid var(--border);
-  border-radius:24px;
-  box-shadow:var(--shadow);
-  padding:18px;
-  margin-bottom:16px;
-}
-
-.input-row{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  justify-content:center;
-}
-
-input{
-  width:min(100%,360px);
-  height:58px;
-  border:2px solid #e7d2c0;
-  border-radius:18px;
-  outline:none;
-  text-align:center;
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:6px;
-}
-
-input:focus{
-  border-color:var(--red);
-}
-
-button{
-  border:none;
-  cursor:pointer;
-  font-weight:900;
-}
-
-.btn-main{
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  background:linear-gradient(145deg,var(--red),var(--red2));
-  color:white;
-  font-size:18px;
-  box-shadow:0 10px 22px rgba(217,75,61,.34);
-}
-
-.btn-small{
-  padding:9px 13px;
-  border-radius:12px;
-  background:#f0e2d3;
-  color:#6b5644;
-}
-
-.result{
-  display:none;
-  margin-top:16px;
-  background:#fff;
-  border-radius:20px;
-  border:1px solid var(--border);
-  padding:16px;
-}
-
-.result.show{
-  display:block;
-}
-
-.badge{
-  display:inline-flex;
-  padding:7px 10px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:900;
-  margin:3px;
-}
-
-.badge.ok{
-  background:rgba(31,157,103,.12);
-  color:var(--green);
-}
-
-.badge.no{
-  background:rgba(217,75,61,.10);
-  color:var(--red2);
-}
-
-.badge.blue{
-  background:rgba(60,120,220,.10);
-  color:var(--blue);
-}
-
-.badge.gold{
-  background:rgba(217,140,34,.13);
-  color:#a66710;
-}
-
-.big{
-  font-size:34px;
-  font-weight:1000;
-  margin:10px 0;
-}
-
-.desc{
-  color:var(--muted);
-  line-height:1.7;
-  font-size:14px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-top:12px;
-}
-
-.stat{
-  background:#fff8ef;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:12px 8px;
-  text-align:center;
-}
-
-.stat .v{
-  font-size:20px;
-  font-weight:1000;
-}
-
-.stat .k{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:12px;
+    background:#151922;
+    border:1px solid #292f3b;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
 }
 
 .section-title{
-  font-weight:1000;
-  font-size:18px;
-  margin-bottom:12px;
+    font-size:17px;
+    font-weight:800;
+    margin-bottom:14px;
 }
 
-.combo-list,
+.input-row{
+    display:flex;
+    gap:10px;
+}
+
+input{
+    flex:1;
+    height:54px;
+    border-radius:12px;
+    border:1px solid #374151;
+    background:#0f131b;
+    color:white;
+    padding:0 16px;
+    font-size:22px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#f59e0b;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+.btn-main{
+    height:54px;
+    padding:0 24px;
+    border-radius:12px;
+    background:#f59e0b;
+    color:#111827;
+    font-size:16px;
+    font-weight:800;
+}
+
+.btn-small{
+    padding:7px 12px;
+    border-radius:8px;
+    background:#2b313d;
+    color:#ddd;
+}
+
+.result{
+    display:none;
+    margin-top:16px;
+}
+
+.result.show{
+    display:block;
+}
+
+.big{
+    font-size:28px;
+    font-weight:900;
+    margin:15px 0;
+}
+
+.badge{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:800;
+    margin-right:6px;
+}
+
+.badge.ok{
+    background:#064e3b;
+    color:#6ee7b7;
+}
+
+.badge.no{
+    background:#4c1d1d;
+    color:#fca5a5;
+}
+
+.badge.gold{
+    background:#4a3511;
+    color:#fcd34d;
+}
+
 .pick-list{
-  display:grid;
-  gap:10px;
+    display:grid;
+    gap:10px;
 }
 
-.combo,
 .pick{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:12px;
-}
-
-.combo.special{
-  background:#fffaf0;
-  border-color:rgba(217,140,34,.40);
-}
-
-.combo .name,
-.pick-title{
-  font-weight:1000;
-  margin-bottom:6px;
-}
-
-.combo .rule,
-.pick-rule{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.65;
+    background:#10141c;
+    border:1px solid #303744;
+    border-radius:14px;
+    padding:15px;
 }
 
 .pick.main{
-  border-color:rgba(217,75,61,.42);
-  background:#fff4ee;
+    border-color:#f59e0b;
+}
+
+.pick-title{
+    font-size:19px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.pick-rule{
+    color:#cbd5e1;
+    line-height:1.8;
+    font-size:14px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.stat{
+    background:#10141c;
+    border-radius:12px;
+    padding:14px;
+    text-align:center;
+}
+
+.stat .v{
+    font-size:21px;
+    font-weight:900;
+}
+
+.stat .k{
+    color:#8f99a8;
+    margin-top:5px;
+    font-size:12px;
+}
+
+.combo-list{
+    display:grid;
+    gap:10px;
+}
+
+.combo{
+    background:#10141c;
+    border-radius:12px;
+    padding:14px;
+    border:1px solid #303744;
+}
+
+.combo.special{
+    border-left:4px solid #f59e0b;
+}
+
+.combo .name{
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.combo .rule{
+    color:#9ca3af;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.desc{
+    color:#9ca3af;
+    line-height:1.7;
+    font-size:13px;
 }
 
 .debug{
-  margin-top:12px;
-  overflow-x:auto;
+    margin-top:18px;
+    overflow-x:auto;
 }
 
 table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:1100px;
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
 }
 
 th,td{
-  padding:9px 8px;
-  border-bottom:1px solid #f0e2d3;
-  font-size:12px;
-  text-align:center;
-  white-space:nowrap;
+    padding:9px;
+    border-bottom:1px solid #2b313d;
+    text-align:left;
 }
 
 th{
-  background:#fff1e1;
+    color:#9ca3af;
 }
 
 .history-item{
-  display:flex;
-  justify-content:space-between;
-  padding:10px 0;
-  border-bottom:1px dashed #e4d3c3;
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid #292f3b;
 }
 
 .history-left{
-  font-weight:900;
+    font-size:17px;
+    font-weight:800;
 }
 
 .history-right{
-  color:var(--muted);
-  text-align:right;
-  font-size:13px;
+    text-align:right;
+    color:#9ca3af;
+    font-size:12px;
+    line-height:1.5;
 }
 
 .footer-note{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.7;
+    color:#6b7280;
+    font-size:12px;
+    line-height:1.8;
+    padding:8px;
 }
 
-@media(max-width:620px){
+@media(max-width:650px){
 
-  body{
-    padding:16px 10px 34px;
-  }
+    body{
+        padding:12px;
+    }
 
-  .title{
-    font-size:23px;
-  }
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-  .panel{
-    padding:14px;
-  }
+    .title{
+        font-size:21px;
+    }
 
-  input{
-    height:56px;
-    font-size:25px;
-  }
+    .input-row{
+        flex-direction:column;
+    }
 
-  .btn-main{
-    width:64px;
-    height:64px;
-  }
-
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .big{
-    font-size:26px;
-  }
+    .btn-main{
+        width:100%;
+    }
 }
 </style>
 </head>
@@ -323,214 +302,193 @@ th{
 
 <div class="hero">
 
-<div class="title">
-🦞 5161482｜龙虾 五层完整结构模型 v4.2
-</div>
+    <div class="title">
+        🦞 5161482｜龙虾 721514插位模型 v5.0
+    </div>
 
-<div class="sub">
-94局历史样本｜自动回测
-<br>
-差值门票 → 精确次数 → 一级S/L → 二级相对结构
-<br>
-<b>输入房号 → 自动扫描1～6号 → 最多推荐3个位</b>
-</div>
-
-</div>
-
-
-<div class="panel">
-
-<div class="section-title">
-输入5位房号
-</div>
-
-<div class="input-row">
-
-<input
-id="roomInput"
-type="tel"
-inputmode="numeric"
-maxlength="5"
-placeholder="例如 86235"
-autocomplete="off"
-/>
-
-<button
-class="btn-main"
-onclick="run()"
->
-开干
-</button>
-
-</div>
-
-<div
-id="result"
-class="result"
-></div>
+    <div class="sub">
+        玩家ID：161482<br>
+        比赛场ID：882996<br>
+        两ID逐位绝对差基准：
+        <b>721514</b>
+        <br><br>
+        94局训练样本｜6个位子冻结条件
+    </div>
 
 </div>
 
 
 <div class="panel">
 
-<div class="section-title">
-5161482 龙虾｜自动历史回测
-</div>
+    <div class="section-title">
+        输入5位房号
+    </div>
 
-<div class="grid">
+    <div class="input-row">
 
-<div class="stat">
-<div class="v" id="stSample">--</div>
-<div class="k">总样本</div>
-</div>
+        <input
+            id="roomInput"
+            type="tel"
+            inputmode="numeric"
+            maxlength="5"
+            placeholder="例如 26047"
+            autocomplete="off"
+        >
 
-<div class="stat">
-<div class="v" id="stHits">--</div>
-<div class="k">模型命中</div>
-</div>
+        <button
+            class="btn-main"
+            onclick="run()"
+        >
+            计算
+        </button>
 
-<div class="stat">
-<div class="v" id="stHitRate">--</div>
-<div class="k">出手率</div>
-</div>
+    </div>
 
-<div class="stat">
-<div class="v" id="stWinRate">--</div>
-<div class="k">样本内胜率</div>
-</div>
-
-<div class="stat">
-<div class="v" id="stRecord">--</div>
-<div class="k">胜负结构</div>
-</div>
-
-<div class="stat">
-<div class="v" id="stNet">--</div>
-<div class="k">历史净分</div>
-</div>
-
-<div class="stat">
-<div class="v" id="stBigWin">--</div>
-<div class="k">大赢 ≥ +500</div>
-</div>
-
-<div class="stat">
-<div class="v" id="stBigLoss">--</div>
-<div class="k">大输 ≤ -400</div>
-</div>
-
-<div class="stat">
-<div class="v" id="stBigWinRate">--</div>
-<div class="k">大赢率</div>
-</div>
-
-<div class="stat">
-<div class="v" id="stBigLossRate">--</div>
-<div class="k">大输率</div>
-</div>
-
-<div class="stat">
-<div class="v" id="stMin">--</div>
-<div class="k">最小命中收益</div>
-</div>
-
-<div class="stat">
-<div class="v" id="stAvg">--</div>
-<div class="k">平均每次命中</div>
-</div>
-
-</div>
-
-<div class="desc" style="margin-top:14px">
-
-<b>一级结构：</b>
-差0～4=S，差5～9=L
-
-<br>
-
-<b>二级结构：</b>
-四差内部按从小到大进行密集排名。
-
-<br>
-
-例如：
-
-0 / 2 / 2 / 3
-→
-1223
-
-<br><br>
-
-<b>
-所有统计均由下方94条原始战绩自动计算。
-</b>
-
-</div>
+    <div
+        id="result"
+        class="result"
+    ></div>
 
 </div>
 
 
 <div class="panel">
 
-<div class="section-title">
-🔥 五层完整规则池
-</div>
+    <div class="section-title">
+        冻结规则历史回测
+    </div>
 
-<div
-id="comboList"
-class="combo-list"
-></div>
+    <div class="grid">
+
+        <div class="stat">
+            <div class="v">38次</div>
+            <div class="k">历史命中</div>
+        </div>
+
+        <div class="stat">
+            <div class="v">31次</div>
+            <div class="k">正收益</div>
+        </div>
+
+        <div class="stat">
+            <div class="v">81.6%</div>
+            <div class="k">正收益率</div>
+        </div>
+
+        <div class="stat">
+            <div class="v">+19,060</div>
+            <div class="k">累计净分</div>
+        </div>
+
+        <div class="stat">
+            <div class="v">19次</div>
+            <div class="k">大赢 ≥500</div>
+        </div>
+
+        <div class="stat">
+            <div class="v">0次</div>
+            <div class="k">大输 ≤-400</div>
+        </div>
+
+        <div class="stat">
+            <div class="v">+502</div>
+            <div class="k">平均每次命中</div>
+        </div>
+
+        <div class="stat">
+            <div class="v">94局</div>
+            <div class="k">训练样本</div>
+        </div>
+
+    </div>
+
+    <div
+        class="desc"
+        style="margin-top:14px"
+    >
+        注意：以上属于94局训练集回测，
+        不代表未来真实胜率。
+        当前规则已经冻结，新战绩用于样本外验证。
+    </div>
 
 </div>
 
 
 <div class="panel">
 
-<div class="section-title">
+    <div class="section-title">
+        🔥 当前6个位子冻结条件
+    </div>
 
-查询历史
-
-<button
-class="btn-small"
-onclick="clearHistory()"
-style="float:right"
->
-清空
-</button>
+    <div
+        id="comboList"
+        class="combo-list"
+    ></div>
 
 </div>
 
-<div
-id="historyBox"
-class="desc"
->
-暂无记录
-</div>
+
+<div class="panel">
+
+    <div class="section-title">
+
+        查询历史
+
+        <button
+            class="btn-small"
+            onclick="clearHistory()"
+            style="float:right"
+        >
+            清空
+        </button>
+
+    </div>
+
+    <div
+        id="historyBox"
+        class="desc"
+    >
+        暂无记录
+    </div>
 
 </div>
 
 
 <div class="footer-note">
 
-ABCDE
+基准算法：
 
 <br>
 
-1号=A｜
-2号=B｜
-3号=C｜
-4号=D｜
-5号=E｜
-6号=E
+|161482 − 882996|
+=
+721514
+
+<br><br>
+
+1号：X取A，插第1位<br>
+2号：X取B，插第2位<br>
+3号：X取C，插第3位<br>
+4号：X取D，插第4位<br>
+5号：X取E，插第5位<br>
+6号：X取E，但插第1位
+
+<br><br>
+
+生成6位数以后，与721514逐位计算绝对差 d1～d6。
+
+<br><br>
+
+如果同时超过3个位子命中，
+固定优先级：
 
 <br>
 
-一级S/L + 二级相对结构必须同时成立。
+3号 → 1号 → 4号 → 6号 → 2号 → 5号
 
-<br>
+<br><br>
 
-最多推荐3个位。
+网页最多输出3个推荐位置。
 
 </div>
 
@@ -539,3170 +497,1139 @@ ABCDE
 
 <script>
 
-/*
-====================================================
-基础统计对象
+/* ================================
+   固定基准
+================================ */
 
-实际数字由 autoBacktest() 自动覆盖
-====================================================
-*/
+const BASE = [7,2,1,5,1,4];
 
-const MODEL_STAT={
 
-sample:0,
+/* ================================
+   多位置同时命中时的固定优先级
+================================ */
 
-hitCount:0,
+const PRIORITY = {
 
-hitRate:"0%",
+    3:1,
 
-winRate:"0%",
+    1:2,
 
-record:"0胜0负",
+    4:3,
 
-net:"0",
+    6:4,
 
-bigWin:"0局",
+    2:5,
 
-bigWinRate:"0%",
-
-bigLoss:"0局",
-
-bigLossRate:"0%",
-
-maxLoss:"0",
-
-average:"0"
+    5:6
 
 };
 
 
-/*
-====================================================
-座位映射
-====================================================
-*/
-
-function getSeatXPosition(seat){
-
-if(seat===1) return "A";
-
-if(seat===2) return "B";
-
-if(seat===3) return "C";
-
-if(seat===4) return "D";
-
-return "E";
-
-}
-
-
-/*
-====================================================
-计数
-====================================================
-*/
-
-function countMap(arr){
-
-const map={};
-
-arr.forEach(v=>{
-
-map[v]=(map[v]||0)+1;
-
-});
-
-return map;
-
-}
-
-
-/*
-====================================================
-分析房号
-====================================================
-*/
-
-function analyzeRoom(roomNumber){
-
-const digits=
-roomNumber
-.split("")
-.map(Number);
-
-const [A,B,C,D,E]=digits;
-
-return{
-
-room:roomNumber,
-
-digits,
-
-positions:[
-"A",
-"B",
-"C",
-"D",
-"E"
-],
-
-A,
-B,
-C,
-D,
-E,
-
-hasZero:
-digits.includes(0),
-
-hasRepeat:
-Object
-.values(
-countMap(digits)
-)
-.some(
-v=>v>=2
-)
-
-};
-
-}
-
-
-/*
-====================================================
-计算四差
-====================================================
-*/
-
-function getSeatDiffs(room,seat){
-
-const xPos=
-getSeatXPosition(seat);
-
-const x=
-room[xPos];
-
-const diffs=[];
-
-
-room.positions.forEach(pos=>{
-
-if(pos===xPos){
-return;
-}
-
-const value=
-room[pos];
-
-diffs.push({
-
-pos,
-
-value,
-
-absDiff:
-Math.abs(
-x-value
-),
-
-signedDiff:
-x-value
-
-});
-
-});
-
-
-return{
-
-seat,
-
-xPos,
-
-x,
-
-diffs,
-
-allDiffs:
-diffs.map(
-d=>d.absDiff
-)
-
-};
-
-}
-
-
-/*
-====================================================
-差值次数
-====================================================
-*/
-
-function countAbsDiff(
-room,
-seat,
-diff
-){
-
-return getSeatDiffs(
-room,
-seat
-)
-.allDiffs
-.filter(
-v=>v===diff
-)
-.length;
-
-}
-
-
-/*
-====================================================
-存在差X
-====================================================
-*/
-
-function hasDiff(
-room,
-seat,
-diff
-){
-
-return countAbsDiff(
-room,
-seat,
-diff
-)>=1;
-
-}
-
-
-/*
-====================================================
-单差
-====================================================
-*/
-
-function hasSingleDiff(
-room,
-seat,
-diff
-){
-
-return countAbsDiff(
-room,
-seat,
-diff
-)===1;
-
-}
-
-
-/*
-====================================================
-双差
-====================================================
-*/
-
-function hasExactDoubleDiff(
-room,
-seat,
-diff
-){
-
-return countAbsDiff(
-room,
-seat,
-diff
-)===2;
-
-}
-
-
-/*
-====================================================
-多个差值同时存在
-====================================================
-*/
-
-function hasDiffCombo(
-room,
-seat,
-diffs
-){
-
-return diffs.every(
-diff=>
-hasDiff(
-room,
-seat,
-diff
-)
-);
-
-}
-
-
-/*
-====================================================
-一级 S/L
-====================================================
-*/
-
-function getSL(
-room,
-seat
-){
-
-const diffs=
-getSeatDiffs(
-room,
-seat
-).allDiffs;
-
-
-const shape=
-diffs
-.map(
-d=>
-d<=4
-?
-"S"
-:
-"L"
-)
-.join("");
-
-
-const S=
-[...shape]
-.filter(
-v=>v==="S"
-)
-.length;
-
-
-const L=
-4-S;
-
-
-return{
-
-S,
-
-L,
-
-code:
-`${S}S${L}L`,
-
-shape
-
-};
-
-}
-
-
-/*
-====================================================
-二级相对结构
-
-采用密集排名：
-
-最小值=1
-
-第二档=2
-
-第三档=3
-
-第四档=4
-
-相同差值使用同一个等级
-====================================================
-*/
-
-function getRelativeCode(
-room,
-seat
-){
-
-const diffs=
-getSeatDiffs(
-room,
-seat
-).allDiffs;
-
-
-const levels=
-[
-...new Set(diffs)
-]
-.sort(
-(a,b)=>a-b
-);
-
-
-return diffs
-.map(
-v=>
-levels.indexOf(v)+1
-)
-.join("");
-
-}
-
-
-/*
-====================================================
-次数结构
-====================================================
-*/
-
-function getCountType(
-room,
-seat
-){
-
-const vals=
-Object
-.values(
-
-countMap(
-
-getSeatDiffs(
-room,
-seat
-).allDiffs
-
-)
-
-)
-.sort(
-(a,b)=>b-a
-);
-
-
-return vals.join("+");
-
-}
-
-
-/*
-====================================================
-全异
-====================================================
-*/
-
-function isAllDistinct(
-room,
-seat
-){
-
-return Object
-.keys(
-
-countMap(
-
-getSeatDiffs(
-room,
-seat
-).allDiffs
-
-)
-
-)
-.length===4;
-
-}
-
-
-/*
-====================================================
-一级排列判断
-====================================================
-*/
-
-function isSLShape(
-room,
-seat,
-shape
-){
-
-return getSL(
-room,
-seat
-).shape===shape;
-
-}
-
-
-/*
-====================================================
-二级结构判断
-====================================================
-*/
-
-function isRelative(
-room,
-seat,
-codes
-){
-
-const list=
-Array.isArray(codes)
-?
-codes
-:
-[codes];
-
-
-return list.includes(
-
-getRelativeCode(
-room,
-seat
-)
-
-);
-
-}
-
-
-/*
-====================================================
-次数型判断
-====================================================
-*/
-
-function isCountType(
-room,
-seat,
-type
-){
-
-return getCountType(
-room,
-seat
-)===type;
-
-}
-
-
-/*
-====================================================
-🔥 正式五层规则
-====================================================
-*/
-
-const FORMAL_RULES=[
-
-
-/*
-1号
-差1+差2
-全异
-SSSS
-2134
-*/
+/* ================================
+   6个位子冻结规则
+================================ */
+
+const RULES = [
 
 {
 
-id:"L1-A",
+    seat:1,
 
-seat:1,
+    name:"1号｜六差跨度 = 6",
 
-rank:1,
+    stat:
+    "6局｜5正｜5大赢｜0大输｜+3560",
 
-type:"完整大赢结构",
-
-name:
-"1号｜差1+差2｜全异｜SSSS｜二级2134",
-
-shortName:
-"1+2·全异·SSSS·2134",
-
-stat:
-"历史+600｜0大输",
-
-test:(seat,room)=>
-
-seat===1
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[1,2]
-)
-
-&&
-
-isAllDistinct(
-room,
-seat
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"SSSS"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"2134"
-)
+    test:d =>
+        Math.max(...d) -
+        Math.min(...d)
+        === 6
 
 },
 
 
-/*
-1号
-双差2 + 单差1
-2+1+1
-SSSS
-
-二级：
-1223
-3312
-3231
-*/
-
 {
 
-id:"L1-B",
+    seat:2,
 
-seat:1,
+    name:"2号｜六差最大值 ≤ 4",
 
-rank:1,
+    stat:
+    "5局｜4正｜2大赢｜0大输｜+2050",
 
-type:"完整大赢结构",
-
-name:
-"1号｜双差2+单差1｜2+1+1｜SSSS｜二级1223/3312/3231",
-
-shortName:
-"双2+单1·SSSS·二级白名单",
-
-stat:
-"+1800/+900/+570｜3局3大赢｜0大输",
-
-test:(seat,room)=>
-
-seat===1
-
-&&
-
-hasExactDoubleDiff(
-room,
-seat,
-2
-)
-
-&&
-
-hasSingleDiff(
-room,
-seat,
-1
-)
-
-&&
-
-isCountType(
-room,
-seat,
-"2+1+1"
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"SSSS"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-[
-"1223",
-"3312",
-"3231"
-]
-)
+    test:d =>
+        Math.max(...d) <= 4
 
 },
 
 
-/*
-2号
-
-共同核心门票：
-差5 + 差6
-
-82527：
-6/3/0/5
-
-82437：
-6/2/1/5
-
-共同：
-差5+差6
-全异
-LSSL
-4213
-*/
-
 {
 
-id:"L2-A",
+    seat:3,
 
-seat:2,
+    name:
+    "3号｜d1<d2>d3<d4>d5<d6",
 
-rank:1,
+    stat:
+    "4局｜4正｜3大赢｜0大输｜+3800",
 
-type:"重复完整结构",
+    test:d =>
 
-name:
-"2号｜差5+差6｜全异｜LSSL｜二级4213",
+        d[0] < d[1] &&
 
-shortName:
-"5+6·全异·LSSL·4213",
+        d[1] > d[2] &&
 
-stat:
-"+460/+790｜2局2胜｜0大输",
+        d[2] < d[3] &&
 
-test:(seat,room)=>
+        d[3] > d[4] &&
 
-seat===2
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[5,6]
-)
-
-&&
-
-isAllDistinct(
-room,
-seat
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"LSSL"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"4213"
-)
+        d[4] < d[5]
 
 },
 
 
-/*
-3号 A
-
-差5+差6
-2+1+1
-SLLS
-1231
-*/
-
 {
 
-id:"L3-A",
+    seat:4,
 
-seat:3,
+    name:
+    "4号｜d4≤3 且 d6≤3",
 
-rank:1,
+    stat:
+    "6局｜6正｜3大赢｜0大输｜+3310",
 
-type:"爆分结构",
+    test:d =>
 
-name:
-"3号｜差5+差6｜2+1+1｜SLLS｜二级1231",
+        d[3] <= 3 &&
 
-shortName:
-"5+6·SLLS·1231",
-
-stat:
-"历史+2100｜0大输",
-
-test:(seat,room)=>
-
-seat===3
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[5,6]
-)
-
-&&
-
-isCountType(
-room,
-seat,
-"2+1+1"
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"SLLS"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"1231"
-)
+        d[5] <= 3
 
 },
 
 
-/*
-3号 B
-
-差1+差7
-2+1+1
-LSSL
-3123
-*/
-
 {
 
-id:"L3-B",
+    seat:5,
 
-seat:3,
+    name:
+    "5号｜d1≤3",
 
-rank:1,
+    stat:
+    "10局｜7正｜2大赢｜0大输｜+2490",
 
-type:"大赢结构",
-
-name:
-"3号｜差1+差7｜2+1+1｜LSSL｜二级3123",
-
-shortName:
-"1+7·LSSL·3123",
-
-stat:
-"历史+760｜0大输",
-
-test:(seat,room)=>
-
-seat===3
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[1,7]
-)
-
-&&
-
-isCountType(
-room,
-seat,
-"2+1+1"
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"LSSL"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"3123"
-)
+    test:d =>
+        d[0] <= 3
 
 },
 
 
-/*
-3号 C
-
-差1+差7
-2+1+1
-LLSS
-3312
-*/
-
 {
 
-id:"L3-C",
+    seat:6,
 
-seat:3,
+    name:
+    "6号｜d5≤4 且 d2>d5",
 
-rank:1,
+    stat:
+    "7局｜5正｜4大赢｜0大输｜+3850",
 
-type:"大赢结构",
+    test:d =>
 
-name:
-"3号｜差1+差7｜2+1+1｜LLSS｜二级3312",
+        d[4] <= 4 &&
 
-shortName:
-"1+7·LLSS·3312",
-
-stat:
-"历史+1020｜0大输",
-
-test:(seat,room)=>
-
-seat===3
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[1,7]
-)
-
-&&
-
-isCountType(
-room,
-seat,
-"2+1+1"
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"LLSS"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"3312"
-)
-
-},
-
-
-/*
-3号 D
-
-差1+差5+差6+差7
-全异
-LLSL
-4312
-*/
-
-{
-
-id:"L3-D",
-
-seat:3,
-
-rank:1,
-
-type:"爆分结构",
-
-name:
-"3号｜差1+5+6+7｜全异｜LLSL｜二级4312",
-
-shortName:
-"1+5+6+7·LLSL·4312",
-
-stat:
-"历史+1760｜0大输",
-
-test:(seat,room)=>
-
-seat===3
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[1,5,6,7]
-)
-
-&&
-
-isAllDistinct(
-room,
-seat
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"LLSL"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"4312"
-)
-
-},
-
-
-/*
-3号 E
-
-差2+差3
-2+1+1
-SSSS
-
-二级：
-1223
-1233
-
-危险：
-1221
-不允许
-*/
-
-{
-
-id:"L3-E",
-
-seat:3,
-
-rank:1,
-
-type:"二级分流结构",
-
-name:
-"3号｜差2+差3｜2+1+1｜SSSS｜二级1223/1233",
-
-shortName:
-"2+3·SSSS·1223/1233",
-
-stat:
-"+1600/+1140｜1221结构排除",
-
-test:(seat,room)=>
-
-seat===3
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[2,3]
-)
-
-&&
-
-isCountType(
-room,
-seat,
-"2+1+1"
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"SSSS"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-[
-"1223",
-"1233"
-]
-)
-
-},
-
-
-/*
-4号
-
-差1+差2
-全异
-LSSS
-
-二级：
-4312
-4123
-*/
-
-{
-
-id:"L4-A",
-
-seat:4,
-
-rank:1,
-
-type:"重复爆分结构",
-
-name:
-"4号｜差1+差2｜全异｜LSSS｜二级4312/4123",
-
-shortName:
-"1+2·全异·LSSS·二级白名单",
-
-stat:
-"+1230/+820｜2局2大赢｜0大输",
-
-test:(seat,room)=>
-
-seat===4
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[1,2]
-)
-
-&&
-
-isAllDistinct(
-room,
-seat
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"LSSS"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-[
-"4312",
-"4123"
-]
-)
-
-},
-
-
-/*
-5号 A
-
-差2+差5
-全异
-SSLS
-3241
-*/
-
-{
-
-id:"L5-A",
-
-seat:5,
-
-rank:1,
-
-type:"大赢结构",
-
-name:
-"5号｜差2+差5｜全异｜SSLS｜二级3241",
-
-shortName:
-"2+5·SSLS·3241",
-
-stat:
-"历史+700｜0大输",
-
-test:(seat,room)=>
-
-seat===5
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[2,5]
-)
-
-&&
-
-isAllDistinct(
-room,
-seat
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"SSLS"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"3241"
-)
-
-},
-
-
-/*
-5号 B
-
-差2+差5
-全异
-SLSL
-1324
-*/
-
-{
-
-id:"L5-B",
-
-seat:5,
-
-rank:1,
-
-type:"爆分结构",
-
-name:
-"5号｜差2+差5｜全异｜SLSL｜二级1324",
-
-shortName:
-"2+5·SLSL·1324",
-
-stat:
-"历史+1030｜0大输",
-
-test:(seat,room)=>
-
-seat===5
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[2,5]
-)
-
-&&
-
-isAllDistinct(
-room,
-seat
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"SLSL"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"1324"
-)
-
-},
-
-
-/*
-6号 A
-
-差2+差6
-全异
-SLLL
-1324
-*/
-
-{
-
-id:"L6-A",
-
-seat:6,
-
-rank:1,
-
-type:"爆分结构",
-
-name:
-"6号｜差2+差6｜全异｜SLLL｜二级1324",
-
-shortName:
-"2+6·全异·SLLL·1324",
-
-stat:
-"历史+1180｜0大输",
-
-test:(seat,room)=>
-
-seat===6
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[2,6]
-)
-
-&&
-
-isAllDistinct(
-room,
-seat
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"SLLL"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"1324"
-)
-
-},
-
-
-/*
-6号 B
-
-差2+差6
-2+1+1
-SSLL
-2133
-*/
-
-{
-
-id:"L6-B",
-
-seat:6,
-
-rank:1,
-
-type:"大赢结构",
-
-name:
-"6号｜差2+差6｜2+1+1｜SSLL｜二级2133",
-
-shortName:
-"2+6·SSLL·2133",
-
-stat:
-"历史+870｜0大输",
-
-test:(seat,room)=>
-
-seat===6
-
-&&
-
-hasDiffCombo(
-room,
-seat,
-[2,6]
-)
-
-&&
-
-isCountType(
-room,
-seat,
-"2+1+1"
-)
-
-&&
-
-isSLShape(
-room,
-seat,
-"SSLL"
-)
-
-&&
-
-isRelative(
-room,
-seat,
-"2133"
-)
+        d[1] > d[4]
 
 }
 
 ];
 
 
-/*
-====================================================
-规则命中
-====================================================
-*/
+/* ================================
+   X插位算法
 
-function getFormalHits(
-room,
-seat
-){
+   房号ABCDE
 
-return FORMAL_RULES
+   1号：
+   X=A
+   XABCDE
 
-.filter(
-rule=>
-rule.test(
-seat,
-room
-)
-)
+   2号：
+   X=B
+   AXBCDE
 
-.sort(
-(a,b)=>
-a.rank-b.rank
-||
-a.id.localeCompare(
-b.id
-)
-);
+   3号：
+   X=C
+   ABXCDE
 
-}
+   4号：
+   X=D
+   ABCXDE
 
+   5号：
+   X=E
+   ABCDXE
 
-/*
-====================================================
-分析6个位子
-====================================================
-*/
+   6号：
+   X=E
+   XABCDE
+================================ */
 
-function analyzeSeats(room){
+function buildVector(room,seat){
 
-const result=[];
+    const digits =
+        room
+        .split("")
+        .map(Number);
+
+    let x;
+
+    let insertIndex;
 
 
-for(
-let seat=1;
-seat<=6;
-seat++
-){
+    if(seat <= 5){
 
-const info=
-getSeatDiffs(
-room,
-seat
-);
+        x =
+            digits[
+                seat - 1
+            ];
+
+        insertIndex =
+            seat - 1;
+
+    }
+
+    else{
+
+        /*
+        6号：
+        X取房号E
+        但是插入第1位
+        */
+
+        x =
+            digits[4];
+
+        insertIndex = 0;
+
+    }
 
 
-const sl=
-getSL(
-room,
-seat
-);
+    const vector =
+        digits.slice();
 
 
-const formalHits=
-getFormalHits(
-room,
-seat
-);
+    vector.splice(
+        insertIndex,
+        0,
+        x
+    );
 
 
-result.push({
+    return {
 
-seat,
+        vector,
 
-xPos:
-info.xPos,
+        x,
 
-x:
-info.x,
+        insertIndex
 
-diffs:
-info.diffs,
-
-sl,
-
-relative:
-getRelativeCode(
-room,
-seat
-),
-
-countType:
-getCountType(
-room,
-seat
-),
-
-formalHits,
-
-isCandidate:
-formalHits.length>0,
-
-bestRank:
-formalHits.length
-?
-formalHits[0].rank
-:
-999
-
-});
+    };
 
 }
 
 
-return result;
+/* ================================
+   计算某个位子的六差
+================================ */
+
+function calcSeat(room,seat){
+
+    const built =
+        buildVector(
+            room,
+            seat
+        );
+
+
+    const d =
+        built.vector.map(
+
+            (number,index) =>
+
+                Math.abs(
+                    number -
+                    BASE[index]
+                )
+
+        );
+
+
+    const rule =
+        RULES.find(
+            r =>
+            r.seat === seat
+        );
+
+
+    const hit =
+        rule.test(d);
+
+
+    return {
+
+        seat,
+
+        x:
+        built.x,
+
+        vector:
+        built.vector,
+
+        d,
+
+        hit,
+
+        rule
+
+    };
 
 }
 
 
-/*
-====================================================
-最多3个推荐位
-====================================================
-*/
+/* ================================
+   计算整个房间
+================================ */
 
-function choosePicks(seats){
+function calculateRoom(room){
 
-const allCandidates=
-seats
-
-.filter(
-s=>
-s.isCandidate
-)
-
-.sort(
-(a,b)=>
-
-a.bestRank-b.bestRank
-
-||
-
-b.formalHits.length-
-a.formalHits.length
-
-||
-
-a.seat-b.seat
-
-);
+    const all = [];
 
 
-return{
+    for(
+        let seat = 1;
+        seat <= 6;
+        seat++
+    ){
 
-allCandidates,
+        all.push(
+            calcSeat(
+                room,
+                seat
+            )
+        );
 
-finalPicks:
-allCandidates.slice(
-0,
-3
-),
+    }
 
-hiddenCount:
-Math.max(
-0,
-allCandidates.length-3
-)
 
-};
+    /*
+    找出全部命中位子
+    */
+
+    const hits =
+        all
+        .filter(
+            item =>
+            item.hit
+        )
+        .sort(
+
+            (a,b) =>
+
+            PRIORITY[a.seat] -
+            PRIORITY[b.seat]
+
+        );
+
+
+    /*
+    最多推荐3个位子
+    */
+
+    const picks =
+        hits.slice(
+            0,
+            3
+        );
+
+
+    return {
+
+        all,
+
+        hits,
+
+        picks,
+
+        hidden:
+        Math.max(
+            0,
+            hits.length - 3
+        )
+
+    };
 
 }
 
 
-/*
-====================================================
-运行
-====================================================
-*/
+/* ================================
+   点击计算
+================================ */
 
 function run(){
 
-const input=
-document.getElementById(
-"roomInput"
-);
+    const input =
+        document.getElementById(
+            "roomInput"
+        );
 
 
-let roomNumber=
-input.value
-.replace(
-/\D/g,
-""
-)
-.slice(
-0,
-5
-);
+    const room =
+        input
+        .value
+        .replace(
+            /\D/g,
+            ""
+        )
+        .slice(
+            0,
+            5
+        );
 
 
-input.value=
-roomNumber;
+    input.value =
+        room;
 
 
-if(
-roomNumber.length!==5
-){
+    if(
+        room.length !== 5
+    ){
 
-showError(
-"请输入完整的5位数字房号。"
-);
+        showError(
+            "请输入完整的5位数字房号。"
+        );
 
-return;
+        return;
 
-}
-
-
-const room=
-analyzeRoom(
-roomNumber
-);
+    }
 
 
-const seats=
-analyzeSeats(
-room
-);
+    const result =
+        calculateRoom(
+            room
+        );
 
 
-const decision=
-choosePicks(
-seats
-);
+    renderResult(
+        room,
+        result
+    );
 
 
-renderResult(
-room,
-seats,
-decision
-);
+    saveHistory(
+        room,
+        result
+    );
 
 
-saveHistory(
-room,
-decision
-);
-
-
-renderHistory();
+    renderHistory();
 
 }
 
 
-/*
-====================================================
-错误
-====================================================
-*/
+/* ================================
+   输入错误
+================================ */
 
 function showError(message){
 
-const box=
-document.getElementById(
-"result"
-);
+    const box =
+        document.getElementById(
+            "result"
+        );
 
 
-box.className=
-"result show";
+    box.className =
+        "result show";
 
 
-box.innerHTML=`
+    box.innerHTML = `
 
-<span class="badge no">
-输入错误
-</span>
+        <span class="badge no">
+        输入错误
+        </span>
 
-<div class="big">
-不处理
-</div>
+        <div class="big">
+        不处理
+        </div>
 
-<div class="desc">
-${message}
-</div>
+        <div class="desc">
+        ${message}
+        </div>
 
-`;
-
-}
-
-
-/*
-====================================================
-房号信息
-====================================================
-*/
-
-function renderRoomLine(room){
-
-return`
-
-ABCDE=
-${room.A}${room.B}${room.C}${room.D}${room.E}
-
-<br>
-
-A=${room.A}
-｜
-B=${room.B}
-｜
-C=${room.C}
-｜
-D=${room.D}
-｜
-E=${room.E}
-
-<br>
-
-${
-room.hasZero
-?
-"房号含0"
-:
-"房号无0"
-}
-
-｜
-
-${
-room.hasRepeat
-?
-"有重复数字"
-:
-"无重复数字"
-}
-
-`;
+    `;
 
 }
 
 
-/*
-====================================================
-座位详情
-====================================================
-*/
-
-function renderSeatRelation(item){
-
-const diffs=
-item.diffs
-.map(
-d=>d.absDiff
-)
-.join(
-" / "
-);
-
-
-const detail=
-item.diffs
-.map(
-d=>
-`${d.pos}=${d.value} → 差${d.absDiff}`
-)
-.join(
-"<br>"
-);
-
-
-const rules=
-item.formalHits
-.map(
-rule=>`
-
-<div style="
-margin-top:10px;
-padding-top:8px;
-border-top:1px dashed #eadccc;
-">
-
-<b>
-${rule.name}
-</b>
-
-<br>
-
-<span class="badge gold">
-${rule.type}
-</span>
-
-<br>
-
-${rule.stat}
-
-</div>
-
-`
-)
-.join("");
-
-
-return`
-
-<div style="margin-top:8px">
-
-<b>四差：</b>
-${diffs}
-
-<br>
-
-<b>精确次数：</b>
-${item.countType}
-
-<br>
-
-<b>一级S/L：</b>
-${item.sl.code}
-
-｜
-
-<span class="badge blue">
-${item.sl.shape}
-</span>
-
-<br>
-
-<b>二级相对结构：</b>
-
-<span class="badge gold">
-${item.relative}
-</span>
-
-<br><br>
-
-${detail}
-
-${rules}
-
-</div>
-
-`;
-
-}
-
-
-/*
-====================================================
-结果显示
-====================================================
-*/
+/* ================================
+   输出推荐
+================================ */
 
 function renderResult(
-room,
-seats,
-decision
+    room,
+    result
 ){
 
-const box=
-document.getElementById(
-"result"
-);
+    const box =
+        document.getElementById(
+            "result"
+        );
 
 
-const picks=
-decision.finalPicks;
+    box.className =
+        "result show";
 
 
-/*
-没有推荐
-*/
+    /*
+    没有任何位置命中
+    */
 
-if(
-!picks.length
-){
+    if(
+        result.picks.length === 0
+    ){
 
-box.className=
-"result show";
+        box.innerHTML = `
+
+        <span class="badge no">
+        ❌ 跳过
+        </span>
+
+        <div class="big">
+        ${room}
+        </div>
+
+        <div class="desc">
+
+        当前1～6号
+        均未命中冻结条件。
+
+        <br>
+
+        这局不推荐。
+
+        </div>
+
+        ${debugTable(
+            result.all
+        )}
+
+        `;
+
+        return;
+
+    }
 
 
-box.innerHTML=`
+    /*
+    推荐位子文字
+    */
 
-<span class="badge no">
-❌ 跳过
-</span>
+    const names =
+        result.picks
+        .map(
+            item =>
+            item.seat + "号"
+        )
+        .join("、");
 
-<span class="badge blue">
-未命中五层完整结构
-</span>
 
-<div class="big">
-${room.room}
-</div>
+    /*
+    推荐详情
+    */
 
-<div class="desc">
+    const cards =
+        result.picks
+        .map(
 
-当前没有任何座位同时满足：
+            (item,index) => `
 
-<br><br>
+            <div
+            class="pick
+            ${
+                index === 0
+                ?
+                "main"
+                :
+                ""
+            }"
+            >
 
-<b>
-差值门票
-+
-精确次数
-+
-一级S/L
-+
-二级相对结构
-</b>
+                <div class="pick-title">
 
-<br><br>
+                ${
+                    index === 0
+                    ?
+                    "🔥 第一推荐"
+                    :
+                    "⚡ 推荐" +
+                    (index + 1)
+                }
 
-<b>
-这局不进。
-</b>
+                ｜
 
-<br><br>
+                ${item.seat}号
 
-${renderRoomLine(room)}
+                </div>
 
-</div>
 
-${renderDebug(
-room,
-seats
-)}
+                <div class="pick-rule">
 
-`;
+                <span class="badge gold">
 
-return;
+                冻结条件命中
+
+                </span>
+
+                <br>
+
+                插位后：
+
+                <b>
+                ${item.vector.join("")}
+                </b>
+
+                <br>
+
+                六差：
+
+                <b>
+                ${item.d.join(" / ")}
+                </b>
+
+                <br>
+
+                ${item.rule.name}
+
+                <br>
+
+                ${item.rule.stat}
+
+                </div>
+
+            </div>
+
+            `
+
+        )
+        .join("");
+
+
+    let hiddenText = "";
+
+
+    if(
+        result.hidden > 0
+    ){
+
+        hiddenText = `
+
+        <div
+        class="desc"
+        style="margin-top:10px"
+        >
+
+        另有
+        ${result.hidden}
+        个位置命中，
+
+        但按照固定优先级
+        只显示前3个。
+
+        </div>
+
+        `;
+
+    }
+
+
+    box.innerHTML = `
+
+    <span class="badge ok">
+    🔥 建议进房
+    </span>
+
+    <span class="badge gold">
+    721514 v5.0
+    </span>
+
+
+    <div class="big">
+
+    推荐：
+
+    ${names}
+
+    </div>
+
+
+    <div class="pick-list">
+
+    ${cards}
+
+    </div>
+
+
+    ${hiddenText}
+
+
+    <div
+    class="desc"
+    style="margin-top:14px"
+    >
+
+    房号：
+
+    <b>
+    ${room}
+    </b>
+
+    ｜
+
+    基准：
+
+    <b>
+    721514
+    </b>
+
+    </div>
+
+
+    ${debugTable(
+        result.all
+    )}
+
+    `;
 
 }
 
 
-/*
-有推荐
-*/
+/* ================================
+   显示1～6号全部计算结果
+================================ */
 
-const pickNames=
-picks
-.map(
-p=>
-`${p.seat}号`
-)
-.join(
-"、"
-);
+function debugTable(all){
 
+    const rows =
+        all
+        .map(
 
-const pickHtml=
-picks
-.map(
-(pick,index)=>`
+            item => `
 
-<div class="pick ${
-index===0
-?
-"main"
-:
-""
-}">
+            <tr>
 
-<div class="pick-title">
+                <td>
+                ${item.seat}号
+                </td>
 
-${
-index===0
-?
-"🔥 第一推荐"
-:
-`⚡ 推荐${index+1}`
-}
+                <td>
+                ${item.vector.join("")}
+                </td>
 
-｜
+                <td>
+                ${item.d.join("、")}
+                </td>
 
-${pick.seat}号
+                <td>
 
-｜
+                ${
+                    item.hit
+                    ?
+                    "🔥 命中"
+                    :
+                    "未命中"
+                }
 
-X=${pick.x}
+                </td>
 
-</div>
+                <td>
+                ${item.rule.name}
+                </td>
 
-<div class="pick-rule">
+            </tr>
 
-<span class="badge gold">
-五层完整结构命中
-</span>
+            `
 
-${renderSeatRelation(
-pick
-)}
-
-</div>
-
-</div>
-
-`
-)
-.join("");
+        )
+        .join("");
 
 
-const hidden=
-decision.hiddenCount
+    return `
 
-?
+    <div class="debug">
 
-`
+    <table
+    style="min-width:760px"
+    >
 
-<div
-class="desc"
-style="margin-top:10px"
->
+    <thead>
 
-另有
-${decision.hiddenCount}
-个位子命中，
+    <tr>
 
-但根据
-“最多3个推荐位”
-规则不进入推荐区。
+        <th>
+        位子
+        </th>
 
-</div>
+        <th>
+        X插位后的6位数
+        </th>
 
-`
+        <th>
+        d1～d6
+        </th>
 
-:
+        <th>
+        结果
+        </th>
 
-"";
+        <th>
+        冻结条件
+        </th>
+
+    </tr>
+
+    </thead>
 
 
-box.className=
-"result show";
+    <tbody>
 
+    ${rows}
 
-box.innerHTML=`
+    </tbody>
 
-<span class="badge ok">
-🔥 建议进房
-</span>
+    </table>
 
-<span class="badge gold">
-龙虾 v4.2
-</span>
+    </div>
 
-<div class="big">
-
-推荐：
-${pickNames}
-
-</div>
-
-<div class="pick-list">
-
-${pickHtml}
-
-</div>
-
-${hidden}
-
-<div
-class="desc"
-style="margin-top:14px"
->
-
-房号：
-
-<b>
-${room.room}
-</b>
-
-<br>
-
-${renderRoomLine(room)}
-
-</div>
-
-${renderDebug(
-room,
-seats
-)}
-
-`;
+    `;
 
 }
 
 
-/*
-====================================================
-调试表
-====================================================
-*/
+/* ================================
+   显示规则
+================================ */
 
-function renderDebug(
-room,
-seats
-){
+function renderRules(){
 
-const rows=
-seats
-.map(
-item=>{
+    const box =
+        document.getElementById(
+            "comboList"
+        );
 
 
-const diffShape=
-item.diffs
-.map(
-d=>d.absDiff
-)
-.join(
-"、"
-);
+    box.innerHTML =
+        RULES
+        .map(
+
+            rule => `
+
+            <div
+            class="combo special"
+            >
+
+                <div class="name">
+
+                🔥
+                ${rule.name}
+
+                </div>
 
 
-const count=
-countMap(
-item.diffs
-.map(
-d=>d.absDiff
-)
-);
+                <div class="rule">
 
+                ${rule.stat}
 
-const repeats=
-Object
-.entries(
-count
-)
-.filter(
-([diff,num])=>
-num>=2
-)
-.map(
-([diff,num])=>
-`差${diff}×${num}`
-)
-.join(
-"、"
-)
+                </div>
 
-||
+            </div>
 
-"无重复差";
+            `
 
-
-const status=
-item.formalHits.length
-
-?
-
-"🔥 "+
-
-item.formalHits
-.map(
-r=>r.shortName
-)
-.join(
-"、"
-)
-
-:
-
-"未命中";
-
-
-return`
-
-<tr>
-
-<td>
-${item.seat}号
-</td>
-
-<td>
-${item.xPos}
-</td>
-
-<td>
-${item.x}
-</td>
-
-<td>
-${diffShape}
-</td>
-
-<td>
-<b>
-${item.countType}
-</b>
-</td>
-
-<td>
-<b>
-${item.sl.shape}
-</b>
-</td>
-
-<td>
-<b>
-${item.relative}
-</b>
-</td>
-
-<td>
-${repeats}
-</td>
-
-<td>
-${status}
-</td>
-
-</tr>
-
-`;
+        )
+        .join("");
 
 }
-)
-.join("");
 
 
-return`
+/* ================================
+   本地查询历史
+================================ */
 
-<div class="debug">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th colspan="9">
-
-房号
-${room.room}
-
-｜
-
-一级 S=0–4 / L=5–9
-
-｜
-
-二级=四差内部相对大小
-
-</th>
-
-</tr>
-
-<tr>
-
-<th>位子</th>
-
-<th>X位置</th>
-
-<th>X</th>
-
-<th>四差</th>
-
-<th>次数型</th>
-
-<th>一级排列</th>
-
-<th>二级结构</th>
-
-<th>重复差</th>
-
-<th>模型结果</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-${rows}
-
-</tbody>
-
-</table>
-
-</div>
-
-`;
-
-}
-
-
-/*
-====================================================
-规则列表
-====================================================
-*/
-
-function renderComboList(){
-
-document
-.getElementById(
-"comboList"
-)
-.innerHTML=
-
-FORMAL_RULES
-.map(
-rule=>`
-
-<div class="combo special">
-
-<div class="name">
-
-🔥
-${rule.name}
-
-</div>
-
-<div class="rule">
-
-${rule.stat}
-
-<br>
-
-<b>
-差值门票 → 次数 → 一级 → 二级
-必须全部通过。
-</b>
-
-</div>
-
-</div>
-
-`
-)
-.join("");
-
-}
-
-
-/*
-====================================================
-94条原始历史战绩
-
-网页每次启动自动重新回测
-====================================================
-*/
-
-const RAW_HISTORY=`
-
-82527 2 460
-93161 5 20
-97062 6 -810
-48730 6 -960
-25062 3 2100
-81852 6 170
-72207 1 430
-11351 2 -700
-50933 5 310
-99436 3 -1050
-87876 2 420
-16286 3 -880
-56313 2 -720
-80138 3 760
-21343 5 260
-51504 2 270
-91995 1 -680
-41515 6 -130
-88152 2 -1110
-31771 1 510
-53126 3 -610
-48708 6 1120
-32772 6 -480
-37403 5 -400
-60835 2 -270
-81162 1 -330
-89694 3 -690
-13908 6 -480
-91100 4 -1320
-92504 4 -620
-82042 5 60
-12135 1 600
-53408 3 -630
-81588 3 -580
-88110 3 1020
-69982 4 490
-88813 3 180
-39332 6 510
-99654 6 840
-62308 6 1180
-48673 5 230
-33872 4 110
-82437 2 790
-13134 3 1600
-75924 1 -1180
-45627 1 1800
-24021 1 900
-53594 1 410
-68786 1 570
-84153 6 -200
-64889 2 20
-87964 5 700
-26954 1 130
-59069 4 -270
-86235 4 1230
-36630 2 -160
-76907 3 120
-76015 3 1760
-24360 5 -90
-82907 5 1030
-32759 2 -650
-42953 2 800
-80458 5 -100
-11774 4 510
-24845 1 -470
-35728 3 -160
-68640 4 -740
-80273 2 -650
-58699 3 1140
-61386 5 -100
-89990 3 -400
-71060 2 1180
-64283 1 850
-46053 1 170
-75553 1 -720
-71462 4 150
-37530 5 -21
-17825 2 -470
-93005 5 390
-35117 6 870
-36553 1 -800
-48026 1 820
-17709 3 120
-61188 5 -50
-64140 1 -1160
-48148 3 260
-93431 4 820
-16334 1 1140
-75798 1 -250
-92280 3 80
-16336 1 1260
-18330 6 90
-24660 1 -870
-62972 3 -730
-
-`;
-
-
-/*
-====================================================
-解析历史
-====================================================
-*/
-
-function parseHistory(){
-
-return RAW_HISTORY
-.trim()
-.split(
-/\n+/
-)
-.map(
-line=>{
-
-const [
-room,
-seat,
-score
-]=
-line
-.trim()
-.split(
-/\s+/
-);
-
-
-return{
-
-room,
-
-seat:
-Number(seat),
-
-score:
-Number(score)
-
-};
-
-});
-
-}
-
-
-/*
-====================================================
-自动回测
-
-这里使用和实时推荐完全相同的规则函数。
-
-因此以后修改 FORMAL_RULES，
-历史统计会自动跟着变化。
-====================================================
-*/
-
-function autoBacktest(){
-
-const history=
-parseHistory();
-
-
-const hits=[];
-
-
-history.forEach(rec=>{
-
-const room=
-analyzeRoom(
-rec.room
-);
-
-
-const rules=
-getFormalHits(
-room,
-rec.seat
-);
-
-
-if(
-rules.length
-){
-
-hits.push({
-
-...rec,
-
-rules
-
-});
-
-}
-
-});
-
-
-const positive=
-hits
-.filter(
-x=>x.score>0
-)
-.length;
-
-
-const negative=
-hits.length-positive;
-
-
-const bigWin=
-hits
-.filter(
-x=>x.score>=500
-)
-.length;
-
-
-const bigLoss=
-hits
-.filter(
-x=>x.score<=-400
-)
-.length;
-
-
-const net=
-hits
-.reduce(
-(sum,item)=>
-sum+item.score,
-0
-);
-
-
-const min=
-hits.length
-
-?
-
-Math.min(
-...hits.map(
-x=>x.score
-)
-)
-
-:
-
-0;
-
-
-const average=
-hits.length
-?
-net/hits.length
-:
-0;
-
-
-/*
-百分比
-*/
-
-function pct(a,b){
-
-if(!b){
-return "0%";
-}
-
-return(
-(a/b)*100
-)
-.toFixed(2)
-+"%";
-
-}
-
-
-/*
-正负号
-*/
-
-function signNumber(n){
-
-return(
-n>=0
-?
-"+"
-:
-""
-)
-+
-n.toLocaleString(
-"en-US"
-);
-
-}
-
-
-/*
-写入统计对象
-*/
-
-MODEL_STAT.sample=
-history.length;
-
-MODEL_STAT.hitCount=
-hits.length;
-
-MODEL_STAT.hitRate=
-pct(
-hits.length,
-history.length
-);
-
-MODEL_STAT.winRate=
-pct(
-positive,
-hits.length
-);
-
-MODEL_STAT.record=
-`${positive}胜${negative}负`;
-
-MODEL_STAT.net=
-signNumber(net);
-
-MODEL_STAT.bigWin=
-bigWin+"局";
-
-MODEL_STAT.bigWinRate=
-pct(
-bigWin,
-hits.length
-);
-
-MODEL_STAT.bigLoss=
-bigLoss+"局";
-
-MODEL_STAT.bigLossRate=
-pct(
-bigLoss,
-hits.length
-);
-
-MODEL_STAT.maxLoss=
-signNumber(min);
-
-MODEL_STAT.average=
-signNumber(
-Number(
-average.toFixed(1)
-)
-);
-
-
-/*
-更新页面
-*/
-
-function set(
-id,
-value
-){
-
-const el=
-document.getElementById(
-id
-);
-
-if(el){
-
-el.textContent=
-value;
-
-}
-
-}
-
-
-set(
-"stSample",
-history.length+"局"
-);
-
-set(
-"stHits",
-hits.length+"局"
-);
-
-set(
-"stHitRate",
-MODEL_STAT.hitRate
-);
-
-set(
-"stWinRate",
-MODEL_STAT.winRate
-);
-
-set(
-"stRecord",
-MODEL_STAT.record
-);
-
-set(
-"stNet",
-MODEL_STAT.net
-);
-
-set(
-"stBigWin",
-MODEL_STAT.bigWin
-);
-
-set(
-"stBigLoss",
-MODEL_STAT.bigLoss
-);
-
-set(
-"stBigWinRate",
-MODEL_STAT.bigWinRate
-);
-
-set(
-"stBigLossRate",
-MODEL_STAT.bigLossRate
-);
-
-set(
-"stMin",
-MODEL_STAT.maxLoss
-);
-
-set(
-"stAvg",
-MODEL_STAT.average
-);
-
-
-/*
-控制台同时输出命中记录，
-方便以后检查。
-*/
-
-console.log(
-"5161482 龙虾 v4.2 自动回测"
-);
-
-console.table(
-hits.map(
-x=>({
-
-房号:x.room,
-
-位子:x.seat,
-
-盈亏:x.score,
-
-规则:
-x.rules
-.map(
-r=>r.id
-)
-.join(",")
-
-})
-)
-);
-
-
-console.log({
-
-总样本:
-history.length,
-
-命中:
-hits.length,
-
-正收益:
-positive,
-
-大赢:
-bigWin,
-
-大输:
-bigLoss,
-
-净分:
-net,
-
-平均:
-average
-
-});
-
-
-return hits;
-
-}
-
-
-/*
-====================================================
-查询历史记录
-====================================================
-*/
-
-const HISTORY_KEY=
-"id_5161482_lobster_v42_history";
+const HISTORY_KEY =
+"5161482_lobster_721514_v50";
 
 
 function saveHistory(
-room,
-decision
+    room,
+    result
 ){
 
-const item={
+    const recommendation =
 
-room:
-room.room,
+        result.picks.length
 
-time:
-new Date()
-.toLocaleString(),
+        ?
 
-result:
+        result.picks
+        .map(
+            item =>
+            item.seat + "号"
+        )
+        .join("、")
 
-decision
-.finalPicks
-.length
+        :
 
-?
-
-decision
-.finalPicks
-.map(
-p=>
-
-`${p.seat}号(${
-p.formalHits
-.map(
-r=>r.shortName
-)
-.join("+")
-})`
-
-)
-.join("、")
-
-:
-
-"跳过"
-
-};
+        "跳过";
 
 
-const list=
-JSON.parse(
+    const list =
+        JSON.parse(
 
-localStorage.getItem(
-HISTORY_KEY
-)
+            localStorage.getItem(
+                HISTORY_KEY
+            )
+            ||
+            "[]"
 
-||
-
-"[]"
-
-);
+        );
 
 
-list.unshift(
-item
-);
+    list.unshift({
+
+        room,
+
+        result:
+        recommendation,
+
+        time:
+        new Date()
+        .toLocaleString()
+
+    });
 
 
-localStorage.setItem(
+    localStorage.setItem(
 
-HISTORY_KEY,
+        HISTORY_KEY,
 
-JSON.stringify(
+        JSON.stringify(
+            list.slice(
+                0,
+                50
+            )
+        )
 
-list.slice(
-0,
-50
-)
-
-)
-
-);
+    );
 
 }
 
 
-/*
-====================================================
-显示查询历史
-====================================================
-*/
+/* ================================
+   显示查询历史
+================================ */
 
 function renderHistory(){
 
-const box=
-document.getElementById(
-"historyBox"
-);
+    const box =
+        document.getElementById(
+            "historyBox"
+        );
 
 
-const list=
-JSON.parse(
+    const list =
+        JSON.parse(
 
-localStorage.getItem(
-HISTORY_KEY
-)
+            localStorage.getItem(
+                HISTORY_KEY
+            )
+            ||
+            "[]"
 
-||
-
-"[]"
-
-);
+        );
 
 
-if(
-!list.length
-){
+    if(
+        list.length === 0
+    ){
 
-box.innerHTML=
-"暂无记录";
+        box.innerHTML =
+        "暂无记录";
 
-return;
+        return;
+
+    }
+
+
+    box.innerHTML =
+        list
+        .map(
+
+            item => `
+
+            <div class="history-item">
+
+                <div class="history-left">
+
+                ${item.room}
+
+                </div>
+
+
+                <div class="history-right">
+
+                推荐：
+
+                ${item.result}
+
+                <br>
+
+                ${item.time}
+
+                </div>
+
+            </div>
+
+            `
+
+        )
+        .join("");
 
 }
 
 
-box.innerHTML=
-
-list
-.map(
-item=>`
-
-<div class="history-item">
-
-<div class="history-left">
-
-${item.room}
-
-</div>
-
-<div class="history-right">
-
-推荐：
-
-${item.result}
-
-<br>
-
-${item.time}
-
-</div>
-
-</div>
-
-`
-)
-.join("");
-
-}
-
-
-/*
-====================================================
-清空查询历史
-====================================================
-*/
+/* ================================
+   清空历史
+================================ */
 
 function clearHistory(){
 
-localStorage.removeItem(
-HISTORY_KEY
+    localStorage.removeItem(
+        HISTORY_KEY
+    );
+
+    renderHistory();
+
+}
+
+
+/* ================================
+   输入限制
+================================ */
+
+document
+.getElementById(
+    "roomInput"
+)
+.addEventListener(
+
+    "input",
+
+    event => {
+
+        event.target.value =
+
+        event.target.value
+        .replace(
+            /\D/g,
+            ""
+        )
+        .slice(
+            0,
+            5
+        );
+
+    }
+
 );
+
+
+/* ================================
+   回车直接计算
+================================ */
+
+document
+.getElementById(
+    "roomInput"
+)
+.addEventListener(
+
+    "keydown",
+
+    event => {
+
+        if(
+            event.key === "Enter"
+        ){
+
+            run();
+
+        }
+
+    }
+
+);
+
+
+/* ================================
+   页面初始化
+================================ */
+
+renderRules();
 
 renderHistory();
 
-}
 
+/* ================================
+   一致性自检
 
-/*
-====================================================
-限制输入
-====================================================
-*/
+   已确认测试房号：
 
-document
-.getElementById(
-"roomInput"
-)
-.addEventListener(
-"input",
-event=>{
+   26047
 
-event.target.value=
-event.target.value
-.replace(
-/\D/g,
-""
-)
-.slice(
-0,
-5
-);
+   必须：
+   只推荐4号
+================================ */
 
-}
-);
+const SELF_TEST =
 
+    calculateRoom(
+        "26047"
+    )
+    .picks
+    .map(
+        item =>
+        item.seat
+    )
+    .join(",");
 
-/*
-====================================================
-回车查询
-====================================================
-*/
-
-document
-.getElementById(
-"roomInput"
-)
-.addEventListener(
-"keydown",
-event=>{
 
 if(
-event.key==="Enter"
+    SELF_TEST !== "4"
 ){
 
-run();
+    console.error(
+
+        "模型自检失败！",
+
+        "26047应该只推荐4号，",
+
+        "当前结果：",
+
+        SELF_TEST
+
+    );
 
 }
-
-}
-);
-
-
-/*
-====================================================
-启动顺序
-
-1. 自动回测94局
-2. 显示规则
-3. 显示查询历史
-====================================================
-*/
-
-autoBacktest();
-
-renderComboList();
-
-renderHistory();
 
 </script>
 
